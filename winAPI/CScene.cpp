@@ -70,12 +70,46 @@ void CScene::render(HDC hDC)
 {
 	for (UINT i = 0; i < (UINT)OBJ::SIZE; i++)
 	{
+		if ((UINT)OBJ::TILE == i)
+		{
+			renderTile(hDC);
+			continue;
+		}
+
 		for (vector<CObject*>::iterator iter = m_arrObj[i].begin(); iter != m_arrObj[i].end();)
 		{
 			if (!(*iter)->isDead())
 				(*iter++)->render(hDC);
 			else										// 유예 중이면 erase
 				iter = m_arrObj[i].erase(iter);
+		}
+	}
+}
+
+void CScene::renderTile(HDC hDC)
+{
+	const vector<CObject*>& vecTile = getGroupObject(OBJ::TILE);
+
+	fPoint fptCamLook = CCameraManager::getInst()->getFocus();
+	fPoint fptLeftTop = fptCamLook - fPoint(WINSIZEX, WINSIZEY) / 2.f;
+
+	int iLTCol = (int)fptLeftTop.x / CTile::SIZE_TILE;
+	int iLTRow = (int)fptLeftTop.y / CTile::SIZE_TILE;
+	int iLTIdx = m_uiTileX * iLTRow + iLTCol;
+
+	int iClientWidth = (int)WINSIZEX / CTile::SIZE_TILE;
+	int iClientHeight = (int)WINSIZEY / CTile::SIZE_TILE;
+	for (int iCurRow = iLTRow; iCurRow <= (iLTRow + iClientHeight); ++iCurRow)
+	{
+		for (int iCurCol = iLTCol; iCurCol <= (iLTCol + iClientWidth); ++iCurCol)
+		{
+			if (iCurCol < 0 || (int)m_uiTileX <= iCurCol ||
+				iCurRow < 0 || (int)m_uiTileY <= iCurRow)
+				continue;
+
+			int iIdx = (m_uiTileX * iCurRow) + iCurCol;
+
+			vecTile[iIdx]->render(hDC);
 		}
 	}
 }
@@ -101,14 +135,16 @@ void CScene::deleteObjectAll()
 
 void CScene::createTile(UINT xSize, UINT ySize)
 {
+	deleteObjectGroup(OBJ::TILE);
+
 	m_uiTileX = xSize;
 	m_uiTileY = ySize;
 
 	CTexture* pTex = loadTex(L"Tile", L"map\\testTile.bmp");
 
-	for (UINT i = 0; i < xSize; i++)
+	for (UINT i = 0; i < ySize; i++)
 	{
-		for (UINT j = 0; j < ySize; j++)
+		for (UINT j = 0; j < xSize; j++)
 		{
 			CTile* pTile = new CTile();
 			pTile->setPos(fPoint((float)(j * CTile::SIZE_TILE), (float)(i * CTile::SIZE_TILE)));
@@ -116,4 +152,29 @@ void CScene::createTile(UINT xSize, UINT ySize)
 			addObject(pTile, OBJ::TILE);
 		}
 	}
+}
+
+void CScene::loadTile(const wstring& strPath)
+{
+	FILE* pFile = nullptr;
+
+	_wfopen_s(&pFile, strPath.c_str(), L"rb");      // r : read, b : binary
+	assert(pFile);
+
+	UINT xCount = 0;
+	UINT yCount = 0;
+
+	// save했던 x,y순서대로 해야 함
+	fread(&xCount, sizeof(UINT), 1, pFile);
+	fread(&yCount, sizeof(UINT), 1, pFile);
+
+	createTile(xCount, yCount);
+
+	// 
+	const vector<CObject*>& vecTile = getGroupObject(OBJ::TILE);
+
+	for (UINT i = 0; i < vecTile.size(); i++)
+		((CTile*)vecTile[i])->load(pFile);
+
+	fclose(pFile);
 }

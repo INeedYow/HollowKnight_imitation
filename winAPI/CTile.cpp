@@ -64,3 +64,13 @@ void CTile::setImageIndex(UINT idx)
 {
 	m_iIndex = idx;
 }
+
+void CTile::save(FILE* pFile)
+{
+	fwrite(&m_iIndex, sizeof(int), 1, pFile);
+}
+
+void CTile::load(FILE* pFile)
+{
+	fread(&m_iIndex, sizeof(int), 1, pFile);
+}

@@ -17,6 +17,9 @@ public:
 
 	void setTexture(CTexture* pTex);
 	void setImageIndex(UINT idx);
+
+	virtual void save(FILE* pFile);
+	virtual void load(FILE* pFile);
 };
 
 // 타일은 보통 2^n 크기로 같은 크기로 사용함

@@ -78,11 +78,12 @@ enum class GROUP_OBJECT
 {
 	DEFAULT,
 	BACKGROUND,
+	TILE,
+
 	PLAYER,
 	MONSTER,
 	MISSILE_PLAYER,
 	MISSILE_MONSTER,
-	TILE,
 
 
 	UI,
@@ -221,4 +222,5 @@ enum class COLL_DIR
 #define realPos(pos)				CCameraManager::getInst()->getRealPos(pos)
 
 #define loadTex(eName, wsPath)		CResourceManager::getInst()->loadTextrue(eName, wsPath)
+#define findTex(eName)				CResourceManager::getInst()->findTexture(eName)
 

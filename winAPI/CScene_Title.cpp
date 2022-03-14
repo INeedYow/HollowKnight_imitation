@@ -32,10 +32,10 @@ void CScene_Title::update()
 
 void CScene_Title::enter()
 {
-	//// 타일 로딩
-	//wstring path = CPathManager::getInst()->GetContentPath();
-	//path += L"tile\\Start.tile";
-	//loadTile(path);
+	// 타일 로딩
+	wstring path = CPathManager::getInst()->getContentPath();
+	path += L"map\\test.tile";
+	loadTile(path);
 
 	// Player 추가
 	CObject* pPlayer = new CPlayer;

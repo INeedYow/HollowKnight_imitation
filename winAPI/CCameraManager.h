@@ -30,7 +30,7 @@ public:
 	fPoint getRealPos(fPoint renderPos);
 	fPoint getRenderPos(fPoint pos);
 
-
+	void scroll(fVec2 vec, float spd);
 };
 
 // 한 오브젝트만 따라가거나 특정 좌표를 보게

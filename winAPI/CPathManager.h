@@ -9,6 +9,6 @@ private:
 public:
 	void init();
 
-	const wchar_t* GetContentPath();
+	const wchar_t* getContentPath();
 };
 

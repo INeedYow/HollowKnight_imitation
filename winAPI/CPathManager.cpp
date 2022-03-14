@@ -29,7 +29,7 @@ void CPathManager::init()
 	wcscat_s(m_strContentPath, 255, L"\\Release\\content\\");	// wchar_t 문자열 붙이는 함수
 }
 
-const wchar_t* CPathManager::GetContentPath()
+const wchar_t* CPathManager::getContentPath()
 {
 	return m_strContentPath;
 }

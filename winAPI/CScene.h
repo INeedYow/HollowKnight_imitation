@@ -25,6 +25,8 @@ public:
 	virtual void finalUpdate();
 	virtual void render(HDC hDC);
 
+	void renderTile(HDC hDC);
+
 	virtual void enter() = 0;
 	virtual void exit() = 0;
 
@@ -35,4 +37,5 @@ public:
 	void deleteObjectAll();							// ÀüÃ¼ obj delete
 
 	void createTile(UINT xSize, UINT ySize);
+	void loadTile(const wstring& strPath);
 };

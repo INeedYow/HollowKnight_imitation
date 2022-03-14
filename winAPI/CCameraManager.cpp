@@ -62,6 +62,15 @@ fPoint CCameraManager::getRenderPos(fPoint pos)
 	return pos - m_fpDiff;
 }
 
+void CCameraManager::scroll(fVec2 vec, float spd)
+{
+	m_fpFocus		= m_fpFocus + vec * spd * fDT;
+	m_fpCurFocus	= m_fpCurFocus + vec * spd * fDT;
+
+	fPoint fptCenter = fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f);
+	m_fpDiff = m_fpCurFocus - fptCenter;
+}
+
 void CCameraManager::calculateDiff()
 {
 	m_fAccTime += fDT;
