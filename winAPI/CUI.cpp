@@ -42,7 +42,7 @@ void CUI::finalUpdate()
 
 void CUI::render(HDC hDC)
 {
-	fPoint pos = getPos();
+	fPoint pos = getFinalPos();
 	fPoint size = getSize();
 
 	Rectangle(hDC,
@@ -76,6 +76,22 @@ void CUI::rendChild(HDC hDC)
 	{
 		m_vecChildUI[i]->render(hDC);
 	}
+}
+
+void CUI::mouseOn()
+{
+}
+
+void CUI::mouseLbtnDown()
+{
+}
+
+void CUI::mouseLbtnUp()
+{
+}
+
+void CUI::mouseLbtnClicked()
+{
 }
 
 fPoint CUI::getFinalPos()

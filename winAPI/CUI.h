@@ -21,6 +21,11 @@ public:
 	void finalUpdateChild();
 	void rendChild(HDC hDC);
 
+	virtual void mouseOn();
+	virtual void mouseLbtnDown();
+	virtual void mouseLbtnUp();
+	virtual void mouseLbtnClicked();
+
 	fPoint getFinalPos();
 	CUI* getParent();
 
