@@ -63,6 +63,8 @@ enum class GROUP_OBJECT
 	MISSILE_MONSTER,
 	TILE,
 
+
+	UI,
 	SIZE
 };
 

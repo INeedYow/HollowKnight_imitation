@@ -183,6 +183,9 @@
     <ClInclude Include="CTile.h">
       <Filter>Object\Tile</Filter>
     </ClInclude>
+    <ClInclude Include="CUI.h">
+      <Filter>Object\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winAPI.cpp">
@@ -259,6 +262,9 @@
     </ClCompile>
     <ClCompile Include="CTile.cpp">
       <Filter>Object\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="CUI.cpp">
+      <Filter>Object\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

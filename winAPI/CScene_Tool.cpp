@@ -2,6 +2,7 @@
 #include "CScene_Tool.h"
 #include "resource.h"		// CreateDialog() 함수가 IDD_TILEBOX를 알기 위해 필요
 #include "CTile.h"
+#include "CUI.h"
 
 INT_PTR CALLBACK TileWinProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -42,6 +43,11 @@ void CScene_Tool::enter()
 	m_hWnd = CreateDialog(hInst, MAKEINTRESOURCE(IDD_TILEBOX), hWnd, TileWinProc);
 
 	ShowWindow(m_hWnd, SW_SHOW);
+
+	CUI* pUI = new CUI;
+	pUI->setSize(fPoint(100.f, 30.f));
+	pUI->setPos(fPoint(WINSIZEX - pUI->getSize().x, 0.f));		// UI는 카메라의 위치와 상관없이 절대 좌표를 통해 구현
+	addObject(pUI, OBJ::UI);
 }
 
 void CScene_Tool::exit()

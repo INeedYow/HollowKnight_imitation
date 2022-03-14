@@ -50,6 +50,13 @@ struct fPoint
 		return fPoint(x - other.x, y - other.y);
 	}
 
+	fPoint& operator+=(const fPoint& other)
+	{
+		x += other.x;
+		y += other.y;
+		return *this;
+	}
+
 	bool operator==(fPoint other)
 	{
 		return (x == other.x && y == other.y);

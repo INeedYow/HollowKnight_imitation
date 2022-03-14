@@ -10,7 +10,7 @@ private:
 	map<wstring, CTexture*> m_mapTex;
 
 public:
-	CTexture* findTexture(const wstring& eKey);
-	CTexture* loadTextrue(const wstring& eKey, const wstring& strRelativePath);
+	CTexture* findTexture(const wstring& strKey);
+	CTexture* loadTextrue(const wstring& strKey, const wstring& strRelativePath);
 
 };

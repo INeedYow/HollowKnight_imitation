@@ -28,9 +28,9 @@ CTexture* CResourceManager::findTexture(const wstring& strKey)
 	return iter->second;
 }
 
-CTexture* CResourceManager::loadTextrue(const wstring& eKey, const wstring& strRelativePath)
+CTexture* CResourceManager::loadTextrue(const wstring& strKey, const wstring& strRelativePath)
 {
-	CTexture* pTex = findTexture(eKey);		// 이미 Texture가 있는지 확인
+	CTexture* pTex = findTexture(strKey);		// 이미 Texture가 있는지 확인
 	if (nullptr == pTex)
 	{
 		// Texture 저장 경로 확인
@@ -40,10 +40,10 @@ CTexture* CResourceManager::loadTextrue(const wstring& eKey, const wstring& strR
 		// Texture 생성 후 저장
 		pTex = new CTexture;
 		pTex->load(strFilePath);
-		pTex->setKey(eKey);
+		pTex->setKey(strKey);
 		pTex->setRelativePath(strRelativePath);
 
-		m_mapTex.insert(make_pair(eKey, pTex));
+		m_mapTex.insert(make_pair(strKey, pTex));
 	}
 	return pTex;
 }
