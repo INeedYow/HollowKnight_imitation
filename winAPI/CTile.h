@@ -3,7 +3,7 @@
 class CTile : public CObject
 {
 	CTexture* m_pTex;
-	int			m_iIdx;		// index
+	int			m_iIndex;		// index
 
 public:
 	const static int SIZE_TILE = 32;		// #define과 비슷한 용도
@@ -16,6 +16,7 @@ public:
 	virtual void render(HDC hDC);
 
 	void setTexture(CTexture* pTex);
+	void setImageIndex(UINT idx);
 };
 
 // 타일은 보통 2^n 크기로 같은 크기로 사용함

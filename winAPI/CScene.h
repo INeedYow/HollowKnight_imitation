@@ -7,12 +7,17 @@ class CScene
 	vector<CObject*> m_arrObj[(int)OBJ::SIZE];		// 벡터 배열
 	wstring m_strName;
 
+	UINT m_uiTileX;
+	UINT m_uiTileY;
+
 public:
 	CScene();
 	virtual ~CScene();
 
 	void setName(const wstring& strName);
 	wstring getName();
+	UINT	getTileX();
+	UINT	getTileY();
 
 	void addObject(CObject* pObj, OBJ objType);
 
@@ -28,4 +33,6 @@ public:
 
 	void deleteObjectGroup(OBJ objGroup);			// 해당 obj그룹만 delete
 	void deleteObjectAll();							// 전체 obj delete
+
+	void createTile(UINT xSize, UINT ySize);
 };

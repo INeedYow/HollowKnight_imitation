@@ -14,11 +14,16 @@
 #define IDC_WINAPI                      109
 #define IDR_MAINFRAME                   128
 #define IDC_EDIT2                       1028
+#define IDC_EDIT_SIZEX                  1028
 #define IDC_EDIT3                       1029
+#define IDC_EDIT_SIZEY                  1029
 #define IDC_EDIT4                       1031
+#define IDC_EDIT_TILE                   1031
 #define IDC_BUTTON2                     1032
 #define IDC_BUTTON3                     1033
+#define IDC_BUTTON_SIZE                 1033
 #define IDC_BUTTON4                     1034
+#define IDC_BUTTON_TILE                 1034
 #define IDC_STATIC                      -1
 
 // Next default values for new objects

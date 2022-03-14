@@ -85,6 +85,9 @@
     <Filter Include="Engine\Component\Collider">
       <UniqueIdentifier>{b90744e7-7d73-45bd-be59-eac8fa2d548e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\BackGround">
+      <UniqueIdentifier>{d4427a62-4008-4429-a1d8-dbd46fad51dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -183,6 +186,9 @@
     <ClInclude Include="CTile.h">
       <Filter>Object\Tile</Filter>
     </ClInclude>
+    <ClInclude Include="CBackGround.h">
+      <Filter>Object\BackGround</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winAPI.cpp">
@@ -259,6 +265,9 @@
     </ClCompile>
     <ClCompile Include="CTile.cpp">
       <Filter>Object\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="CBackGround.cpp">
+      <Filter>Object\BackGround</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

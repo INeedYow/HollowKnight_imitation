@@ -9,29 +9,34 @@
 
 CPlayer::CPlayer()
 {
-	m_pTex = loadTex(L"PlayerTex", L"texture\\Animation_Player.bmp");
+	m_pTex = loadTex(L"PlayerTex", L"texture\\test.bmp");
 	setName(OBJNAME::PLAYER);
-	setSize(fPoint(70.f, 70.f));
-	m_fSpeed = 300.f;
+	setSize(fPoint(100.f, 100.f));
+
+	CPlayer::eACT act = eACT::IDLE;
+	m_ucState = 0;
+	m_fSpd = P_SPD;
+	m_fJumpSpd = P_JSPD;
+	m_fGravity = P_GRAV;
+	m_fTimer = 0.f;
+	m_iBottomCnt = 0;
 
 	createCollider();
-	getCollider()->setSize(fPoint(40.f, 40.f));
+	getCollider()->setSize(fPoint(80.f, 120.f));
 	getCollider()->setOffset(fPoint(0.f, 10.f));
 
 	createAnimator();
-	createAnim(L"LeftNone",		m_pTex, fPoint(0.f, 0.f),		fPoint(70.f, 70.f),		fPoint(70.f, 0.f),		0.5f,	2);
-	createAnim(L"RightNone",	m_pTex, fPoint(0.f, 70.f),		fPoint(70.f, 70.f),		fPoint(70.f, 0.f),		0.5f,	2);
-	createAnim(L"LeftMove",		m_pTex, fPoint(0.f, 140.f),		fPoint(70.f, 70.f),		fPoint(70.f, 0.f),		0.25f,	3);
-	createAnim(L"RightMove",	m_pTex, fPoint(0.f, 210.f),		fPoint(70.f, 70.f),		fPoint(70.f, 0.f),		0.25f,	3);
-	createAnim(L"LeftHit",		m_pTex, fPoint(140.f, 0.f),		fPoint(70.f, 70.f),		fPoint(70.f, 0.f),		0.25f,	1);
-	createAnim(L"RightHit",		m_pTex, fPoint(140.f, 70.f),	fPoint(70.f, 70.f),		fPoint(70.f, 0.f),		0.25f,	1);
-	PLAY(L"LeftNone");
 
-	CAnimation* pAni;
-	pAni = getAnimator()->findAnimation(L"LeftMove");
-	pAni->getFrame(1).fpOffset = fPoint(0.f, -20.f);
-	pAni = getAnimator()->findAnimation(L"RightMove");
-	pAni->getFrame(1).fpOffset = fPoint(0.f, -20.f);
+	createAnim(L"Idle_L",	m_pTex,		fPoint(0.f, 127.f),			fPoint(60.f, 127.f),		fPoint(60.f, 0.f),		0.25f,		6);
+	createAnim(L"Idle_R",	m_pTex,		fPoint(0.f, 0.f),			fPoint(60.f, 127.f),		fPoint(60.f, 0.f),		0.25f,		6);
+
+	createAnim(L"Walk_L",	m_pTex,		fPoint(0.f, 381.f),			fPoint(60.f, 127.f),		fPoint(60.f, 0.f),		0.25f,		7);
+	createAnim(L"Walk_R",	m_pTex,		fPoint(0.f, 254.f),			fPoint(60.f, 127.f),		fPoint(60.f, 0.f),		0.25f,		7);
+
+	createAnim(L"Run_L",	m_pTex,		fPoint(902.f, 635.f),		fPoint(82.f, 127.f),		fPoint(-82.f, 0.f),		0.2f,		8);
+	createAnim(L"Run_R",	m_pTex,		fPoint(328.f, 508.f),		fPoint(82.f, 127.f),		fPoint(82.f, 0.f),		0.2f,		8);
+
+	PLAY(L"Idle_R");
 }
 
 CPlayer::~CPlayer()
@@ -48,38 +53,72 @@ void CPlayer::update()
 {
 	fPoint pos = getPos();
 
+	if (m_ucState & SP_DIR)
+		PLAY(L"Idle_R");
+	else
+		PLAY(L"Idle_L");
+
 	if (KEY_HOLD(VK_LEFT))
 	{
-		pos.x -= m_fSpeed * fDT;
-		PLAY(L"LeftMove");
+		m_ucState &= ~(SP_DIR);
+
+		if (KEY_NONE(VK_CONTROL))
+		{
+			pos.x -= m_fSpd * fDT;
+			PLAY(L"Walk_L");
+		}
+		else
+		{
+			pos.x -= 2 * m_fSpd * fDT;
+			PLAY(L"Run_L");
+		}
 	}
 	if (KEY_HOLD(VK_RIGHT))
 	{
-		pos.x += m_fSpeed * fDT;
-		PLAY(L"RightMove");
+		m_ucState |= SP_DIR;
+
+		if (KEY_NONE(VK_CONTROL))
+		{
+			pos.x += m_fSpd * fDT;
+			PLAY(L"Walk_R");
+		}
+		else
+		{
+			pos.x += 2 * m_fSpd * fDT;
+			PLAY(L"Run_R");
+		}
 	}
+
+	// юс╫ц
 	if (KEY_HOLD(VK_UP))
 	{
-		pos.y -= m_fSpeed * fDT;
+
+		pos.y -= m_fSpd * fDT;
 	}
 	if (KEY_HOLD(VK_DOWN))
 	{
-		pos.y += m_fSpeed * fDT;
+		pos.y += m_fSpd * fDT;
 	}
 
 	setPos(pos);
-
-	if (KEY_ON(VK_SPACE))
-	{
-		createMissile();
-		PLAY(L"LeftHit");
-	}
-
 	getAnimator()->update();
 }
 
 void CPlayer::render(HDC hDC)
 {
+	fPoint pos = getPos();
+
+	wchar_t bufX[255] = {};
+	wchar_t bufY[255] = {};
+
+	swprintf_s(bufX, L"x = %d", (int)pos.x);
+	swprintf_s(bufY, L"y = %d", (int)pos.y);
+
+	pos = rendPos(pos);
+
+	TextOutW(hDC, (int)pos.x - 20, (int)pos.y + 60, bufX, (int)wcslen(bufX));
+	TextOutW(hDC, (int)pos.x - 20, (int)pos.y + 75, bufY, (int)wcslen(bufY));
+
 	componentRender(hDC);
 }
 

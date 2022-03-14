@@ -1,9 +1,13 @@
 #include "framework.h"
 #include "CScene.h"
+#include "CTile.h"
 
 CScene::CScene()
 {
 	m_strName = L"";
+
+	m_uiTileX = 0;
+	m_uiTileY = 0;
 }
 CScene::~CScene()
 {
@@ -22,6 +26,16 @@ void CScene::setName(const wstring& strName)
 wstring CScene::getName()
 {
 	return m_strName;
+}
+
+UINT CScene::getTileX()
+{
+	return m_uiTileX;
+}
+
+UINT CScene::getTileY()
+{
+	return m_uiTileY;
 }
 
 void CScene::addObject(CObject* pObj, OBJ objType)
@@ -83,4 +97,23 @@ void CScene::deleteObjectAll()
 {
 	for (UINT i = 0; i < (UINT)OBJ::SIZE; i++)
 		deleteObjectGroup((OBJ)i);
+}
+
+void CScene::createTile(UINT xSize, UINT ySize)
+{
+	m_uiTileX = xSize;
+	m_uiTileY = ySize;
+
+	CTexture* pTex = loadTex(L"Tile", L"map\\testTile.bmp");
+
+	for (UINT i = 0; i < xSize; i++)
+	{
+		for (UINT j = 0; j < ySize; j++)
+		{
+			CTile* pTile = new CTile();
+			pTile->setPos(fPoint((float)(j * CTile::SIZE_TILE), (float)(i * CTile::SIZE_TILE)));
+			pTile->setTexture(pTex);
+			addObject(pTile, OBJ::TILE);
+		}
+	}
 }

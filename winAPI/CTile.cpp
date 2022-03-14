@@ -5,7 +5,7 @@
 CTile::CTile()
 {
 	m_pTex = nullptr;
-	m_iIdx = 0;
+	m_iIndex = 0;
 	setSize(fPoint(SIZE_TILE, SIZE_TILE));
 }
 
@@ -36,14 +36,14 @@ void CTile::render(HDC hDC)
 
 	// 현재 x,y 인덱스 값은 나머지 연산 활용 (타일의 lefttop 좌표)
 		// 현재 X = index가 최대 X개수만큼 돌고 몇 개 남았는지
-	UINT iCurX = m_iIdx % iMaxX;
+	UINT iCurX = m_iIndex % iMaxX;
 	// 현재 Y = index가 최대 x개수만큼을 몇 번 채웠는지
-	UINT iCurY = (m_iIdx / iMaxX) % iMaxY;
+	UINT iCurY = (m_iIndex / iMaxX) % iMaxY;
 
-	fPoint rendPos = getRendPos(getPos());
+	fPoint rendPos = rendPos(getPos());
 	fPoint size = getSize();
 
-	TransparentBlt(hDC,
+	BitBlt(hDC,
 		(int)(rendPos.x),
 		(int)(rendPos.y),
 		(int)(size.x),
@@ -51,12 +51,16 @@ void CTile::render(HDC hDC)
 		m_pTex->getDC(),
 		(int)(iCurX * SIZE_TILE),
 		(int)(iCurY * SIZE_TILE),
-		(int)(size.x),
-		(int)(size.y),
-		RGB(255, 0, 255));
+		SRCCOPY);
+
 }
 
 void CTile::setTexture(CTexture* pTex)
 {
 	m_pTex = pTex;
+}
+
+void CTile::setImageIndex(UINT idx)
+{
+	m_iIndex = idx;
 }

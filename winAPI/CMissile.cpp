@@ -41,7 +41,7 @@ void CMissile::render(HDC hDC)
 	fPoint pos = getPos();
 	fPoint scale = getSize();
 
-	fPoint fptRenderPos = getRendPos(pos);
+	fPoint fptRenderPos = rendPos(pos);
 
 	Ellipse(hDC,
 		(int)(fptRenderPos.x - scale.x / 2.f),

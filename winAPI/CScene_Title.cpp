@@ -4,6 +4,7 @@
 #include "CObject.h"
 #include "CPlayer.h"
 #include "CMonster.h"
+#include "CBackGround.h"
 
 CScene_Title::CScene_Title()
 {
@@ -47,12 +48,16 @@ void CScene_Title::enter()
 	pMonster->setCenterPos(pMonster->getPos());
 	addObject(pMonster, OBJ::MONSTER);
 
+	//
+	CBackGround* pBG = new CBackGround;
+	addObject(pBG, OBJ::BACKGROUND);
+
 	checkGrp(OBJ::PLAYER, OBJ::MONSTER);
 	checkGrp(OBJ::MISSILE_PLAYER, OBJ::MONSTER);
 
 	// Camera Look ÁöÁ¤
-	setFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
-	//CCameraManager::getInst()->SetTargetObj(pPlayer);
+	//setFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
+	CCameraManager::getInst()->setTrace(pPlayer);
 }
 
 void CScene_Title::exit()

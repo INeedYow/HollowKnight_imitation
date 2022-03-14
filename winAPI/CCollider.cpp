@@ -93,7 +93,7 @@ void CCollider::finalUpdate()
 
 void CCollider::render(HDC hDC)
 {
-	fPoint fpRendPos = getRendPos(m_fpPos);
+	fPoint fpRendPos = rendPos(m_fpPos);
 
 	SelectGDI pen(hDC, PEN::RED, PEN::GREEN, m_uiCollCnt);
 	SelectGDI brush(hDC, BRUSH::HOLLOW);

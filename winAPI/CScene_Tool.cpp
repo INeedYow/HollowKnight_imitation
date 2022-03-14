@@ -9,6 +9,7 @@ INT_PTR CALLBACK TileWinProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 CScene_Tool::CScene_Tool()
 {
 	m_hWnd = 0;
+	m_uiIndex = 0;
 }
 
 CScene_Tool::~CScene_Tool()
@@ -19,23 +20,13 @@ void CScene_Tool::update()
 {
 	if (KEY_ON(VK_TAB))
 		changeScn(SCENE::TITLE);
+
 }
 
 void CScene_Tool::enter()
 {
-	CTexture* pTileTex = loadTex(L"Tile", L"texture\\tilemap.bmp");
 
-	// Tile 생성
-	for (int i = 0; i < 5; i++)
-	{
-		for (int j = 0; j < 5; j++)
-		{
-			CTile* pTile = new CTile();
-			pTile->setPos(fPoint((float)(j * CTile::SIZE_TILE), (float)(i * CTile::SIZE_TILE)));
-			pTile->setTexture(pTileTex);
-			addObject(pTile, OBJ::TILE);
-		}
-	}
+	createTile(5, 5);
 
 	setFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
 
@@ -47,6 +38,20 @@ void CScene_Tool::enter()
 void CScene_Tool::exit()
 {
 	EndDialog(m_hWnd, IDOK);
+}
+
+void CScene_Tool::setIndex(UINT idx)
+{
+	m_uiIndex = idx;
+}
+
+void CScene_Tool::setTileIndex()
+{
+	if (KEY_ON(VK_LBUTTON))
+	{
+		fPoint mPos = mousePos();
+		mPos = realPos(mPos);
+	}
 }
 
 // 정보 대화 상자의 메시지 처리기입니다.
@@ -62,6 +67,30 @@ INT_PTR CALLBACK TileWinProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
 		{
 			return (INT_PTR)TRUE;
+		}
+		else if (LOWORD(wParam) == IDC_BUTTON_SIZE)
+		{
+			int x = GetDlgItemInt(hDlg, IDC_EDIT_SIZEX, nullptr, false);
+			int y = GetDlgItemInt(hDlg, IDC_EDIT_SIZEY, nullptr, false);
+
+			CScene* pCurScene = CSceneManager::getInst()->getCurScene();
+
+			CScene_Tool* pToolScene = dynamic_cast<CScene_Tool*>(pCurScene);
+			assert(pToolScene);
+
+			pToolScene->deleteObjectGroup(OBJ::TILE);
+			pToolScene->createTile(x, y);
+		}
+		else if (LOWORD(wParam) == IDC_BUTTON_TILE)
+		{
+			int index = GetDlgItemInt(hDlg, IDC_EDIT_TILE, nullptr, false);
+
+			CScene* pCurScene = CSceneManager::getInst()->getCurScene();
+
+			CScene_Tool* pToolScene = dynamic_cast<CScene_Tool*>(pCurScene);
+			assert(pToolScene);
+
+			pToolScene->setIndex(index);
 		}
 		break;
 	}
