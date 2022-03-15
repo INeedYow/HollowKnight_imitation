@@ -88,6 +88,9 @@
     <Filter Include="Object\BackGround">
       <UniqueIdentifier>{d4427a62-4008-4429-a1d8-dbd46fad51dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Manager\UIMgr">
+      <UniqueIdentifier>{330aa453-e9a6-44ec-89e4-743f28055a81}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -189,6 +192,12 @@
     <ClInclude Include="CBackGround.h">
       <Filter>Object\BackGround</Filter>
     </ClInclude>
+    <ClInclude Include="CUI.h">
+      <Filter>Object\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="CUIManager.h">
+      <Filter>Engine\Manager\UIMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winAPI.cpp">
@@ -268,6 +277,12 @@
     </ClCompile>
     <ClCompile Include="CBackGround.cpp">
       <Filter>Object\BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="CUI.cpp">
+      <Filter>Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="CUIManager.cpp">
+      <Filter>Engine\Manager\UIMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

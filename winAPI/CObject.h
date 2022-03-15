@@ -37,7 +37,7 @@ public:
 	bool isDead();
 
 	virtual void update() = 0;
-	virtual void finalUpdate() final;	// 오버라이딩 막음
+	virtual void finalUpdate();
 	virtual void render(HDC hDC);
 	virtual void componentRender(HDC hDC);
 

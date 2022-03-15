@@ -22,21 +22,22 @@ CPlayer::CPlayer()
 	m_iBottomCnt = 0;
 
 	createCollider();
-	getCollider()->setSize(fPoint(80.f, 120.f));
+	getCollider()->setSize(fPoint(90.f, 120.f));
 	getCollider()->setOffset(fPoint(0.f, 10.f));
 
 	createAnimator();
+	createAnim(L"Idle_L", m_pTex, fPoint(0.f, 127.f), fPoint(60.f, 127.f), fPoint(60.f, 0.f), 0.25f, 6);
+	createAnim(L"Idle_R", m_pTex, fPoint(0.f, 0.f), fPoint(60.f, 127.f), fPoint(60.f, 0.f), 0.25f, 6);
 
-	createAnim(L"Idle_L",	m_pTex,		fPoint(0.f, 127.f),			fPoint(60.f, 127.f),		fPoint(60.f, 0.f),		0.25f,		6);
-	createAnim(L"Idle_R",	m_pTex,		fPoint(0.f, 0.f),			fPoint(60.f, 127.f),		fPoint(60.f, 0.f),		0.25f,		6);
+	createAnim(L"Walk_L", m_pTex, fPoint(0.f, 381.f), fPoint(60.f, 127.f), fPoint(60.f, 0.f), 0.25f, 7);
+	createAnim(L"Walk_R", m_pTex, fPoint(0.f, 254.f), fPoint(60.f, 127.f), fPoint(60.f, 0.f), 0.25f, 7);
 
-	createAnim(L"Walk_L",	m_pTex,		fPoint(0.f, 381.f),			fPoint(60.f, 127.f),		fPoint(60.f, 0.f),		0.25f,		7);
-	createAnim(L"Walk_R",	m_pTex,		fPoint(0.f, 254.f),			fPoint(60.f, 127.f),		fPoint(60.f, 0.f),		0.25f,		7);
-
-	createAnim(L"Run_L",	m_pTex,		fPoint(902.f, 635.f),		fPoint(82.f, 127.f),		fPoint(-82.f, 0.f),		0.2f,		8);
-	createAnim(L"Run_R",	m_pTex,		fPoint(328.f, 508.f),		fPoint(82.f, 127.f),		fPoint(82.f, 0.f),		0.2f,		8);
+	createAnim(L"Run_L", m_pTex, fPoint(902.f, 635.f), fPoint(82.f, 127.f), fPoint(-82.f, 0.f), 0.2f, 8);
+	createAnim(L"Run_R", m_pTex, fPoint(328.f, 508.f), fPoint(82.f, 127.f), fPoint(82.f, 0.f), 0.2f, 8);
 
 	PLAY(L"Idle_R");
+
+	
 }
 
 CPlayer::~CPlayer()

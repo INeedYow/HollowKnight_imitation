@@ -4,6 +4,7 @@
 #include "CTile.h"
 #include "CTexture.h"
 #include "commdlg.h"		// OPENFILENAME 구조체 사용하기 위해서
+#include "CUI.h"
 
 INT_PTR CALLBACK TileWinProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -57,6 +58,16 @@ void CScene_Tool::enter()
 	m_hWnd = CreateDialog(hInst, MAKEINTRESOURCE(IDD_TILEBOX), hWnd, TileWinProc);
 
 	ShowWindow(m_hWnd, SW_SHOW);
+
+	CUI* pUI = new CUI(false);
+	pUI->setSize(fPoint(200.f, 80.f));
+	pUI->setPos(fPoint(WINSIZEX - pUI->getSize().x, 0.f));		// UI는 카메라의 위치와 상관없이 절대 좌표를 통해 구현
+	addObject(pUI, OBJ::UI);
+
+	CUI* pChildUI = new CUI(false);
+	pChildUI->setSize(fPoint(100.f, 40.f));
+	pChildUI->setPos(fPoint(10.f, 10.f));
+	pUI->addChild(pChildUI);
 }
 
 void CScene_Tool::exit()
