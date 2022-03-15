@@ -28,6 +28,7 @@ public:
 	void finalUpdateChild();
 	void rendChild(HDC hDC);
 
+	// 마우스와 상호작용에 체크하고 해당 UI에 함수 호출함
 	virtual void mouseOn();
 	virtual void mouseLbtnDown();
 	virtual void mouseLbtnUp();
