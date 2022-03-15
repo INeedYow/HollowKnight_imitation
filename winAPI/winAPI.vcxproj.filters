@@ -85,6 +85,9 @@
     <Filter Include="Engine\Component\Collider">
       <UniqueIdentifier>{b90744e7-7d73-45bd-be59-eac8fa2d548e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Manager\UIMgr">
+      <UniqueIdentifier>{330aa453-e9a6-44ec-89e4-743f28055a81}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -186,6 +189,9 @@
     <ClInclude Include="CUI.h">
       <Filter>Object\UI</Filter>
     </ClInclude>
+    <ClInclude Include="CUIManager.h">
+      <Filter>Engine\Manager\UIMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winAPI.cpp">
@@ -265,6 +271,9 @@
     </ClCompile>
     <ClCompile Include="CUI.cpp">
       <Filter>Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="CUIManager.cpp">
+      <Filter>Engine\Manager\UIMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

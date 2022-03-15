@@ -169,6 +169,7 @@
     <ClInclude Include="CTile.h" />
     <ClInclude Include="CTimeManager.h" />
     <ClInclude Include="CUI.h" />
+    <ClInclude Include="CUIManager.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="func.h" />
     <ClInclude Include="Logger.h" />
@@ -204,6 +205,7 @@
     <ClCompile Include="CTile.cpp" />
     <ClCompile Include="CTimeManager.cpp" />
     <ClCompile Include="CUI.cpp" />
+    <ClCompile Include="CUIManager.cpp" />
     <ClCompile Include="func.cpp" />
     <ClCompile Include="winAPI.cpp" />
   </ItemGroup>

@@ -2,13 +2,19 @@
 #include "CObject.h"
 class CUI : public CObject
 {
+	friend class CUIManager;
+
 	vector<CUI*> m_vecChildUI;		// 계층 구조
 	CUI* m_pParentUI;
 
-	fPoint m_fpFinalPos;
+	fPoint m_fpFinalPos;			// 자식 UI의 경우 부모 위치에 상대적
+
+	bool	m_bCamAffect;
+	bool	m_bMouseOn;
+	bool	m_bLbtnDown;
 
 public:
-	CUI();
+	CUI(bool bCamAff);
 	virtual ~CUI();
 
 	virtual CUI* clone();
@@ -28,7 +34,11 @@ public:
 
 	fPoint getFinalPos();
 	CUI* getParent();
+	bool isMouseOn();
+	bool getCamAffect();
 
 	void addChild(CUI* pUI);
+
+	void mouseOnChk();
 };
 

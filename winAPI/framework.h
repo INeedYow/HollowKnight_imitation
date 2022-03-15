@@ -52,16 +52,38 @@ extern HINSTANCE	hInst;
 #define COLLRR				collisionRectToRect
 
 
+// # state
+#define P_SPD				140;
+#define P_JSPD				200;
+#define P_GRAV				400
+#define P_GRAVMAX			(P_GRAV * 3);
+
+// 플레이어 상태
+#define SP_DIR				0x0001			// 좌, 우 방향
+#define SP_AIR				0x0002			// 공중에 뜸
+#define SP_JUMPHOLD			0x0004			// 점프 키 누르고 있는 상황
+
+#define SP_INVIN			0x0010			// 무적 (임시)
+#define SP_GETDMG			0x0020			// 피격 등으로 무적
+
+// item 보유
+#define SP_ITEM1			0x0100
+#define SP_ITEM2			0x0200
+
+
+
  // enum class 열거형
 #define OBJ		GROUP_OBJECT
 enum class GROUP_OBJECT
 {
 	DEFAULT,
+	BACKGROUND,
+	TILE,
+
 	PLAYER,
 	MONSTER,
 	MISSILE_PLAYER,
 	MISSILE_MONSTER,
-	TILE,
 
 
 	UI,
@@ -86,6 +108,7 @@ enum class GROUP_SCENE
 	TITLE,
 	TOOL,
 	STAGE_01,
+	STAGE_02,
 
 	SIZE
 };
@@ -195,7 +218,9 @@ enum class COLL_DIR
 
 #define setFocus(fp)				CCameraManager::getInst()->setFocusOn(fp)
 #define setTrace(pObj)				CCameraManager::getInst()->setTraceObj(pObj)
-#define getRendPos(pos)				CCameraManager::getInst()->getRenderPos(pos)
+#define rendPos(pos)				CCameraManager::getInst()->getRenderPos(pos)
+#define realPos(pos)				CCameraManager::getInst()->getRealPos(pos)
 
 #define loadTex(eName, wsPath)		CResourceManager::getInst()->loadTextrue(eName, wsPath)
+#define findTex(eName)				CResourceManager::getInst()->findTexture(eName)
 
