@@ -119,6 +119,11 @@ const vector<CObject*>& CScene::getGroupObject(OBJ group)
 	return m_arrObj[(UINT)group];
 }
 
+vector<CObject*>& CScene::getUIGroup()
+{
+	return m_arrObj[(UINT)OBJ::UI];
+}
+
 void CScene::deleteObjectGroup(OBJ objGroup)
 {
 	for (UINT i = 0; i < m_arrObj[(UINT)objGroup].size(); i++)

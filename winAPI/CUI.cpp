@@ -12,6 +12,20 @@ CUI::CUI(bool bCamAff)
 	m_bLbtnDown = false;
 }
 
+CUI::CUI(const CUI& other)
+	: CObject(other)		// 부모의 복사생성자를 지정해주어야 함
+{
+	m_pParentUI = nullptr;
+	m_bCamAffect = other.m_bCamAffect;
+	m_bMouseOn = false;
+	m_bLbtnDown = false;
+
+	for (UINT i = 0; i < other.m_vecChildUI.size(); i++)
+	{	// 자식 UI 개수만큼 생성 해줌
+		addChild(other.m_vecChildUI[i]->clone());
+	}
+}
+
 CUI::~CUI()
 {	// 자식 UI벡터 해제
 	for (int i = 0; i < m_vecChildUI.size(); i++)
@@ -19,11 +33,6 @@ CUI::~CUI()
 		if (nullptr != m_vecChildUI[i])
 			delete m_vecChildUI[i];
 	}
-}
-
-CUI* CUI::clone()
-{
-	return new CUI(*this);
 }
 
 void CUI::update()
@@ -36,9 +45,9 @@ void CUI::finalUpdate()
 	CObject::finalUpdate();
 
 	m_fpFinalPos = getPos();
-	if (getParent())
+	if (getParentUI())
 	{	// 부모가 있는 경우 자식 UI의 위치는 상대적
-		fPoint parentPos = getParent()->getFinalPos();
+		fPoint parentPos = getParentUI()->getFinalPos();
 		m_fpFinalPos += parentPos;
 	}
 
@@ -128,9 +137,14 @@ fPoint CUI::getFinalPos()
 	return m_fpFinalPos;
 }
 
-CUI* CUI::getParent()
+CUI* CUI::getParentUI()
 {
 	return m_pParentUI;
+}
+
+const vector<CUI*>& CUI::getChildUI()
+{
+	return m_vecChildUI;
 }
 
 bool CUI::isMouseOn()
@@ -138,9 +152,14 @@ bool CUI::isMouseOn()
 	return m_bMouseOn;
 }
 
-bool CUI::getCamAffect()
+bool CUI::isCamAffect()
 {
 	return m_bCamAffect;
+}
+
+bool CUI::isLbtnDown()
+{
+	return m_bLbtnDown;
 }
 
 void CUI::addChild(CUI* pUI)

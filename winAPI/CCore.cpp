@@ -20,7 +20,7 @@ CCore::~CCore()
 	DeleteObject(m_hBitMap);
 
 	for (int i = 0; i < (int)BRUSH::SIZE; i++)
-	{	// hollow´Â stock¿¡¼­ ºô·Á¿Â °Å¶ó¼­ Áö¿ì¸é ¾È µÊ
+	{	// hollow´Â stock¿¡¼­ ºô·Á¿È
 		if ((int)BRUSH::HOLLOW == i) continue;
 		DeleteObject(m_arrBrush[i]);
 	}
@@ -44,6 +44,7 @@ void CCore::update()
 	CSceneManager::getInst()->update();
 	CCollisionManager::getInst()->update();
 	CCameraManager::getInst()->update();
+	CUIManager::getInst()->update();
 }
 
 void CCore::render()

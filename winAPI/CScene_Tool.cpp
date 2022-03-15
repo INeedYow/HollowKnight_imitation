@@ -5,6 +5,8 @@
 #include "CTexture.h"
 #include "commdlg.h"		// OPENFILENAME 구조체 사용하기 위해서
 #include "CUI.h"
+#include "CPanelUI.h"
+#include "CButtonUI.h"
 
 INT_PTR CALLBACK TileWinProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -59,15 +61,19 @@ void CScene_Tool::enter()
 
 	ShowWindow(m_hWnd, SW_SHOW);
 
-	CUI* pUI = new CUI(false);
-	pUI->setSize(fPoint(200.f, 80.f));
-	pUI->setPos(fPoint(WINSIZEX - pUI->getSize().x, 0.f));		// UI는 카메라의 위치와 상관없이 절대 좌표를 통해 구현
-	addObject(pUI, OBJ::UI);
+	CUI* pPanelUI = new CPanelUI();
+	pPanelUI->setSize(fPoint(200.f, 80.f));
+	pPanelUI->setPos(fPoint(WINSIZEX - pPanelUI->getSize().x, 0.f));		// UI는 카메라의 위치와 상관없이 절대 좌표를 통해 구현
+	addObject(pPanelUI, OBJ::UI);
 
-	CUI* pChildUI = new CUI(false);
-	pChildUI->setSize(fPoint(100.f, 40.f));
-	pChildUI->setPos(fPoint(10.f, 10.f));
-	pUI->addChild(pChildUI);
+	CUI* pButtonUI = new CButtonUI();
+	pButtonUI->setSize(fPoint(100.f, 40.f));
+	pButtonUI->setPos(fPoint(10.f, 10.f));
+	pPanelUI->addChild(pButtonUI);
+
+	CUI* pClonePanel = pPanelUI->clone();
+	pClonePanel->setPos(pClonePanel->getPos() + fPoint(-500.f, 0.f));
+	addObject(pClonePanel, OBJ::UI);
 }
 
 void CScene_Tool::exit()

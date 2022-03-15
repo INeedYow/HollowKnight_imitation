@@ -15,9 +15,10 @@ class CUI : public CObject
 
 public:
 	CUI(bool bCamAff);
+	CUI(const CUI& other);
 	virtual ~CUI();
 
-	virtual CUI* clone();
+	virtual CUI* clone() = 0;
 
 	virtual void update();
 	virtual void finalUpdate();
@@ -33,9 +34,12 @@ public:
 	virtual void mouseLbtnClicked();
 
 	fPoint getFinalPos();
-	CUI* getParent();
 	bool isMouseOn();
-	bool getCamAffect();
+	bool isCamAffect();
+	bool isLbtnDown();
+
+	const vector<CUI*>& getChildUI();
+	CUI* getParentUI();
 
 	void addChild(CUI* pUI);
 

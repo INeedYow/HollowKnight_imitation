@@ -3,7 +3,7 @@
 
 class CCollider;
 
-// x가 더 긴 캐릭터가 움직일 때 대각선 위에서 left로 판정이 나서 이동이 막힘
+
 DIR collisionRectToRect(CCollider* coll1, CCollider* coll2)
 {	// 이미 충돌인 상태에서
 	fPoint pos1 = coll1->getPos();
