@@ -53,6 +53,7 @@ void CTile::render(HDC hDC)
 		(int)(iCurY * SIZE_TILE),
 		SRCCOPY);
 
+	componentRender(hDC);
 }
 
 void CTile::setTexture(CTexture* pTex)

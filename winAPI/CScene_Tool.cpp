@@ -9,7 +9,6 @@
 #include "CButtonUI.h"
 
 INT_PTR CALLBACK TileWinProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
-void changeScene(DWORD_PTR, DWORD_PTR);
 
 CScene_Tool::CScene_Tool()
 {
@@ -27,7 +26,7 @@ void CScene_Tool::update()
 {
 	CScene::update();
 
-	if (KEY_ON(VK_TAB))
+	if (KEY_ON(VK_ESCAPE))
 		changeScn(SCENE::TITLE);
 
 	if (KEY_HOLD('A'))
@@ -52,7 +51,6 @@ void CScene_Tool::update()
 
 void CScene_Tool::enter()
 {
-
 	createTile(5, 5);
 
 	setFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
@@ -61,25 +59,6 @@ void CScene_Tool::enter()
 
 	ShowWindow(m_hWnd, SW_SHOW);
 
-	CUI* pPanelUI = new CPanelUI();
-	pPanelUI->setSize(fPoint(200.f, 80.f));
-	pPanelUI->setPos(fPoint(WINSIZEX - pPanelUI->getSize().x, 0.f));		// UI는 카메라의 위치와 상관없이 절대 좌표를 통해 구현
-	addObject(pPanelUI, OBJ::UI);
-
-	CButtonUI* pButtonUI = new CButtonUI();
-	pButtonUI->setSize(fPoint(100.f, 40.f));
-	pButtonUI->setPos(fPoint(10.f, 10.f));
-	pPanelUI->addChild(pButtonUI);
-
-	CUI* pClonePanel = pPanelUI->clone();
-	pClonePanel->setPos(pClonePanel->getPos() + fPoint(-500.f, 0.f));
-	addObject(pClonePanel, OBJ::UI);
-
-	CButtonUI* pBtnUI = new CButtonUI;
-	pBtnUI->setPos(fPoint(140.f, 40.f));
-	pBtnUI->setSize(fPoint(50.f, 20.f));
-	pBtnUI->setClickedCallBack(changeScene, 0, 0);
-	pClonePanel->addChild(pBtnUI);
 }
 
 void CScene_Tool::exit()
@@ -265,9 +244,4 @@ INT_PTR CALLBACK TileWinProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 		break;
 	}
 	return (INT_PTR)FALSE;
-}
-
-void changeScene(DWORD_PTR, DWORD_PTR)
-{
-	changeScn(SCENE::TITLE);
 }

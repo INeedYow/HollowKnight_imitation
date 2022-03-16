@@ -67,9 +67,6 @@
     <ClCompile Include="CTexture.cpp">
       <Filter>Resource\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="CBackGround.cpp">
-      <Filter>Object\BackGround</Filter>
-    </ClCompile>
     <ClCompile Include="CMonster.cpp">
       <Filter>Object\Character</Filter>
     </ClCompile>
@@ -90,6 +87,15 @@
     </ClCompile>
     <ClCompile Include="CButtonUI.cpp">
       <Filter>Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="CScene_Stage01.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CBackGround_Title.cpp">
+      <Filter>Object\BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="CBackGround_Stg1.cpp">
+      <Filter>Object\BackGround</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -168,9 +174,6 @@
     <ClInclude Include="CTexture.h">
       <Filter>Resource\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="CBackGround.h">
-      <Filter>Object\BackGround</Filter>
-    </ClInclude>
     <ClInclude Include="CMonster.h">
       <Filter>Object\Character</Filter>
     </ClInclude>
@@ -203,6 +206,15 @@
     </ClInclude>
     <ClInclude Include="CButtonUI.h">
       <Filter>Object\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="CScene_Stage01.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CBackGround_Title.h">
+      <Filter>Object\BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="CBackGround_Stg1.h">
+      <Filter>Object\BackGround</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

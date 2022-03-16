@@ -1,10 +1,17 @@
 #include "framework.h"
 #include "CScene_Title.h"
-
 #include "CObject.h"
 #include "CPlayer.h"
 #include "CMonster.h"
-#include "CBackGround.h"
+#include "CTile.h"
+#include "CTexture.h"
+#include "commdlg.h"		// OPENFILENAME 구조체 사용하기 위해서
+#include "CUI.h"
+#include "CPanelUI.h"
+#include "CButtonUI.h"
+#include "CBackGround_Title.h"
+
+void changeScene(DWORD_PTR param1, DWORD_PTR param2);
 
 CScene_Title::CScene_Title()
 {
@@ -25,39 +32,43 @@ void CScene_Title::update()
 
 	if (KEY_ON(VK_LBUTTON))
 	{
-		fPoint fptLookAt = CCameraManager::getInst()->getRealPos(mousePos());
+		fPoint fptLookAt = realPos(mousePos());
 		CCameraManager::getInst()->setFocus(fptLookAt);
 	}
 }
 
 void CScene_Title::enter()
 {
-	// 타일 로딩
-	wstring path = CPathManager::getInst()->getContentPath();
-	path += L"map\\test.tile";
-	loadTile(path);
-
-	// Player 추가
-	CObject* pPlayer = new CPlayer;
-	pPlayer->setPos(fPoint(200, 200));
-	addObject(pPlayer, OBJ::PLAYER);
-
-	// Monster 추가
-	CMonster* pMonster = new CMonster;
-	pMonster->setPos(fPoint(1100, 350));
-	pMonster->setCenterPos(pMonster->getPos());
-	addObject(pMonster, OBJ::MONSTER);
-
-	//
-	CBackGround* pBG = new CBackGround;
-	addObject(pBG, OBJ::BACKGROUND);
-
-	checkGrp(OBJ::PLAYER, OBJ::MONSTER);
-	checkGrp(OBJ::MISSILE_PLAYER, OBJ::MONSTER);
 
 	// Camera Look 지정
-	//setFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
-	CCameraManager::getInst()->setTrace(pPlayer);
+	setFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
+
+	CUI* pPanelUI = new CPanelUI();
+	pPanelUI->setSize(fPoint(360.f, 150.f));
+	pPanelUI->setPos(fPoint(WINSIZEX / 2.f - 180.f, WINSIZEY / 2.f));		// UI는 카메라의 위치와 상관없이 절대 좌표를 통해 구현
+	addObject(pPanelUI, OBJ::UI);
+
+	CButtonUI* pBtnStart = new CButtonUI();
+	pBtnStart->setSize(fPoint(150.f, 30.f));
+	pBtnStart->setPos(fPoint(90.f, 20.f));
+	pBtnStart->setClickedCallBack(changeScene, (DWORD_PTR)SCENE::STAGE_01, 0);
+	pPanelUI->addChild(pBtnStart);
+
+	CButtonUI* pBtnTool = new CButtonUI();
+	pBtnTool->setSize(fPoint(150.f, 30.f));
+	pBtnTool->setPos(fPoint(90.f, 60.f));
+	pBtnTool->setClickedCallBack(changeScene, (DWORD_PTR)SCENE::TOOL, 0);
+	pPanelUI->addChild(pBtnTool);
+
+	CButtonUI* pBtnExit = new CButtonUI();
+	pBtnExit->setSize(fPoint(150.f, 30.f));
+	pBtnExit->setPos(fPoint(90.f, 100.f));
+	pBtnExit->setClickedCallBack(changeScene, (DWORD_PTR)SCENE::TITLE, 0);
+	pPanelUI->addChild(pBtnExit);
+
+	//CBackGround_Title* pBGTitle = new CBackGround_Title();
+	//addObject(pBGTitle, OBJ::BACKGROUND);
+
 }
 
 void CScene_Title::exit()
@@ -65,4 +76,10 @@ void CScene_Title::exit()
 	deleteObjectAll();
 
 	CCollisionManager::getInst()->resetGroup();
+}
+
+
+void changeScene(DWORD_PTR param1, DWORD_PTR param2)
+{
+	changeScn((SCENE)param1);
 }

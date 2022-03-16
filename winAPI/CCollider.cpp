@@ -88,11 +88,13 @@ UINT CCollider::getID()
 void CCollider::finalUpdate()
 {
 	m_fpPos = m_pOwner->getPos() + m_fpOffset;
-	m_fpSize = m_pOwner->getSize();
+	//m_fpSize = m_pOwner->getSize();
 }
 
 void CCollider::render(HDC hDC)
 {
+	if (!g_bDebug) return;
+
 	fPoint fpRendPos = rendPos(m_fpPos);
 
 	SelectGDI pen(hDC, PEN::RED, PEN::GREEN, m_uiCollCnt);
@@ -116,6 +118,7 @@ void CCollider::render(HDC hDC)
 		break;
 	}
 
+	// 정보 출력
 	WCHAR szBuffer[255] = {};
 	swprintf_s(szBuffer, L"%d", m_uiCollCnt);
 	TextOutW(hDC, (int)fpRendPos.x, (int)fpRendPos.y, szBuffer, (int)wcslen(szBuffer));

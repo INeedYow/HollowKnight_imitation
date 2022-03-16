@@ -34,6 +34,7 @@ using namespace std;
 // # 전역 변수
 extern HWND			hWnd;
 extern HINSTANCE	hInst;
+extern bool			g_bDebug;
 
 
 // # 전처리기
@@ -54,10 +55,10 @@ extern HINSTANCE	hInst;
 
 
 // # state
-#define P_SPD				140;
-#define P_JSPD				200;
-#define P_GRAV				400
-#define P_GRAVMAX			(P_GRAV * 3);
+#define P_SPDX				150;
+#define P_SPDY				300;
+#define P_GRAV				300
+#define P_GRAVMAX			(P_GRAV * 3)
 
 // 플레이어 상태
 #define SP_DIR				0x0001			// 좌, 우 방향
@@ -95,6 +96,7 @@ enum class GROUP_OBJECT
 enum class OBJECT_NAME
 {
 	DEFAULT,
+	TILE,
 	PLAYER,
 	MONSTER,
 	MISSILE_PLAYER,
