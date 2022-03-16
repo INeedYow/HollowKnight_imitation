@@ -5,7 +5,7 @@
 
 CUIManager::CUIManager()
 {
-
+	m_pFocusUI = nullptr;
 }
 
 CUIManager::~CUIManager()
@@ -13,37 +13,63 @@ CUIManager::~CUIManager()
 
 }
 
+// TODO
 void CUIManager::update()
 {	
-	CScene* pCurScene = CSceneManager::getInst()->getCurScene();
-	const vector<CObject*>& vecUI = pCurScene->getGroupObject(OBJ::UI);
+	m_pFocusUI = getFocusUI();
+	CUI* pUI = getTargetUI(m_pFocusUI);
 
-	for (UINT i = 0; i < vecUI.size(); i++)
+	if (nullptr != pUI)
 	{
-		CUI* pUI = (CUI*)vecUI[i];
-		pUI = getTargetUI(pUI);			//
+		pUI->mouseOn();
 
-		if (nullptr != pUI)
+		if (KEY_ON(VK_LBUTTON))
 		{
-			pUI->mouseOn();
+			pUI->mouseLbtnDown();
+			pUI->m_bLbtnDown = true;
+		}
+		else if (KEY_OFF(VK_LBUTTON))
+		{
+			pUI->mouseLbtnUp();
 
-			if (KEY_ON(VK_LBUTTON))
+			if (pUI->m_bLbtnDown)
 			{
-				pUI->mouseLbtnDown();
-				pUI->m_bLbtnDown = true;
+				pUI->mouseLbtnClicked();
 			}
-			else if (KEY_OFF(VK_LBUTTON))
-			{
-				pUI->mouseLbtnUp();
-
-				if (pUI->m_bLbtnDown)
-				{
-					pUI->mouseLbtnClicked();
-				}
-				pUI->m_bLbtnDown = false;
-			}
+			pUI->m_bLbtnDown = false;
 		}
 	}
+	
+}
+
+void CUIManager::setFocusUI(CUI* pUI)
+{
+	// 예외처리
+	if (m_pFocusUI == pUI || nullptr == m_pFocusUI)
+	{
+		m_pFocusUI = pUI;
+		return;
+	}
+
+	m_pFocusUI = pUI;
+
+	if (nullptr == m_pFocusUI)
+		return;
+
+	CScene* pCurScene = CSceneManager::getInst()->getCurScene();
+	vector<CObject*>& vecUI = pCurScene->getUIGroup();
+
+	vector<CObject*>::iterator iter = vecUI.begin();
+	for (; iter != vecUI.end(); iter++)
+	{
+		if (m_pFocusUI == *iter)
+		{
+			break;
+		}
+	}
+
+	vecUI.erase(iter);
+	vecUI.push_back(m_pFocusUI);
 }
 
 // UI가 부모 자식 겹쳐있는데 부모가 업데이트가 먼저 돼서 자식 UI를 클릭해도 부모 UI가 반응하기 때문에
@@ -54,6 +80,9 @@ CUI* CUIManager::getTargetUI(CUI* pParentUI)
 	vector<CUI*> vecNoneTarget;
 	
 	CUI* pTargetUI = nullptr;
+
+	if (nullptr == pParentUI)
+		return nullptr;
 
 	queue.push_back(pParentUI);
 
@@ -90,4 +119,38 @@ CUI* CUIManager::getTargetUI(CUI* pParentUI)
 		}
 	}
 	return pTargetUI;
+}
+
+CUI* CUIManager::getFocusUI()
+{
+	CScene* pCurScene = CSceneManager::getInst()->getCurScene();
+	vector<CObject*>& vecUI = pCurScene->getUIGroup();
+	CUI* pFocusUI = m_pFocusUI;
+
+	if (!KEY_ON(VK_LBUTTON))
+	{
+		return pFocusUI;
+	}
+
+	vector<CObject*>::iterator targetiter = vecUI.end();
+	vector<CObject*>::iterator iter = vecUI.begin();
+	for (; iter != vecUI.end(); ++iter)
+	{
+		if (((CUI*)*iter)->isMouseOn())
+		{
+			targetiter = iter;
+		}
+	}
+
+	if (vecUI.end() == targetiter)
+	{
+		return nullptr;
+	}
+
+	pFocusUI = (CUI*)*targetiter;
+
+	vecUI.erase(targetiter);
+	vecUI.push_back(pFocusUI);
+
+	return pFocusUI;
 }

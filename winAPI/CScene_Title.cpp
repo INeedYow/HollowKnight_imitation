@@ -9,6 +9,7 @@
 #include "CUI.h"
 #include "CPanelUI.h"
 #include "CButtonUI.h"
+#include "CBackGround.h"
 
 void changeScene(DWORD_PTR param1, DWORD_PTR param2);
 
@@ -20,27 +21,18 @@ CScene_Title::~CScene_Title()
 {
 }
 
-void CScene_Title::update()
-{
-	CScene::update();
-
-	if (KEY_ON(VK_TAB))
-	{
-		changeScn(GROUP_SCENE::TOOL);
-	}
-
-	if (KEY_ON(VK_LBUTTON))
-	{
-		fPoint fptLookAt = realPos(mousePos());
-		CCameraManager::getInst()->setFocus(fptLookAt);
-	}
-}
-
 void CScene_Title::enter()
 {
 
 	// Camera Look ÁöÁ¤
 	setFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
+
+	CBackGround* pBG = new CBackGround;
+	pBG->load(L"BG_title", L"texture\\background\\title.bmp");
+	pBG->setPos(fPoint(0.f, 0.f));
+	pBG->setSize(fPoint(WINSIZEX, WINSIZEY));
+	pBG->setName(OBJNAME::BACKGROUND);
+	addObject(pBG, OBJ::BACKGROUND);
 
 	CUI* pPanelUI = new CPanelUI();
 	pPanelUI->setSize(fPoint(360.f, 150.f));

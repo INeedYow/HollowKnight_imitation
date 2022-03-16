@@ -1,23 +1,21 @@
 #include "framework.h"
 #include "CCore.h"
+#include "CTexture.h"
 
 CCore::CCore()
 {
 	m_hDC = 0;
-	m_hMemDC = 0;
-	m_hBitMap = 0;
 	m_arrBrush[0] = {};
 	m_arrPen[0] = {};
 	m_arrFont[0] = {};
+
+	m_pMemTex = nullptr;
 }
 
 CCore::~CCore()
 {
 	// 해당 윈도우 DC 핸들 반납
 	ReleaseDC(hWnd, m_hDC);
-	// 메모리 DC, 비트맵 반납
-	DeleteObject(m_hMemDC);
-	DeleteObject(m_hBitMap);
 
 	for (int i = 0; i < (int)BRUSH::SIZE; i++)
 	{	// hollow는 stock에서 빌려옴
@@ -49,38 +47,35 @@ void CCore::update()
 
 void CCore::render()
 {
-	Rectangle(m_hMemDC, -1, -1, WINSIZEX + 1, WINSIZEY + 1);
+	Rectangle(m_pMemTex->getDC(), -1, -1, WINSIZEX + 1, WINSIZEY + 1);
 
-	CSceneManager::getInst()->render(m_hMemDC);
+	CSceneManager::getInst()->render(m_pMemTex->getDC());
+	CCameraManager::getInst()->render(m_pMemTex->getDC());
 
 	// FPS 출력하기
 	wchar_t szBuffer[255] = {};
 	swprintf_s(szBuffer, L"[Flatform Imitation] FPS : %d", CTimeManager::getInst()->getFPS());
 	SetWindowText(hWnd, szBuffer);
 
-	BitBlt(m_hDC, 0, 0, WINSIZEX, WINSIZEY, m_hMemDC, 0, 0, SRCCOPY);
+	BitBlt(m_hDC, 0, 0, WINSIZEX, WINSIZEY, m_pMemTex->getDC(), 0, 0, SRCCOPY);
 }
 
 void CCore::init()
 {
 	CreateBrushPenFont();
+	m_hDC = GetDC(hWnd);
 
 	CPathManager::getInst()->init();
 	CTimeManager::getInst()->init();
 	CKeyManager::getInst()->init();
+	CCameraManager::getInst()->init();
 	CSceneManager::getInst()->init();
 	CCollisionManager::getInst()->init();
 
+	m_hDC = GetDC(hWnd);
 
-	m_hDC = GetDC(hWnd);		// hWnd 전역변수로 선언할 필요성;
-
-	// bitmap 생성과 메모리 DC 생성 및 호환
-		// compatible : 호환
-	m_hMemDC = CreateCompatibleDC(m_hDC);
-	m_hBitMap = CreateCompatibleBitmap(m_hDC, WINSIZEX, WINSIZEY);
-
-	HBITMAP hOldBitMap = (HBITMAP)SelectObject(m_hMemDC, m_hBitMap);
-	DeleteObject(hOldBitMap);
+	// 이중 버퍼링용 텍스쳐
+	m_pMemTex = CResourceManager::getInst()->createTexture(L"BackBuffer", WINSIZEX, WINSIZEY);
 }
 
 void CCore::CreateBrushPenFont()
@@ -112,5 +107,5 @@ HFONT CCore::getFont(FONT type)
 
 HDC CCore::getMainDC()
 {
-	return m_hMemDC;
+	return m_hDC;
 }

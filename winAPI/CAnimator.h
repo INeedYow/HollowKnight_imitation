@@ -7,8 +7,8 @@ class CAnimator
 	friend class CObject;
 
 	map<wstring, CAnimation*>	m_mapAni;		// 키값으로 애니메이션 저장
-	CAnimation* m_pCurAni;
-	CObject* m_pOwner;
+	CAnimation*		m_pCurAni;
+	CObject*		m_pOwner;
 
 public:
 	CAnimator();

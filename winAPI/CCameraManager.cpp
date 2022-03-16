@@ -1,6 +1,7 @@
 #include "framework.h"
 #include "CCameraManager.h"
 #include "CObject.h"
+#include "CTexture.h"
 
 CCameraManager::CCameraManager()
 {
@@ -19,6 +20,11 @@ CCameraManager::~CCameraManager()
 {
 }
 
+void CCameraManager::init()
+{
+	m_pTex = CResourceManager::getInst()->createTexture(L"CameraTex", WINSIZEX, WINSIZEY);
+}
+
 void CCameraManager::update()
 {
 	if (m_pTraceObj)				// 추적 중일 때
@@ -30,6 +36,27 @@ void CCameraManager::update()
 	}
 
 	calculateDiff();
+}
+
+void CCameraManager::render(HDC hDC)
+{
+	Rectangle(m_pTex->getDC(), 0, 0, 500, 500);
+	BLENDFUNCTION bf = {  };
+
+	bf.BlendOp = AC_SRC_OVER;
+	bf.BlendFlags = 0;
+	bf.AlphaFormat = 0;
+	bf.SourceConstantAlpha = 127;
+
+	AlphaBlend(hDC,
+		 0, 0,
+		 (int)(m_pTex->getBmpWidth()),
+		 (int)(m_pTex->getBmpHeight()),
+		 m_pTex->getDC(),
+		 0, 0,
+		 (int)(m_pTex->getBmpWidth()),
+		 (int)(m_pTex->getBmpHeight()),
+		 bf);
 }
 
 void CCameraManager::setFocusOn(fPoint focus)

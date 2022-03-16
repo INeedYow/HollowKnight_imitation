@@ -16,8 +16,8 @@ class CAnimation
 	friend class CAnimator;
 
 	wstring			m_strName;
-	CAnimator* m_pAnimator;
-	CTexture* m_pTex;
+	CAnimator*		m_pAnimator;
+	CTexture*		m_pTex;
 	vector<tAniFrm> m_vecFrm;
 	UINT			m_uiCurFrm;
 	float			m_fTimer;

@@ -6,6 +6,7 @@ class CMissile : public CObject
 private:
 	fVec2 m_fvDir;
 	float m_fSpeed;
+	float m_fTimer;
 
 public:
 	CMissile();

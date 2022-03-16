@@ -154,6 +154,7 @@
     <ClInclude Include="CCollisionManager.h" />
     <ClInclude Include="CCore.h" />
     <ClInclude Include="CEventManager.h" />
+    <ClInclude Include="CFrontGround.h" />
     <ClInclude Include="CKeyManager.h" />
     <ClInclude Include="CMissile.h" />
     <ClInclude Include="CMonster.h" />
@@ -194,6 +195,7 @@
     <ClCompile Include="CCollisionManager.cpp" />
     <ClCompile Include="CCore.cpp" />
     <ClCompile Include="CEventManager.cpp" />
+    <ClCompile Include="CFrontGround.cpp" />
     <ClCompile Include="CKeyManager.cpp" />
     <ClCompile Include="CMissile.cpp" />
     <ClCompile Include="CMonster.cpp" />

@@ -47,3 +47,20 @@ CTexture* CResourceManager::loadTextrue(const wstring& strKey, const wstring& st
 	}
 	return pTex;
 }
+
+CTexture* CResourceManager::createTexture(const wstring& strKey, UINT width, UINT height)
+{
+	CTexture* pTex = findTexture(strKey);
+	if (nullptr != pTex)
+	{
+		return nullptr;
+	}
+
+	pTex = new CTexture;
+	pTex->create(width, height);
+	pTex->setKey(strKey);
+
+	m_mapTex.insert(make_pair(strKey, pTex));
+
+	return pTex;
+}

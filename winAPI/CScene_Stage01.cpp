@@ -37,19 +37,19 @@ void CScene_Stage01::enter()
 	pMonster->setCenterPos(pMonster->getPos());
 	addObject(pMonster, OBJ::MONSTER);
 
-	CTile* pTile = new CTile;
+	/*CTile* pTile = new CTile;
 	pTile->setPos(fPoint(640.f, 600.f));
-	pTile->setSize(fPoint(1000.f, 100.f));
 	pTile->createCollider();
 	pTile->getCollider()->setSize(fPoint(1000.f, 100.f));
 	pTile->getCollider()->setShape(SHAPE::RECT);
-	addObject(pTile, OBJ::TILE);
+	addObject(pTile, OBJ::TILE);*/
 
-	//CBackGround* pBGBack = new CBackGround;
-	//pBGBack->setName(OBJNAME::BACKGROUND);
-	//pBGBack->setMove(false);
-	//pBGBack->load(L"BG_stage1B", L"texture\\background\\stage1_back.bmp");
-	//addObject(pBGBack, OBJ::BACKGROUND);
+	createTile(4, 15);
+
+	CBackGround* pBGBack = new CBackGround;
+	pBGBack->setName(OBJNAME::BACKGROUND);
+	pBGBack->load(L"BG_stage1B", L"texture\\background\\stage1_back.bmp");
+	addObject(pBGBack, OBJ::BACKGROUND);
 
 	/*CBackGround* pBGFront = new CBackGround;
 	pBGFront->setName(OBJNAME::BACKGROUND);

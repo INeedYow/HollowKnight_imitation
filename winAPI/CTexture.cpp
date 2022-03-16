@@ -14,6 +14,7 @@ CTexture::~CTexture()
 	DeleteObject(m_hBMP);
 }
 
+// 에러
 HDC CTexture::getDC()
 {
 	return m_hDC;
@@ -58,4 +59,16 @@ void CTexture::load(const wstring& strPath)
 
 	GetObject(m_hBMP, sizeof(BITMAP), &m_bmpInfo);				// 비트맵 정보
 
+}
+
+void CTexture::create(UINT width, UINT height)
+{
+	HDC mainDC = CCore::getInst()->getMainDC();
+	m_hBMP = CreateCompatibleBitmap(mainDC, width, height);
+	m_hDC = CreateCompatibleDC(mainDC);
+
+	HBITMAP hOldBmp = (HBITMAP)SelectObject(m_hDC, m_hBMP);
+	DeleteObject(hOldBmp);
+
+	GetObject(m_hBMP, sizeof(BITMAP), &m_bmpInfo);
 }

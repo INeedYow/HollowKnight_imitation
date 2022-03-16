@@ -12,6 +12,7 @@ CMissile::CMissile()
 	setSize(fPoint(25.f, 25.f));
 	m_fvDir = fVec2(0, 0);
 	m_fSpeed = 400.f;
+	m_fTimer = 0.f;
 	setName(OBJNAME::MISSILE_PLAYER);
 
 	createCollider();
@@ -29,11 +30,12 @@ void CMissile::update()
 	pos.x += m_fSpeed * m_fvDir.x * fDT;
 	pos.y += m_fSpeed * m_fvDir.y * fDT;
 
-	setPos(pos);
+	m_fTimer += fDT;
 
-	if (pos.x < 0 || pos.x > WINSIZEX
-		|| pos.y < 0 || pos.y > WINSIZEY)
+	if (m_fTimer > 8.f)
 		deleteObj(this);
+
+	setPos(pos);
 }
 
 void CMissile::render(HDC hDC)
@@ -66,8 +68,33 @@ void CMissile::setDir(float theta)
 void CMissile::collisionEnter(CCollider* pOther)
 {
 	CObject* pOtherObj = pOther->getOwner();
-	if (pOtherObj->getName() == OBJNAME::MONSTER)
-	{
-		deleteObj(this);
+
+	if (OBJNAME::MISSILE_PLAYER == getName())
+	{	// 플레이어 미사일인 경우
+		switch (pOther->getOwner()->getName())
+		{
+		case OBJNAME::MONSTER:
+		case OBJNAME::TILE:
+		{
+			deleteObj(this);
+			// TODO 이펙트 생성
+			break;
+		}
+
+		}
+	}
+	else if (OBJNAME::MISSILE_MONSTER == getName())
+	{	// 몬스터의 미사일인 경우
+		switch (pOther->getOwner()->getName())
+		{
+		case OBJNAME::PLAYER:
+		case OBJNAME::TILE:
+		{
+			deleteObj(this);
+			// TODO 이펙트 생성
+			break;
+		}
+
+		}
 	}
 }

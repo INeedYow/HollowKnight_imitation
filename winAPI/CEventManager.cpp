@@ -43,6 +43,7 @@ void CEventManager::execute(const tEvent& _event)
 	case EVENT::SCENECHANGE:
 		// lParam : scn eGroup (GROUP_SCENE) / (SCENE)
 	{
+		CUIManager::getInst()->setFocusUI(nullptr);				// 씬전환 시 포커스 해제
 		CSceneManager::getInst()->sceneChange((SCENE)_event.lParam);
 	}
 	break;

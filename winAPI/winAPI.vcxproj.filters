@@ -94,6 +94,9 @@
     <ClCompile Include="CBackGround.cpp">
       <Filter>Object\BackGround</Filter>
     </ClCompile>
+    <ClCompile Include="CFrontGround.cpp">
+      <Filter>Object\BackGround</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCollider.h">
@@ -208,6 +211,9 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="CBackGround.h">
+      <Filter>Object\BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="CFrontGround.h">
       <Filter>Object\BackGround</Filter>
     </ClInclude>
   </ItemGroup>
