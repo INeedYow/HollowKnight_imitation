@@ -19,8 +19,11 @@ CPlayer::CPlayer()
 	m_fSpdX = P_SPDX;
 	m_fSpdY = P_SPDY;
 	m_fGravity = P_GRAV;
-	m_fTimer = 0.f;
 	m_iBottomCnt = 0;
+
+	m_fJumpTimer = 0.f;
+	//m_fFireTimer = 0.f;
+	m_fAttackTimer = 0.f;
 
 	m_uiHP = 5;
 	m_uiSoul = 0;
@@ -56,14 +59,14 @@ CPlayer::CPlayer()
 	createAnim(L"Slash2_R",		m_pTex,	fPoint(410.f, 254.f),		fPoint(118.f, 127.f),		fPoint(118.f, 0.f),			0.2f,	5);
 	createAnim(L"Slash2_L",		m_pTex,	fPoint(882.f, 381.f),		fPoint(118.f, 127.f),		fPoint(-118.f, 0.f),		0.2f,	5);
 
-	createAnim(L"UpSlash_R",	m_pTex,	fPoint(1000.f, 254.f),		fPoint(95.f, 127.f),		fPoint(95.f, 0.f),			0.2f,	5);
-	createAnim(L"UpSlash_L",	m_pTex,	fPoint(1380.f, 381.f),		fPoint(95.f, 127.f),		fPoint(-95.f, 0.f),			0.2f,	5);
+	createAnim(L"UpSlash_R",	m_pTex,	fPoint(1000.f, 254.f),		fPoint(95.f, 127.f),		fPoint(95.f, 0.f),			0.1f,	5);
+	createAnim(L"UpSlash_L",	m_pTex,	fPoint(1380.f, 381.f),		fPoint(95.f, 127.f),		fPoint(-95.f, 0.f),			0.1f,	5);
 
 	createAnim(L"DownSlash_R",	m_pTex,	fPoint(1475.f, 254.f),		fPoint(118.f, 127.f),		fPoint(118.f, 0.f),			0.2f,	5);
 	createAnim(L"DownSlash_L",	m_pTex,	fPoint(1947.f, 381.f),		fPoint(118.f, 127.f),		fPoint(-118.f, 0.f),		0.2f,	5);
 
-	createAnim(L"Fire_R",		m_pTex,	fPoint(2065.f, 254.f),		fPoint(87.f, 127.f),		fPoint(87.f, 0.f),			0.2f,	7);
-	createAnim(L"Fire_L",		m_pTex,	fPoint(2587.f, 381.f),		fPoint(87.f, 127.f),		fPoint(-87.f, 0.f),			0.2f,	7);
+	createAnim(L"Fire_R",		m_pTex,	fPoint(2065.f, 254.f),		fPoint(87.f, 127.f),		fPoint(87.f, 0.f),			0.1f,	7);
+	createAnim(L"Fire_L",		m_pTex,	fPoint(2587.f, 381.f),		fPoint(87.f, 127.f),		fPoint(-87.f, 0.f),			0.1f,	7);
 
 	createAnim(L"Focus2Idle_R",	m_pTex,	fPoint(0.f, 508.f),			fPoint(64.f, 127.f),		fPoint(64.f, 0.f),			0.2f,	2);
 	createAnim(L"Focus2Idle_L",	m_pTex,	fPoint(64.f, 635.f),		fPoint(64.f, 127.f),		fPoint(-64.f, 0.f),			0.2f,	2);
@@ -76,7 +79,6 @@ CPlayer::CPlayer()
 
 	PLAY(L"Idle_R");
 }
-
 
 
 CPlayer::~CPlayer()
@@ -107,27 +109,30 @@ void CPlayer::update()
 
 	fPoint pos = getPos();
 
-	if (KEY_ON(VK_LEFT))
-		m_uiState &= ~(SP_DIR);
-	if (KEY_ON(VK_RIGHT))
-		m_uiState |= SP_DIR;
-	
 	switch (m_eAction)
 	{
 	case eACT::IDLE:
-	{	// 좌우이동, 점프, 공격, 스킬
-		if (KEY_ON('Z') && !(m_uiState & SP_AIR))
+	{
+		if (KEY_HOLD(VK_LEFT))
 		{
-			m_uiState |= SP_AIR;
-			m_eAction = eACT::JUMP;
-		}
-
-		if (KEY_ON(VK_LEFT) || KEY_ON(VK_RIGHT))
-		{
+			m_uiState &= ~(SP_DIR);
 			m_eAction = eACT::RUN;
 		}
 
-		if (KEY_ON('X'))
+		else if (KEY_HOLD(VK_RIGHT))
+		{
+			m_uiState |= SP_DIR;
+			m_eAction = eACT::RUN;
+		}
+
+		else if (KEY_ON('Z'))
+		{
+			m_eAction = eACT::JUMP;
+			m_uiState |= SP_JUMPHOLD;
+			m_uiState |= SP_AIR;
+		}
+
+		else if (KEY_ON('X'))
 		{
 			if (KEY_HOLD(VK_UP))
 			{
@@ -139,96 +144,287 @@ void CPlayer::update()
 			}
 		}
 
-		if (KEY_ON('A') /*&& m_uiSoul >= mp소모량*/)
-		{
+		else if (KEY_ON('A') /*&& m_uiSoul >= P_FIRESOUL*/)
+		{	// TODO A 누르는 시간 축적해서 회복과 스킬로 나눔?
 			m_eAction = eACT::FIRE;
+			//m_uiSoul -= P_FIRESOUL;
 		}
 
 		playAnim(L"Idle");
-	}
 		break;
+	}
 	case eACT::RUN:
-	{
-		if (KEY_ON('Z') && !(m_uiState & SP_AIR))
-		{
-			m_uiState |= SP_AIR;
-			m_eAction = eACT::JUMP;
-		}
-
-		if (KEY_ON(VK_LEFT))
+	{	// TODO 여유되면 애니메이션 시작 프레임 0으로
+		if (KEY_HOLD(VK_LEFT))
 		{
 			m_uiState &= ~(SP_DIR);
-			m_fSpdX *= -1.f;
+			pos.x -= m_fSpdX * fDT;
 		}
-		else if (KEY_ON(VK_RIGHT))
+		else if (KEY_HOLD(VK_RIGHT))
 		{
 			m_uiState |= SP_DIR;
-			m_fSpdX *= -1.f;
+			pos.x += m_fSpdX * fDT;
 		}
-
-		if (KEY_OFF(VK_LEFT) || KEY_OFF(VK_RIGHT))
+		else
 		{
 			m_eAction = eACT::IDLE;
 		}
 
-		playAnim(L"Run");
-	}
-		break;
-	case eACT::JUMP:
-	{	// 공격, 낙하
-		if (KEY_ON('X'))
+		if (KEY_ON('Z'))
 		{
-			if (KEY_HOLD(VK_LEFT))
-			{
-				// TODO 하단공격
-			}
+			m_eAction = eACT::JUMP;
+			m_uiState |= SP_JUMPHOLD;
+			m_uiState |= SP_AIR;
+		}
 
-			else if (KEY_HOLD(VK_UP))
+		else if (KEY_ON('X'))
+		{
+			if (KEY_HOLD(VK_UP))
 			{
-				// TODO 상단공격
+				m_eAction = eACT::UPSLASH;
 			}
-
 			else
 			{
-				// TODO 정면공격(좌, 우)
+				m_eAction = eACT::SLASH1;
 			}
 		}
 
-		m_fTimer += fDT;
+		else if (KEY_ON('A') /*&& m_uiSoul >= P_FIRESOUL*/)
+		{	// TODO A 누르는 시간 축적해서 회복과 스킬로 나눔?
+			m_eAction = eACT::FIRE;
+		}
 
-		// TODO 구현 방법 두 개 갈팡질팡해서 아무것도 안 되는 중 
-		// y좌표 변화량이 양수가 되면 fall로 처리하도록 딱 정함
-		// 따라서 수정필요
-		if (KEY_OFF('Z') || m_fTimer > 0.6f)
+		playAnim(L"Run");
+		break;
+	}
+	case eACT::JUMP:
+	{	// Z 누르는 시간 비례 점프력 증가 구현 고민
+		if (m_uiState & SP_JUMPHOLD)
+		{	// Z 누르는 동안은 타이머만 증가(중력 증가 X)
+			m_fJumpTimer += fDT;
+		}
+		else
+		{	// 중력 증가
+			if (m_fGravity < P_GRAVMAX)
+				m_fGravity += P_GRAV * fDT;
+		}
+
+		if (KEY_OFF('Z') || m_fJumpTimer >= 0.5f)
+		{	// Z 떼거나 점프 유지 최대시간 지나면
+			m_uiState &= ~(SP_JUMPHOLD);
+			m_fJumpTimer = 0.f;
+		}
+		if (m_fSpdY < m_fGravity)
 		{
 			m_eAction = eACT::FALL;
-			m_fTimer = 0.f;
 		}
+
+		if (KEY_HOLD(VK_LEFT))
+		{
+			m_uiState &= ~(SP_DIR);
+			pos.x -= m_fSpdX * fDT;
+		}
+		else if (KEY_HOLD(VK_RIGHT))
+		{
+			m_uiState |= SP_DIR;
+			pos.x += m_fSpdX * fDT;
+		}
+
+		if (KEY_ON('X'))
+		{
+			if (KEY_HOLD(VK_UP))
+			{
+				m_eAction = eACT::UPSLASH;
+			}
+			else if (KEY_HOLD(VK_DOWN))
+			{
+				m_eAction = eACT::DOWNSLASH;
+			}
+			else
+			{
+				m_eAction = eACT::SLASH1;
+			}
+		}
+
+		if (m_fGravity < P_GRAVMAX)
+			m_fGravity += P_GRAV * fDT;
 
 		pos.y -= (m_fSpdY - m_fGravity) * fDT;
 
-		if (m_fGravity < P_GRAVMAX)
-		{
-			m_fGravity += P_GRAV * fDT;
-		}
-	}
+		playAnim(L"Jump");
 		break;
-
+	}
 	case eACT::FALL:
 	{
-		pos.y -= (m_fSpdY - m_fGravity) * fDT;
+		if (KEY_HOLD(VK_LEFT))
+		{
+			m_uiState &= ~(SP_DIR);
+			pos.x -= m_fSpdX * fDT;
+		}
+		else if (KEY_HOLD(VK_RIGHT))
+		{
+			m_uiState |= SP_DIR;
+			pos.x += m_fSpdX * fDT;
+		}
+
+		if (KEY_ON('X'))
+		{
+			if (KEY_HOLD(VK_UP))
+			{
+				m_eAction = eACT::UPSLASH;
+			}
+			else if (KEY_HOLD(VK_DOWN))
+			{
+				m_eAction = eACT::DOWNSLASH;
+			}
+			else
+			{
+				m_eAction = eACT::SLASH1;
+			}
+		}
 
 		if (m_fGravity < P_GRAVMAX)
-		{
 			m_fGravity += P_GRAV * fDT;
-		}
-	}
+
+		pos.y -= (m_fSpdY - m_fGravity) * fDT;
+
+		playAnim(L"Fall");
 		break;
 	}
+	case eACT::FIRE:
+	{
+		if (m_fAttackTimer == 0.f)
+		{
+			createMissile();
+		}
+		
+		m_fAttackTimer += fDT;
 
-	pos.x += m_fSpdX * fDT;
+		if (m_fAttackTimer >= (float)P_FIREDELAY)
+		{
+			if (m_uiState & SP_AIR)
+			{
+				m_eAction = eACT::FALL;
+				m_fAttackTimer = 0.f;
+			}
+			else
+			{
+				m_eAction = eACT::IDLE;
+				m_fAttackTimer = 0.f;
+			}
+		}
+		playAnim(L"Fire");
+		break;
+	}
+	case eACT::SLASH1:
+	{
+		if (m_fAttackTimer == 0.f)
+		{
+			firstSlash();
+		}
+
+		m_fAttackTimer += fDT;
+
+		if (m_uiState & SP_AIR)
+		{	// 공중에서 공격할 때 중력적용
+			if (m_fGravity < P_GRAVMAX)
+				m_fGravity += P_GRAV * fDT;
+
+			pos.y -= (m_fSpdY - m_fGravity) * fDT;
+		}
+
+		if (m_fAttackTimer > (float)P_ATTDELAY)
+		{
+			if (m_uiState & SP_AIR)
+			{
+				m_eAction = eACT::FALL;
+				m_fAttackTimer = 0.f;
+			}
+			else
+			{
+				m_eAction = eACT::IDLE;
+				m_fAttackTimer = 0.f;
+			}
+		}
+		playAnim(L"Slash1");
+		
+		break;
+	}
+	case eACT::SLASH2:
+	{
+		// TODO 연속 공격이 되는 조건 확인하기
+		break;
+	}
+	case eACT::UPSLASH:
+	{
+		if (m_fAttackTimer == 0.f)
+		{
+			secondSlash();
+		}
+
+		m_fAttackTimer += fDT;
+
+		if (m_uiState & SP_AIR)
+		{	// 공중에서 공격할 때 중력적용
+			if (m_fGravity < P_GRAVMAX)
+				m_fGravity += P_GRAV * fDT;
+
+			pos.y -= (m_fSpdY - m_fGravity) * fDT;
+		}
+
+		if (m_fAttackTimer > (float)P_ATTDELAY)
+		{
+			if (m_uiState & SP_AIR)
+			{	// JUMP 상태에서 공격하면 계속 올라가는건 아니겠지
+				m_eAction = eACT::FALL;
+				m_fAttackTimer = 0.f;
+			}
+			else
+			{
+				m_eAction = eACT::IDLE;
+				m_fAttackTimer = 0.f;
+			}
+		}
+		playAnim(L"UpSlash");
+		break;
+	}
+	case  eACT::DOWNSLASH:
+	{
+		if (m_fAttackTimer == 0.f)
+		{
+			secondSlash();
+		}
+
+		m_fAttackTimer += fDT;
+
+		if (m_uiState & SP_AIR)
+		{	// 공중에서 공격할 때 중력적용
+			if (m_fGravity < P_GRAVMAX)
+				m_fGravity += P_GRAV * fDT;
+
+			pos.y -= (m_fSpdY - m_fGravity) * fDT;
+		}
+
+		if (m_fAttackTimer > (float)P_ATTDELAY)
+		{
+			if (m_uiState & SP_AIR)
+			{	// JUMP 상태에서 공격하면 계속 올라가는건 아니겠지
+				m_eAction = eACT::FALL;
+				m_fAttackTimer = 0.f;
+			}
+			else
+			{
+				m_eAction = eACT::IDLE;
+				m_fAttackTimer = 0.f;
+			}
+		}
+		playAnim(L"DownSlash");
+		break;
+	}
+	}
 	
 	
+
 	setPos(pos);
 	getAnimator()->update();
 }
@@ -276,6 +472,7 @@ void CPlayer::collisionEnter(CCollider* pOther)
 				if (m_uiState & SP_AIR)
 					m_uiState &= ~(SP_AIR);
 				m_iBottomCnt++;
+				m_fGravity = 0.f;
 			}
 			break;
 		}
@@ -318,7 +515,7 @@ void CPlayer::collisionExit(CCollider* pOther)
 				/*if (m_iBottomCnt < 0)
 					m_iBottomCnt = 0;*/
 				m_uiState |= SP_AIR;
-				m_fGravity = false;
+				m_fGravity = 0.f;
 			}
 			break;
 		}
@@ -326,15 +523,26 @@ void CPlayer::collisionExit(CCollider* pOther)
 	}
 }
 
+// TODO 왜 이상한 위치에 생성되나?
 void CPlayer::createMissile()
 {
-	fPoint fpMissilePos = getPos();
-	fpMissilePos.x += getSize().x / 2.f;
+	fPoint mPos = rendPos(getPos());
+	float mDir = 1.f;
 
-	// Misiile Object
 	CMissile* pMissile = new CMissile;
-	pMissile->setPos(fpMissilePos);
-	pMissile->setDir(fVec2(1, 0));
+
+	if (m_uiState & SP_DIR)
+	{
+		mPos.x += getSize().x / 2.f;
+		mDir = 1.f;
+	}
+	else
+	{
+		mPos.x -= getSize().x / 2.f;
+		mDir = -1.f;
+	}
+	pMissile->setPos(fPoint(mPos.x, mPos.y));
+	pMissile->setDir(fVec2(mDir, 0.f));
 
 	createObj(pMissile, OBJ::MISSILE_PLAYER);
 }
@@ -355,17 +563,3 @@ void CPlayer::downSlash()
 {
 }
 
-void CPlayer::setAction(eACT act)
-{
-	switch (act)
-	{
-	case eACT::IDLE:
-		m_fSpdX = 0.f;
-		break;
-	case eACT::RUN:
-		m_fSpdX = P_SPDX;
-		break;
-	case eACT::JUMP:
-		break;
-	}
-}

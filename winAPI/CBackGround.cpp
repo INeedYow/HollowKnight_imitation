@@ -4,10 +4,11 @@
 
 CBackGround::CBackGround()
 {
-	setSize(fPoint(3000.f, 1689.f));
-	setPos(fPoint(getSize().x / 2.f, getSize().y / 2.f));
+	setSize(fPoint(0.f, 0.f));
+	setPos(fPoint(0.f, 0.f));
 
-	m_pTex = loadTex(L"BossStg1Tex", L"texture\\background\\bossStage.bmp");;
+	m_pTex = nullptr;
+	m_bMove = false;
 }
 
 CBackGround::~CBackGround()
@@ -27,19 +28,43 @@ void CBackGround::render(HDC hDC)
 {
 	fPoint pos = getPos();
 	fPoint size = getSize();
-	pos = rendPos(pos);
+	fPoint renderPos = rendPos(pos);
 
-	//TransparentBlt(hDC,
-	//	/*(pos.x - size.x / 2.f) + (int)(pos.x - WINSIZEX / 2.f),
-	//	(pos.y - size.y / 2.f) + (int)(pos.y - WINSIZEY / 2.f),*/
-	//	(int)(pos.x - WINSIZEX / 2.f),
-	//	(int)(pos.y - WINSIZEY / 2.f),
-	//	(int)WINSIZEX,
-	//	(int)WINSIZEY,
-	//	m_pTex->getDC(),
-	//	(int)(pos.x - WINSIZEX / 2.f),
-	//	(int)(pos.y - WINSIZEY / 2.f),
-	//	(int)WINSIZEX,
-	//	(int)WINSIZEY,
-	//	RGB(255, 0, 255));
+	if (m_bMove)
+	{
+		renderPos = pos + (renderPos - pos) / 5;
+
+		BitBlt(hDC,
+			0,0,
+			m_pTex->getBmpWidth(),
+			m_pTex->getBmpHeight(),
+			m_pTex->getDC(),
+			(int)renderPos.x,
+			(int)renderPos.y,
+			SRCCOPY);
+	}
+	else
+	{
+		TransparentBlt(hDC,
+			0, 0,
+			m_pTex->getBmpWidth() / 2,
+			m_pTex->getBmpHeight() / 2,
+			m_pTex->getDC(),
+			(int)renderPos.x,
+			(int)renderPos.y,
+			(int)WINSIZEX,
+			(int)WINSIZEY,
+			RGB(255, 0, 255));
+	}
+
+}
+
+void CBackGround::setMove(bool isMove)
+{
+	m_bMove = isMove;
+}
+
+void CBackGround::load(const wstring& strKey, const wstring& strPath)
+{
+	m_pTex = loadTex(strKey, strPath);
 }

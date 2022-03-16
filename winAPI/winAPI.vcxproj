@@ -147,8 +147,7 @@
   <ItemGroup>
     <ClInclude Include="CAnimation.h" />
     <ClInclude Include="CAnimator.h" />
-    <ClInclude Include="CBackGround_Stg1.h" />
-    <ClInclude Include="CBackGround_Title.h" />
+    <ClInclude Include="CBackGround.h" />
     <ClInclude Include="CButtonUI.h" />
     <ClInclude Include="CCameraManager.h" />
     <ClInclude Include="CCollider.h" />
@@ -188,8 +187,7 @@
   <ItemGroup>
     <ClCompile Include="CAnimation.cpp" />
     <ClCompile Include="CAnimator.cpp" />
-    <ClCompile Include="CBackGround_Stg1.cpp" />
-    <ClCompile Include="CBackGround_Title.cpp" />
+    <ClCompile Include="CBackGround.cpp" />
     <ClCompile Include="CButtonUI.cpp" />
     <ClCompile Include="CCameraManager.cpp" />
     <ClCompile Include="CCollider.cpp" />

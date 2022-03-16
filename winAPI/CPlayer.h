@@ -18,8 +18,12 @@ class CPlayer : public CObject
 	float		m_fSpdX;
 	float		m_fSpdY;
 	float		m_fGravity;
-	float		m_fTimer;
 	int			m_iBottomCnt;
+
+	float		m_fJumpTimer;
+	//float		m_fFireTimer;			// attack 타이머로 될듯
+	float		m_fAttackTimer;
+
 	
 private:
 	void createMissile();
@@ -28,7 +32,6 @@ private:
 	void upSlash();
 	void downSlash();
 
-	void setAction(eACT act);
 public:
 	CPlayer();
 	~CPlayer();
@@ -50,7 +53,6 @@ enum class eACT
 	RUN,
 	JUMP,
 	FALL,
-	ATTACK,
 	HANG,
 	SLASH1,
 	SLASH2,

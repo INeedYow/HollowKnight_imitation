@@ -9,7 +9,6 @@
 #include "CUI.h"
 #include "CPanelUI.h"
 #include "CButtonUI.h"
-#include "CBackGround_Title.h"
 
 void changeScene(DWORD_PTR param1, DWORD_PTR param2);
 

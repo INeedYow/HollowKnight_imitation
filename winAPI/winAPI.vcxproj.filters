@@ -91,10 +91,7 @@
     <ClCompile Include="CScene_Stage01.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="CBackGround_Title.cpp">
-      <Filter>Object\BackGround</Filter>
-    </ClCompile>
-    <ClCompile Include="CBackGround_Stg1.cpp">
+    <ClCompile Include="CBackGround.cpp">
       <Filter>Object\BackGround</Filter>
     </ClCompile>
   </ItemGroup>
@@ -148,9 +145,6 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="CScene_Title.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="CScene_Tool.h">
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="func.h">
@@ -210,10 +204,10 @@
     <ClInclude Include="CScene_Stage01.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="CBackGround_Title.h">
-      <Filter>Object\BackGround</Filter>
+    <ClInclude Include="CScene_Tool.h">
+      <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="CBackGround_Stg1.h">
+    <ClInclude Include="CBackGround.h">
       <Filter>Object\BackGround</Filter>
     </ClInclude>
   </ItemGroup>

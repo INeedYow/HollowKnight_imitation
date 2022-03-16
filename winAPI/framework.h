@@ -59,6 +59,9 @@ extern bool			g_bDebug;
 #define P_SPDY				300;
 #define P_GRAV				300
 #define P_GRAVMAX			(P_GRAV * 3)
+#define P_FIRESOUL			30
+#define P_FIREDELAY			0.7
+#define P_ATTDELAY			0.5
 
 // 플레이어 상태
 #define SP_DIR				0x0001			// 좌, 우 방향
@@ -101,6 +104,8 @@ enum class OBJECT_NAME
 	MONSTER,
 	MISSILE_PLAYER,
 	MISSILE_MONSTER,
+
+	BACKGROUND,
 
 	SIZE
 };
