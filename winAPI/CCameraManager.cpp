@@ -14,6 +14,7 @@ CCameraManager::CCameraManager()
 	m_fAccTime		= 0.f;
 	m_fSpeed		= 0.f;
 
+	m_pTex = nullptr;
 }
 
 CCameraManager::~CCameraManager()
@@ -32,7 +33,7 @@ void CCameraManager::update()
 		if (m_pTraceObj->isDead())		// 유예 중 예외처리
 			m_pTraceObj = nullptr;
 		else
-			setFocus(m_pTraceObj->getPos());
+			camSetFocus(m_pTraceObj->getPos());
 	}
 
 	calculateDiff();
@@ -40,13 +41,38 @@ void CCameraManager::update()
 
 void CCameraManager::render(HDC hDC)
 {
-	Rectangle(m_pTex->getDC(), 0, 0, 500, 500);
+	// 이펙트 없을 때
+	if (m_listCamEffect.empty()) return;
+
+	tCamEffect& effect = m_listCamEffect.front();
+	effect.fTimer += fDT;
+
+	float fRatio = 0.f;
+	fRatio = effect.fTimer / effect.fDura;
+
+	if (fRatio < 0.f)
+		fRatio = 0.f;
+	else if (fRatio > 1.f)
+		fRatio = 1.f;
+
+	int iAlpha = 0;
+
+	// fade out
+	if (CAM_EFFECT::FADE_OUT == effect.eEffect)
+	{
+		iAlpha = (int)(255.f * fRatio);
+	}
+	else if (CAM_EFFECT::FADE_IN == effect.eEffect)
+	{	// fade in 때는 (1 - 비율)로 반대 효과
+		iAlpha = (int)(255.f * (1.f - fRatio));
+	}
+
 	BLENDFUNCTION bf = {  };
 
 	bf.BlendOp = AC_SRC_OVER;
 	bf.BlendFlags = 0;
 	bf.AlphaFormat = 0;
-	bf.SourceConstantAlpha = 127;
+	bf.SourceConstantAlpha = iAlpha;
 
 	AlphaBlend(hDC,
 		 0, 0,
@@ -57,6 +83,12 @@ void CCameraManager::render(HDC hDC)
 		 (int)(m_pTex->getBmpWidth()),
 		 (int)(m_pTex->getBmpHeight()),
 		 bf);
+
+	// 효과 완료
+	if (effect.fDura < effect.fTimer)
+	{
+		m_listCamEffect.pop_front();
+	}
 }
 
 void CCameraManager::setFocusOn(fPoint focus)
@@ -87,6 +119,30 @@ fPoint CCameraManager::getRealPos(fPoint renderPos)
 fPoint CCameraManager::getRenderPos(fPoint pos)
 {
 	return pos - m_fpDiff;
+}
+
+void CCameraManager::fadeIn(float dura)
+{	// fade in 이펙트 생성해서 리스트에 추가
+	tCamEffect ef = {};
+	ef.eEffect = CAM_EFFECT::FADE_IN;
+	ef.fDura = dura;
+	ef.fTimer = 0.f;
+
+	m_listCamEffect.push_back(ef);
+
+	if (0.f == dura) assert(nullptr);
+}
+
+void CCameraManager::fadeOut(float dura)
+{
+	tCamEffect ef = {};
+	ef.eEffect = CAM_EFFECT::FADE_OUT;
+	ef.fDura = dura;
+	ef.fTimer = 0.f;
+
+	m_listCamEffect.push_back(ef);
+
+	if (0.f == dura) assert(nullptr);
 }
 
 void CCameraManager::scroll(fVec2 vec, float spd)

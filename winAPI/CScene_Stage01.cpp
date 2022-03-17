@@ -26,6 +26,9 @@ void CScene_Stage01::update()
 
 void CScene_Stage01::enter()
 {
+	camFadeOut(0.9f);
+	camFadeIn(0.9f);
+
 	// Player Ãß°¡
 	CObject* pPlayer = new CPlayer;
 	pPlayer->setPos(fPoint(200, 200));
@@ -36,13 +39,6 @@ void CScene_Stage01::enter()
 	pMonster->setPos(fPoint(1100, 350));
 	pMonster->setCenterPos(pMonster->getPos());
 	addObject(pMonster, OBJ::MONSTER);
-
-	/*CTile* pTile = new CTile;
-	pTile->setPos(fPoint(640.f, 600.f));
-	pTile->createCollider();
-	pTile->getCollider()->setSize(fPoint(1000.f, 100.f));
-	pTile->getCollider()->setShape(SHAPE::RECT);
-	addObject(pTile, OBJ::TILE);*/
 
 	createTile(4, 15);
 
@@ -62,7 +58,7 @@ void CScene_Stage01::enter()
 	checkGrp(OBJ::MONSTER, OBJ::TILE);
 	checkGrp(OBJ::MISSILE_PLAYER, OBJ::MONSTER);
 
-	setTrace(pPlayer);
+	camSetTrace(pPlayer);
 }
 
 void CScene_Stage01::exit()

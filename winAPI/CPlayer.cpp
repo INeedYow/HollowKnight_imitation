@@ -21,12 +21,11 @@ CPlayer::CPlayer()
 	m_fGravity = P_GRAV;
 	m_iBottomCnt = 0;
 
-	m_fJumpTimer = 0.f;
-	//m_fFireTimer = 0.f;
-	m_fAttackTimer = 0.f;
+	m_fTimer = 0.f;
+	m_fAttackDelay = 0.f;
 
 	m_uiHP = 5;
-	m_uiSoul = 0;
+	m_uiSoul = 100.f;
 	m_uiZio = 0;
 
 	createCollider();
@@ -102,6 +101,7 @@ void CPlayer::playAnim(const wstring& commonName)
 }
 
 // TODO : 현재 애니메이션 준비동작까지 반복돼서 같은 동작 오래 지속하면 부자연스러움
+	// 그리고 매 번 첫 프레임부터 시작하게 해야 할듯
 void CPlayer::update()
 {
 	if (KEY_ON('P')) g_bDebug = !g_bDebug;
@@ -111,7 +111,7 @@ void CPlayer::update()
 	switch (m_eAction)
 	{
 	case eACT::IDLE:
-	{
+	{	// idle to run
 		if (KEY_HOLD(VK_LEFT))
 		{
 			m_uiState &= ~(SP_DIR);
@@ -123,7 +123,7 @@ void CPlayer::update()
 			m_uiState |= SP_DIR;
 			m_eAction = eACT::RUN;
 		}
-
+		// idle to jump
 		else if (KEY_ON('Z'))
 		{
 			pos.y--;
@@ -131,7 +131,7 @@ void CPlayer::update()
 			m_uiState |= SP_JUMPHOLD;
 			m_uiState |= SP_AIR;
 		}
-
+		// idle to slash
 		else if (KEY_ON('X'))
 		{
 			if (KEY_HOLD(VK_UP))
@@ -144,10 +144,26 @@ void CPlayer::update()
 			}
 		}
 
-		else if (KEY_ON('A') /*&& m_uiSoul >= P_FIRESOUL*/)
-		{	// TODO A 누르는 시간 축적해서 회복과 스킬로 나눔?
-			m_eAction = eACT::FIRE;
-			//m_uiSoul -= P_FIRESOUL;
+		// idle to focus
+		if (KEY_HOLD('A'))
+		{
+			m_fTimer += fDT;
+			
+			if (m_fTimer >= 0.5f)
+			{
+				m_eAction = eACT::FOCUS;
+				m_fTimer = 0.f;
+			}
+		}		
+		// idle to fire
+		else if (KEY_OFF('A'))
+		{
+			m_fTimer = 0.f;
+
+			if (m_uiSoul >= P_FIRESOUL)
+			{
+				m_eAction = eACT::FIRE;
+			}
 		}
 
 		playAnim(L"Idle");
@@ -191,7 +207,7 @@ void CPlayer::update()
 		}
 
 		else if (KEY_ON('A') /*&& m_uiSoul >= P_FIRESOUL*/)
-		{	// TODO A 누르는 시간 축적해서 회복과 스킬로 나눔?
+		{	
 			m_eAction = eACT::FIRE;
 		}
 
@@ -199,10 +215,10 @@ void CPlayer::update()
 		break;
 	}
 	case eACT::JUMP:
-	{	// Z 누르는 시간 비례 점프력 증가 구현 고민
+	{	
 		if (m_uiState & SP_JUMPHOLD)
 		{	// Z 누르는 동안은 타이머만 증가(중력 증가 X)
-			m_fJumpTimer += fDT;
+			m_fTimer += fDT;
 		}
 		else
 		{	// 중력 증가
@@ -210,10 +226,10 @@ void CPlayer::update()
 				m_fGravity += P_GRAV * fDT;
 		}
 
-		if (KEY_OFF('Z') || m_fJumpTimer >= 0.5f)
+		if (KEY_OFF('Z') || m_fTimer >= 0.5f)
 		{	// Z 떼거나 점프 유지 최대시간 지나면
 			m_uiState &= ~(SP_JUMPHOLD);
-			m_fJumpTimer = 0.f;
+			m_fTimer = 0.f;
 		}
 		if (m_fSpdY < m_fGravity)
 		{
@@ -250,11 +266,7 @@ void CPlayer::update()
 		else if (KEY_ON('A') /*&& m_uiSoul >= P_FIRESOUL*/)
 		{
 			m_eAction = eACT::FIRE;
-			//m_uiSoul -= P_FIRESOUL;
 		}
-
-		/*if (m_fGravity < P_GRAVMAX)
-			m_fGravity += P_GRAV * fDT;*/
 
 		pos.y -= (m_fSpdY - m_fGravity) * fDT;
 
@@ -306,24 +318,25 @@ void CPlayer::update()
 	}
 	case eACT::FIRE:
 	{
-		if (m_fAttackTimer == 0.f)
+		if (m_fAttackDelay == 0.f)
 		{
 			createMissile();
+			//m_uiSoul -= P_FIRESOUL;
 		}
 		
-		m_fAttackTimer += fDT;
+		m_fAttackDelay += fDT;
 
-		if (m_fAttackTimer >= (float)P_FIREDELAY)
+		if (m_fAttackDelay >= (float)P_FIREDELAY)
 		{
 			if (m_uiState & SP_AIR)
 			{
 				m_eAction = eACT::FALL;
-				m_fAttackTimer = 0.f;
+				m_fAttackDelay = 0.f;
 			}
 			else
 			{
 				m_eAction = eACT::IDLE;
-				m_fAttackTimer = 0.f;
+				m_fAttackDelay = 0.f;
 			}
 		}
 		playAnim(L"Fire");
@@ -331,12 +344,12 @@ void CPlayer::update()
 	}
 	case eACT::SLASH1:
 	{
-		if (m_fAttackTimer == 0.f)
+		if (m_fAttackDelay == 0.f)
 		{
 			firstSlash();
 		}
 
-		m_fAttackTimer += fDT;
+		m_fAttackDelay += fDT;
 
 		if (m_uiState & SP_AIR)
 		{	// 공중에서 공격할 때 중력적용
@@ -346,17 +359,17 @@ void CPlayer::update()
 			pos.y -= (m_fSpdY - m_fGravity) * fDT;
 		}
 
-		if (m_fAttackTimer > (float)P_ATTDELAY)
+		if (m_fAttackDelay > (float)P_ATTDELAY)
 		{
 			if (m_uiState & SP_AIR)
 			{
 				m_eAction = eACT::FALL;
-				m_fAttackTimer = 0.f;
+				m_fAttackDelay = 0.f;
 			}
 			else
 			{
 				m_eAction = eACT::IDLE;
-				m_fAttackTimer = 0.f;
+				m_fAttackDelay = 0.f;
 			}
 		}
 		playAnim(L"Slash1");
@@ -365,17 +378,17 @@ void CPlayer::update()
 	}
 	case eACT::SLASH2:
 	{
-		// TODO 연속 공격이 되는 조건 확인하기
+		// TODO SLASH2 되는 조건 확인하기
 		break;
 	}
 	case eACT::UPSLASH:
 	{
-		if (m_fAttackTimer == 0.f)
+		if (m_fAttackDelay == 0.f)
 		{
 			upSlash();
 		}
 
-		m_fAttackTimer += fDT;
+		m_fAttackDelay += fDT;
 
 		if (m_uiState & SP_AIR)
 		{	// 중력적용
@@ -385,17 +398,17 @@ void CPlayer::update()
 			pos.y -= (m_fSpdY - m_fGravity) * fDT;
 		}
 
-		if (m_fAttackTimer > (float)P_ATTDELAY)
+		if (m_fAttackDelay > (float)P_ATTDELAY)
 		{
 			if (m_uiState & SP_AIR)
 			{	// JUMP 상태에서 공격하면 Fall 상태로
 				m_eAction = eACT::FALL;
-				m_fAttackTimer = 0.f;
+				m_fAttackDelay = 0.f;
 			}
 			else
 			{
 				m_eAction = eACT::IDLE;
-				m_fAttackTimer = 0.f;
+				m_fAttackDelay = 0.f;
 			}
 		}
 		playAnim(L"UpSlash");
@@ -403,12 +416,12 @@ void CPlayer::update()
 	}
 	case  eACT::DOWNSLASH:
 	{
-		if (m_fAttackTimer == 0.f)
+		if (m_fAttackDelay == 0.f)
 		{
 			downSlash();
 		}
 
-		m_fAttackTimer += fDT;
+		m_fAttackDelay += fDT;
 
 		if (m_uiState & SP_AIR)
 		{	// 공중에서 공격할 때 중력적용
@@ -418,20 +431,45 @@ void CPlayer::update()
 			pos.y -= (m_fSpdY - m_fGravity) * fDT;
 		}
 
-		if (m_fAttackTimer > (float)P_ATTDELAY)
+		if (m_fAttackDelay > (float)P_ATTDELAY)
 		{
 			if (m_uiState & SP_AIR)
-			{	// JUMP 상태에서 공격하면 계속 올라가는건 아니겠지
+			{	// JUMP 상태에서 공격하면 fall
 				m_eAction = eACT::FALL;
-				m_fAttackTimer = 0.f;
+				m_fAttackDelay = 0.f;
 			}
 			else
 			{
 				m_eAction = eACT::IDLE;
-				m_fAttackTimer = 0.f;
+				m_fAttackDelay = 0.f;
 			}
 		}
 		playAnim(L"DownSlash");
+		break;
+	}
+	case eACT::FOCUS:
+	{	// focus to idle
+		if (KEY_OFF('A'))
+		{
+			m_fTimer = 0.f;
+			m_eAction = eACT::IDLE;
+		}
+		
+		m_fTimer += fDT;
+
+		if (m_fTimer/**/)
+		{
+			// TODO 체력회복
+		}	// 소울 소모
+
+		if (m_uiSoul < 0.f)
+		{
+			m_fTimer = 0.f;
+			m_uiSoul = 0.f;
+			m_eAction = eACT::IDLE;
+		}
+
+		playAnim(L"Focus");
 		break;
 	}
 	}
@@ -545,7 +583,6 @@ void CPlayer::collisionExit(CCollider* pOther)
 	}
 }
 
-// TODO 왜 이상한 위치에 생성되나?
 void CPlayer::createMissile()
 {
 	fPoint mPos = getPos();
@@ -565,6 +602,7 @@ void CPlayer::createMissile()
 	}
 	pMissile->setPos(fPoint(mPos.x, mPos.y));
 	pMissile->setDir(fVec2(mDir, 0.f));
+	pMissile->setName(OBJNAME::MISSILE_PLAYER);
 
 	createObj(pMissile, OBJ::MISSILE_PLAYER);
 }

@@ -68,6 +68,7 @@ enum class GROUP_OBJECT
 	MONSTER,
 	PLAYER,
 
+	EFFECT,
 
 	UI,
 	SIZE
@@ -77,13 +78,13 @@ enum class GROUP_OBJECT
 enum class OBJECT_NAME
 {
 	DEFAULT,
+	BACKGROUND,
 	TILE,
 	PLAYER,
 	MONSTER,
 	MISSILE_PLAYER,
 	MISSILE_MONSTER,
-
-	BACKGROUND,
+	EFFECT,
 
 	SIZE
 };
@@ -203,8 +204,10 @@ enum class COLL_DIR
 #define createAnim					getAnimator()->createAnimation
 #define PLAY(name)					getAnimator()->play(name)
 
-#define setFocus(fp)				CCameraManager::getInst()->setFocusOn(fp)
-#define setTrace(pObj)				CCameraManager::getInst()->setTraceObj(pObj)
+#define camSetFocus(fp)				CCameraManager::getInst()->setFocusOn(fp)
+#define camSetTrace(pObj)			CCameraManager::getInst()->setTraceObj(pObj)
+#define camFadeOut(fTime)			CCameraManager::getInst()->fadeOut(fTime)
+#define camFadeIn(fTime)			CCameraManager::getInst()->fadeIn(fTime)
 #define rendPos(pos)				CCameraManager::getInst()->getRenderPos(pos)
 #define realPos(pos)				CCameraManager::getInst()->getRealPos(pos)
 

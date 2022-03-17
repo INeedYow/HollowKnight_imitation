@@ -25,7 +25,7 @@ void CScene_Title::enter()
 {
 
 	// Camera Look ÁöÁ¤
-	setFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
+	//camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
 
 	CBackGround* pBG = new CBackGround;
 	pBG->load(L"BG_title", L"texture\\background\\title.bmp");

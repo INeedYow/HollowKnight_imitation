@@ -67,9 +67,6 @@
     <ClCompile Include="CTexture.cpp">
       <Filter>Resource\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="CMonster.cpp">
-      <Filter>Object\Character</Filter>
-    </ClCompile>
     <ClCompile Include="CPlayer.cpp">
       <Filter>Object\Character</Filter>
     </ClCompile>
@@ -96,6 +93,15 @@
     </ClCompile>
     <ClCompile Include="CFrontGround.cpp">
       <Filter>Object\BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="CImage.cpp">
+      <Filter>Object\ect</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonster.cpp">
+      <Filter>Object\Character\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonster_Mush.cpp">
+      <Filter>Object\Character\Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -171,9 +177,6 @@
     <ClInclude Include="CTexture.h">
       <Filter>Resource\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="CMonster.h">
-      <Filter>Object\Character</Filter>
-    </ClInclude>
     <ClInclude Include="CPlayer.h">
       <Filter>Object\Character</Filter>
     </ClInclude>
@@ -215,6 +218,15 @@
     </ClInclude>
     <ClInclude Include="CFrontGround.h">
       <Filter>Object\BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="CImage.h">
+      <Filter>Object\ect</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonster.h">
+      <Filter>Object\Character\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonster_Mush.h">
+      <Filter>Object\Character\Monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -313,6 +325,15 @@
     <Filter Include="ResFile">
       <UniqueIdentifier>{3708015d-8b04-4a9c-a4fb-6a5452ba4ef7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Character\Monster">
+      <UniqueIdentifier>{a37873d8-42ba-48d1-b8e2-90c4c5101b38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\ect">
+      <UniqueIdentifier>{46ead140-2c6c-4361-a8ac-2816a8aa8092}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\CEffect">
+      <UniqueIdentifier>{f9af9b91-70f8-479c-b9eb-f9bf231d268b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="winAPI.rc">
@@ -321,5 +342,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>

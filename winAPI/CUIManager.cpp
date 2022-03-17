@@ -13,7 +13,6 @@ CUIManager::~CUIManager()
 
 }
 
-// TODO
 void CUIManager::update()
 {	
 	m_pFocusUI = getFocusUI();

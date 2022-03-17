@@ -53,12 +53,11 @@ void CScene_Tool::enter()
 {
 	createTile(5, 5);
 
-	setFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
+	camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
 
 	m_hWnd = CreateDialog(hInst, MAKEINTRESOURCE(IDD_TILEBOX), hWnd, TileWinProc);
 
 	ShowWindow(m_hWnd, SW_SHOW);
-
 }
 
 void CScene_Tool::exit()

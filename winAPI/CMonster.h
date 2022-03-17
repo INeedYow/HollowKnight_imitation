@@ -23,3 +23,5 @@ public:
 	void collisionEnter(CCollider* pOther);
 };
 
+#define SM_DIR		0x01
+#define SM_AIR		0x02

@@ -12,7 +12,7 @@ class CPlayer : public CObject
 	CTexture*	m_pTex;
 
 	UINT		m_uiHP;
-	UINT		m_uiSoul;
+	float		m_uiSoul;
 	UINT		m_uiZio;
 
 	float		m_fSpdX;
@@ -20,9 +20,8 @@ class CPlayer : public CObject
 	float		m_fGravity;
 	int			m_iBottomCnt;
 
-	float		m_fJumpTimer;
-	//float		m_fFireTimer;			// attack 타이머로 될듯
-	float		m_fAttackTimer;
+	float		m_fTimer;				// jump, focus 등에서 쓸 타이머
+	float		m_fAttackDelay;			//
 
 	
 private:
@@ -59,7 +58,9 @@ enum class eACT
 	UPSLASH,
 	DOWNSLASH,
 	FIRE,
+	FOCUS,
 
+	STUN,
 
 	LOOKUP,
 	LOOKDOWN,
@@ -70,10 +71,11 @@ enum class eACT
 
 // # state
 #define P_SPDX				150
-#define P_SPDY				300
-#define P_GRAV				1000
+#define P_SPDY				350
+#define P_GRAV				1200
 #define P_GRAVMAX			(P_GRAV * 3)
 #define P_FIRESOUL			30
+#define P_FOCUSSOUL			33
 #define P_FIREDELAY			0.5
 #define P_ATTDELAY			0.4
 

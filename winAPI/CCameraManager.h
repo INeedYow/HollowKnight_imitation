@@ -11,6 +11,13 @@ enum class CAM_EFFECT
 	NONE
 };
 
+struct tCamEffect
+{
+	CAM_EFFECT eEffect;
+	float fDura;
+	float fTimer;
+};
+
 class CCameraManager
 {
 	SINGLETON(CCameraManager);
@@ -21,14 +28,15 @@ private:
 	fPoint		m_fpPrevFocus;
 	CObject*	m_pTraceObj;
 
-	fPoint		m_fpDiff;
+	fPoint		m_fpDiff;			// 해상도 중심좌표와 카메라 Focus좌표 차이값
 
-	float		m_fTime;
+	float		m_fTime;			// trace에 걸리는 시간
 	float		m_fAccTime;
 	float		m_fSpeed;
 
-	CAM_EFFECT	m_eEffect;
-	CTexture*	m_pTex;
+	list<tCamEffect>	m_listCamEffect;	// 리스트로 카메라 효과 순차적으로 실행
+	CTexture*			m_pTex;
+
 
 private:
 	void calculateDiff();
@@ -44,6 +52,9 @@ public:
 	fPoint getFocus();
 	fPoint getRealPos(fPoint renderPos);
 	fPoint getRenderPos(fPoint pos);
+
+	void fadeIn(float dura);
+	void fadeOut(float dura);
 
 	void scroll(fVec2 vec, float spd);
 };
