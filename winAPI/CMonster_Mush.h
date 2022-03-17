@@ -2,10 +2,6 @@
 #include "CMonster.h"
 class CMonster_Mush : public CMonster
 {
-	UCHAR	m_ucState;
-
-	// TODO state 필요한가
-
 	float	m_fTimer;
 
 public:

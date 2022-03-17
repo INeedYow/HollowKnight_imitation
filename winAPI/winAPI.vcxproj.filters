@@ -109,7 +109,12 @@
     <ClCompile Include="CAttack.cpp">
       <Filter>Object\CAttack</Filter>
     </ClCompile>
-    <ClCompile Include="CBoss_Markoth.cpp" />
+    <ClCompile Include="CBoss_Markoth.cpp">
+      <Filter>Object\Character\Monster\CBoss</Filter>
+    </ClCompile>
+    <ClCompile Include="CShield.cpp">
+      <Filter>Object\CAttack</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCollider.h">
@@ -241,7 +246,12 @@
     <ClInclude Include="CAttack.h">
       <Filter>Object\CAttack</Filter>
     </ClInclude>
-    <ClInclude Include="CBoss_Markoth.h" />
+    <ClInclude Include="CBoss_Markoth.h">
+      <Filter>Object\Character\Monster\CBoss</Filter>
+    </ClInclude>
+    <ClInclude Include="CShield.h">
+      <Filter>Object\CAttack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">

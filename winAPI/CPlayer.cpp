@@ -12,7 +12,7 @@
 
 CPlayer::CPlayer()
 {
-	m_pTex = loadTex(L"PlayerTex", L"texture\\texPlayer.bmp");
+	m_pTex = loadTex(L"PlayerTex", L"texture\\player\\texPlayer.bmp");
 	setName(eOBJNAME::PLAYER);
 	setSize(fPoint(P_SIZEX, P_SIZEY));
 
@@ -624,7 +624,7 @@ void CPlayer::createRotMissile()
 	if (m_uiState & SP_DIR)
 	{
 		pTest->setDir(fPoint(1.f, 0.f));
-		mPos.x = 100.f;
+		mPos.x = -100.f;
 		pTest->setRot(true);
 	}
 	else
@@ -635,7 +635,7 @@ void CPlayer::createRotMissile()
 	}
 	pTest->setOwner(this);
 	//pTest->setPos(fPoint(mPos.x, mPos.y));
-	pTest->setOffset(fPoint(0.f, 0.f));
+	pTest->setOffset(fPoint(mPos.x, 0.f));
 	pTest->setName(eOBJNAME::TEST);
 
 	createObj(pTest, eOBJ::TEST);
@@ -651,6 +651,7 @@ void CPlayer::firstSlash()
 	pAttack->setName(eOBJNAME::ATTACK);
 	pAttack->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEY));
 	pAttack->getCollider()->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEX));
+	pAttack->setOwner(this);
 
 	if (m_uiState & SP_DIR)
 	{
@@ -681,6 +682,7 @@ void CPlayer::upSlash()
 	pAttack->setName(eOBJNAME::ATTACK);
 	pAttack->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEY));
 	pAttack->getCollider()->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEY));
+	pAttack->setOwner(this);
 
 	mPos.y -= PSLASH_OFFSETY;
 	pAttack->setDir(eDIR::TOP);
@@ -699,6 +701,7 @@ void CPlayer::downSlash()
 	pAttack->setName(eOBJNAME::ATTACK);
 	pAttack->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEY));
 	pAttack->getCollider()->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEY));
+	pAttack->setOwner(this);
 
 	mPos.y += PSLASH_OFFSETY;
 	pAttack->setDir(eDIR::BOTTOM);

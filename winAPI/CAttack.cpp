@@ -55,6 +55,16 @@ void CAttack::setDmg(UINT dmg)
 	m_uiDmg = dmg;
 }
 
+void CAttack::setOwner(CObject* pOwner)
+{
+	m_pOwner = pOwner;
+}
+
+CObject* CAttack::getOwner()
+{
+	return m_pOwner;
+}
+
 
 void CAttack::collisionEnter(CCollider* pOther)
 {

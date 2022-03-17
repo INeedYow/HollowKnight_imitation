@@ -11,11 +11,13 @@ CTest::CTest()
 	setPos(fPoint (0.f, 0.f));
 	setSize(fPoint(50.f, 50.f));
 	m_fvDir = fVec2(0, 0);
-	m_fSpeed = 400.f;
-	m_fTimer = 0.f;
+	m_fRad = 100.f;
+	m_fSpd = 2.f;
 	m_fTheta = 0.f;
 	setName(eOBJNAME::TEST);
 	m_pOwner = nullptr;
+
+	m_fRadius = 0.f;
 
 	m_fpOffset = {};
 
@@ -29,34 +31,46 @@ CTest::~CTest()
 
 void CTest::update()
 {
-	m_fTheta += 5 * fDT;
 
-	m_fTimer += fDT;
+	fPoint ownerPos = m_pOwner->getPos();
+	fPoint pos = getPos();
 
-	if (m_fTimer < 4.f)
-		m_fSpeed += 350 * fDT;
-	else
-		m_fSpeed -= 350 * fDT;
+	if (KEY_HOLD('H'))
+		m_fSpd += 1.f * fDT;
+	if (KEY_HOLD('G'))
+		m_fSpd -= 1.f * fDT;
+	if (KEY_ON('J'))
+		m_fSpd = 2.f;
 
-	setDir(m_fTheta);
+
+	m_fTheta += m_fSpd * fDT;
+
+	//if (m_fTheta > 6.3f)
+	//	m_fTheta = 0.f;
+
+	if (KEY_HOLD('U'))
+		m_fRad += 70 * fDT;
+	if (KEY_HOLD('I'))
+		m_fRad -= 70 * fDT;
+	if (KEY_ON('O'))
+		m_fRad = m_fRadius;
+
+	if (KEY_ON('T'))
+		m_bRotRight = !m_bRotRight;
 
 	if (m_bRotRight)
 	{
-		m_fpOffset.x += m_fSpeed * m_fvDir.x * fDT;
-		m_fpOffset.y += m_fSpeed * m_fvDir.y * fDT;
+		pos.x = (float)cos(m_fTheta) * m_fRad;
+		pos.y = (float)sin(m_fTheta) * m_fRad;
 	}
 	else
 	{
-		m_fpOffset.x -= m_fSpeed * m_fvDir.x * fDT;
-		m_fpOffset.y -= m_fSpeed * m_fvDir.y * fDT;
+		pos.x = (float)sin(m_fTheta) * m_fRad;
+		pos.y = (float)cos(m_fTheta) * m_fRad;
 	}
 
-	if (m_fTimer > 8.f)
-		deleteObj(this);
+	pos += ownerPos;
 
-	fPoint ownerPos = m_pOwner->getPos();
-	fPoint pos = ownerPos + m_fpOffset;
-	
 	setPos(pos);
 }
 
@@ -100,38 +114,18 @@ void CTest::setOwner(CObject* pOwner)
 void CTest::setOffset(fPoint offset)
 {
 	m_fpOffset = offset;
+
+	float rad = (float)sqrt((double)(m_fpOffset.x * m_fpOffset.x) + 
+							(double)(m_fpOffset.y * m_fpOffset.y));
+
+	setRadius(rad);
+}
+
+void CTest::setRadius(float rad)
+{
+	m_fRadius = rad;
 }
 
 void CTest::collisionEnter(CCollider* pOther)
 {
-	//CObject* pOtherObj = pOther->getOwner();
-
-	//if (OBJNAME::MISSILE_PLAYER == getName())
-	//{	// 플레이어 미사일인 경우
-	//	switch (pOther->getOwner()->getName())
-	//	{
-	//	case OBJNAME::MONSTER:
-	//	case OBJNAME::TILE:
-	//	{
-	//		deleteObj(this);
-	//		// TODO 이펙트 생성
-	//		break;
-	//	}
-
-	//	}
-	//}
-	//else if (OBJNAME::MISSILE_MONSTER == getName())
-	//{	// 몬스터의 미사일인 경우
-	//	switch (pOther->getOwner()->getName())
-	//	{
-	//	case OBJNAME::PLAYER:
-	//	case OBJNAME::TILE:
-	//	{
-	//		deleteObj(this);
-	//		// TODO 이펙트 생성
-	//		break;
-	//	}
-
-	//	}
-	//}
 }

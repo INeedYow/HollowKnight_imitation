@@ -1,11 +1,12 @@
 #include "framework.h"
 #include "CScene_Stage01.h"
 #include "CPlayer.h"
-#include "CMonster.h"
 #include "CTile.h"
 #include "CMissile.h"
 #include "CUI.h"
 #include "CBackGround.h"
+//#include "CMonster.h"
+#include "CBoss_Markoth.h"
 
 CScene_Stage01::CScene_Stage01()
 {
@@ -31,19 +32,20 @@ void CScene_Stage01::enter()
 
 	// Player 추가
 	CObject* pPlayer = new CPlayer;
-	pPlayer->setPos(fPoint(200, 200));
+	pPlayer->setPos(fPoint(200, 3000));
 	addObject(pPlayer, eOBJ::PLAYER);
 
-	// Monster 추가
-	CMonster* pMonster = new CMonster;
-	pMonster->setPos(fPoint(1100, 350));
-	pMonster->setCenterPos(pMonster->getPos());
-	addObject(pMonster, eOBJ::MONSTER);
+	//// Monster 추가
+	//CMonster* pMonster = new CMonster;
+	//pMonster->setPos(fPoint(1100, 350));
+	//addObject(pMonster, eOBJ::MONSTER);
 
-	createTile(4, 15);
+	CBoss_Markoth* pBoss = new CBoss_Markoth;
+	pBoss->setPos(fPoint(1000.f, 2800.f));
+	pBoss->setSize(fPoint(300.f, 400.f));
+	addObject(pBoss, eOBJ::BOSS);
 
 	CBackGround* pBGBack = new CBackGround;
-	pBGBack->setName(eOBJNAME::BACKGROUND);
 	pBGBack->load(L"BG_stage1B", L"texture\\background\\stage1_back.bmp");
 	addObject(pBGBack, eOBJ::BACKGROUND);
 

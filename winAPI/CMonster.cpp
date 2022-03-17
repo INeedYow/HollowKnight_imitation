@@ -2,66 +2,51 @@
 #include "CMonster.h"
 #include "CCollider.h"
 
-CMonster* CMonster::clone()
-{
-	return new CMonster(*this);
-}
-
 CMonster::CMonster()
 {
-	m_fpCenterPos = fPoint(0, 0);
-	m_fSpeed = 0;
-	m_fDistance = 300;
-	m_bUpDir = true;
+	m_uiState = 0;
+	m_uiHP = 1;
+	m_fSpd = 10.f;
 
 	setName(eOBJNAME::MONSTER);
 	setSize(fPoint(100.f, 100.f));
 
 	createCollider();
-	getCollider()->setSize(fPoint(90.f, 90.f));
 }
 
 CMonster::~CMonster()
 {
 }
 
-void CMonster::update()
+void CMonster::setState(UINT state, bool isOn)
 {
-	fPoint pos = getPos();
-
-	if (m_bUpDir)
-	{
-		pos.y -= fDT * m_fSpeed;
-		if (pos.y < m_fpCenterPos.y - m_fDistance)
-			m_bUpDir = false;
-	}
+	if (isOn)
+		m_uiState |= state;
 	else
-	{
-		pos.y += fDT * m_fSpeed;
-		if (pos.y > m_fpCenterPos.y + m_fDistance)
-			m_bUpDir = true;
-	}
-
-	setPos(pos);
+		m_uiState &= ~(state);
 }
 
-void CMonster::render(HDC hDC)
+void CMonster::setHP(UINT hp)
 {
-	fPoint pos = getPos();
-	fPoint size = getSize();
-	Rectangle(hDC,
-		(int)(pos.x - size.x / 2),
-		(int)(pos.y - size.y / 2),
-		(int)(pos.x + size.x / 2),
-		(int)(pos.y + size.y / 2) );
+	m_uiHP = hp;
 }
 
-void CMonster::setCenterPos(fPoint point)
+void CMonster::setSpd(float spd)
 {
-	m_fpCenterPos = point;
+	m_fSpd = spd;
 }
 
-void CMonster::collisionEnter(CCollider* pOther)
+bool CMonster::isState(UINT state)
 {
+	return m_uiState & state;
+}
 
+UINT CMonster::getHP()
+{
+	return m_uiHP;
+}
+
+float CMonster::getSpd()
+{
+	return m_fSpd;
 }

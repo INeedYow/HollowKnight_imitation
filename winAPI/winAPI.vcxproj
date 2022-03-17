@@ -173,6 +173,7 @@
     <ClInclude Include="CScene_Stage01.h" />
     <ClInclude Include="CScene_Title.h" />
     <ClInclude Include="CScene_Tool.h" />
+    <ClInclude Include="CShield.h" />
     <ClInclude Include="CSound.h" />
     <ClInclude Include="CTest.h" />
     <ClInclude Include="CTexture.h" />
@@ -219,6 +220,7 @@
     <ClCompile Include="CScene_Stage01.cpp" />
     <ClCompile Include="CScene_Title.cpp" />
     <ClCompile Include="CScene_Tool.cpp" />
+    <ClCompile Include="CShield.cpp" />
     <ClCompile Include="CSound.cpp" />
     <ClCompile Include="CTest.cpp" />
     <ClCompile Include="CTexture.cpp" />

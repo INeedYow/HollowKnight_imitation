@@ -4,13 +4,14 @@ class CTest :
     public CObject
 {
 private:
-
 	CObject* m_pOwner;
 	fPoint	m_fpOffset;
 
+	float	m_fRadius;
+
 	fVec2	m_fvDir;
-	float	m_fSpeed;
-	float	m_fTimer;
+	float	m_fRad;
+	float	m_fSpd;
 	float	m_fTheta;
 	bool	m_bRotRight;
 
@@ -27,8 +28,11 @@ public:
 	void setRot(bool isRight);
 	void setOwner(CObject* pOwner);
 	void setOffset(fPoint offset);
-	
 
 	void collisionEnter(CCollider* pOther);
+
+private:
+	void setRadius(float rad);
+	
 };
 
