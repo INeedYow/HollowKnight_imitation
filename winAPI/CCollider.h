@@ -14,7 +14,7 @@ class CCollider
 	fPoint			m_fpOffset;			// 유격, 편차
 	UINT			m_uiCollCnt;		// 충돌 카운트
 
-	SHAPE			m_eShape;			// 히트박스 모양 (원,사각형,점)
+	eSHAPE			m_eShape;			// 히트박스 모양 (원,사각형,점)
 
 	UINT			m_uiID;				// 고유 키값(아이디) // 충돌여부 고유 키값으로 저장하고 찾기 위함
 
@@ -26,13 +26,13 @@ public:
 	void setPos(fPoint pos);
 	void setSize(fPoint size);
 	void setOffset(fPoint offset);
-	void setShape(SHAPE shape);
+	void setShape(eSHAPE shape);
 
 	fPoint		getPos();
 	fPoint		getSize();
 	fPoint		getOffset();
 	CObject*	getOwner();
-	SHAPE		getShape();
+	eSHAPE		getShape();
 	UINT		getID();
 
 	CCollider& operator==(const CCollider& other) = delete;		// 못 쓰게

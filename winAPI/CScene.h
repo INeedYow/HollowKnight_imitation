@@ -4,7 +4,7 @@ class CObject;
 
 class CScene
 {
-	vector<CObject*> m_arrObj[(int)OBJ::SIZE];		// 벡터 배열
+	vector<CObject*> m_arrObj[(int)eOBJ::SIZE];		// 벡터 배열
 	wstring m_strName;
 
 	UINT m_uiTileX;
@@ -19,7 +19,7 @@ public:
 	UINT	getTileX();
 	UINT	getTileY();
 
-	void addObject(CObject* pObj, OBJ objType);
+	void addObject(CObject* pObj, eOBJ objType);
 
 	virtual void update();
 	virtual void finalUpdate();
@@ -31,10 +31,10 @@ public:
 	virtual void exit() = 0;
 
 	// const 원본, 해당 OBJ의 배열.
-	const vector<CObject*>& getGroupObject(OBJ type);
+	const vector<CObject*>& getGroupObject(eOBJ type);
 	vector<CObject*>& getUIGroup();
 
-	void deleteObjectGroup(OBJ objGroup);			// 해당 obj그룹만 delete
+	void deleteObjectGroup(eOBJ objGroup);			// 해당 obj그룹만 delete
 	void deleteObjectAll();							// 전체 obj delete
 
 	void createTile(UINT xSize, UINT ySize);

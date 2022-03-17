@@ -11,7 +11,7 @@ CScene::CScene()
 }
 CScene::~CScene()
 {
-	for (UINT i = 0; i < (UINT)OBJ::SIZE; i++)
+	for (UINT i = 0; i < (UINT)eOBJ::SIZE; i++)
 	{
 		for (UINT j = 0; j < m_arrObj[i].size(); j++)
 			delete m_arrObj[i][j];
@@ -38,14 +38,14 @@ UINT CScene::getTileY()
 	return m_uiTileY;
 }
 
-void CScene::addObject(CObject* pObj, OBJ objType)
+void CScene::addObject(CObject* pObj, eOBJ objType)
 {
 	m_arrObj[(UINT)objType].push_back(pObj);
 }
 
 void CScene::update()
 {
-	for (UINT i = 0; i < (UINT)OBJ::SIZE; i++)
+	for (UINT i = 0; i < (UINT)eOBJ::SIZE; i++)
 	{
 		for (UINT j = 0; j < m_arrObj[i].size(); j++)
 		{
@@ -57,7 +57,7 @@ void CScene::update()
 
 void CScene::finalUpdate()
 {
-	for (UINT i = 0; i < (UINT)OBJ::SIZE; i++)
+	for (UINT i = 0; i < (UINT)eOBJ::SIZE; i++)
 	{
 		for (UINT j = 0; j < m_arrObj[i].size(); j++)
 		{
@@ -68,9 +68,9 @@ void CScene::finalUpdate()
 
 void CScene::render(HDC hDC)
 {
-	for (UINT i = 0; i < (UINT)OBJ::SIZE; i++)
+	for (UINT i = 0; i < (UINT)eOBJ::SIZE; i++)
 	{
-		if ((UINT)OBJ::TILE == i)
+		if ((UINT)eOBJ::TILE == i)
 		{
 			renderTile(hDC);
 			continue;
@@ -88,7 +88,7 @@ void CScene::render(HDC hDC)
 
 void CScene::renderTile(HDC hDC)
 {
-	const vector<CObject*>& vecTile = getGroupObject(OBJ::TILE);
+	const vector<CObject*>& vecTile = getGroupObject(eOBJ::TILE);
 
 	fPoint fptCamLook = CCameraManager::getInst()->getFocus();
 	fPoint fptLeftTop = fptCamLook - fPoint(WINSIZEX, WINSIZEY) / 2.f;
@@ -114,17 +114,17 @@ void CScene::renderTile(HDC hDC)
 	}
 }
 
-const vector<CObject*>& CScene::getGroupObject(OBJ group)
+const vector<CObject*>& CScene::getGroupObject(eOBJ group)
 {
 	return m_arrObj[(UINT)group];
 }
 
 vector<CObject*>& CScene::getUIGroup()
 {
-	return m_arrObj[(UINT)OBJ::UI];
+	return m_arrObj[(UINT)eOBJ::UI];
 }
 
-void CScene::deleteObjectGroup(OBJ objGroup)
+void CScene::deleteObjectGroup(eOBJ objGroup)
 {
 	for (UINT i = 0; i < m_arrObj[(UINT)objGroup].size(); i++)
 		delete m_arrObj[(UINT)objGroup][i];
@@ -134,13 +134,13 @@ void CScene::deleteObjectGroup(OBJ objGroup)
 
 void CScene::deleteObjectAll()
 {
-	for (UINT i = 0; i < (UINT)OBJ::SIZE; i++)
-		deleteObjectGroup((OBJ)i);
+	for (UINT i = 0; i < (UINT)eOBJ::SIZE; i++)
+		deleteObjectGroup((eOBJ)i);
 }
 
 void CScene::createTile(UINT xSize, UINT ySize)
 {
-	deleteObjectGroup(OBJ::TILE);
+	deleteObjectGroup(eOBJ::TILE);
 
 	m_uiTileX = xSize;
 	m_uiTileY = ySize;
@@ -154,7 +154,7 @@ void CScene::createTile(UINT xSize, UINT ySize)
 			CTile* pTile = new CTile();
 			pTile->setPos(fPoint((float)(j * CTile::SIZE_TILE), (float)(i * CTile::SIZE_TILE)));
 			pTile->setTexture(pTex);
-			addObject(pTile, OBJ::TILE);
+			addObject(pTile, eOBJ::TILE);
 		}
 	}
 }
@@ -176,7 +176,7 @@ void CScene::loadTile(const wstring& strPath)
 	createTile(xCount, yCount);
 
 	// 
-	const vector<CObject*>& vecTile = getGroupObject(OBJ::TILE);
+	const vector<CObject*>& vecTile = getGroupObject(eOBJ::TILE);
 
 	for (UINT i = 0; i < vecTile.size(); i++)
 		((CTile*)vecTile[i])->load(pFile);

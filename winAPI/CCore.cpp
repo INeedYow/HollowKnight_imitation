@@ -17,16 +17,16 @@ CCore::~CCore()
 	// ÇØ´ç À©µµ¿ì DC ÇÚµé ¹Ý³³
 	ReleaseDC(hWnd, m_hDC);
 
-	for (int i = 0; i < (int)BRUSH::SIZE; i++)
+	for (int i = 0; i < (int)eBRUSH::SIZE; i++)
 	{	// hollow´Â stock¿¡¼­ ºô·Á¿È
-		if ((int)BRUSH::HOLLOW == i) continue;
+		if ((int)eBRUSH::HOLLOW == i) continue;
 		DeleteObject(m_arrBrush[i]);
 	}
-	for (int i = 0; i < (int)PEN::SIZE; i++)
+	for (int i = 0; i < (int)ePEN::SIZE; i++)
 	{
 		DeleteObject(m_arrPen[i]);
 	}
-	for (int i = 0; i < (int)FONT::SIZE; i++)
+	for (int i = 0; i < (int)eFONT::SIZE; i++)
 	{
 		DeleteObject(m_arrFont[i]);
 	}
@@ -90,17 +90,17 @@ void CCore::CreateBrushPenFont()
 	m_arrPen[(UINT)TYPE_PEN::BLUE] = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
 }
 
-HBRUSH CCore::getBrush(BRUSH type)
+HBRUSH CCore::getBrush(eBRUSH type)
 {
 	return m_arrBrush[(UINT)type];
 }
 
-HPEN CCore::getPen(PEN type)
+HPEN CCore::getPen(ePEN type)
 {
 	return m_arrPen[(UINT)type];
 }
 
-HFONT CCore::getFont(FONT type)
+HFONT CCore::getFont(eFONT type)
 {
 	return m_arrFont[(UINT)type];
 }

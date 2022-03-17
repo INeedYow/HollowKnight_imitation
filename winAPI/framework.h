@@ -55,7 +55,7 @@ extern bool			g_bDebug;
 
 
  // enum class 열거형
-#define OBJ		GROUP_OBJECT
+#define eOBJ		GROUP_OBJECT
 enum class GROUP_OBJECT
 {
 	DEFAULT,
@@ -63,6 +63,7 @@ enum class GROUP_OBJECT
 	FRONTGROUND,
 	TILE,
 
+	ATTACK,
 	MISSILE_PLAYER,
 	MISSILE_MONSTER,
 	MONSTER,
@@ -70,11 +71,13 @@ enum class GROUP_OBJECT
 
 	EFFECT,
 
+	TEST,
+
 	UI,
 	SIZE
 };
 
-#define OBJNAME	OBJECT_NAME
+#define eOBJNAME	OBJECT_NAME
 enum class OBJECT_NAME
 {
 	DEFAULT,
@@ -82,14 +85,17 @@ enum class OBJECT_NAME
 	TILE,
 	PLAYER,
 	MONSTER,
+	ATTACK,
 	MISSILE_PLAYER,
 	MISSILE_MONSTER,
 	EFFECT,
 
+	TEST,
+
 	SIZE
 };
 
-#define SCENE	GROUP_SCENE
+#define eSCENE	GROUP_SCENE
 enum class GROUP_SCENE
 {
 	TITLE,
@@ -101,7 +107,7 @@ enum class GROUP_SCENE
 };
 
 // GDI
-#define BRUSH	TYPE_BRUSH
+#define eBRUSH	TYPE_BRUSH
 enum class TYPE_BRUSH
 {
 	HOLLOW,
@@ -109,7 +115,7 @@ enum class TYPE_BRUSH
 	SIZE
 };
 
-#define PEN		TYPE_PEN
+#define ePEN		TYPE_PEN
 enum class TYPE_PEN
 {
 	RED,
@@ -119,7 +125,7 @@ enum class TYPE_PEN
 	SIZE
 };
 
-#define FONT	TYPE_FONT
+#define eFONT	TYPE_FONT
 enum class TYPE_FONT
 {
 	COMIC24,
@@ -127,7 +133,7 @@ enum class TYPE_FONT
 	SIZE
 };
 
-#define SHAPE	COLL_SHAPE
+#define eSHAPE	COLL_SHAPE
 enum class COLL_SHAPE
 {
 	CIRCLE,
@@ -137,7 +143,7 @@ enum class COLL_SHAPE
 	END
 };
 
-#define EVENT	TYPE_EVENT
+#define eEvent	TYPE_EVENT
 enum class TYPE_EVENT
 {
 	CREATEOBJ,
@@ -147,7 +153,7 @@ enum class TYPE_EVENT
 	END
 };
 
-#define DIR		COLL_DIR
+#define eDIR		COLL_DIR
 enum class COLL_DIR
 {
 	NONE,

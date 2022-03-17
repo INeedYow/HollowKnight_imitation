@@ -14,7 +14,7 @@ CMonster::CMonster()
 	m_fDistance = 300;
 	m_bUpDir = true;
 
-	setName(OBJNAME::MONSTER);
+	setName(eOBJNAME::MONSTER);
 	setSize(fPoint(100.f, 100.f));
 
 	createCollider();

@@ -13,7 +13,7 @@ CCollider::CCollider()
 	m_fpSize = {};
 	m_fpOffset = {};
 	m_uiCollCnt = 0;
-	m_eShape = SHAPE::POINT;
+	m_eShape = eSHAPE::POINT;
 
 	m_uiID = s_uiID++;
 }
@@ -50,7 +50,7 @@ void CCollider::setOffset(fPoint offset)
 	m_fpOffset = offset;
 }
 
-void CCollider::setShape(SHAPE shape)
+void CCollider::setShape(eSHAPE shape)
 {
 	m_eShape = shape;
 }
@@ -75,7 +75,7 @@ CObject* CCollider::getOwner()
 	return m_pOwner;
 }
 
-SHAPE CCollider::getShape()
+eSHAPE CCollider::getShape()
 {
 	return m_eShape;
 }
@@ -97,19 +97,19 @@ void CCollider::render(HDC hDC)
 
 	fPoint fpRendPos = rendPos(m_fpPos);
 
-	SelectGDI pen(hDC, PEN::RED, PEN::GREEN, m_uiCollCnt);
-	SelectGDI brush(hDC, BRUSH::HOLLOW);
+	SelectGDI pen(hDC, ePEN::RED, ePEN::GREEN, m_uiCollCnt);
+	SelectGDI brush(hDC, eBRUSH::HOLLOW);
 
 	switch (m_eShape)
 	{
-	case SHAPE::CIRCLE:
+	case eSHAPE::CIRCLE:
 		Ellipse(hDC,
 			(int)(fpRendPos.x - m_fpSize.x / 2.f),
 			(int)(fpRendPos.y - m_fpSize.y / 2.f),
 			(int)(fpRendPos.x + m_fpSize.x / 2.f),
 			(int)(fpRendPos.y + m_fpSize.y / 2.f));
 		break;
-	case SHAPE::RECT:
+	case eSHAPE::RECT:
 		Rectangle(hDC,
 			(int)(fpRendPos.x - m_fpSize.x / 2.f),
 			(int)(fpRendPos.y - m_fpSize.y / 2.f),

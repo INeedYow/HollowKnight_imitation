@@ -76,9 +76,6 @@
     <ClCompile Include="CUI.cpp">
       <Filter>Object\UI</Filter>
     </ClCompile>
-    <ClCompile Include="CMissile.cpp">
-      <Filter>Object\Character</Filter>
-    </ClCompile>
     <ClCompile Include="CPanelUI.cpp">
       <Filter>Object\UI</Filter>
     </ClCompile>
@@ -103,6 +100,16 @@
     <ClCompile Include="CMonster_Mush.cpp">
       <Filter>Object\Character\Monster</Filter>
     </ClCompile>
+    <ClCompile Include="CTest.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="CMissile.cpp">
+      <Filter>Object\CAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="CAttack.cpp">
+      <Filter>Object\CAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="CBoss_Markoth.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCollider.h">
@@ -183,9 +190,6 @@
     <ClInclude Include="CTile.h">
       <Filter>Object\Tile</Filter>
     </ClInclude>
-    <ClInclude Include="CMissile.h">
-      <Filter>Object\Character</Filter>
-    </ClInclude>
     <ClInclude Include="CUI.h">
       <Filter>Object\UI</Filter>
     </ClInclude>
@@ -228,6 +232,16 @@
     <ClInclude Include="CMonster_Mush.h">
       <Filter>Object\Character\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="CTest.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="CMissile.h">
+      <Filter>Object\CAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="CAttack.h">
+      <Filter>Object\CAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="CBoss_Markoth.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -333,6 +347,12 @@
     </Filter>
     <Filter Include="Object\CEffect">
       <UniqueIdentifier>{f9af9b91-70f8-479c-b9eb-f9bf231d268b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\CAttack">
+      <UniqueIdentifier>{fbbf58c3-f07c-415e-8e69-eb7f84c288db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Character\Monster\CBoss">
+      <UniqueIdentifier>{82fb5d76-ef7b-4b90-82a1-932fcde36fea}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

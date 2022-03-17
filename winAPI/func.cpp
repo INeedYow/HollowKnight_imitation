@@ -4,7 +4,7 @@
 class CCollider;
 
 
-DIR collisionRectToRect(CCollider* coll1, CCollider* coll2)
+eDIR collisionRectToRect(CCollider* coll1, CCollider* coll2)
 {	// 이미 충돌인 상태에서
 	fPoint pos1 = coll1->getPos();
 	fPoint pos2 = coll2->getPos();
@@ -12,15 +12,15 @@ DIR collisionRectToRect(CCollider* coll1, CCollider* coll2)
 
 	if (pos2.y - size2.y / 2 <= pos1.y && pos1.y <= pos2.y + size2.y / 2)
 	{
-		if (pos1.x <= pos2.x - size2.x / 2) return DIR::LEFT;
-		if (pos1.x >= pos2.x + size2.x / 2) return DIR::RIGHT;
+		if (pos1.x <= pos2.x - size2.x / 2) return eDIR::LEFT;
+		if (pos1.x >= pos2.x + size2.x / 2) return eDIR::RIGHT;
 	}
 	else
 	{
-		if (pos1.y <= pos2.y - size2.y / 2) return DIR::TOP;
-		if (pos1.y >= pos2.y + size2.y / 2) return DIR::BOTTOM;
+		if (pos1.y <= pos2.y - size2.y / 2) return eDIR::TOP;
+		if (pos1.y >= pos2.y + size2.y / 2) return eDIR::BOTTOM;
 	}
-	return DIR::NONE;
+	return eDIR::NONE;
 }
 
 bool isLeftColl(CCollider* coll1, CCollider* coll2)

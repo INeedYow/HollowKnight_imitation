@@ -4,7 +4,7 @@ class CObject;
 
 struct tEvent
 {
-	EVENT		eEvent;
+	eEvent		eEvent;
 	DWORD_PTR	lParam;		// 이벤트 종류에 따라 필요한 파라미터 다르기 때문에
 	DWORD_PTR	wParam;			// DWORD_PTR(포인터자료형)으로 받은 후 사용할 때 원래 자료형으로 형변환
 };
@@ -25,9 +25,9 @@ public:
 
 	void update();
 
-	void eventCreateObject(CObject* pObj, OBJ group);
+	void eventCreateObject(CObject* pObj, eOBJ group);
 	void eventDeleteObject(CObject* pObj);
-	void eventChangeScene(SCENE scn);
+	void eventChangeScene(eSCENE scn);
 };
 
 // 한 프레임 동안 발생한 이벤트(오브젝트 생성, 삭제, 씬전환 등)를 

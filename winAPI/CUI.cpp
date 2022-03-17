@@ -68,7 +68,7 @@ void CUI::render(HDC hDC)
 	
 	if (m_bLbtnDown)
 	{
-		SelectGDI pen(hDC, PEN::GREEN);
+		SelectGDI pen(hDC, ePEN::GREEN);
 
 		Rectangle(hDC,
 			(int)(pos.x),

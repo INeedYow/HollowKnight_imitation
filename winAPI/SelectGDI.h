@@ -7,7 +7,7 @@ class SelectGDI
 	HFONT	m_hDefaultFont;
 
 public:
-	SelectGDI(HDC hDC, BRUSH type)
+	SelectGDI(HDC hDC, eBRUSH type)
 	{
 		m_hDC = hDC;
 		HBRUSH hBrush = CCore::getInst()->getBrush(type);
@@ -16,7 +16,7 @@ public:
 		m_hDefaultFont = 0;
 	}
 
-	SelectGDI(HDC hDC, BRUSH typeTrue, BRUSH typeFalse, bool mode)
+	SelectGDI(HDC hDC, eBRUSH typeTrue, eBRUSH typeFalse, bool mode)
 	{
 		m_hDC = hDC;
 		HBRUSH hBrush;
@@ -32,7 +32,7 @@ public:
 
 	}
 
-	SelectGDI(HDC hDC, PEN type)
+	SelectGDI(HDC hDC, ePEN type)
 	{
 		m_hDC = hDC;
 		HPEN hPen = CCore::getInst()->getPen(type);
@@ -42,7 +42,7 @@ public:
 
 	}
 
-	SelectGDI(HDC hDC, PEN typeTrue, PEN typeFalse, bool mode)
+	SelectGDI(HDC hDC, ePEN typeTrue, ePEN typeFalse, bool mode)
 	{
 		m_hDC = hDC;
 		HPEN hPen;
@@ -58,7 +58,7 @@ public:
 
 	}
 
-	SelectGDI(HDC hDC, FONT type)
+	SelectGDI(HDC hDC, eFONT type)
 	{
 		m_hDC = hDC;
 		HFONT hFont;

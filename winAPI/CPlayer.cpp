@@ -1,17 +1,20 @@
 #include "framework.h"
 #include "CPlayer.h"
-#include "CMissile.h"
 #include "CScene.h"
 #include "CTexture.h"
 #include "CCollider.h"
 #include "CAnimator.h"
 #include "CAnimation.h"
+#include "CMissile.h"
+#include "CAttack.h"
+
+#include "CTest.h"
 
 CPlayer::CPlayer()
 {
 	m_pTex = loadTex(L"PlayerTex", L"texture\\texPlayer.bmp");
-	setName(OBJNAME::PLAYER);
-	setSize(fPoint(90.f, 150.f));
+	setName(eOBJNAME::PLAYER);
+	setSize(fPoint(P_SIZEX, P_SIZEY));
 
 	m_eAction = eACT::IDLE;
 	m_uiState = 0;
@@ -101,12 +104,18 @@ void CPlayer::playAnim(const wstring& commonName)
 }
 
 // TODO : 현재 애니메이션 준비동작까지 반복돼서 같은 동작 오래 지속하면 부자연스러움
-	// 그리고 매 번 첫 프레임부터 시작하게 해야 할듯
+	// 애니메이션 반복 여부 설정
 void CPlayer::update()
 {
 	if (KEY_ON('P')) g_bDebug = !g_bDebug;
 
 	fPoint pos = getPos();
+
+	// 회전테스트
+	if (KEY_ON('Q'))
+	{
+		createRotMissile();
+	}
 
 	switch (m_eAction)
 	{
@@ -518,10 +527,10 @@ void CPlayer::collisionEnter(CCollider* pOther)
 {
 	switch (pOther->getOwner()->getName())
 	{	//벽 충돌
-	case OBJNAME::TILE:
+	case eOBJNAME::TILE:
 		switch (COLLRR(getCollider(), pOther))
 		{
-		case DIR::TOP:
+		case eDIR::TOP:
 		{	// 지면과 1픽셀 겹치게 위치
 			if (m_eAction == eACT::FALL)
 			{	// Fall일 때만 착지
@@ -536,7 +545,7 @@ void CPlayer::collisionEnter(CCollider* pOther)
 			}
 			break;
 		}
-		case DIR::LEFT:
+		case eDIR::LEFT:
 		{
 			fPoint pos = getPos();
 			pos.x = pOther->getPos().x + (getCollider()->getOffset().x + pOther->getOffset().x
@@ -545,7 +554,7 @@ void CPlayer::collisionEnter(CCollider* pOther)
 			m_fSpdX = 0.f;
 			break;
 		}
-		case DIR::RIGHT:
+		case eDIR::RIGHT:
 		{
 			fPoint pos = getPos();
 			pos.x = pOther->getPos().x + (getCollider()->getOffset().x + pOther->getOffset().x
@@ -554,7 +563,7 @@ void CPlayer::collisionEnter(CCollider* pOther)
 			m_fSpdX = 0.f;
 			break;
 		}
-		case DIR::BOTTOM:	// 머리 콩
+		case eDIR::BOTTOM:	// 머리 콩
 			m_fSpdY = 0.f;
 			break;
 		}
@@ -566,14 +575,12 @@ void CPlayer::collisionExit(CCollider* pOther)
 {
 	switch (pOther->getOwner()->getName())
 	{
-	case OBJNAME::TILE:
+	case eOBJNAME::TILE:
 		switch (COLLRR(getCollider(), pOther))
 		{
-		case DIR::TOP:
+		case eDIR::TOP:
 			if (--m_iBottomCnt <= 0)
 			{
-				/*if (m_iBottomCnt < 0)
-					m_iBottomCnt = 0;*/
 				m_uiState |= SP_AIR;
 				m_fGravity = 0.f;
 			}
@@ -602,13 +609,64 @@ void CPlayer::createMissile()
 	}
 	pMissile->setPos(fPoint(mPos.x, mPos.y));
 	pMissile->setDir(fVec2(mDir, 0.f));
-	pMissile->setName(OBJNAME::MISSILE_PLAYER);
+	pMissile->setName(eOBJNAME::MISSILE_PLAYER);
 
-	createObj(pMissile, OBJ::MISSILE_PLAYER);
+	createObj(pMissile, eOBJ::MISSILE_PLAYER);
 }
 
+/////////////////////////////////////// test
+void CPlayer::createRotMissile()
+{	
+	fPoint mPos = getPos();
+
+	CTest* pTest = new CTest;
+
+	if (m_uiState & SP_DIR)
+	{
+		pTest->setDir(fPoint(1.f, 0.f));
+		mPos.x = 100.f;
+		pTest->setRot(true);
+	}
+	else
+	{
+		pTest->setDir(fPoint(-1.f, 0.f));
+		mPos.x = 100.f;
+		pTest->setRot(false);
+	}
+	pTest->setOwner(this);
+	//pTest->setPos(fPoint(mPos.x, mPos.y));
+	pTest->setOffset(fPoint(0.f, 0.f));
+	pTest->setName(eOBJNAME::TEST);
+
+	createObj(pTest, eOBJ::TEST);
+}///////////////////////////////////////////////
+
+
+// Slash들 합쳐도 될듯
 void CPlayer::firstSlash()
 {
+	fPoint mPos = getPos();
+
+	CAttack* pAttack = new CAttack;
+	pAttack->setName(eOBJNAME::ATTACK);
+	pAttack->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEY));
+	pAttack->getCollider()->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEX));
+
+	if (m_uiState & SP_DIR)
+	{
+		mPos.x += PSLASH_OFFSETX;
+		pAttack->setDir(eDIR::RIGHT);
+	}
+	else
+	{
+		mPos.x -= PSLASH_OFFSETX;
+		pAttack->setDir(eDIR::LEFT);
+	}
+
+	pAttack->setPos(fPoint(mPos.x, mPos.y));
+	pAttack->setDura(0.5f);
+	
+	createObj(pAttack, eOBJ::ATTACK);
 }
 
 void CPlayer::secondSlash()
@@ -617,9 +675,37 @@ void CPlayer::secondSlash()
 
 void CPlayer::upSlash()
 {
+	fPoint mPos = getPos();
+
+	CAttack* pAttack = new CAttack;
+	pAttack->setName(eOBJNAME::ATTACK);
+	pAttack->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEY));
+	pAttack->getCollider()->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEY));
+
+	mPos.y -= PSLASH_OFFSETY;
+	pAttack->setDir(eDIR::TOP);
+
+	pAttack->setPos(fPoint(mPos.x, mPos.y));
+	pAttack->setDura(0.5f);
+
+	createObj(pAttack, eOBJ::ATTACK);
 }
 
 void CPlayer::downSlash()
 {
+	fPoint mPos = getPos();
+
+	CAttack* pAttack = new CAttack;
+	pAttack->setName(eOBJNAME::ATTACK);
+	pAttack->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEY));
+	pAttack->getCollider()->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEY));
+
+	mPos.y += PSLASH_OFFSETY;
+	pAttack->setDir(eDIR::BOTTOM);
+
+	pAttack->setPos(fPoint(mPos.x, mPos.y));
+	pAttack->setDura(0.5f);
+
+	createObj(pAttack, eOBJ::ATTACK);
 }
 

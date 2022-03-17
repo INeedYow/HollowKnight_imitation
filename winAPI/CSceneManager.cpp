@@ -7,20 +7,20 @@
 
 CSceneManager::CSceneManager()
 {
-	for (int i = 0; i < (int)SCENE::SIZE; i++)
+	for (int i = 0; i < (int)eSCENE::SIZE; i++)
 		m_pArrScene[i] = nullptr;
 	m_pCurScene = nullptr;
 }
 CSceneManager::~CSceneManager()
 {
-	for (int i = 0; i < (int)SCENE::SIZE; i++)
+	for (int i = 0; i < (int)eSCENE::SIZE; i++)
 	{
 		if (nullptr != m_pArrScene[i])
 			delete m_pArrScene[i];
 	}
 }
 
-void CSceneManager::sceneChange(SCENE scene)
+void CSceneManager::sceneChange(eSCENE scene)
 {
 	m_pCurScene->exit();
 	m_pCurScene = m_pArrScene[(int)scene];
@@ -42,11 +42,11 @@ void CSceneManager::render(HDC hDC)
 // 배열의 원소에 바로 동적할당하면 됨
 void CSceneManager::init()
 {
-	m_pArrScene[(int)SCENE::TITLE] = new CScene_Title;
-	m_pArrScene[(int)SCENE::TOOL] = new CScene_Tool;
-	m_pArrScene[(int)SCENE::STAGE_01] = new CScene_Stage01;
+	m_pArrScene[(int)eSCENE::TITLE] = new CScene_Title;
+	m_pArrScene[(int)eSCENE::TOOL] = new CScene_Tool;
+	m_pArrScene[(int)eSCENE::STAGE_01] = new CScene_Stage01;
 
-	m_pCurScene = m_pArrScene[(int)SCENE::TITLE];
+	m_pCurScene = m_pArrScene[(int)eSCENE::TITLE];
 	m_pCurScene->enter();
 }
 

@@ -8,7 +8,7 @@ class CObject
 	friend class CEventManager;
 private:
 
-	OBJNAME		m_eName;			// 충돌 대상의 종류를 알려면 필요함
+	eOBJNAME		m_eName;			// 충돌 대상의 종류를 알려면 필요함
 
 	fPoint		m_fptPos;
 	fPoint		m_fptSize;
@@ -28,11 +28,11 @@ public:
 
 	void setPos(fPoint pos);
 	void setSize(fPoint size);
-	void setName(OBJNAME name);
+	void setName(eOBJNAME name);
 
 	fPoint	getPos();
 	fPoint	getSize();
-	OBJNAME	getName();
+	eOBJNAME	getName();
 
 	bool isDead();
 

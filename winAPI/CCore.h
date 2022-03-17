@@ -21,9 +21,9 @@ public:
 	void init();
 
 	void	CreateBrushPenFont();
-	HBRUSH	getBrush(BRUSH type);
-	HPEN	getPen(PEN type);
-	HFONT	getFont(FONT type);
+	HBRUSH	getBrush(eBRUSH type);
+	HPEN	getPen(ePEN type);
+	HFONT	getFont(eFONT type);
 
 	HDC		getMainDC();
 };

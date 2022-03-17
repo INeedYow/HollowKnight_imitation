@@ -16,19 +16,19 @@ class CCollisionManager
 	SINGLETON(CCollisionManager);
 
 private:
-	UINT	m_arrCollChk[(UINT)OBJ::SIZE];					// 비트로 충돌 여부 저장
+	UINT	m_arrCollChk[(UINT)eOBJ::SIZE];					// 비트로 충돌 여부 저장
 
 	map<ULONGLONG, bool> m_mapIsColl;						// 이전 프레임에 충돌했는지 저장하는 자료구조
 
-	void collisionGroupUpdate(OBJ obj1, OBJ obj2);			// update 통해 내부적으로만 호출되는 함수라서 private
-	bool isCollision(CCollider* pColl1, SHAPE shape1, CCollider* pColl2, SHAPE shape2);  // 충돌여부 판정
+	void collisionGroupUpdate(eOBJ obj1, eOBJ obj2);			// update 통해 내부적으로만 호출되는 함수라서 private
+	bool isCollision(CCollider* pColl1, eSHAPE shape1, CCollider* pColl2, eSHAPE shape2);  // 충돌여부 판정
 
 public:
 	void init();
 	void update();
 
-	void checkGroup(OBJ obj1, OBJ obj2);
-	void unCheckGroup(OBJ obj1, OBJ obj2);
+	void checkGroup(eOBJ obj1, eOBJ obj2);
+	void unCheckGroup(eOBJ obj1, eOBJ obj2);
 	void resetGroup();
 };
 

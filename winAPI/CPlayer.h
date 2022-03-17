@@ -31,6 +31,8 @@ private:
 	void upSlash();
 	void downSlash();
 
+	void createRotMissile();
+
 public:
 	CPlayer();
 	~CPlayer();
@@ -70,6 +72,8 @@ enum class eACT
 };
 
 // # state
+#define P_SIZEX				64
+#define P_SIZEY				128
 #define P_SPDX				150
 #define P_SPDY				350
 #define P_GRAV				1200
@@ -78,6 +82,13 @@ enum class eACT
 #define P_FOCUSSOUL			33
 #define P_FIREDELAY			0.5
 #define P_ATTDELAY			0.4
+
+//
+#define PSLASH_SIZEX		120
+#define PSLASH_SIZEY		120
+
+#define PSLASH_OFFSETX		(P_SIZEX / 2 + PSLASH_SIZEX / 2)
+#define PSLASH_OFFSETY		(P_SIZEY / 2 + PSLASH_SIZEY / 2)
 
 // 플레이어 상태
 #define SP_DIR				0x0001			// 좌, 우 방향

@@ -12,7 +12,7 @@ CObject::CObject()
 	m_pCollider = nullptr;
 	m_pAnimator = nullptr;
 	m_bDead = false;
-	m_eName = OBJNAME::DEFAULT;
+	m_eName = eOBJNAME::DEFAULT;
 }
 
 
@@ -60,7 +60,7 @@ void CObject::setSize(fPoint size)
 	m_fptSize = size;
 }
 
-void CObject::setName(OBJNAME name)
+void CObject::setName(eOBJNAME name)
 {
 	m_eName = name;
 }
@@ -75,7 +75,7 @@ fPoint CObject::getSize()
 	return m_fptSize;
 }
 
-OBJNAME CObject::getName()
+eOBJNAME CObject::getName()
 {
 	return m_eName;
 }

@@ -10,10 +10,10 @@ CMissile* CMissile::clone()
 CMissile::CMissile()
 {
 	setSize(fPoint(25.f, 25.f));
+	setName(eOBJNAME::MISSILE_PLAYER);
 	m_fvDir = fVec2(0, 0);
 	m_fSpeed = 400.f;
 	m_fTimer = 0.f;
-	setName(OBJNAME::MISSILE_PLAYER);
 
 	createCollider();
 	getCollider()->setSize(fPoint(15.f, 15.f));
@@ -69,12 +69,12 @@ void CMissile::collisionEnter(CCollider* pOther)
 {
 	CObject* pOtherObj = pOther->getOwner();
 
-	if (OBJNAME::MISSILE_PLAYER == getName())
+	if (eOBJNAME::MISSILE_PLAYER == getName())
 	{	// 플레이어 미사일인 경우
 		switch (pOther->getOwner()->getName())
 		{
-		case OBJNAME::MONSTER:
-		case OBJNAME::TILE:
+		case eOBJNAME::MONSTER:
+		case eOBJNAME::TILE:
 		{
 			deleteObj(this);
 			// TODO 이펙트 생성
@@ -83,12 +83,12 @@ void CMissile::collisionEnter(CCollider* pOther)
 
 		}
 	}
-	else if (OBJNAME::MISSILE_MONSTER == getName())
+	else if (eOBJNAME::MISSILE_MONSTER == getName())
 	{	// 몬스터의 미사일인 경우
 		switch (pOther->getOwner()->getName())
 		{
-		case OBJNAME::PLAYER:
-		case OBJNAME::TILE:
+		case eOBJNAME::PLAYER:
+		case eOBJNAME::TILE:
 		{
 			deleteObj(this);
 			// TODO 이펙트 생성

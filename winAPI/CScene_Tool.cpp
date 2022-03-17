@@ -27,7 +27,7 @@ void CScene_Tool::update()
 	CScene::update();
 
 	if (KEY_ON(VK_ESCAPE))
-		changeScn(SCENE::TITLE);
+		changeScn(eSCENE::TITLE);
 
 	if (KEY_HOLD('A'))
 	{
@@ -90,7 +90,7 @@ void CScene_Tool::setTileIndex()
 			return;
 
 		UINT index = iX + iY * iTileX;
-		const vector<CObject*>& vecTile = getGroupObject(OBJ::TILE);
+		const vector<CObject*>& vecTile = getGroupObject(eOBJ::TILE);
 		((CTile*)vecTile[index])->setImageIndex(m_uiIndex);
 	}
 }
@@ -109,7 +109,7 @@ void CScene_Tool::saveTile(const wstring& strPath)
 	fwrite(&yCount, sizeof(UINT), 1, pFile);
 
 	// 모든 타일이 자기 인덱스를 파일에 저장하게
-	const vector<CObject*>& vecTile = getGroupObject(OBJ::TILE);
+	const vector<CObject*>& vecTile = getGroupObject(eOBJ::TILE);
 
 	for (UINT i = 0; i < vecTile.size(); i++)
 		((CTile*)vecTile[i])->save(pFile);
@@ -204,7 +204,7 @@ INT_PTR CALLBACK TileWinProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 			CScene_Tool* pToolScene = dynamic_cast<CScene_Tool*>(pCurScene);
 			assert(pToolScene);
 
-			pToolScene->deleteObjectGroup(OBJ::TILE);
+			pToolScene->deleteObjectGroup(eOBJ::TILE);
 			pToolScene->createTile(x, y);
 		}
 		else if (LOWORD(wParam) == IDC_BUTTON_TILE)

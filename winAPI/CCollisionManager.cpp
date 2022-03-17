@@ -14,7 +14,7 @@ CCollisionManager::~CCollisionManager()
 
 // 충돌하는 OBJ그룹의 오브젝트들 모두를 비교해야 하기 때문에 오브젝트 배열 받아와야 한다.
 // 현재 씬의 오브젝트들만 있으면 되고 현재 씬은 씬 매니저가 알고 있다.
-void CCollisionManager::collisionGroupUpdate(OBJ obj1, OBJ obj2)
+void CCollisionManager::collisionGroupUpdate(eOBJ obj1, eOBJ obj2)
 {
 	CScene* pCurScene = CSceneManager::getInst()->getCurScene();
 
@@ -89,7 +89,7 @@ void CCollisionManager::collisionGroupUpdate(OBJ obj1, OBJ obj2)
 	}
 }
 
-bool CCollisionManager::isCollision(CCollider* pColl1, SHAPE shape1, CCollider* pColl2, SHAPE shape2)
+bool CCollisionManager::isCollision(CCollider* pColl1, eSHAPE shape1, CCollider* pColl2, eSHAPE shape2)
 {
 	fPoint pos1 = pColl1->getPos();
 	fPoint size1 = pColl1->getSize();
@@ -98,41 +98,41 @@ bool CCollisionManager::isCollision(CCollider* pColl1, SHAPE shape1, CCollider* 
 
 	switch (shape1)
 	{
-	case SHAPE::CIRCLE:
+	case eSHAPE::CIRCLE:
 		switch (shape2)
 		{
-		case SHAPE::CIRCLE:
+		case eSHAPE::CIRCLE:
 		{
 			return ISCOLLCC(pos1, (int)(size1.x / 2), pos2, (int)(size2.x / 2));
 		}
-		case SHAPE::RECT:
+		case eSHAPE::RECT:
 		{
 			RECT rt = { (int)pos2.x - (int)size2.x / 2, (int)pos2.y - (int)size2.y,
 						(int)pos2.x + (int)size2.x / 2, (int)pos2.y + (int)size2.y };
 			return ISCOLLCR(pos1, (int)(size1.x / 2), rt);
 		}
-		case SHAPE::POINT:
+		case eSHAPE::POINT:
 		{
 			return ISCOLLPC(pos2, pos1, (int)(size1.x / 2));
 		}
 		}
 		break;
 		//
-	case SHAPE::RECT:
+	case eSHAPE::RECT:
 		switch (shape2)
 		{
-		case SHAPE::CIRCLE:
+		case eSHAPE::CIRCLE:
 		{
 			RECT rt = { (int)pos1.x - (int)size1.x / 2, (int)pos1.y - (int)size1.y,
 						(int)pos1.x + (int)size1.x / 2, (int)pos1.y + (int)size1.y };
 			return ISCOLLCR(pos2, (int)(size2.x / 2), rt);
 		}
 		break;
-		case SHAPE::RECT:
+		case eSHAPE::RECT:
 		{
 			return ISCOLLRR(pos1, size1, pos2, size2);
 		}
-		case SHAPE::POINT:
+		case eSHAPE::POINT:
 		{
 			RECT rt = { (int)pos1.x - (int)size1.x / 2, (int)pos1.y - (int)size1.y,
 						(int)pos1.x + (int)size1.x / 2, (int)pos1.y + (int)size1.y };
@@ -140,20 +140,20 @@ bool CCollisionManager::isCollision(CCollider* pColl1, SHAPE shape1, CCollider* 
 		}
 		}
 		//
-	case SHAPE::POINT:
+	case eSHAPE::POINT:
 		switch (shape2)
 		{
-		case SHAPE::CIRCLE:
+		case eSHAPE::CIRCLE:
 		{
 			return ISCOLLPC(pos1, pos2, (int)(size2.x / 2));
 		}
-		case SHAPE::RECT:
+		case eSHAPE::RECT:
 		{
 			RECT rt = { (int)pos2.x - (int)size2.x / 2, (int)pos2.y - (int)size2.y,
 						(int)pos2.x + (int)size2.x / 2, (int)pos2.y + (int)size2.y };
 			return ISCOLLPR(pos1, rt);
 		}
-		case SHAPE::POINT:
+		case eSHAPE::POINT:
 		{
 			return (pos1 == pos2);
 		}
@@ -169,19 +169,19 @@ void CCollisionManager::init()
 // 충돌 여부 체크된 그룹만 확인하도록 분류
 void CCollisionManager::update()
 {
-	for (int i = 0; i < (UINT)OBJ::SIZE; i++)
+	for (int i = 0; i < (UINT)eOBJ::SIZE; i++)
 	{	// 절반은 검사 안 해도 되니까 j = i부터 시작
-		for (int j = i; j < (UINT)OBJ::SIZE; j++)
+		for (int j = i; j < (UINT)eOBJ::SIZE; j++)
 		{	// 충돌 여부 비트로 저장한 UINT m_arrCollChk[]가 1이면 판정 
 			if (m_arrCollChk[i] & (0x1 << j))
 			{	
-				collisionGroupUpdate((OBJ)i, (OBJ)j);
+				collisionGroupUpdate((eOBJ)i, (eOBJ)j);
 			}
 		}
 	}
 }
 
-void CCollisionManager::checkGroup(OBJ obj1, OBJ obj2)
+void CCollisionManager::checkGroup(eOBJ obj1, eOBJ obj2)
 {
 	UINT groupLow, group;
 
@@ -197,7 +197,7 @@ void CCollisionManager::checkGroup(OBJ obj1, OBJ obj2)
 	m_arrCollChk[(UINT)groupLow] |= (0x1 << group);
 }
 
-void CCollisionManager::unCheckGroup(OBJ obj1, OBJ obj2)
+void CCollisionManager::unCheckGroup(eOBJ obj1, eOBJ obj2)
 {
 	UINT groupLow, group;
 
@@ -215,5 +215,5 @@ void CCollisionManager::unCheckGroup(OBJ obj1, OBJ obj2)
 
 void CCollisionManager::resetGroup()
 {	// (void* Dst, int Val,  size_t Size)
-	memset(m_arrCollChk, 0, sizeof(UINT) * (UINT)OBJ::SIZE);		// memset 속도가 매우 빠름
+	memset(m_arrCollChk, 0, sizeof(UINT) * (UINT)eOBJ::SIZE);		// memset 속도가 매우 빠름
 }

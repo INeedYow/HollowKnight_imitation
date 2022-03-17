@@ -7,11 +7,11 @@ class CSceneManager
 	SINGLETON(CSceneManager);
 
 private:
-	CScene* m_pArrScene[(int)SCENE::SIZE];
+	CScene* m_pArrScene[(int)eSCENE::SIZE];
 	CScene* m_pCurScene;
 
 public:
-	void sceneChange(SCENE scene);
+	void sceneChange(eSCENE scene);
 
 	void update();
 	void render(HDC hDC);

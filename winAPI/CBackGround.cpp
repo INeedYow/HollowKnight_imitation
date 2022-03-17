@@ -6,6 +6,7 @@ CBackGround::CBackGround()
 {
 	setSize(fPoint(0.f, 0.f));
 	setPos(fPoint(0.f, 0.f));
+	setName(eOBJNAME::BACKGROUND);
 
 	m_pTex = nullptr;
 }
