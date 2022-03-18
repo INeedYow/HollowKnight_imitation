@@ -124,6 +124,9 @@
     <ClCompile Include="CAI.cpp">
       <Filter>Engine\Component\AI</Filter>
     </ClCompile>
+    <ClCompile Include="CState_Idle.cpp">
+      <Filter>Engine\Component\AI\State</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCollider.h">
@@ -269,6 +272,9 @@
     </ClInclude>
     <ClInclude Include="CAI.h">
       <Filter>Engine\Component\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_Idle.h">
+      <Filter>Engine\Component\AI\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -5,7 +5,7 @@
 
 CMonster::CMonster()
 {
-	m_uiState = 0;
+	m_uiCheck = 0;
 	m_uiHP = 1;
 	m_fSpd = 10.f;
 
@@ -19,18 +19,12 @@ CMonster::~CMonster()
 {
 }
 
-void CMonster::setAI(CAI* ai)
-{
-	m_pAI = ai;
-	m_pAI->m_pOwner = this;
-}
-
-void CMonster::setState(UINT state, bool isOn)
+void CMonster::setCheck(UINT chk, bool isOn)
 {
 	if (isOn)
-		m_uiState |= state;
+		m_uiCheck |= chk;
 	else
-		m_uiState &= ~(state);
+		m_uiCheck &= ~(chk);
 }
 
 void CMonster::setHP(UINT hp)
@@ -43,9 +37,9 @@ void CMonster::setSpd(float spd)
 	m_fSpd = spd;
 }
 
-bool CMonster::isState(UINT state)
+bool CMonster::isCheck(UINT chk)
 {
-	return m_uiState & state;
+	return m_uiCheck & chk;
 }
 
 UINT CMonster::getHP()

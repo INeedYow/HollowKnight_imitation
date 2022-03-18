@@ -50,6 +50,11 @@ CObject::~CObject()
 		delete m_pAnimator;
 }
 
+CObject* CObject::clone()
+{
+	return nullptr;
+}
+
 void CObject::setPos(fPoint pos)
 {
 	m_fptPos = pos;

@@ -7,7 +7,8 @@
 #include "CAnimation.h"
 #include "CMissile.h"
 #include "CAttack.h"
-
+#include "CAI.h"
+// test
 #include "CTest.h"
 
 CPlayer::CPlayer()
@@ -16,8 +17,8 @@ CPlayer::CPlayer()
 	setName(eOBJNAME::PLAYER);
 	setSize(fPoint(P_SIZEX, P_SIZEY));
 
-	m_eAction = eACT::IDLE;
-	m_uiState = 0;
+	m_eState = eSTATE_PLAYER::IDLE;
+	m_uiCheck = 0;
 
 	m_fSpdX = P_SPDX;
 	m_fSpdY = P_SPDY;
@@ -31,19 +32,24 @@ CPlayer::CPlayer()
 	m_uiSoul = 100.f;
 	m_uiZio = 0;
 
+	m_pAI = nullptr;
+
 	createCollider();
 	getCollider()->setSize(fPoint(110.f, 140.f));
 	getCollider()->setOffset(fPoint(0.f, 10.f));
 
 	createAnimator();
+
+#pragma region Animation
+
 	createAnim(L"Idle_R",		m_pTex,	fPoint(0.f, 0.f),			fPoint(60.f, 127.f),		fPoint(60.f, 0.f),			0.25f,	6);
 	createAnim(L"Idle_L",		m_pTex,	fPoint(300.f, 127.f),		fPoint(60.f, 127.f),		fPoint(-60.f, 0.f),			0.25f,	6);
 
 	createAnim(L"Run_R",		m_pTex,	fPoint(360.f, 0.f),			fPoint(82.f, 127.f),		fPoint(82.f, 0.f),			0.2f,	12);
 	createAnim(L"Run_L",		m_pTex,	fPoint(1262.f, 127.f),		fPoint(82.f, 127.f),		fPoint(-82.f, 0.f),			0.2f,	12);
 
-	createAnim(L"Jump_R",		m_pTex,	fPoint(1344.f, 0.f),		fPoint(77.f, 127.f),		fPoint(77.f, 0.f),			0.1f,	6);
-	createAnim(L"Jump_L",		m_pTex,	fPoint(1729.f, 127.f),		fPoint(77.f, 127.f),		fPoint(-77.f, 0.f),			0.1f,	6);
+	createAnim(L"Jump_R",		m_pTex,	fPoint(1344.f, 0.f),		fPoint(77.f, 127.f),		fPoint(77.f, 0.f),			0.2f,	6);
+	createAnim(L"Jump_L",		m_pTex,	fPoint(1729.f, 127.f),		fPoint(77.f, 127.f),		fPoint(-77.f, 0.f),			0.2f,	6);
 
 	createAnim(L"Fall_R",		m_pTex,	fPoint(1806.f, 0.f),		fPoint(87.f, 127.f),		fPoint(87.f, 0.f),			0.2f,	6);
 	createAnim(L"Fall_L",		m_pTex,	fPoint(2241.f, 127.f),		fPoint(87.f, 127.f),		fPoint(-87.f, 0.f),			0.2f,	6);
@@ -54,14 +60,14 @@ CPlayer::CPlayer()
 	createAnim(L"Stun_R",		m_pTex,	fPoint(2556.f, 0.f),		fPoint(94.f, 127.f),		fPoint(94.f, 0.f),			0.3f,	1);
 	createAnim(L"Stun_L",		m_pTex,	fPoint(2556.f, 127.f),		fPoint(94.f, 127.f),		fPoint(94.f, 0.f),			0.3f,	1);
 
-	createAnim(L"Slash1_R",		m_pTex,	fPoint(0.f, 254.f),			fPoint(82.f, 127.f),		fPoint(82.f, 0.f),			0.1f,	5);
-	createAnim(L"Slash1_L",		m_pTex,	fPoint(328.f, 381.f),		fPoint(82.f, 127.f),		fPoint(-82.f, 0.f),			0.1f,	5);
+	createAnim(L"Slash1_R",		m_pTex,	fPoint(0.f, 254.f),			fPoint(82.f, 127.f),		fPoint(82.f, 0.f),			0.2f,	5);
+	createAnim(L"Slash1_L",		m_pTex,	fPoint(328.f, 381.f),		fPoint(82.f, 127.f),		fPoint(-82.f, 0.f),			0.2f,	5);
 
 	createAnim(L"Slash2_R",		m_pTex,	fPoint(410.f, 254.f),		fPoint(118.f, 127.f),		fPoint(118.f, 0.f),			0.1f,	5);
 	createAnim(L"Slash2_L",		m_pTex,	fPoint(882.f, 381.f),		fPoint(118.f, 127.f),		fPoint(-118.f, 0.f),		0.1f,	5);
 
-	createAnim(L"UpSlash_R",	m_pTex,	fPoint(1000.f, 254.f),		fPoint(95.f, 127.f),		fPoint(95.f, 0.f),			0.1f,	5);
-	createAnim(L"UpSlash_L",	m_pTex,	fPoint(1380.f, 381.f),		fPoint(95.f, 127.f),		fPoint(-95.f, 0.f),			0.1f,	5);
+	createAnim(L"UpSlash_R",	m_pTex,	fPoint(1000.f, 254.f),		fPoint(95.f, 127.f),		fPoint(95.f, 0.f),			0.2f,	5);
+	createAnim(L"UpSlash_L",	m_pTex,	fPoint(1380.f, 381.f),		fPoint(95.f, 127.f),		fPoint(-95.f, 0.f),			0.2f,	5);
 
 	createAnim(L"DownSlash_R",	m_pTex,	fPoint(1475.f, 254.f),		fPoint(118.f, 127.f),		fPoint(118.f, 0.f),			0.2f,	5);
 	createAnim(L"DownSlash_L",	m_pTex,	fPoint(1947.f, 381.f),		fPoint(118.f, 127.f),		fPoint(-118.f, 0.f),		0.2f,	5);
@@ -78,12 +84,15 @@ CPlayer::CPlayer()
 	createAnim(L"Focus_R",		m_pTex,	fPoint(1412.f, 508.f),		fPoint(94.f, 127.f),		fPoint(94.f, 0.f),			0.2f,	10);
 	createAnim(L"Focus_L",		m_pTex,	fPoint(2258.f, 635.f),		fPoint(94.f, 127.f),		fPoint(-94.f, 0.f),			0.2f,	10);
 
+#pragma endregion
+
 	PLAY(L"Idle_R");
 }
 
 CPlayer::~CPlayer()
 {
-
+	if (nullptr != m_pAI)
+		delete m_pAI;
 }
 
 CPlayer* CPlayer::clone()
@@ -95,7 +104,7 @@ void CPlayer::playAnim(const wstring& commonName)
 {
 	wstring strKey = commonName;
 
-	if (m_uiState & SP_DIR)
+	if (m_uiCheck & SP_DIR)
 		strKey += L"_R";
 	else
 		strKey += L"_L";
@@ -110,47 +119,47 @@ void CPlayer::update()
 {
 	if (KEY_ON('P')) g_bDebug = !g_bDebug;
 
+	if (nullptr != getAnimator())
+		getAnimator()->update();
+
+	if (nullptr != m_pAI)
+		m_pAI->update();
+
 	fPoint pos = getPos();
 
-	// 회전테스트
-	if (KEY_ON('Q'))
+	switch (m_eState)
 	{
-		createRotTester();
-	}
-
-	switch (m_eAction)
-	{
-	case eACT::IDLE:
+	case eSTATE_PLAYER::IDLE:
 	{	// idle to run
 		if (KEY_HOLD(VK_LEFT))
 		{
-			m_uiState &= ~(SP_DIR);
-			m_eAction = eACT::RUN;
+			m_uiCheck &= ~(SP_DIR);
+			m_eState = eSTATE_PLAYER::RUN;
 		}
 
 		else if (KEY_HOLD(VK_RIGHT))
 		{
-			m_uiState |= SP_DIR;
-			m_eAction = eACT::RUN;
+			m_uiCheck |= SP_DIR;
+			m_eState = eSTATE_PLAYER::RUN;
 		}
 		// idle to jump
 		else if (KEY_ON('Z'))
 		{
 			pos.y--;
-			m_eAction = eACT::JUMP;
-			m_uiState |= SP_JUMPHOLD;
-			m_uiState |= SP_AIR;
+			m_eState = eSTATE_PLAYER::JUMP;
+			m_uiCheck |= SP_JUMPHOLD;
+			m_uiCheck |= SP_AIR;
 		}
 		// idle to slash
 		else if (KEY_ON('X'))
 		{
 			if (KEY_HOLD(VK_UP))
 			{
-				m_eAction = eACT::UPSLASH;
+				m_eState = eSTATE_PLAYER::UPSLASH;
 			}
 			else
 			{
-				m_eAction = eACT::SLASH1;
+				m_eState = eSTATE_PLAYER::SLASH1;
 			}
 		}
 
@@ -161,7 +170,7 @@ void CPlayer::update()
 			
 			if (m_fTimer >= 0.5f)
 			{
-				m_eAction = eACT::FOCUS;
+				m_eState = eSTATE_PLAYER::FOCUS;
 				m_fTimer = 0.f;
 			}
 		}		
@@ -172,61 +181,61 @@ void CPlayer::update()
 
 			if (m_uiSoul >= P_FIRESOUL)
 			{
-				m_eAction = eACT::FIRE;
+				m_eState = eSTATE_PLAYER::FIRE;
 			}
 		}
 
 		playAnim(L"Idle");
 		break;
 	}
-	case eACT::RUN:
+	case eSTATE_PLAYER::RUN:
 	{	// TODO 여유되면 애니메이션 시작 프레임 0으로
 		if (KEY_HOLD(VK_LEFT))
 		{
-			m_uiState &= ~(SP_DIR);
+			m_uiCheck &= ~(SP_DIR);
 			pos.x -= m_fSpdX * fDT;
 		}
 		else if (KEY_HOLD(VK_RIGHT))
 		{
-			m_uiState |= SP_DIR;
+			m_uiCheck |= SP_DIR;
 			pos.x += m_fSpdX * fDT;
 		}
 		else
 		{
-			m_eAction = eACT::IDLE;
+			m_eState = eSTATE_PLAYER::IDLE;
 		}
 
 		if (KEY_ON('Z'))
 		{
 			pos.y--;
-			m_eAction = eACT::JUMP;
-			m_uiState |= SP_JUMPHOLD;
-			m_uiState |= SP_AIR;
+			m_eState = eSTATE_PLAYER::JUMP;
+			m_uiCheck |= SP_JUMPHOLD;
+			m_uiCheck |= SP_AIR;
 		}
 
 		else if (KEY_ON('X'))
 		{
 			if (KEY_HOLD(VK_UP))
 			{
-				m_eAction = eACT::UPSLASH;
+				m_eState = eSTATE_PLAYER::UPSLASH;
 			}
 			else
 			{
-				m_eAction = eACT::SLASH1;
+				m_eState = eSTATE_PLAYER::SLASH1;
 			}
 		}
 
 		else if (KEY_ON('A') /*&& m_uiSoul >= P_FIRESOUL*/)
 		{	
-			m_eAction = eACT::FIRE;
+			m_eState = eSTATE_PLAYER::FIRE;
 		}
 
 		playAnim(L"Run");
 		break;
 	}
-	case eACT::JUMP:
+	case eSTATE_PLAYER::JUMP:
 	{	
-		if (m_uiState & SP_JUMPHOLD)
+		if (m_uiCheck & SP_JUMPHOLD)
 		{	// Z 누르는 동안은 타이머만 증가(중력 증가 X)
 			m_fTimer += fDT;
 		}
@@ -238,22 +247,22 @@ void CPlayer::update()
 
 		if (KEY_OFF('Z') || m_fTimer >= 0.5f)
 		{	// Z 떼거나 점프 유지 최대시간 지나면
-			m_uiState &= ~(SP_JUMPHOLD);
+			m_uiCheck &= ~(SP_JUMPHOLD);
 			m_fTimer = 0.f;
 		}
 		if (m_fSpdY < m_fGravity)
 		{
-			m_eAction = eACT::FALL;
+			m_eState = eSTATE_PLAYER::FALL;
 		}
 
 		if (KEY_HOLD(VK_LEFT))
 		{
-			m_uiState &= ~(SP_DIR);
+			m_uiCheck &= ~(SP_DIR);
 			pos.x -= m_fSpdX * fDT;
 		}
 		else if (KEY_HOLD(VK_RIGHT))
 		{
-			m_uiState |= SP_DIR;
+			m_uiCheck |= SP_DIR;
 			pos.x += m_fSpdX * fDT;
 		}
 
@@ -261,21 +270,21 @@ void CPlayer::update()
 		{
 			if (KEY_HOLD(VK_UP))
 			{
-				m_eAction = eACT::UPSLASH;
+				m_eState = eSTATE_PLAYER::UPSLASH;
 			}
 			else if (KEY_HOLD(VK_DOWN))
 			{
-				m_eAction = eACT::DOWNSLASH;
+				m_eState = eSTATE_PLAYER::DOWNSLASH;
 			}
 			else
 			{
-				m_eAction = eACT::SLASH1;
+				m_eState = eSTATE_PLAYER::SLASH1;
 			}
 		}
 
 		else if (KEY_ON('A') /*&& m_uiSoul >= P_FIRESOUL*/)
 		{
-			m_eAction = eACT::FIRE;
+			m_eState = eSTATE_PLAYER::FIRE;
 		}
 
 		pos.y -= (m_fSpdY - m_fGravity) * fDT;
@@ -283,16 +292,16 @@ void CPlayer::update()
 		playAnim(L"Jump");
 		break;
 	}
-	case eACT::FALL:
+	case eSTATE_PLAYER::FALL:
 	{
 		if (KEY_HOLD(VK_LEFT))
 		{
-			m_uiState &= ~(SP_DIR);
+			m_uiCheck &= ~(SP_DIR);
 			pos.x -= m_fSpdX * fDT;
 		}
 		else if (KEY_HOLD(VK_RIGHT))
 		{
-			m_uiState |= SP_DIR;
+			m_uiCheck |= SP_DIR;
 			pos.x += m_fSpdX * fDT;
 		}
 
@@ -300,21 +309,21 @@ void CPlayer::update()
 		{
 			if (KEY_HOLD(VK_UP))
 			{
-				m_eAction = eACT::UPSLASH;
+				m_eState = eSTATE_PLAYER::UPSLASH;
 			}
 			else if (KEY_HOLD(VK_DOWN))
 			{
-				m_eAction = eACT::DOWNSLASH;
+				m_eState = eSTATE_PLAYER::DOWNSLASH;
 			}
 			else
 			{
-				m_eAction = eACT::SLASH1;
+				m_eState = eSTATE_PLAYER::SLASH1;
 			}
 		}
 
 		else if (KEY_ON('A') /*&& m_uiSoul >= P_FIRESOUL*/)
 		{
-			m_eAction = eACT::FIRE;
+			m_eState = eSTATE_PLAYER::FIRE;
 			//m_uiSoul -= P_FIRESOUL;
 		}
 
@@ -326,7 +335,7 @@ void CPlayer::update()
 		playAnim(L"Fall");
 		break;
 	}
-	case eACT::FIRE:
+	case eSTATE_PLAYER::FIRE:
 	{
 		if (m_fAttackDelay == 0.f)
 		{
@@ -338,21 +347,21 @@ void CPlayer::update()
 
 		if (m_fAttackDelay >= (float)P_FIREDELAY)
 		{
-			if (m_uiState & SP_AIR)
+			if (m_uiCheck & SP_AIR)
 			{
-				m_eAction = eACT::FALL;
+				m_eState = eSTATE_PLAYER::FALL;
 				m_fAttackDelay = 0.f;
 			}
 			else
 			{
-				m_eAction = eACT::IDLE;
+				m_eState = eSTATE_PLAYER::IDLE;
 				m_fAttackDelay = 0.f;
 			}
 		}
 		playAnim(L"Fire");
 		break;
 	}
-	case eACT::SLASH1:
+	case eSTATE_PLAYER::SLASH1:
 	{
 		if (m_fAttackDelay == 0.f)
 		{
@@ -361,7 +370,7 @@ void CPlayer::update()
 
 		m_fAttackDelay += fDT;
 
-		if (m_uiState & SP_AIR)
+		if (m_uiCheck & SP_AIR)
 		{	// 공중에서 공격할 때 중력적용
 			if (m_fGravity < P_GRAVMAX)
 				m_fGravity += P_GRAV * fDT;
@@ -371,14 +380,14 @@ void CPlayer::update()
 
 		if (m_fAttackDelay > (float)P_ATTDELAY)
 		{
-			if (m_uiState & SP_AIR)
+			if (m_uiCheck & SP_AIR)
 			{
-				m_eAction = eACT::FALL;
+				m_eState = eSTATE_PLAYER::FALL;
 				m_fAttackDelay = 0.f;
 			}
 			else
 			{
-				m_eAction = eACT::IDLE;
+				m_eState = eSTATE_PLAYER::IDLE;
 				m_fAttackDelay = 0.f;
 			}
 		}
@@ -386,12 +395,12 @@ void CPlayer::update()
 		
 		break;
 	}
-	case eACT::SLASH2:
+	case eSTATE_PLAYER::SLASH2:
 	{
 		// TODO SLASH2 되는 조건 확인하기
 		break;
 	}
-	case eACT::UPSLASH:
+	case eSTATE_PLAYER::UPSLASH:
 	{
 		if (m_fAttackDelay == 0.f)
 		{
@@ -400,7 +409,7 @@ void CPlayer::update()
 
 		m_fAttackDelay += fDT;
 
-		if (m_uiState & SP_AIR)
+		if (m_uiCheck & SP_AIR)
 		{	// 중력적용
 			if (m_fGravity < P_GRAVMAX)
 				m_fGravity += P_GRAV * fDT;
@@ -410,21 +419,21 @@ void CPlayer::update()
 
 		if (m_fAttackDelay > (float)P_ATTDELAY)
 		{
-			if (m_uiState & SP_AIR)
+			if (m_uiCheck & SP_AIR)
 			{	// JUMP 상태에서 공격하면 Fall 상태로
-				m_eAction = eACT::FALL;
+				m_eState = eSTATE_PLAYER::FALL;
 				m_fAttackDelay = 0.f;
 			}
 			else
 			{
-				m_eAction = eACT::IDLE;
+				m_eState = eSTATE_PLAYER::IDLE;
 				m_fAttackDelay = 0.f;
 			}
 		}
 		playAnim(L"UpSlash");
 		break;
 	}
-	case  eACT::DOWNSLASH:
+	case  eSTATE_PLAYER::DOWNSLASH:
 	{
 		if (m_fAttackDelay == 0.f)
 		{
@@ -433,7 +442,7 @@ void CPlayer::update()
 
 		m_fAttackDelay += fDT;
 
-		if (m_uiState & SP_AIR)
+		if (m_uiCheck & SP_AIR)
 		{	// 공중에서 공격할 때 중력적용
 			if (m_fGravity < P_GRAVMAX)
 				m_fGravity += P_GRAV * fDT;
@@ -443,26 +452,26 @@ void CPlayer::update()
 
 		if (m_fAttackDelay > (float)P_ATTDELAY)
 		{
-			if (m_uiState & SP_AIR)
+			if (m_uiCheck & SP_AIR)
 			{	// JUMP 상태에서 공격하면 fall
-				m_eAction = eACT::FALL;
+				m_eState = eSTATE_PLAYER::FALL;
 				m_fAttackDelay = 0.f;
 			}
 			else
 			{
-				m_eAction = eACT::IDLE;
+				m_eState = eSTATE_PLAYER::IDLE;
 				m_fAttackDelay = 0.f;
 			}
 		}
 		playAnim(L"DownSlash");
 		break;
 	}
-	case eACT::FOCUS:
+	case eSTATE_PLAYER::FOCUS:
 	{	// focus to idle
 		if (KEY_OFF('A'))
 		{
 			m_fTimer = 0.f;
-			m_eAction = eACT::IDLE;
+			m_eState = eSTATE_PLAYER::IDLE;
 		}
 		
 		m_fTimer += fDT;
@@ -476,7 +485,7 @@ void CPlayer::update()
 		{
 			m_fTimer = 0.f;
 			m_uiSoul = 0.f;
-			m_eAction = eACT::IDLE;
+			m_eState = eSTATE_PLAYER::IDLE;
 		}
 
 		playAnim(L"Focus");
@@ -484,16 +493,26 @@ void CPlayer::update()
 	}
 	}
 	
+	// 회전테스트
+	if (KEY_ON('Q'))
+	{
+		createRotTester();
+	}
+
 	if (pos.y > 1519.f)
 	{
 		pos.y = 1519.f;
-		m_uiState &= ~(SP_AIR);
-		m_eAction = eACT::IDLE;
+		m_uiCheck &= ~(SP_AIR);
+		m_eState = eSTATE_PLAYER::IDLE;
 		m_fGravity = 0.f;
 	}
 
 	setPos(pos);
-	getAnimator()->update();
+
+	if (nullptr != getAnimator())
+		getAnimator()->update();
+	if (nullptr != m_pAI)
+		m_pAI->update();
 }
 
 void CPlayer::render(HDC hDC)
@@ -505,6 +524,12 @@ void CPlayer::render(HDC hDC)
 
 	componentRender(hDC);
 	
+}
+
+void CPlayer::setAI(CAI* ai)
+{
+	m_pAI = ai;
+	m_pAI->m_pOwner = this;
 }
 
 void CPlayer::collisionKeep(CCollider* pOther)
@@ -520,14 +545,14 @@ void CPlayer::collisionEnter(CCollider* pOther)
 		{
 		case eDIR::TOP:
 		{	// 지면과 1픽셀 겹치게 위치
-			if (m_eAction == eACT::FALL)
+			if (m_eState == eSTATE_PLAYER::FALL)
 			{	// Fall일 때만 착지
 				fPoint pos = getPos();
 				pos.y = pOther->getPos().y - getCollider()->getOffset().y + pOther->getOffset().y
 					- (pOther->getSize().y + getCollider()->getSize().y) / 2 + 1;
 				setPos(pos);
-				if (m_uiState & SP_AIR)
-					m_uiState &= ~(SP_AIR);
+				if (m_uiCheck & SP_AIR)
+					m_uiCheck &= ~(SP_AIR);
 				m_iBottomCnt++;
 				m_fGravity = 0.f;
 			}
@@ -569,7 +594,7 @@ void CPlayer::collisionExit(CCollider* pOther)
 		case eDIR::TOP:
 			if (--m_iBottomCnt <= 0)
 			{
-				m_uiState |= SP_AIR;
+				m_uiCheck |= SP_AIR;
 				m_fGravity = 0.f;
 			}
 			break;
@@ -585,7 +610,7 @@ void CPlayer::createMissile()
 
 	CMissile* pMissile = new CMissile;
 
-	if (m_uiState & SP_DIR)
+	if (m_uiCheck & SP_DIR)
 	{
 		mPos.x += getSize().x / 2.f;
 		mDir = 1.f;
@@ -612,7 +637,7 @@ void CPlayer::createRotTester()
 
 	CTest* pTest = new CTest;
 
-	if (m_uiState & SP_DIR)
+	if (m_uiCheck & SP_DIR)
 	{
 		pTest->setDir(fPoint(1.f, 0.f));
 		mPos.x = -100.f;
@@ -643,42 +668,42 @@ void CPlayer::printInfo(HDC hDC)
 	wchar_t bufY[255] = {};
 	wchar_t bufGrav[255] = {};
 
-	switch (m_eAction)
+	switch (m_eState)
 	{
-	case eACT::IDLE:
+	case eSTATE_PLAYER::IDLE:
 		szAct = L"Idle";
 		break;
-	case eACT::RUN:
+	case eSTATE_PLAYER::RUN:
 		szAct = L"Run";
 		break;
-	case eACT::JUMP:
+	case eSTATE_PLAYER::JUMP:
 		szAct = L"Jump";
 		break;
-	case eACT::FALL:
+	case eSTATE_PLAYER::FALL:
 		szAct = L"Fall";
 		break;
-	case eACT::SLASH1:
+	case eSTATE_PLAYER::SLASH1:
 		szAct = L"Slash1";
 		break;
-	case eACT::SLASH2:
+	case eSTATE_PLAYER::SLASH2:
 		szAct = L"SLASH2";
 		break;
-	case eACT::UPSLASH:
+	case eSTATE_PLAYER::UPSLASH:
 		szAct = L"UpSlash";
 		break;
-	case eACT::DOWNSLASH:
+	case eSTATE_PLAYER::DOWNSLASH:
 		szAct = L"DownSlash";
 		break;
-	case eACT::HANG:
+	case eSTATE_PLAYER::HANG:
 		szAct = L"Hang";
 		break;
-	case eACT::FIRE:
+	case eSTATE_PLAYER::FIRE:
 		szAct = L"Fire";
 		break;
-	case eACT::FOCUS:
+	case eSTATE_PLAYER::FOCUS:
 		szAct = L"Focus";
 		break;
-	case eACT::STUN:
+	case eSTATE_PLAYER::STUN:
 		szAct = L"Stun";
 		break;
 	default:
@@ -709,7 +734,7 @@ void CPlayer::firstSlash()
 	pAttack->getCollider()->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEX));
 	pAttack->setOwner(this);
 
-	if (m_uiState & SP_DIR)
+	if (m_uiCheck & SP_DIR)
 	{
 		mPos.x += PSLASH_OFFSETX;
 		pAttack->setDir(eDIR::RIGHT);

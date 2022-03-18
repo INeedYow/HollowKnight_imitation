@@ -13,7 +13,7 @@ CBoss_Markoth::CBoss_Markoth()
 	
 	setHP(20);
 	setSpd(200.f);
-	setState(SB_NORMAL,true);
+	setCheck(SB_NORMAL,true);
 
 	m_ucPhase = 1;
 	m_fTimer = 0.f;
@@ -46,6 +46,7 @@ CBoss_Markoth* CBoss_Markoth::clone()
 
 // TODO boss패턴
 // 방패 맞은 편에 생성하는 방법 고민
+// 방패 방향 전환(스킬 쓸 때마다 전환하면 될듯)
 void CBoss_Markoth::update()
 {
 	fPoint pos = getPos();
@@ -72,25 +73,25 @@ void CBoss_Markoth::update()
 		setRandDelay();
 	}
 	
-	if (m_fTimer > 10.f && isState(SB_NORMAL))
+	if (m_fTimer > 10.f && isCheck(SB_NORMAL))
 	{
-		setState(SB_MIDDLE, true);
-		setState(SB_NORMAL, false);
+		setCheck(SB_MIDDLE, true);
+		setCheck(SB_NORMAL, false);
 		m_fTimer = 0.f;
 	}
 
-	else if (isState(SB_MIDDLE))
+	else if (isCheck(SB_MIDDLE))
 	{
 		PLAY(L"st_Middle");
 		if (m_fTimer > 0.6f)
 		{
-			setState(SB_SKILL, true);
-			setState(SB_MIDDLE, false);
+			setCheck(SB_SKILL, true);
+			setCheck(SB_MIDDLE, false);
 			m_fTimer = 0.f;
 		}
 	}
 
-	else if (isState(SB_SKILL))
+	else if (isCheck(SB_SKILL))
 	{
 		PLAY(L"st_Skill");
 
@@ -119,8 +120,8 @@ void CBoss_Markoth::update()
 				m_vecShield[i]->setRadius(260.f);
 			}
 			m_fTimer = 0;
-			setState(SB_NORMAL, true);
-			setState(SB_SKILL, false);
+			setCheck(SB_NORMAL, true);
+			setCheck(SB_SKILL, false);
 		}
 	}
 
@@ -166,7 +167,7 @@ void CBoss_Markoth::collisionEnter(CCollider* pOther)
 	switch (pOther->getOwner()->getName())
 	{	// att도 player, monster 구분해야 
 	case eOBJNAME::MISSILE_PLAYER:
-		setHP(getHP() - 2);
+		setHP(getHP() - 1);
 		break;
 
 	case eOBJNAME::ATTACK:
@@ -196,7 +197,7 @@ void CBoss_Markoth::setRandDelay()
 	case 2:
 		randDelay += 0.05f;
 	case 3:
-		randDelay += 0.5f;
+		randDelay += 0.85f;
 	}
 	m_fDelay = randDelay;
 }

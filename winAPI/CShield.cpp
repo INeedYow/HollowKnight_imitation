@@ -1,6 +1,8 @@
 #include "framework.h"
 #include "CShield.h"
 
+#include "SelectGDI.h"
+
 CShield::CShield()
 {
 	m_pTex = nullptr;
@@ -44,7 +46,7 @@ void CShield::calculateRad()
 	float x = getPos().x - m_pOwner->getPos().x;
 	float y = getPos().y - m_pOwner->getPos().y;
 
-	m_fRadius = (float)sqrt((double)x * x + (double)y * y );
+	m_fRadius = (float)sqrt((double)x * x + (double)y * y);
 }
 
 void CShield::update()

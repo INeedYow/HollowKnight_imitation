@@ -178,6 +178,7 @@
     <ClInclude Include="CShield.h" />
     <ClInclude Include="CSound.h" />
     <ClInclude Include="CState.h" />
+    <ClInclude Include="CState_Idle.h" />
     <ClInclude Include="CTest.h" />
     <ClInclude Include="CTexture.h" />
     <ClInclude Include="CTile.h" />
@@ -228,6 +229,7 @@
     <ClCompile Include="CShield.cpp" />
     <ClCompile Include="CSound.cpp" />
     <ClCompile Include="CState.cpp" />
+    <ClCompile Include="CState_Idle.cpp" />
     <ClCompile Include="CTest.cpp" />
     <ClCompile Include="CTexture.cpp" />
     <ClCompile Include="CTile.cpp" />

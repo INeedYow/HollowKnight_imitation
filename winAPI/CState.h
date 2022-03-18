@@ -1,25 +1,27 @@
 #pragma once
 
-class AI;
+class CAI;
+class CPlayer;
 
-enum class MON_STATE{};
+enum class eSTATE_PLAYER;
 
 class CState
 {
-	friend class AI;
+	friend class CAI;
 
 private:
-	AI*			m_pOwner;
-	MON_STATE	m_eState;
+	CAI*			m_pOwner;
+	eSTATE_PLAYER	m_ePlayerState;
 
 public:
-	CState(MON_STATE state);
+	CState(eSTATE_PLAYER state);
 	virtual ~CState();
 
-	AI* getOwner();
+	CAI* getOwner();
+	eSTATE_PLAYER getState();
+	CPlayer* getPlayer();
 
-	virtual void Enter() = 0;
-	virtual void Exit() = 0;
-
+	virtual void update() = 0;
+	virtual void enter() = 0;
+	virtual void exit() = 0;
 };
-

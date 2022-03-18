@@ -6,7 +6,7 @@ class CAI;
 class CMonster : public CObject
 {
 private:
-	UINT	m_uiState;
+	UINT	m_uiCheck;
 
 	UINT	m_uiHP;
 	float	m_fSpd;
@@ -25,19 +25,17 @@ public:
 	void collisionKeep(CCollider* pOther){}
 	void collisionExit(CCollider* pOther){}
 
-	void setAI(CAI* ai);
-	void setState(UINT state, bool isOn);
+	void setCheck(UINT chk, bool isOn);
 	void setHP(UINT hp);
 	void setSpd(float spd);
 
-	bool isState(UINT state);
+	bool isCheck(UINT chk);
 	UINT getHP();
 	float getSpd();
 };
 
 #define SM_DIR		0x01
 #define SM_AIR		0x02
-
 
 
 // boss

@@ -2,12 +2,14 @@
 #include "CObject.h"
 
 class CTexture;
-enum class eACT;
+class CAI;
+enum class eSTATE_PLAYER;
 
+// TODO 각 state로 변수들 나눠줘야 하나
 class CPlayer : public CObject
 {
-	eACT		m_eAction;				// 행동 상태값
-	UINT		m_uiState;				// 상태값 (무적, Item 보유상황등 체크)
+	eSTATE_PLAYER	m_eState;				// 행동 상태값
+	UINT			m_uiCheck;				// 상태값 (무적, Item 보유상황등 체크)
 
 	CTexture*	m_pTex;
 
@@ -20,10 +22,11 @@ class CPlayer : public CObject
 	float		m_fGravity;
 	int			m_iBottomCnt;
 
-	float		m_fTimer;				// jump, focus 등에서 쓸 타이머
-	float		m_fAttackDelay;			//
+	float		m_fTimer;					// jump, focus 등에서 쓸 타이머
+	float		m_fAttackDelay;				//
 
-	
+	CAI*		m_pAI;
+
 private:
 	void createMissile();
 	void firstSlash();
@@ -44,12 +47,14 @@ public:
 	virtual void update();
 	virtual void render(HDC hDC);
 
+	void setAI(CAI* ai);
+
 	void collisionKeep(CCollider* pOther);
 	void collisionEnter(CCollider* pOther);
 	void collisionExit(CCollider* pOther);
 };
 
-enum class eACT
+enum class eSTATE_PLAYER
 {
 	IDLE,
 	RUN,

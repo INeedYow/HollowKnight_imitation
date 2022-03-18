@@ -2,6 +2,7 @@
 #include "CEventManager.h"
 #include "CObject.h"
 #include "CScene.h"
+#include "CAI.h"
 
 CEventManager::CEventManager()
 {
@@ -48,6 +49,15 @@ void CEventManager::execute(const tEvent& _event)
 	}
 	break;
 
+	case eEvent::CHANGE_AI_STATE:
+		// lParam : CAI
+		// wParam : next state
+	{
+		CAI* pAI = (CAI*)_event.lParam;
+		eSTATE_PLAYER nextState = (eSTATE_PLAYER)_event.wParam;
+		pAI->changeState(nextState);
+	}
+	break;
 	}
 }
 
@@ -92,6 +102,16 @@ void CEventManager::eventChangeScene(eSCENE eScn)
 	newEvent.lParam = (DWORD_PTR)eScn;
 
 	addEvent(newEvent);
+}
+
+void CEventManager::eventChangeAIState(CAI* ai, eSTATE_PLAYER state)
+{
+	tEvent newEvent = {};
+	newEvent.eEvent = eEvent::CHANGE_AI_STATE;
+	newEvent.lParam = (DWORD_PTR)ai;
+	newEvent.wParam = (DWORD_PTR)state;
+
+	CEventManager::getInst()->addEvent(newEvent);
 }
 
 void CEventManager::addEvent(const tEvent& _event)

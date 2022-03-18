@@ -8,7 +8,7 @@ class CObject
 	friend class CEventManager;
 private:
 
-	eOBJNAME		m_eName;			// 충돌 대상의 종류를 알려면 필요함
+	eOBJNAME	m_eName;			// 충돌 대상의 종류를 알려면 필요함
 
 	fPoint		m_fptPos;
 	fPoint		m_fptSize;

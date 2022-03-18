@@ -46,11 +46,11 @@ void CScene_Stage01::enter()
 	pBoss->getCollider()->setSize(fPoint(220.f, 320.f));
 	addObject(pBoss, eOBJ::BOSS);
 
-	//CBackGround* pBGBack = new CBackGround;
-	//pBGBack->load(L"BG_stage1B", L"texture\\background\\stage1_back.bmp");
-	//pBGBack->setPos(fPoint(0.f, 0.f));
-	//pBGBack->setSize(fPoint(991.f, 1518.f));
-	//addObject(pBGBack, eOBJ::BACKGROUND);
+	CBackGround* pBGBack = new CBackGround;
+	pBGBack->load(L"BG_stage1B", L"texture\\background\\stage1_back.bmp");
+	pBGBack->setPos(fPoint(0.f, 0.f));
+	pBGBack->setSize(fPoint(991.f, 1518.f));
+	addObject(pBGBack, eOBJ::BACKGROUND);
 
 	/*CBackGround* pBGFront = new CBackGround;
 	pBGFront->setName(OBJNAME::BACKGROUND);
