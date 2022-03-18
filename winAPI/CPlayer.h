@@ -32,6 +32,7 @@ private:
 	void downSlash();
 
 	void createRotTester();
+	void printInfo(HDC hDC);
 
 public:
 	CPlayer();
@@ -64,6 +65,9 @@ enum class eACT
 
 	STUN,
 
+	DASH,
+	DOUBLEJUMP,
+
 	LOOKUP,
 	LOOKDOWN,
 	DEATH,
@@ -75,8 +79,8 @@ enum class eACT
 #define P_SIZEX				64
 #define P_SIZEY				128
 #define P_SPDX				150
-#define P_SPDY				350
-#define P_GRAV				1200
+#define P_SPDY				450
+#define P_GRAV				2000
 #define P_GRAVMAX			(P_GRAV * 3)
 #define P_FIRESOUL			30
 #define P_FOCUSSOUL			33

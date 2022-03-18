@@ -28,7 +28,7 @@ CBoss_Markoth::CBoss_Markoth()
 
 	createAnim(L"st_Middle",	m_pTex, fPoint(0.f, 420.f),		fPoint(300.f, 415.f),		fPoint(300.f, 0.f),		0.15f,	4);
 
-	createAnim(L"st_Skill",		m_pTex, fPoint(0.f, 835.f),		fPoint(448.f, 282.f),		fPoint(448.f, 0.f),		0.3f,	4);
+	createAnim(L"st_Skill",		m_pTex, fPoint(0.f, 835.f),		fPoint(448.f, 282.f),		fPoint(448.f, 0.f),		0.2f,	4);
 
 	PLAY(L"st_Normal");
 
@@ -58,7 +58,7 @@ void CBoss_Markoth::update()
 		createShield();
 	}
 
-	if (getHP() <= 0 && m_ucPhase == 2)
+	if (getHP() <= 0)
 	{
 		m_ucPhase = 1;
 		setHP(20);
@@ -152,9 +152,9 @@ void CBoss_Markoth::render(HDC hDC)
 
 		pos = rendPos(pos);
 
-		TextOutW(hDC, (int)pos.x + 150, (int)pos.y - 120, buffHP, (int)wcslen(buffHP));
-		TextOutW(hDC, (int)pos.x + 150, (int)pos.y - 135, bufX, (int)wcslen(bufX));
-		TextOutW(hDC, (int)pos.x + 150, (int)pos.y - 150, bufY, (int)wcslen(bufY));
+		TextOutW(hDC, (int)pos.x + 150, (int)pos.y + 120, buffHP, (int)wcslen(buffHP));
+		TextOutW(hDC, (int)pos.x + 150, (int)pos.y + 135, bufX, (int)wcslen(bufX));
+		TextOutW(hDC, (int)pos.x + 150, (int)pos.y + 150, bufY, (int)wcslen(bufY));
 	}
 
 	componentRender(hDC);
@@ -196,15 +196,17 @@ void CBoss_Markoth::setRandDelay()
 	case 2:
 		randDelay += 0.05f;
 	case 3:
-		randDelay += 0.3f;
+		randDelay += 0.5f;
 	}
 	m_fDelay = randDelay;
 }
 
+// TODO
 // 소환된 창이 일정시간 후에 이동하도록 하려면 새로 클래스 만들거나
 	// 미사일에 대기시간등 추가로 만들어야(해당 기능 안쓰는 경우 낭비일듯)
 // 플레이어 좌표로 날아오게 하려면 플레이어 좌표 받아올 수 있어야
 	// 임시로 카메라 중심으로 날아가도록 (이렇게 해도 될듯?)
+// 플레이어 너무 근처에서 생성 되지 않도록
 void CBoss_Markoth::createSpear()
 {
 	fPoint pos = randSpearPos();

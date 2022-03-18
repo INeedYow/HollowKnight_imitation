@@ -63,6 +63,7 @@ enum class GROUP_OBJECT
 	BACKGROUND,
 	FRONTGROUND,
 	TILE,
+	IMAGE,
 
 	ATTACK,
 	MISSILE_PLAYER,
@@ -95,6 +96,7 @@ enum class OBJECT_NAME
 	EFFECT,
 	BOSS,
 	SHIELD,
+	IMAGE,
 
 	TEST,
 
@@ -217,6 +219,7 @@ enum class COLL_DIR
 #define PLAY(name)					getAnimator()->play(name)
 
 #define camSetFocus(fp)				CCameraManager::getInst()->setFocusOn(fp)
+#define camSetFocusNow(fp)			CCameraManager::getInst()->setFocusNow(fp)
 #define camSetTrace(pObj)			CCameraManager::getInst()->setTraceObj(pObj)
 #define camFadeOut(fTime)			CCameraManager::getInst()->fadeOut(fTime)
 #define camFadeIn(fTime)			CCameraManager::getInst()->fadeIn(fTime)

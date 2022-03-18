@@ -24,7 +24,7 @@ public:
 	CObject();
 	CObject(const CObject& other);
 	virtual ~CObject();
-	virtual CObject* clone() = 0;
+	virtual CObject* clone();
 
 	void setPos(fPoint pos);
 	void setSize(fPoint size);

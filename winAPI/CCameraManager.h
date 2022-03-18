@@ -46,6 +46,7 @@ public:
 	void update();
 	void render(HDC hDC);
 
+	void setFocusNow(fPoint focus);
 	void setFocusOn(fPoint focus);
 	void setTraceObj(CObject* targetObj);
 

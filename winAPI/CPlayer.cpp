@@ -105,6 +105,7 @@ void CPlayer::playAnim(const wstring& commonName)
 
 // TODO : 현재 애니메이션 준비동작까지 반복돼서 같은 동작 오래 지속하면 부자연스러움
 	// 애니메이션 반복 여부 설정
+// TODO : 한 번씩 키 씹히는 것 같은데
 void CPlayer::update()
 {
 	if (KEY_ON('P')) g_bDebug = !g_bDebug;
@@ -483,9 +484,9 @@ void CPlayer::update()
 	}
 	}
 	
-	if (pos.y > 2950.f)
+	if (pos.y > 1519.f)
 	{
-		pos.y = 2950.f;
+		pos.y = 1519.f;
 		m_uiState &= ~(SP_AIR);
 		m_eAction = eACT::IDLE;
 		m_fGravity = 0.f;
@@ -499,24 +500,11 @@ void CPlayer::render(HDC hDC)
 {
 	if (g_bDebug)
 	{
-		fPoint pos = getPos();
-
-		wchar_t bufX[255] = {};
-		wchar_t bufY[255] = {};
-		wchar_t bufGrav[255] = {};
-
-		swprintf_s(bufX, L"x = %d", (int)pos.x);
-		swprintf_s(bufY, L"y = %d", (int)pos.y);
-		swprintf_s(bufGrav, L"grav = %f", m_fGravity);
-
-		pos = rendPos(pos);
-
-		TextOutW(hDC, (int)pos.x - 20, (int)pos.y + 60, bufX, (int)wcslen(bufX));
-		TextOutW(hDC, (int)pos.x - 20, (int)pos.y + 75, bufY, (int)wcslen(bufY));
-		TextOutW(hDC, (int)pos.x - 20, (int)pos.y + 90, bufGrav, (int)wcslen(bufGrav));
+		printInfo(hDC);
 	}
 
 	componentRender(hDC);
+	
 }
 
 void CPlayer::collisionKeep(CCollider* pOther)
@@ -608,6 +596,8 @@ void CPlayer::createMissile()
 		mDir = -1.f;
 	}
 	pMissile->setPos(fPoint(mPos.x, mPos.y));
+	pMissile->setSize(fPoint(30.f, 30.f));
+	pMissile->getCollider()->setSize(fPoint(30.f, 30.f));
 	pMissile->setDir(fVec2(mDir, 0.f));
 	pMissile->setName(eOBJNAME::MISSILE_PLAYER);
 	pMissile->setSpeed(400.f);
@@ -640,8 +630,73 @@ void CPlayer::createRotTester()
 	pTest->setName(eOBJNAME::TEST);
 
 	createObj(pTest, eOBJ::TEST);
-}///////////////////////////////////////////////
+}
+///////////////////////////////////////////////
 
+void CPlayer::printInfo(HDC hDC)
+{
+	fPoint pos = getPos();
+
+
+	LPCWSTR	szAct = L"";
+	wchar_t bufX[255] = {};
+	wchar_t bufY[255] = {};
+	wchar_t bufGrav[255] = {};
+
+	switch (m_eAction)
+	{
+	case eACT::IDLE:
+		szAct = L"Idle";
+		break;
+	case eACT::RUN:
+		szAct = L"Run";
+		break;
+	case eACT::JUMP:
+		szAct = L"Jump";
+		break;
+	case eACT::FALL:
+		szAct = L"Fall";
+		break;
+	case eACT::SLASH1:
+		szAct = L"Slash1";
+		break;
+	case eACT::SLASH2:
+		szAct = L"SLASH2";
+		break;
+	case eACT::UPSLASH:
+		szAct = L"UpSlash";
+		break;
+	case eACT::DOWNSLASH:
+		szAct = L"DownSlash";
+		break;
+	case eACT::HANG:
+		szAct = L"Hang";
+		break;
+	case eACT::FIRE:
+		szAct = L"Fire";
+		break;
+	case eACT::FOCUS:
+		szAct = L"Focus";
+		break;
+	case eACT::STUN:
+		szAct = L"Stun";
+		break;
+	default:
+		break;
+	}
+
+	swprintf_s(bufX, L"x = %d", (int)pos.x);
+	swprintf_s(bufY, L"y = %d", (int)pos.y);
+	swprintf_s(bufGrav, L"grav = %f", m_fGravity);
+
+	pos = rendPos(pos);
+
+	TextOutW(hDC, (int)pos.x - 20, (int)pos.y + 60, szAct, (int)wcslen(szAct));
+	TextOutW(hDC, (int)pos.x - 20, (int)pos.y + 75, bufX, (int)wcslen(bufX));
+	TextOutW(hDC, (int)pos.x - 20, (int)pos.y + 90, bufY, (int)wcslen(bufY));
+	TextOutW(hDC, (int)pos.x - 20, (int)pos.y + 105, bufGrav, (int)wcslen(bufGrav));
+
+}
 
 // Slash들 합쳐도 될듯
 void CPlayer::firstSlash()

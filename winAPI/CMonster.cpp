@@ -1,6 +1,7 @@
 #include "framework.h"
 #include "CMonster.h"
 #include "CCollider.h"
+#include "CAI.h"
 
 CMonster::CMonster()
 {
@@ -16,6 +17,12 @@ CMonster::CMonster()
 
 CMonster::~CMonster()
 {
+}
+
+void CMonster::setAI(CAI* ai)
+{
+	m_pAI = ai;
+	m_pAI->m_pOwner = this;
 }
 
 void CMonster::setState(UINT state, bool isOn)

@@ -10,6 +10,7 @@
 #include "CPanelUI.h"
 #include "CButtonUI.h"
 #include "CBackGround.h"
+#include "CImage.h"
 
 void changeScene(DWORD_PTR param1, DWORD_PTR param2);
 
@@ -23,21 +24,25 @@ CScene_Title::~CScene_Title()
 
 void CScene_Title::enter()
 {
-
 	// Camera Look 지정
-	//camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
-	// 
-	// TODO 왜 정위치에 안 나오나
+	camSetFocusNow(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
+
 	CBackGround* pBG = new CBackGround;
-	pBG->load(L"BG_title", L"texture\\background\\title.bmp");
+	pBG->load(L"BG_title", L"texture\\background\\BG_title.bmp");
 	pBG->setPos(fPoint(0.f, 0.f));
-	pBG->setSize(fPoint(WINSIZEX, WINSIZEY));
+	pBG->setSize(fPoint((float)WINSIZEX, (float)WINSIZEY));
 	pBG->setName(eOBJNAME::BACKGROUND);
 	addObject(pBG, eOBJ::BACKGROUND);
 
+	CImage* pImg = new CImage;
+	pImg->load(L"TextImage_title", L"texture\\image\\titleText.bmp");
+	pImg->setPos(fPoint(130.f, 100.f));
+	pImg->setName(eOBJNAME::IMAGE);
+	addObject(pImg, eOBJ::IMAGE);
+
 	CUI* pPanelUI = new CPanelUI();
 	pPanelUI->setSize(fPoint(360.f, 150.f));
-	pPanelUI->setPos(fPoint(WINSIZEX / 2.f - 180.f, WINSIZEY / 2.f));		// UI는 카메라의 위치와 상관없이 절대 좌표를 통해 구현
+	pPanelUI->setPos(fPoint(WINSIZEX / 2.f - 180.f, WINSIZEY / 2.f + 200));		// UI는 카메라의 위치와 상관없이 절대 좌표를 통해 구현
 	addObject(pPanelUI, eOBJ::UI);
 
 	CButtonUI* pBtnStart = new CButtonUI();

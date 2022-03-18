@@ -24,6 +24,9 @@ CCameraManager::~CCameraManager()
 void CCameraManager::init()
 {
 	m_pTex = CResourceManager::getInst()->createTexture(L"CameraTex", WINSIZEX, WINSIZEY);
+	m_fpCurFocus = { WINSIZEX / 2.f, WINSIZEY / 2.f };
+	m_fpFocus = { WINSIZEX / 2.f, WINSIZEY / 2.f };
+	m_fpPrevFocus = { WINSIZEX / 2.f, WINSIZEY / 2.f };
 }
 
 void CCameraManager::update()
@@ -89,6 +92,13 @@ void CCameraManager::render(HDC hDC)
 	{
 		m_listCamEffect.pop_front();
 	}
+}
+
+void CCameraManager::setFocusNow(fPoint focus)
+{
+	m_fpCurFocus = focus;
+	m_fpFocus = focus;
+	m_fpPrevFocus = focus;
 }
 
 void CCameraManager::setFocusOn(fPoint focus)

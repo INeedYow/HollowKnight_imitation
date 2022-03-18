@@ -84,9 +84,10 @@ void CMissile::collisionEnter(CCollider* pOther)
 		switch (pOther->getOwner()->getName())
 		{
 		case eOBJNAME::MONSTER:
+		case eOBJNAME::BOSS:
 		case eOBJNAME::TILE:
 		{
-			deleteObj(this);
+			//deleteObj(this);
 			// TODO 이펙트 생성
 			break;
 		}

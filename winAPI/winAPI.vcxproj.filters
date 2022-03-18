@@ -92,7 +92,7 @@
       <Filter>Object\BackGround</Filter>
     </ClCompile>
     <ClCompile Include="CImage.cpp">
-      <Filter>Object\ect</Filter>
+      <Filter>Object\Image</Filter>
     </ClCompile>
     <ClCompile Include="CMonster.cpp">
       <Filter>Object\Character\Monster</Filter>
@@ -114,6 +114,15 @@
     </ClCompile>
     <ClCompile Include="CShield.cpp">
       <Filter>Object\CAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="CButtonUI_Image.cpp">
+      <Filter>Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="CState.cpp">
+      <Filter>Engine\Component\AI\State</Filter>
+    </ClCompile>
+    <ClCompile Include="CAI.cpp">
+      <Filter>Engine\Component\AI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -229,7 +238,7 @@
       <Filter>Object\BackGround</Filter>
     </ClInclude>
     <ClInclude Include="CImage.h">
-      <Filter>Object\ect</Filter>
+      <Filter>Object\Image</Filter>
     </ClInclude>
     <ClInclude Include="CMonster.h">
       <Filter>Object\Character\Monster</Filter>
@@ -251,6 +260,15 @@
     </ClInclude>
     <ClInclude Include="CShield.h">
       <Filter>Object\CAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="CButtonUI_Image.h">
+      <Filter>Object\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="CState.h">
+      <Filter>Engine\Component\AI\State</Filter>
+    </ClInclude>
+    <ClInclude Include="CAI.h">
+      <Filter>Engine\Component\AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -352,9 +370,6 @@
     <Filter Include="Object\Character\Monster">
       <UniqueIdentifier>{a37873d8-42ba-48d1-b8e2-90c4c5101b38}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\ect">
-      <UniqueIdentifier>{46ead140-2c6c-4361-a8ac-2816a8aa8092}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Object\CEffect">
       <UniqueIdentifier>{f9af9b91-70f8-479c-b9eb-f9bf231d268b}</UniqueIdentifier>
     </Filter>
@@ -363,6 +378,15 @@
     </Filter>
     <Filter Include="Object\Character\Monster\CBoss">
       <UniqueIdentifier>{82fb5d76-ef7b-4b90-82a1-932fcde36fea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Image">
+      <UniqueIdentifier>{46ead140-2c6c-4361-a8ac-2816a8aa8092}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Component\AI">
+      <UniqueIdentifier>{b45b45a8-088e-4717-a6cb-313cf0527b45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Component\AI\State">
+      <UniqueIdentifier>{32d02ebb-01c4-4105-b34d-74040e90f95a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -27,12 +27,12 @@ void CScene_Stage01::update()
 
 void CScene_Stage01::enter()
 {
-	camFadeOut(0.9f);
-	camFadeIn(0.9f);
+	camFadeOut(0.6f);
+	camFadeIn(0.6f);
 
 	// Player 추가
 	CObject* pPlayer = new CPlayer;
-	pPlayer->setPos(fPoint(200, 3000));
+	pPlayer->setPos(fPoint(200, 1500));
 	addObject(pPlayer, eOBJ::PLAYER);
 
 	//// Monster 추가
@@ -41,14 +41,16 @@ void CScene_Stage01::enter()
 	//addObject(pMonster, eOBJ::MONSTER);
 
 	CBoss_Markoth* pBoss = new CBoss_Markoth;
-	pBoss->setPos(fPoint(1000.f, 2800.f));
+	pBoss->setPos(fPoint(1000.f, 1200.f));
 	pBoss->setSize(fPoint(300.f, 400.f));
 	pBoss->getCollider()->setSize(fPoint(220.f, 320.f));
 	addObject(pBoss, eOBJ::BOSS);
 
-	CBackGround* pBGBack = new CBackGround;
-	pBGBack->load(L"BG_stage1B", L"texture\\background\\stage1_back.bmp");
-	addObject(pBGBack, eOBJ::BACKGROUND);
+	//CBackGround* pBGBack = new CBackGround;
+	//pBGBack->load(L"BG_stage1B", L"texture\\background\\stage1_back.bmp");
+	//pBGBack->setPos(fPoint(0.f, 0.f));
+	//pBGBack->setSize(fPoint(991.f, 1518.f));
+	//addObject(pBGBack, eOBJ::BACKGROUND);
 
 	/*CBackGround* pBGFront = new CBackGround;
 	pBGFront->setName(OBJNAME::BACKGROUND);
@@ -65,6 +67,7 @@ void CScene_Stage01::enter()
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::BOSS);
 	checkGrp(eOBJ::ATTACK, eOBJ::BOSS);
 
+	camSetFocusNow(pPlayer->getPos());
 	camSetTrace(pPlayer);
 }
 

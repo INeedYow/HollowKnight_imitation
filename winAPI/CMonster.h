@@ -1,6 +1,7 @@
 #pragma once
 #include "CObject.h"
 
+class CAI;
 
 class CMonster : public CObject
 {
@@ -10,9 +11,11 @@ private:
 	UINT	m_uiHP;
 	float	m_fSpd;
 
+	CAI*	m_pAI;
+
 public:
 	CMonster();
-	~CMonster();
+	virtual ~CMonster();
 	virtual CMonster* clone() = 0;
 
 	virtual void update() = 0;
@@ -22,6 +25,7 @@ public:
 	void collisionKeep(CCollider* pOther){}
 	void collisionExit(CCollider* pOther){}
 
+	void setAI(CAI* ai);
 	void setState(UINT state, bool isOn);
 	void setHP(UINT hp);
 	void setSpd(float spd);

@@ -145,12 +145,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CAI.h" />
     <ClInclude Include="CAnimation.h" />
     <ClInclude Include="CAnimator.h" />
     <ClInclude Include="CAttack.h" />
     <ClInclude Include="CBackGround.h" />
     <ClInclude Include="CBoss_Markoth.h" />
     <ClInclude Include="CButtonUI.h" />
+    <ClInclude Include="CButtonUI_Image.h" />
     <ClInclude Include="CCameraManager.h" />
     <ClInclude Include="CCollider.h" />
     <ClInclude Include="CCollisionManager.h" />
@@ -175,6 +177,7 @@
     <ClInclude Include="CScene_Tool.h" />
     <ClInclude Include="CShield.h" />
     <ClInclude Include="CSound.h" />
+    <ClInclude Include="CState.h" />
     <ClInclude Include="CTest.h" />
     <ClInclude Include="CTexture.h" />
     <ClInclude Include="CTile.h" />
@@ -192,12 +195,14 @@
     <ClInclude Include="winAPI.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CAI.cpp" />
     <ClCompile Include="CAnimation.cpp" />
     <ClCompile Include="CAnimator.cpp" />
     <ClCompile Include="CAttack.cpp" />
     <ClCompile Include="CBackGround.cpp" />
     <ClCompile Include="CBoss_Markoth.cpp" />
     <ClCompile Include="CButtonUI.cpp" />
+    <ClCompile Include="CButtonUI_Image.cpp" />
     <ClCompile Include="CCameraManager.cpp" />
     <ClCompile Include="CCollider.cpp" />
     <ClCompile Include="CCollisionManager.cpp" />
@@ -222,6 +227,7 @@
     <ClCompile Include="CScene_Tool.cpp" />
     <ClCompile Include="CShield.cpp" />
     <ClCompile Include="CSound.cpp" />
+    <ClCompile Include="CState.cpp" />
     <ClCompile Include="CTest.cpp" />
     <ClCompile Include="CTexture.cpp" />
     <ClCompile Include="CTile.cpp" />
