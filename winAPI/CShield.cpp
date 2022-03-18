@@ -8,7 +8,7 @@ CShield::CShield()
 	setPos(fPoint(0.f, 0.f));
 	setSize(fPoint(70.f, 70.f));
 	setName(eOBJNAME::SHIELD);
-	m_fSpd = 2.f;
+	m_fSpd = 2.5f;
 	m_fTheta = 0.f;
 	m_fRadius = 0.f;
 	m_bRotRight = true;
@@ -16,7 +16,7 @@ CShield::CShield()
 	m_pOwner = nullptr;
 
 	createCollider();
-	getCollider()->setSize(fPoint(70.f, 70.f));
+	getCollider()->setSize(fPoint(80.f, 80.f));
 
 	//createAnimator();
 }
@@ -53,6 +53,9 @@ void CShield::update()
 	fPoint pos = getPos();
 
 	m_fTheta += m_fSpd * fDT;
+
+	if (m_fTheta > 6.2831f)
+		m_fTheta = 0.f;
 
 	if (m_bRotRight)
 	{

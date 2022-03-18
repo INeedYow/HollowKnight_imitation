@@ -18,6 +18,11 @@ public:
 
 	void setDir(fVec2 vec);
 	void setDir(float theta);
+	void setSpeed(float spd);
+
+	float getSpeed();
+
+	//void rotation(float theta);
 
 	void collisionEnter(CCollider* pOther);
 };

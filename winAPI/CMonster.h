@@ -40,7 +40,6 @@ public:
 
 #define SB_HPMAX	20
 
-
 #define SB_NORMAL	0x1000
 #define SB_MIDDLE	0x2000
 #define SB_SKILL	0x4000

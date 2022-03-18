@@ -10,9 +10,9 @@ CMissile* CMissile::clone()
 CMissile::CMissile()
 {
 	setSize(fPoint(25.f, 25.f));
-	setName(eOBJNAME::MISSILE_PLAYER);
+	setName(eOBJNAME::MISSILE_MONSTER);
 	m_fvDir = fVec2(0, 0);
-	m_fSpeed = 400.f;
+	m_fSpeed = 0.f;
 	m_fTimer = 0.f;
 
 	createCollider();
@@ -63,6 +63,16 @@ void CMissile::setDir(float theta)
 {
 	m_fvDir.x = (float)cos(theta);
 	m_fvDir.y = (float)sin(theta);
+}
+
+void CMissile::setSpeed(float spd)
+{
+	m_fSpeed = spd;
+}
+
+float CMissile::getSpeed()
+{
+	return m_fSpeed;
 }
 
 void CMissile::collisionEnter(CCollider* pOther)

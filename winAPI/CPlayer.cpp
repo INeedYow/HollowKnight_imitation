@@ -114,7 +114,7 @@ void CPlayer::update()
 	// 회전테스트
 	if (KEY_ON('Q'))
 	{
-		createRotMissile();
+		createRotTester();
 	}
 
 	switch (m_eAction)
@@ -610,12 +610,13 @@ void CPlayer::createMissile()
 	pMissile->setPos(fPoint(mPos.x, mPos.y));
 	pMissile->setDir(fVec2(mDir, 0.f));
 	pMissile->setName(eOBJNAME::MISSILE_PLAYER);
+	pMissile->setSpeed(400.f);
 
 	createObj(pMissile, eOBJ::MISSILE_PLAYER);
 }
 
 /////////////////////////////////////// test
-void CPlayer::createRotMissile()
+void CPlayer::createRotTester()
 {	
 	fPoint mPos = getPos();
 

@@ -53,6 +53,7 @@ extern bool			g_bDebug;
 
 #define COLLRR				collisionRectToRect
 
+#define PI					3.141592
 
  // enum class 열거형
 #define eOBJ		GROUP_OBJECT

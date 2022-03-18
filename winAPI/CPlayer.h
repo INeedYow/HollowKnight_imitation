@@ -31,7 +31,7 @@ private:
 	void upSlash();
 	void downSlash();
 
-	void createRotMissile();
+	void createRotTester();
 
 public:
 	CPlayer();

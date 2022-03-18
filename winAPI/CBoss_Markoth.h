@@ -8,6 +8,7 @@ class CBoss_Markoth : public CMonster
 {
 	UCHAR	m_ucPhase;
 	float	m_fTimer;
+	float	m_fDelay;
 	fVec2	m_fvDir;
 
 	vector<CShield*> m_vecShield;
@@ -22,11 +23,13 @@ public:
 	virtual void update();
 	virtual void render(HDC hDC);
 
-	void collisionEnter(CCollider* pOther) {}
-	void collisionKeep(CCollider* pOther) {}
-	void collisionExit(CCollider* pOther) {}
+	void collisionEnter(CCollider* pOther);
+	void collisionKeep(CCollider* pOther);
+	void collisionExit(CCollider* pOther);
 
 private:
+	void setRandDelay();
 	void createSpear();
 	void createShield();
+	fPoint randSpearPos();
 };
