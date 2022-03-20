@@ -39,6 +39,9 @@ void CMissile::update()
 	if (m_fTimer > 8.f)
 		deleteObj(this);
 
+	if (nullptr != getAnimator())
+		getAnimator()->update();
+
 	setPos(pos);
 }
 

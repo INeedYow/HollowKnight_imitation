@@ -24,4 +24,3 @@ public:
 	CAnimation* findAnimation(const wstring& strName);
 	void play(const wstring& strName);
 };
-

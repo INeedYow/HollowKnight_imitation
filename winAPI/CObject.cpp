@@ -4,6 +4,7 @@
 #include "CObject.h"
 #include "CCollider.h"
 #include "CAnimator.h"
+#include "CEffector.h"
 
 CObject::CObject()
 {
@@ -134,4 +135,15 @@ void CObject::createAnimator()
 {
 	m_pAnimator = new CAnimator();
 	m_pAnimator->m_pOwner = this;
+}
+
+CEffector* CObject::getEffector()
+{
+	return m_pEffector;
+}
+
+void CObject::createEffector()
+{
+	m_pEffector = new CEffector();
+	m_pEffector->m_pOwner = this;
 }

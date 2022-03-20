@@ -154,12 +154,32 @@
     <ClCompile Include="CState_Slash2.cpp">
       <Filter>Engine\Component\AI\State\CState_Player</Filter>
     </ClCompile>
-    <ClCompile Include="CState_Death.cpp" />
     <ClCompile Include="CState_Stun.cpp">
       <Filter>Engine\Component\AI\State\CState_Player</Filter>
     </ClCompile>
     <ClCompile Include="CSpear.cpp">
       <Filter>Object\CAttack\NewFilter1</Filter>
+    </ClCompile>
+    <ClCompile Include="CEffector.cpp">
+      <Filter>Engine\Component\Effector</Filter>
+    </ClCompile>
+    <ClCompile Include="CEffect.cpp">
+      <Filter>Engine\Component\Effector\CEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_Death.cpp">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_Dash.cpp">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_Dash2Idle.cpp">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_Doublejump.cpp">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CGround.cpp">
+      <Filter>Object\Tile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -337,12 +357,32 @@
     <ClInclude Include="CState_Slash2.h">
       <Filter>Engine\Component\AI\State\CState_Player</Filter>
     </ClInclude>
-    <ClInclude Include="CState_Death.h" />
     <ClInclude Include="CState_Stun.h">
       <Filter>Engine\Component\AI\State\CState_Player</Filter>
     </ClInclude>
     <ClInclude Include="CSpear.h">
       <Filter>Object\CAttack\NewFilter1</Filter>
+    </ClInclude>
+    <ClInclude Include="CEffector.h">
+      <Filter>Engine\Component\Effector</Filter>
+    </ClInclude>
+    <ClInclude Include="CEffect.h">
+      <Filter>Engine\Component\Effector\CEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_Death.h">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_Dash.h">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_Dash2Idle.h">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_Doublejump.h">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CGround.h">
+      <Filter>Object\Tile</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -444,9 +484,6 @@
     <Filter Include="Object\Character\Monster">
       <UniqueIdentifier>{a37873d8-42ba-48d1-b8e2-90c4c5101b38}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\CEffect">
-      <UniqueIdentifier>{f9af9b91-70f8-479c-b9eb-f9bf231d268b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Object\CAttack">
       <UniqueIdentifier>{fbbf58c3-f07c-415e-8e69-eb7f84c288db}</UniqueIdentifier>
     </Filter>
@@ -467,6 +504,12 @@
     </Filter>
     <Filter Include="Object\CAttack\NewFilter1">
       <UniqueIdentifier>{3cffa103-1c8d-440c-96f1-f195f04c23b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Component\Effector">
+      <UniqueIdentifier>{705342b9-b269-4014-9170-73650d611350}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Component\Effector\CEffect">
+      <UniqueIdentifier>{f9af9b91-70f8-479c-b9eb-f9bf231d268b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -68,6 +68,11 @@ void CState_Jump::update(UINT& chk)
 		}
 	}
 
+	else if (KEY_ON('C'))
+	{
+		changeAIState(getOwner(), eSTATE_PLAYER::DASH);
+	}
+
 	else if (KEY_ON('A'))
 	{
 		if (info.uiSoul >= P_FIRESOUL)
@@ -86,10 +91,18 @@ void CState_Jump::enter()
 {
 	getPlayer()->playAnim(L"Jump");
 	getPlayer()->setCheck(SP_STOPANIM, true);
+
+	// 
+	fPoint pos = getPlayer()->getPos();
+	pos.y -= 1;
+	getPlayer()->setPos(pos);
 }
 
 void CState_Jump::exit()
 {
-	m_fTimer = 0.f;
 	getPlayer()->setCheck(SP_STOPANIM, false);
+
+	getPlayer()->setCheck(SP_JUMPHOLD, false);
+
+	m_fTimer = 0.f;
 }

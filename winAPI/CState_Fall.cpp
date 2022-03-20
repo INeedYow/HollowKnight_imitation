@@ -51,6 +51,16 @@ void CState_Fall::update(UINT& chk)
 		}
 	}
 
+	else if (KEY_ON('C'))
+	{
+		changeAIState(getOwner(), eSTATE_PLAYER::DASH);
+	}
+
+	else if (KEY_ON('Z') && !(chk & SP_DBJUMP))
+	{
+		changeAIState(getOwner(), eSTATE_PLAYER::DOUBLEJUMP);
+	}
+
 	else if (KEY_ON('A'))
 	{
 		if (info.uiSoul >= P_FIRESOUL)
@@ -62,7 +72,7 @@ void CState_Fall::update(UINT& chk)
 	if (info.fGravity < P_GRAVMAX)
 		info.fGravity += P_GRAV * fDT;
 
-	pos.y -= (info.fSpdY - info.fGravity) * fDT;
+	pos.y += info.fGravity * fDT;
 		
 	getPlayer()->setPos(pos);
 	getPlayer()->setPlayerInfo(info);
@@ -72,9 +82,21 @@ void CState_Fall::enter()
 {
 	getPlayer()->playAnim(L"Fall");
 	getPlayer()->setCheck(SP_STOPANIM, true);
+
+	getPlayer()->setCheck(SP_AIR, true);
+	getPlayer()->setCheck(SP_GODOWN, true);
+
+	tPlayerInfo info = getPlayer()->getPlayerInfo();
+	info.fGravity = 0.f;
+	info.iBottomCnt = 0;
+	getPlayer()->setPlayerInfo(info);
 }
 
 void CState_Fall::exit()
 {
 	getPlayer()->setCheck(SP_STOPANIM, false);
+
+	tPlayerInfo info = getPlayer()->getPlayerInfo();
+	info.fGravity = 0.f;
+	getPlayer()->setPlayerInfo(info);
 }

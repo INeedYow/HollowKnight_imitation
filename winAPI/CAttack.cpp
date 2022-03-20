@@ -37,8 +37,6 @@ void CAttack::update()
 
 void CAttack::render(HDC hDC)
 {
-
-
 	componentRender(hDC);
 }
 
@@ -67,7 +65,6 @@ CObject* CAttack::getOwner()
 	return m_pOwner;
 }
 
-
 void CAttack::collisionEnter(CCollider* pOther)
 {
 	CObject* pOwner = getOwner();
@@ -80,9 +77,12 @@ void CAttack::collisionEnter(CCollider* pOther)
 		switch (pTarget->getName())
 		{
 		case eOBJNAME::BOSS:
-		{
+		case eOBJNAME::MONSTER:
+		{	// soul ȹ�淮
 			info.fvKnockBackDir = (pOwner->getPos() - pTarget->getPos());
-			info.uiSoul += 10;
+			info.uiSoul += 20;
+			if (info.uiSoul > 100)
+				info.uiSoul = 100;
 			break;
 		}
 		}

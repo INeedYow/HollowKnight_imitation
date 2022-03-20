@@ -13,6 +13,7 @@ CState_Downslash::~CState_Downslash()
 {
 }
 
+// TODO 하단 공격 시 점프
 void CState_Downslash::update(UINT& chk)
 {
 	fPoint pos = getPlayer()->getPos();
@@ -23,14 +24,14 @@ void CState_Downslash::update(UINT& chk)
 	if (info.fGravity < P_GRAVMAX)
 		info.fGravity += P_GRAV * fDT;
 
-	pos.y -= (info.fSpdY - info.fGravity) * fDT;
+	pos.y += info.fGravity * fDT;
 	
 
 	if (m_fAttackDelay > (float)P_ATTDELAY)
 	{
 		if (chk & SP_AIR)
 		{
-			
+			changeAIState(getOwner(), eSTATE_PLAYER::FALL);
 		}
 		else
 		{
@@ -46,6 +47,7 @@ void CState_Downslash::enter()
 {
 	getPlayer()->downSlash();
 	getPlayer()->playAnim(L"DownSlash");
+	
 	getPlayer()->setCheck(SP_STOPANIM, true);
 }
 

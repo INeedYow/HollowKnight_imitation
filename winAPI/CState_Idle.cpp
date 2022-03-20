@@ -48,6 +48,11 @@ void CState_Idle::update(UINT& chk)
 		}
 	}
 
+	else if (KEY_ON('C'))
+	{
+		changeAIState(getOwner(), eSTATE_PLAYER::DASH);
+	}
+
 	if (KEY_HOLD('A'))
 	{
 		m_fTimer += fDT;

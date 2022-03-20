@@ -24,9 +24,7 @@ void CBackGround::render(HDC hDC)
 	if (nullptr == m_pTex) return;
 
 	fPoint pos = getPos();
-	fPoint size;
-	size.x = m_pTex->getBmpWidth();
-	size.y = m_pTex->getBmpHeight();
+	fPoint size = getSize();
 
 	fPoint renderPos = rendPos(pos);
 	fPoint camPos = getCamPos();

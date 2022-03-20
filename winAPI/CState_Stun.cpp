@@ -6,8 +6,6 @@
 CState_Stun::CState_Stun(eSTATE_PLAYER state)
 	: CState(state)
 {
-	m_fInvinsibleTimer = 0.f;
-
 	m_fvDir = {};
 	m_fTimer = 0.f;
 	m_fSpd = 100.f;
@@ -33,7 +31,11 @@ void CState_Stun::update(UINT& chk)
 	m_fvDir = m_fvDir.normalize();
 
 	pos.x += m_fvDir.x * m_fSpd * fDT;
-	pos.y += m_fvDir.y * m_fSpd * fDT;
+
+	if (chk & SP_AIR)
+	{
+		pos.y += m_fvDir.y * m_fSpd * fDT;
+	}
 
 	getPlayer()->setPos(pos);
 	getPlayer()->setPlayerInfo(info);
@@ -55,9 +57,12 @@ void CState_Stun::enter()
 void CState_Stun::exit()
 {
 	getPlayer()->setCheck(SP_STOPANIM, false);
-	getPlayer()->setCheck(SP_NODMG, false);
+	//getPlayer()->setCheck(SP_NODMG, false);
+
+	tPlayerInfo info = getPlayer()->getPlayerInfo();
+	info.fNoDmgTimer = 2.0f;
+	getPlayer()->setPlayerInfo(info);
 
 	m_fTimer = 0.f;
-	m_fInvinsibleTimer = 0.f;
 	m_fvDir = {};
 }

@@ -9,6 +9,7 @@
 #include "CAttack.h"
 #include "CAI.h"
 
+#pragma region Include_State
 #include "CState.h"
 #include "CState_Idle.h"
 #include "CState_Run.h"
@@ -21,13 +22,18 @@
 #include "CState_Fire.h"
 #include "CState_Focus.h"
 #include "CState_Stun.h"
+#include "CState_Death.h"
+#include "CState_Dash.h"
+#include "CState_Dash2Idle.h"
+#include "CState_Doublejump.h"
+#pragma endregion
 
 // test
 #include "CTest.h"
 
 CPlayer::CPlayer()
 {
-	m_pTex = loadTex(L"PlayerTex", L"texture\\player\\texPlayer.bmp");
+	m_pTex = loadTex(L"PlayerTex", L"texture\\player\\player_tex.bmp");
 	setName(eOBJNAME::PLAYER);
 	setSize(fPoint(P_SIZEX, P_SIZEY));
 
@@ -37,6 +43,7 @@ CPlayer::CPlayer()
 		0,
 		P_SPDX,
 		P_SPDY,
+		0.f,
 		0.f,
 		0,
 		{},
@@ -98,6 +105,19 @@ CPlayer::CPlayer()
 	createAnim(L"Focus_R",		m_pTex,	fPoint(1412.f, 508.f),		fPoint(94.f, 127.f),		fPoint(94.f, 0.f),			0.2f,	10);
 	createAnim(L"Focus_L",		m_pTex,	fPoint(2258.f, 635.f),		fPoint(94.f, 127.f),		fPoint(-94.f, 0.f),			0.2f,	10);
 
+	createAnim(L"Dash_R",		m_pTex,	fPoint(0.f, 762.f),			fPoint(172.f, 127.f),		fPoint(172.f, 0.f),			0.1f,	7);
+	createAnim(L"Dash_L",		m_pTex,	fPoint(1032.f, 889.f),		fPoint(172.f, 127.f),		fPoint(-172.f, 0.f),		0.1f,	7);
+
+	createAnim(L"Dash2Idle_R",	m_pTex,	fPoint(1204.f, 762.f),		fPoint(62.f, 127.f),		fPoint(62.f, 0.f),			0.1f,	4);
+	createAnim(L"Dash2Idle_L",	m_pTex,	fPoint(1390.f, 889.f),		fPoint(62.f, 127.f),		fPoint(-62.f, 0.f),			0.1f,	4);
+
+	createAnim(L"DoubleJump_R",	m_pTex,	fPoint(1452.f, 764.f),		fPoint(116.f, 129.f),		fPoint(116.f, 0.f),			0.2f,	8);
+	createAnim(L"DoubleJump_L",	m_pTex,	fPoint(2264.f, 893.f),		fPoint(116.f, 129.f),		fPoint(-116.f, 0.f),		0.2f,	8);
+
+	createAnim(L"Hang_R",		m_pTex, fPoint(2380.f, 764.f),		fPoint(75.f, 124.f),		fPoint(75.f, 0.f),			0.3f,	4);
+	createAnim(L"Hang_L",		m_pTex, fPoint(2605.f, 892.f),		fPoint(75.f, 124.f),		fPoint(-75.f, 0.f),			0.3f,	4);
+
+
 #pragma endregion
 
 	PLAY(L"Idle_R");
@@ -122,10 +142,15 @@ CPlayer* CPlayer::createNormal(fPoint pos)
 	pPlayer->setPos(pos);
 
 	CAI* pAI = new CAI;
+#pragma region AddState
 	pAI->addState(new CState_Idle(eSTATE_PLAYER::IDLE));
 	pAI->addState(new CState_Run(eSTATE_PLAYER::RUN));
 	pAI->addState(new CState_Jump(eSTATE_PLAYER::JUMP));
+	pAI->addState(new CState_Doublejump(eSTATE_PLAYER::DOUBLEJUMP));
 	pAI->addState(new CState_Fall(eSTATE_PLAYER::FALL));
+
+	pAI->addState(new CState_Dash(eSTATE_PLAYER::DASH));
+	pAI->addState(new CState_Dash2Idle(eSTATE_PLAYER::DASH2IDLE));
 
 	pAI->addState(new CState_Slash1(eSTATE_PLAYER::SLASH1));
 	pAI->addState(new CState_Slash2(eSTATE_PLAYER::SLASH2));
@@ -136,10 +161,11 @@ CPlayer* CPlayer::createNormal(fPoint pos)
 	pAI->addState(new CState_Focus(eSTATE_PLAYER::FOCUS));
 
 	pAI->addState(new CState_Stun(eSTATE_PLAYER::STUN));
+	pAI->addState(new CState_Death(eSTATE_PLAYER::DEATH));
 
 	pAI->setCurState(eSTATE_PLAYER::IDLE);
 	pPlayer->setAI(pAI);
-
+#pragma endregion
 	return pPlayer;
 }
 
@@ -155,6 +181,7 @@ void CPlayer::playAnim(const wstring& keyWord)
 		strKey += L"_L";
 
 	PLAY(strKey);
+#pragma region error
 	//if (strKey == L"\0" && SP_STOPANIM)
 	//{
 	//	fPoint pos = getPos();
@@ -188,56 +215,60 @@ void CPlayer::playAnim(const wstring& keyWord)
 	//	}
 	//}
 	//addDirAndPlay(strKey);
+#pragma endregion
 }
 
-void CPlayer::addDirAndPlay(const wstring& keyWord)
-{
-	wstring strKey = keyWord;
-
-	if (m_uiCheck & SP_DIR)
-		strKey += L"_R";
-	else
-		strKey += L"_L";
-
-	PLAY(strKey);
-}
+//void CPlayer::addDirAndPlay(const wstring& keyWord)
+//{
+//	wstring strKey = keyWord;
+//
+//	if (m_uiCheck & SP_DIR)
+//		strKey += L"_R";
+//	else
+//		strKey += L"_L";
+//
+//	PLAY(strKey);
+//}
 
 // TODO : 현재 애니메이션 준비동작까지 반복돼서 같은 동작 오래 지속하면 부자연스러움
 	// 애니메이션 반복 여부 설정
 // TODO : 한 번씩 키 씹히는 것 같은데
 void CPlayer::update()
 {
-
 	if (KEY_ON('P')) g_bDebug = !g_bDebug;
 
 	////////////////////////////
 	// 임시 // 회전테스트
 	// T Y U I 
 	// G H J
-	fPoint pos = getPos();
 	if (KEY_ON('Q'))
 	{
 		createRotTester();
 	}
-	// 임시 // 타일 없어서
+	 // 임시 // 타일 없어서
+
+	fPoint pos = getPos();
 	if (pos.y > 1518.f)
 	{
 		pos.y = 1518.f;
 		m_uiCheck &= ~(SP_AIR);
 		m_uiCheck &= ~(SP_GODOWN);
-		//changeAIState(m_pAI, eSTATE_PLAYER::IDLE);
+		m_uiCheck &= ~(SP_DBJUMP);
 		m_tInfo.fGravity = 0.f;
 	}
 	setPos(pos);
-	///////////////////////////
+
+	/////////////////////////
 
 	//playAnim();					// 
 	if (nullptr != m_pAI)
 		m_pAI->update(m_uiCheck);
 	if (nullptr != getAnimator())
 		getAnimator()->update();
+
+	checkUpdate();
 	
-	renewPrevInfo(getPos());			// anim 출력 후 이전 상황 갱신
+	//renewPrevInfo(getPos());			// anim 출력 후 이전 상황 갱신
 }
 
 void CPlayer::render(HDC hDC)
@@ -295,20 +326,43 @@ void CPlayer::collisionKeep(CCollider* pOther)
 	{
 		if (!(m_uiCheck & SP_NODMG))
 		{
-			m_tInfo.uiHP--;
 			m_tInfo.fvKnockBackDir = (getPos() - pTarget->getPos());
-			m_tInfo.uiSoul += 10;
-			changeAIState(m_pAI, eSTATE_PLAYER::STUN);
+
+			if (--m_tInfo.uiHP <= 0)
+				changeAIState(m_pAI, eSTATE_PLAYER::DEATH);
+			else
+				changeAIState(m_pAI, eSTATE_PLAYER::STUN);
 		}
 		break;
 	}
 	case eOBJNAME::ATTACK:
 	{
-		// 오반데 attack도 몬스터 플레이어 나눠야 하나
+		// 이렇게 많이 타고 들어가도 되나 // attack도 몬스터 플레이어 나눠야 하나
 		// ((CAttack*)pOther->getOwner())->getOwner()->getName()
 		
 		break;
 	}
+
+	case eOBJNAME::TILE:
+	case eOBJNAME::GROUND:
+		switch (COLLRR(getCollider(), pOther))
+		{
+		case eDIR::LEFT:
+		{	// TODO state::hang
+			fPoint pos = getPos();
+			pos.x = pOther->getPos().x + (pOther->getOffset().x - pOther->getSize().x - getCollider()->getSize().x) / 2;
+			setPos(pos);
+			break;
+		}
+		case eDIR::RIGHT:
+		{
+			fPoint pos = getPos();
+			pos.x = pOther->getPos().x + (pOther->getOffset().x + pOther->getSize().x + getCollider()->getSize().x) / 2;
+			setPos(pos);
+			break;
+		}
+		break;
+		}
 	}
 }
 
@@ -317,6 +371,7 @@ void CPlayer::collisionEnter(CCollider* pOther)
 	switch (pOther->getOwner()->getName())
 	{	//벽 충돌
 	case eOBJNAME::TILE:
+	case eOBJNAME::GROUND:
 		switch (COLLRR(getCollider(), pOther))
 		{
 		case eDIR::TOP:
@@ -329,8 +384,8 @@ void CPlayer::collisionEnter(CCollider* pOther)
 				setPos(pos);
 				if (m_uiCheck & SP_AIR)
 					m_uiCheck &= ~(SP_AIR);
+				m_uiCheck &= ~(SP_DBJUMP);
 				m_tInfo.iBottomCnt++;
-				m_tInfo.fGravity = 0.f;
 			}
 			break;
 		}
@@ -340,7 +395,7 @@ void CPlayer::collisionEnter(CCollider* pOther)
 			pos.x = pOther->getPos().x + (getCollider()->getOffset().x + pOther->getOffset().x
 				- pOther->getSize().x - getCollider()->getSize().x) / 2;
 			setPos(pos);
-			m_tInfo.fSpdX = 0.f;
+			//m_tInfo.fSpdX = 0.f;
 			break;
 		}
 		case eDIR::RIGHT:
@@ -349,12 +404,18 @@ void CPlayer::collisionEnter(CCollider* pOther)
 			pos.x = pOther->getPos().x + (getCollider()->getOffset().x + pOther->getOffset().x
 				+ pOther->getSize().x + getCollider()->getSize().x) / 2;
 			setPos(pos);
-			m_tInfo.fSpdX = 0.f;
+			//m_tInfo.fSpdX = 0.f;
 			break;
 		}
 		case eDIR::BOTTOM:	// 머리 콩
-			m_tInfo.fSpdY = 0.f;
+		{
+			//m_tInfo.fSpdY = 0.f;
+			fPoint pos = getPos();
+			pos.y = pOther->getPos().y + (getCollider()->getOffset().y + pOther->getOffset().y
+				+ pOther->getSize().y + getCollider()->getSize().y) / 2;
+			setPos(pos);
 			break;
+		}
 		}
 		break;
 	}
@@ -365,14 +426,13 @@ void CPlayer::collisionExit(CCollider* pOther)
 	switch (pOther->getOwner()->getName())
 	{
 	case eOBJNAME::TILE:
+	case eOBJNAME::GROUND:
 		switch (COLLRR(getCollider(), pOther))
 		{
 		case eDIR::TOP:
 			if (--m_tInfo.iBottomCnt <= 0)
 			{
-				m_uiCheck |= SP_AIR;
-				m_uiCheck |= SP_GODOWN;
-				m_tInfo.fGravity = 0.f;
+				changeAIState(m_pAI, eSTATE_PLAYER::FALL);
 			}
 			break;
 		}
@@ -387,31 +447,41 @@ void CPlayer::createMissile()
 
 	CMissile* pMissile = new CMissile;
 
+	pMissile->setTex(L"Missile_player", L"texture\\missile\\missile_player.bmp");
+	
+	pMissile->createAnim(L"Missile_player_R", pMissile->getTex(),
+		fPoint(0.f, 0.f), fPoint(254.f, 108.f), fPoint(254.f, 0.f), 0.15f, 4);
+	
+	pMissile->createAnim(L"Missile_player_L", pMissile->getTex(),
+		fPoint(762.f, 108.f), fPoint(254.f, 108.f), fPoint(-254.f, 0.f), 0.15f, 4);
+	
 	if (m_uiCheck & SP_DIR)
 	{
 		mPos.x += getSize().x / 2.f;
 		mDir = 1.f;
+		pMissile->PLAY(L"Missile_player_R");
 	}
 	else
 	{
 		mPos.x -= getSize().x / 2.f;
 		mDir = -1.f;
+		pMissile->PLAY(L"Missile_player_L");
 	}
 	pMissile->setPos(fPoint(mPos.x, mPos.y));
-	pMissile->setSize(fPoint(30.f, 30.f));
-	pMissile->getCollider()->setSize(fPoint(30.f, 30.f));
+	pMissile->setSize(fPoint(40.f, 30.f));
+	pMissile->getCollider()->setSize(fPoint(40.f, 30.f));
 	pMissile->setDir(fVec2(mDir, 0.f));
 	pMissile->setName(eOBJNAME::MISSILE_PLAYER);
-	pMissile->setSpeed(400.f);
-
+	pMissile->setSpeed(1000.f);
+	
 	createObj(pMissile, eOBJ::MISSILE_PLAYER);
 }
 
-void CPlayer::renewPrevInfo(fPoint pos)
-{
-	m_tPrevInfo.fpPrevPos = pos;
-	m_tPrevInfo.uiPrevHP = m_tInfo.uiHP;
-}
+//void CPlayer::renewPrevInfo(fPoint pos)
+//{
+//	m_tPrevInfo.fpPrevPos = pos;
+//	m_tPrevInfo.uiPrevHP = m_tInfo.uiHP;
+//}
 
 /////////////////////////////////////// test
 void CPlayer::createRotTester()
@@ -452,17 +522,21 @@ void CPlayer::printInfo(HDC hDC)
 	wchar_t bufHP[255] = {};
 	wchar_t bufSoul[255] = {};
 
+	wchar_t bufBot[255] = {};
+
 	// state 부분만 옮기기
-	LPCWSTR	szAct = L"";
-	TextOutW(hDC, (int)pos.x - 20, (int)pos.y + 60, szAct, (int)wcslen(szAct));
+	//LPCWSTR	szAct = L"";
+	//TextOutW(hDC, (int)pos.x - 20, (int)pos.y + 60, szAct, (int)wcslen(szAct));
 	// 까지
 
 	swprintf_s(bufX, L"x = %d", (int)pos.x);
 	swprintf_s(bufY, L"y = %d", (int)pos.y);
-	swprintf_s(bufGrav, L"grav = %f", m_tInfo.fGravity);
+	swprintf_s(bufGrav, L"grav = %.2f", m_tInfo.fGravity);
 
 	swprintf_s(bufHP, L"HP = %d", (int)m_tInfo.uiHP);
 	swprintf_s(bufSoul, L"Soul = %d", (int)m_tInfo.uiSoul);
+	swprintf_s(bufBot, L"BottomCnt = %d", (int)m_tInfo.iBottomCnt);
+
 
 	pos = rendPos(pos);
 
@@ -470,8 +544,31 @@ void CPlayer::printInfo(HDC hDC)
 	TextOutW(hDC, (int)pos.x - 20, (int)pos.y + 90, bufY, (int)wcslen(bufY));
 	TextOutW(hDC, (int)pos.x - 20, (int)pos.y + 105, bufGrav, (int)wcslen(bufGrav));
 
-	TextOutW(hDC, (int)pos.x - 100, (int)pos.y + 75, bufHP, (int)wcslen(bufHP));
-	TextOutW(hDC, (int)pos.x - 100, (int)pos.y + 90, bufSoul, (int)wcslen(bufSoul));
+	TextOutW(hDC, (int)pos.x - 140, (int)pos.y + 75, bufHP, (int)wcslen(bufHP));
+	TextOutW(hDC, (int)pos.x - 140, (int)pos.y + 90, bufSoul, (int)wcslen(bufSoul));
+	TextOutW(hDC, (int)pos.x - 140, (int)pos.y + 105, bufBot, (int)wcslen(bufBot));
+
+
+	if (m_uiCheck & SP_NODMG)
+	{
+		wchar_t bufNoDmg[255] = {};
+		swprintf_s(bufNoDmg, L"NoDmg %.2f", m_tInfo.fNoDmgTimer);
+		TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 75, bufNoDmg, (int)wcslen(bufNoDmg));
+	}
+}
+
+void CPlayer::checkUpdate()
+{
+	if (m_tInfo.fNoDmgTimer > 0.f && m_uiCheck & SP_NODMG)
+	{
+		m_tInfo.fNoDmgTimer -= fDT;
+
+		if (m_tInfo.fNoDmgTimer <= 0.f)
+		{
+			m_tInfo.fNoDmgTimer = 0.f;
+			m_uiCheck &= ~(SP_NODMG);
+		}
+	}
 }
 
 // Slash들 합쳐도 될듯

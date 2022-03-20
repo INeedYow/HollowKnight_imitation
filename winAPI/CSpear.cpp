@@ -119,15 +119,15 @@ void CSpear::render(HDC hDC)
 	
 	for (int i = 0; i < 3; i++)
 	{
-		pThreeArr[i].x = arr[i].x * cos(m_fTheta) - arr[i].y * sin(m_fTheta);
-		pThreeArr[i].y = arr[i].x * sin(m_fTheta) + arr[i].y * cos(m_fTheta);
+		pThreeArr[i].x = (LONG)(arr[i].x * cos(m_fTheta) - arr[i].y * sin(m_fTheta));
+		pThreeArr[i].y = (LONG)(arr[i].x * sin(m_fTheta) + arr[i].y * cos(m_fTheta));
 	}
 
 	
 	for (int i = 0; i < 3; i++)
 	{
-		pThreeArr[i].x += pos.x;
-		pThreeArr[i].y += pos.y;
+		pThreeArr[i].x += (LONG)pos.x;
+		pThreeArr[i].y += (LONG)pos.y;
 	}
 
 	PlgBlt(hDC,

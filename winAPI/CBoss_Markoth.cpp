@@ -32,7 +32,7 @@ CBoss_Markoth::CBoss_Markoth()
 
 	PLAY(L"st_Normal");
 
-	createShield();
+	phaseInit();
 }
 
 CBoss_Markoth::~CBoss_Markoth()
@@ -254,7 +254,7 @@ fPoint CBoss_Markoth::randSpearPos()
 {
 	fPoint pos = CCameraManager::getInst()->getFocus();
 	iPoint maxArea = { (int)(WINSIZEX / 2) ,(int)(WINSIZEY / 2)};
-	iPoint minArea = { (int)(WINSIZEX / 5) ,(int)(WINSIZEY / 5)};
+	iPoint minArea = { (int)(WINSIZEX / 4) ,(int)(WINSIZEY / 4)};
 	iPoint randPos;
 	int random;
 	
@@ -282,7 +282,7 @@ void CBoss_Markoth::phaseInit()
 	{
 	case 1:
 	{
-
+		// TODO
 		break;
 	}
 	case 2:

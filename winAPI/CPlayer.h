@@ -15,6 +15,8 @@ struct tPlayerInfo
 	float		fSpdY;
 	float		fGravity;
 
+	float		fNoDmgTimer;
+
 	int			iBottomCnt;
 
 	fVec2		fvKnockBackDir;
@@ -38,10 +40,11 @@ class CPlayer : public CObject
 	CTexture*	m_pTex;
 
 private:
-	void renewPrevInfo(fPoint pos);
+	//void renewPrevInfo(fPoint pos);
 	void createRotTester();
 	void printInfo(HDC hDC);
-	void addDirAndPlay(const wstring& keyWord);
+	void checkUpdate();
+	//void addDirAndPlay(const wstring& keyWord);
 
 public:
 	CPlayer();
@@ -82,23 +85,24 @@ enum class eSTATE_PLAYER
 	IDLE,
 	RUN,
 	JUMP,
+	DOUBLEJUMP,
 	FALL,
 	SLASH1,
-	SLASH2,
 	UPSLASH,
 	DOWNSLASH,
 	FIRE,
 	FOCUS,
-
-	STUN,
-
-	HANG,
 	DASH,
-	DOUBLEJUMP,
+	DASH2IDLE,
+	STUN,
+	DEATH,
+
+	// TODO
+	SLASH2,
+	HANG,
 
 	LOOKUP,
 	LOOKDOWN,
-	DEATH,
 
 	END
 };
@@ -108,7 +112,7 @@ enum class eSTATE_PLAYER
 #define P_SIZEY					128
 #define P_SPDX					160
 #define P_SPDY					500
-#define P_GRAV					3000
+#define P_GRAV					2800
 #define P_GRAVMAX				(P_GRAV * 3)
 #define P_JUMPHOLDMAX			0.35
 #define P_FIRESOUL				30
@@ -118,7 +122,6 @@ enum class eSTATE_PLAYER
 #define P_ATTDELAY				0.4
 #define P_STUNDURA				0.5
 #define P_INVINTIMER_DEFAULT	1.0
-#define P_INVINTIMER_ITEM		2.0
 
 //
 #define PSLASH_SIZEX			120
@@ -127,7 +130,9 @@ enum class eSTATE_PLAYER
 #define PSLASH_OFFSETX			(P_SIZEX / 2 + PSLASH_SIZEX / 2)
 #define PSLASH_OFFSETY			(P_SIZEY / 2 + PSLASH_SIZEY / 2)
 
-// 플레이어 상태
+// 플레이어 상태 추가정보 
+// (동시에 적용될 수 있는 개념은 비트로, 
+// 동시에 하나만 실행되는 경우는 상태 클래스로)
 #define SP_DIR					0x0001			// 좌, 우 방향
 #define SP_AIR					0x0002			// 공중에 뜸
 #define SP_JUMPHOLD				0x0004			// 점프 키 누르고 있는 상황
@@ -135,6 +140,4 @@ enum class eSTATE_PLAYER
 
 #define SP_STOPANIM				0x0010
 #define SP_NODMG				0x0020
-
-// item
-#define SP_ITEM_A				0x1000			// 피해 입었을 때 무적시간 늘리는 아이템
+#define SP_DBJUMP				0x0040

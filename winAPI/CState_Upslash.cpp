@@ -25,7 +25,7 @@ void CState_Upslash::update(UINT& chk)
 		if (info.fGravity < P_GRAVMAX)
 			info.fGravity += P_GRAV * fDT;
 
-		pos.y -= (info.fSpdY - info.fGravity) * fDT;
+		pos.y += info.fGravity * fDT;
 	}
 
 	if (m_fAttackDelay > (float)P_ATTDELAY)

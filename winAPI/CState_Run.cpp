@@ -53,6 +53,11 @@ void CState_Run::update(UINT& chk)
 		}
 	}
 
+	else if (KEY_ON('C'))
+	{
+		changeAIState(getOwner(), eSTATE_PLAYER::DASH);
+	}
+
 	else if (KEY_ON('A'))
 	{
 		if (getPlayer()->getPlayerInfo().uiSoul >= P_FIRESOUL)

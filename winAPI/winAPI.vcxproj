@@ -157,8 +157,11 @@
     <ClInclude Include="CCollider.h" />
     <ClInclude Include="CCollisionManager.h" />
     <ClInclude Include="CCore.h" />
+    <ClInclude Include="CEffect.h" />
+    <ClInclude Include="CEffector.h" />
     <ClInclude Include="CEventManager.h" />
     <ClInclude Include="CFrontGround.h" />
+    <ClInclude Include="CGround.h" />
     <ClInclude Include="CImage.h" />
     <ClInclude Include="CKeyManager.h" />
     <ClInclude Include="CMissile.h" />
@@ -179,7 +182,10 @@
     <ClInclude Include="CSound.h" />
     <ClInclude Include="CSpear.h" />
     <ClInclude Include="CState.h" />
+    <ClInclude Include="CState_Dash.h" />
+    <ClInclude Include="CState_Dash2Idle.h" />
     <ClInclude Include="CState_Death.h" />
+    <ClInclude Include="CState_Doublejump.h" />
     <ClInclude Include="CState_Downslash.h" />
     <ClInclude Include="CState_Fall.h" />
     <ClInclude Include="CState_Fire.h" />
@@ -220,8 +226,11 @@
     <ClCompile Include="CCollider.cpp" />
     <ClCompile Include="CCollisionManager.cpp" />
     <ClCompile Include="CCore.cpp" />
+    <ClCompile Include="CEffect.cpp" />
+    <ClCompile Include="CEffector.cpp" />
     <ClCompile Include="CEventManager.cpp" />
     <ClCompile Include="CFrontGround.cpp" />
+    <ClCompile Include="CGround.cpp" />
     <ClCompile Include="CImage.cpp" />
     <ClCompile Include="CKeyManager.cpp" />
     <ClCompile Include="CMissile.cpp" />
@@ -242,7 +251,10 @@
     <ClCompile Include="CSound.cpp" />
     <ClCompile Include="CSpear.cpp" />
     <ClCompile Include="CState.cpp" />
+    <ClCompile Include="CState_Dash.cpp" />
+    <ClCompile Include="CState_Dash2Idle.cpp" />
     <ClCompile Include="CState_Death.cpp" />
+    <ClCompile Include="CState_Doublejump.cpp" />
     <ClCompile Include="CState_Downslash.cpp" />
     <ClCompile Include="CState_Fall.cpp" />
     <ClCompile Include="CState_Fire.cpp" />
