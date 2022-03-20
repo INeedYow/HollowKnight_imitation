@@ -11,7 +11,6 @@ public:
 	CBackGround();
 	virtual ~CBackGround();
 
-	virtual CBackGround* clone();
 	virtual void update();
 	virtual void render(HDC hDC);
 

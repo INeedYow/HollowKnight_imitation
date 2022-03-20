@@ -15,11 +15,6 @@ CBackGround::~CBackGround()
 {
 }
 
-CBackGround* CBackGround::clone()
-{
-	return new CBackGround(*this);
-}
-
 void CBackGround::update()
 {
 }
@@ -29,19 +24,22 @@ void CBackGround::render(HDC hDC)
 	if (nullptr == m_pTex) return;
 
 	fPoint pos = getPos();
-	fPoint size = getSize();
+	fPoint size;
+	size.x = m_pTex->getBmpWidth();
+	size.y = m_pTex->getBmpHeight();
+
 	fPoint renderPos = rendPos(pos);
+	fPoint camPos = getCamPos();
 
 	renderPos = pos + (renderPos - pos) / 5;
-
+	
 	BitBlt(hDC,
-		(int)(renderPos.x /*- WINSIZEX / 2.f*/),
-		(int)(renderPos.y /*- WINSIZEY / 2.f*/),
-		(int)WINSIZEX,
-		(int)WINSIZEY,
+		0,0,
+		(int)size.x,
+		(int)size.y,
 		m_pTex->getDC(),
-		(int)pos.x,
-		(int)pos.y,
+		(int)(0),
+		(int)(0),
 		SRCCOPY);
 
 }
