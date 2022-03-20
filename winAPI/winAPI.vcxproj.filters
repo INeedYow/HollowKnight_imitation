@@ -124,8 +124,42 @@
     <ClCompile Include="CAI.cpp">
       <Filter>Engine\Component\AI</Filter>
     </ClCompile>
+    <ClCompile Include="CState_Downslash.cpp">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_Fall.cpp">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClCompile>
     <ClCompile Include="CState_Idle.cpp">
-      <Filter>Engine\Component\AI\State</Filter>
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_Jump.cpp">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_Run.cpp">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_Slash1.cpp">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_Upslash.cpp">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_Fire.cpp">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_Focus.cpp">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_Slash2.cpp">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_Death.cpp" />
+    <ClCompile Include="CState_Stun.cpp">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CSpear.cpp">
+      <Filter>Object\CAttack\NewFilter1</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -273,8 +307,42 @@
     <ClInclude Include="CAI.h">
       <Filter>Engine\Component\AI</Filter>
     </ClInclude>
+    <ClInclude Include="CState_Slash1.h">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_Downslash.h">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_Fall.h">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClInclude>
     <ClInclude Include="CState_Idle.h">
-      <Filter>Engine\Component\AI\State</Filter>
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_Jump.h">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_Run.h">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_Upslash.h">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_Fire.h">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_Focus.h">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_Slash2.h">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_Death.h" />
+    <ClInclude Include="CState_Stun.h">
+      <Filter>Engine\Component\AI\State\CState_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CSpear.h">
+      <Filter>Object\CAttack\NewFilter1</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -393,6 +461,12 @@
     </Filter>
     <Filter Include="Engine\Component\AI\State">
       <UniqueIdentifier>{32d02ebb-01c4-4105-b34d-74040e90f95a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Component\AI\State\CState_Player">
+      <UniqueIdentifier>{d8ceaa5c-d20a-4a81-92d3-9fa6dfd7e14f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\CAttack\NewFilter1">
+      <UniqueIdentifier>{3cffa103-1c8d-440c-96f1-f195f04c23b7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

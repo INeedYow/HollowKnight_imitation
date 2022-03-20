@@ -55,6 +55,9 @@ extern bool			g_bDebug;
 
 #define PI					3.141592
 
+#define dir_left			false
+#define dir_right			true
+
  // enum class 열거형
 #define eOBJ		GROUP_OBJECT
 enum class GROUP_OBJECT
@@ -211,6 +214,7 @@ enum class COLL_DIR
 #define createObj(pObj, eGroup)		CEventManager::getInst()->eventCreateObject(pObj, eGroup)
 #define deleteObj(pObj)				CEventManager::getInst()->eventDeleteObject(pObj)
 #define changeScn(eScn)				CEventManager::getInst()->eventChangeScene(eScn)
+#define changeAIState(ai, state)	CEventManager::getInst()->eventChangeAIState(ai,state)
 
 #define checkGrp(eObj1, eObj2)		CCollisionManager::getInst()->checkGroup(eObj1, eObj2)
 #define unCheckGrp(eObj1, eObj2)	CCollisionManager::getInst()->unCheckGroup(eObj1, eObj2)
@@ -226,7 +230,7 @@ enum class COLL_DIR
 #define camFadeIn(fTime)			CCameraManager::getInst()->fadeIn(fTime)
 #define rendPos(pos)				CCameraManager::getInst()->getRenderPos(pos)
 #define realPos(pos)				CCameraManager::getInst()->getRealPos(pos)
+#define getCamPos()					CCameraManager::getInst()->getFocus()
 
 #define loadTex(eName, wsPath)		CResourceManager::getInst()->loadTextrue(eName, wsPath)
 #define findTex(eName)				CResourceManager::getInst()->findTexture(eName)
-

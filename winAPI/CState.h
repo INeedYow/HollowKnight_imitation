@@ -21,7 +21,7 @@ public:
 	eSTATE_PLAYER getState();
 	CPlayer* getPlayer();
 
-	virtual void update() = 0;
+	virtual void update(UINT& chk) = 0;
 	virtual void enter() = 0;
 	virtual void exit() = 0;
 };

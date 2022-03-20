@@ -31,8 +31,7 @@ void CScene_Stage01::enter()
 	camFadeIn(0.6f);
 
 	// Player 추가
-	CObject* pPlayer = new CPlayer;
-	pPlayer->setPos(fPoint(200, 1500));
+	CObject* pPlayer = CPlayer::createNormal(fPoint(200.f, 1500.f));
 	addObject(pPlayer, eOBJ::PLAYER);
 
 	//// Monster 추가
@@ -41,9 +40,10 @@ void CScene_Stage01::enter()
 	//addObject(pMonster, eOBJ::MONSTER);
 
 	CBoss_Markoth* pBoss = new CBoss_Markoth;
-	pBoss->setPos(fPoint(1000.f, 1200.f));
+	pBoss->setPos(fPoint(1000.f, 1300.f));
 	pBoss->setSize(fPoint(300.f, 400.f));
-	pBoss->getCollider()->setSize(fPoint(220.f, 320.f));
+	pBoss->getCollider()->setSize(fPoint(200.f, 310.f));
+	pBoss->getCollider()->setOffset(fPoint(0.f, 20.f));
 	addObject(pBoss, eOBJ::BOSS);
 
 	CBackGround* pBGBack = new CBackGround;
@@ -61,10 +61,16 @@ void CScene_Stage01::enter()
 	g_bDebug = true;
 
 	checkGrp(eOBJ::PLAYER, eOBJ::MONSTER);
+	checkGrp(eOBJ::PLAYER, eOBJ::BOSS);
+	checkGrp(eOBJ::PLAYER, eOBJ::MISSILE_MONSTER);
+	checkGrp(eOBJ::PLAYER, eOBJ::SHIELD);
 	checkGrp(eOBJ::PLAYER, eOBJ::TILE);
+
 	checkGrp(eOBJ::MONSTER, eOBJ::TILE);
+
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::MONSTER);
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::BOSS);
+
 	checkGrp(eOBJ::ATTACK, eOBJ::BOSS);
 
 	camSetFocusNow(pPlayer->getPos());

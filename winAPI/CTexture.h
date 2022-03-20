@@ -17,6 +17,10 @@ public:
 	UINT	getBmpWidth();
 	UINT	getBmpHeight();
 
+	HBITMAP& getTestBMP();
+
 	void	load(const wstring& strPath);
 	void	create(UINT width, UINT height);
+
 };
+

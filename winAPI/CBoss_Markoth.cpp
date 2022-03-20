@@ -1,7 +1,7 @@
 #include "framework.h"
 #include "CBoss_Markoth.h"
 #include "CShield.h"
-#include "CMissile.h"
+#include "CSpear.h"
 
 CBoss_Markoth::CBoss_Markoth()
 {
@@ -20,7 +20,7 @@ CBoss_Markoth::CBoss_Markoth()
 	m_fvDir = {};
 
 	createCollider();
-	getCollider()->setSize(fPoint(0.f,0.f));
+	getCollider()->setSize(fPoint(200.f, 310.f));
 	getCollider()->setShape(eSHAPE::RECT);
 	
 	createAnimator();
@@ -46,9 +46,16 @@ CBoss_Markoth* CBoss_Markoth::clone()
 
 // TODO boss패턴
 // 방패 맞은 편에 생성하는 방법 고민
-// 방패 방향 전환(스킬 쓸 때마다 전환하면 될듯)
+// 방패 방향 전환
 void CBoss_Markoth::update()
 {
+	if (getHP() <= 0)
+	{
+		// death
+		m_ucPhase = 1;
+		setHP(20);
+	}
+
 	fPoint pos = getPos();
 	
 	m_fTimer += fDT;
@@ -56,15 +63,10 @@ void CBoss_Markoth::update()
 	if (getHP() <= SB_HPMAX / 2 && m_ucPhase == 1)
 	{
 		m_ucPhase = 2;
-		createShield();
+		phaseInit();
 	}
 
-	if (getHP() <= 0)
-	{
-		m_ucPhase = 1;
-		setHP(20);
-		createShield();
-	}
+	
 	PLAY(L"st_Normal");
 
 	if (m_fDelay < 0.f)
@@ -73,7 +75,7 @@ void CBoss_Markoth::update()
 		setRandDelay();
 	}
 	
-	if (m_fTimer > 10.f && isCheck(SB_NORMAL))
+	if (m_fTimer > 12.f && isCheck(SB_NORMAL))
 	{
 		setCheck(SB_MIDDLE, true);
 		setCheck(SB_NORMAL, false);
@@ -85,6 +87,10 @@ void CBoss_Markoth::update()
 		PLAY(L"st_Middle");
 		if (m_fTimer > 0.6f)
 		{
+			for (int i = 0; i < m_vecShield.size(); i++)
+			{
+				m_vecShield[i]->toggleRot();
+			}
 			setCheck(SB_SKILL, true);
 			setCheck(SB_MIDDLE, false);
 			m_fTimer = 0.f;
@@ -99,16 +105,16 @@ void CBoss_Markoth::update()
 		{
 			for (int i = 0; i < m_vecShield.size(); i++)
 			{
-				m_vecShield[i]->setfSpeed(m_vecShield[i]->getSpeed() + 0.4f * fDT);
-				m_vecShield[i]->setRadius(m_vecShield[i]->getRadius() + 150.f * fDT);
+				m_vecShield[i]->setfSpeed(m_vecShield[i]->getSpeed() + 0.25f * fDT);
+				m_vecShield[i]->setRadius(m_vecShield[i]->getRadius() + 130.f * fDT);
 			}
 		}
 		else
 		{
 			for (int i = 0; i < m_vecShield.size(); i++)
 			{
-				m_vecShield[i]->setfSpeed(m_vecShield[i]->getSpeed() - 0.4f * fDT);
-				m_vecShield[i]->setRadius(m_vecShield[i]->getRadius() - 150.f * fDT);
+				m_vecShield[i]->setfSpeed(m_vecShield[i]->getSpeed() - 0.25f * fDT);
+				m_vecShield[i]->setRadius(m_vecShield[i]->getRadius() - 130.f * fDT);
 			}
 		}
 
@@ -117,7 +123,8 @@ void CBoss_Markoth::update()
 			for (int i = 0; i < m_vecShield.size(); i++)
 			{
 				m_vecShield[i]->setfSpeed(2.5f);
-				m_vecShield[i]->setRadius(260.f);
+				m_vecShield[i]->setRadius(270.f);
+				m_vecShield[i]->toggleRot();
 			}
 			m_fTimer = 0;
 			setCheck(SB_NORMAL, true);
@@ -153,9 +160,9 @@ void CBoss_Markoth::render(HDC hDC)
 
 		pos = rendPos(pos);
 
-		TextOutW(hDC, (int)pos.x + 150, (int)pos.y + 120, buffHP, (int)wcslen(buffHP));
-		TextOutW(hDC, (int)pos.x + 150, (int)pos.y + 135, bufX, (int)wcslen(bufX));
-		TextOutW(hDC, (int)pos.x + 150, (int)pos.y + 150, bufY, (int)wcslen(bufY));
+		TextOutW(hDC, (int)pos.x - 160, (int)pos.y + 120, buffHP, (int)wcslen(buffHP));
+		TextOutW(hDC, (int)pos.x - 160, (int)pos.y + 135, bufX, (int)wcslen(bufX));
+		TextOutW(hDC, (int)pos.x - 160, (int)pos.y + 150, bufY, (int)wcslen(bufY));
 	}
 
 	componentRender(hDC);
@@ -211,14 +218,17 @@ void CBoss_Markoth::setRandDelay()
 void CBoss_Markoth::createSpear()
 {
 	fPoint pos = randSpearPos();
-	fPoint camPos = CCameraManager::getInst()->getFocus();
+	fPoint camPos = getCamPos();
 
-	CMissile* pSpear = new CMissile;
+	CSpear* pSpear = new CSpear;
 	pSpear->setPos(pos);
-	pSpear->setSize(fPoint(50.f, 50.f));
 	pSpear->setName(eOBJNAME::MISSILE_MONSTER);
-	pSpear->setDir(camPos - pos);
-	pSpear->setSpeed(240.f);
+	pSpear->setMaxSpd(250.f);
+	pSpear->getCollider()->setSize(fPoint(50.f, 50.f));
+	pSpear->setTex(L"Spear_Boss", L"texture\\boss\\boss_spear.bmp");
+	pSpear->createAnim(L"Spear_normal", pSpear->getTex(), 
+		fPoint(0.f, 0.f), fPoint(362.f, 83.f), fPoint(362.f, 0.f), 0.7f, 1);
+	pSpear->getAnimator()->play(L"Spear_normal");
 
 	createObj(pSpear, eOBJ::MISSILE_MONSTER);
 }
@@ -226,9 +236,13 @@ void CBoss_Markoth::createSpear()
 void CBoss_Markoth::createShield()
 {
 	CShield* pShield = new CShield();
-	pShield->setPos(getPos() + fPoint(0.f, -260.f));
+	pShield->setPos(getPos() + fPoint(0.f, -270.f));
 	pShield->setOwner(this);
 	pShield->calculateRad();
+	pShield->setTex(L"Shield_Boss", L"texture\\boss\\boss_shield.bmp");
+	pShield->createAnim(L"Shield_rot", pShield->getTex(), 
+		fPoint(0.f, 0.f), fPoint(166.f, 308.f), fPoint(166.f, 0.f), 0.3f, 3);
+	pShield->getAnimator()->play(L"Shield_rot");
 
 	createObj(pShield, eOBJ::SHIELD);
 
@@ -239,12 +253,43 @@ void CBoss_Markoth::createShield()
 fPoint CBoss_Markoth::randSpearPos()
 {
 	fPoint pos = CCameraManager::getInst()->getFocus();
+	iPoint maxArea = { (int)(WINSIZEX / 2) ,(int)(WINSIZEY / 2)};
+	iPoint minArea = { (int)(WINSIZEX / 5) ,(int)(WINSIZEY / 5)};
+	iPoint randPos;
+	int random;
+	
+	randPos.x = rand() % (maxArea.x - minArea.x + 1) + minArea.x;
+	randPos.y = rand() % (maxArea.y - minArea.y + 1) + minArea.y;
 
-	pos.x -= WINSIZEX / 2.f;
-	pos.y -= WINSIZEY / 2.f;
+	random = rand() % 2;
+	if (random)
+		pos.x -= randPos.x;
+	else
+		pos.x += randPos.x;
 
-	int randX = rand() % WINSIZEX + (int)pos.x;
-	int randY = rand() % WINSIZEY + (int)pos.y;
+	random = rand() % 2;
+	if (random)
+		pos.y -= randPos.y;
+	else
+		pos.y += randPos.y;
 
-	return fPoint((float)randX, (float)randY);
+	return pos;
+}
+
+void CBoss_Markoth::phaseInit()
+{
+	switch (m_ucPhase)
+	{
+	case 1:
+	{
+
+		break;
+	}
+	case 2:
+	{
+
+		break;
+	}
+	}
+	createShield();
 }

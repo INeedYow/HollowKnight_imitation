@@ -24,10 +24,13 @@ public:
 	virtual void render(HDC hDC);
 
 	void setRot(bool isRight);
+	void toggleRot();
 	void setOwner(CObject* pOwner);
 	void setfSpeed(float spd);
 	void setRadius(float rad);			
+	void setTex(const wstring& strName, const wstring& strPath);
 
+	CTexture* getTex();
 	float getSpeed();
 	float getRadius();
 

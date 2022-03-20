@@ -1,5 +1,6 @@
 #include "framework.h"
 #include "CShield.h"
+#include "CTexture.h"
 
 #include "SelectGDI.h"
 
@@ -18,9 +19,10 @@ CShield::CShield()
 	m_pOwner = nullptr;
 
 	createCollider();
-	getCollider()->setSize(fPoint(80.f, 80.f));
+	getCollider()->setSize(fPoint(70.f, 70.f));
+	getCollider()->setShape(eSHAPE::RECT);
 
-	//createAnimator();
+	createAnimator();
 }
 
 CShield::CShield(fPoint pos, CObject* pOwner)
@@ -51,45 +53,36 @@ void CShield::calculateRad()
 
 void CShield::update()
 {
-	;
 	fPoint pos = getPos();
-
-	m_fTheta += m_fSpd * fDT;
-
-	if (m_fTheta > 6.2831f)
-		m_fTheta = 0.f;
 
 	if (m_bRotRight)
 	{
-		pos.x = m_fRadius * (float)cos(m_fTheta);
-		pos.y = m_fRadius * (float)sin(m_fTheta);
+		m_fTheta += m_fSpd * fDT;
 	}
 	else
 	{
-		pos.x = m_fRadius * (float)sin(m_fTheta);
-		pos.y = m_fRadius * (float)cos(m_fTheta);
+		m_fTheta -= m_fSpd * fDT;
 	}
+	
+	if (m_fTheta > 2 * PI)
+	{
+		m_fTheta = 0.f;
+		//m_pTex->setRotatedBitmap(m_fRadius, RGB(255, 0, 255));
+	}
+	
+
+	pos.x = m_fRadius * (float)cos(m_fTheta);
+	pos.y = m_fRadius * (float)sin(m_fTheta);
 
 	pos += m_pOwner->getPos();
 
 	setPos(pos);
-
-	//getAnimator()->update();
+	
+	getAnimator()->update();
 }
 
 void CShield::render(HDC hDC)
 {
-	fPoint pos = getPos();
-	fPoint scale = getSize();
-
-	fPoint fptRenderPos = rendPos(pos);
-
-	Ellipse(hDC,
-		(int)(fptRenderPos.x - scale.x / 2.f),
-		(int)(fptRenderPos.y - scale.y / 2.f),
-		(int)(fptRenderPos.x + scale.x / 2.f),
-		(int)(fptRenderPos.y + scale.y / 2.f));
-
 	componentRender(hDC);
 }
 
@@ -97,6 +90,11 @@ void CShield::render(HDC hDC)
 void CShield::setRot(bool isRight)
 {
 	m_bRotRight = isRight;
+}
+
+void CShield::toggleRot()
+{
+	m_bRotRight = !m_bRotRight;
 }
 
 void CShield::setOwner(CObject* pOwner)
@@ -112,6 +110,16 @@ void CShield::setfSpeed(float spd)
 void CShield::setRadius(float rad)
 {
 	m_fRadius = rad;
+}
+
+void CShield::setTex(const wstring& strName, const wstring& strPath)
+{
+	m_pTex = loadTex(strName, strPath);
+}
+
+CTexture* CShield::getTex()
+{
+	return m_pTex;
 }
 
 float CShield::getSpeed()

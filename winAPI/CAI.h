@@ -16,11 +16,12 @@ public:
 	CAI();
 	~CAI();
 
-	void update();
+	void update(UINT& chk);
 
 	CPlayer* getOwner();
 
 	CState* findState(eSTATE_PLAYER state);
+	CState* getCurState();
 
 	void setCurState(eSTATE_PLAYER state);
 

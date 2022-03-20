@@ -14,7 +14,6 @@ CTexture::~CTexture()
 	DeleteObject(m_hBMP);
 }
 
-// ¿¡·¯
 HDC CTexture::getDC()
 {
 	return m_hDC;
@@ -38,6 +37,11 @@ UINT CTexture::getBmpWidth()
 UINT CTexture::getBmpHeight()
 {
 	return (int)(m_bmpInfo.bmHeight);
+}
+
+HBITMAP& CTexture::getTestBMP()
+{
+	return m_hBMP;
 }
 
 void CTexture::load(const wstring& strPath)
@@ -72,3 +76,4 @@ void CTexture::create(UINT width, UINT height)
 
 	GetObject(m_hBMP, sizeof(BITMAP), &m_bmpInfo);
 }
+

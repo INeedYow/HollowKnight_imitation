@@ -1,41 +1,46 @@
 #include "framework.h"
-#include "CState_Idle.h"
+#include "CState_Run.h"
 #include "CAI.h"
 #include "CPlayer.h"
 
-CState_Idle::CState_Idle(eSTATE_PLAYER state)
+CState_Run::CState_Run(eSTATE_PLAYER state)
 	: CState(state)
 {
-	m_fTimer = 0.f;
 }
 
-CState_Idle::~CState_Idle()
+CState_Run::~CState_Run()
 {
 }
 
-// TODO getOwner() 두 단계 최선인가
-void CState_Idle::update(UINT& chk)
+void CState_Run::update(UINT& chk)
 {
-	// jump enter에서 pos.y--해주면 될듯?
+	fPoint pos = getPlayer()->getPos();
+	tPlayerInfo info = getPlayer()->getPlayerInfo();
+
 	if (KEY_HOLD(VK_LEFT))
 	{
 		chk &= ~(SP_DIR);
-		changeAIState(getOwner(), eSTATE_PLAYER::RUN);
+		pos.x -= info.fSpdX * fDT;
+		getPlayer()->playAnim(L"Run");
 	}
-
 	else if (KEY_HOLD(VK_RIGHT))
 	{
 		chk |= SP_DIR;
-		changeAIState(getOwner(), eSTATE_PLAYER::RUN);
+		pos.x += info.fSpdX * fDT;
+		getPlayer()->playAnim(L"Run");
 	}
-	
-	else if (KEY_ON('Z'))
+	else
 	{
-		chk |= SP_AIR;
+		changeAIState(getOwner(), eSTATE_PLAYER::IDLE);
+	}
+
+	if (KEY_ON('Z'))
+	{
 		chk |= SP_JUMPHOLD;
+		chk |= SP_AIR;
 		changeAIState(getOwner(), eSTATE_PLAYER::JUMP);
 	}
-	
+
 	else if (KEY_ON('X'))
 	{
 		if (KEY_HOLD(VK_UP))
@@ -48,33 +53,24 @@ void CState_Idle::update(UINT& chk)
 		}
 	}
 
-	if (KEY_HOLD('A'))
-	{
-		m_fTimer += fDT;
-
-		if (m_fTimer >= 0.5f)
-		{
-			changeAIState(getOwner(), eSTATE_PLAYER::FOCUS);
-		}
-	}
-	
-	else if (KEY_OFF('A'))
+	else if (KEY_ON('A'))
 	{
 		if (getPlayer()->getPlayerInfo().uiSoul >= P_FIRESOUL)
 		{
 			changeAIState(getOwner(), eSTATE_PLAYER::FIRE);
 		}
 	}
+
+	getPlayer()->setPos(pos);
 }
 
-void CState_Idle::enter()
+void CState_Run::enter()
 {
-	getPlayer()->playAnim(L"Idle");
+	getPlayer()->playAnim(L"Run");
 	getPlayer()->setCheck(SP_STOPANIM, true);
 }
 
-void CState_Idle::exit()
+void CState_Run::exit()
 {
-	m_fTimer = 0.f;
 	getPlayer()->setCheck(SP_STOPANIM, false);
 }

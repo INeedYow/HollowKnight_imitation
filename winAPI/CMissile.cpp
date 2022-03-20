@@ -1,6 +1,7 @@
 #include "framework.h"
 #include "CMissile.h"
 #include "CCollider.h"
+#include "CTexture.h"
 
 CMissile* CMissile::clone()
 {
@@ -9,14 +10,17 @@ CMissile* CMissile::clone()
 
 CMissile::CMissile()
 {
-	setSize(fPoint(25.f, 25.f));
+	setSize(fPoint(30.f, 30.f));
 	setName(eOBJNAME::MISSILE_MONSTER);
 	m_fvDir = fVec2(0, 0);
 	m_fSpeed = 0.f;
 	m_fTimer = 0.f;
 
 	createCollider();
-	getCollider()->setSize(fPoint(15.f, 15.f));
+	getCollider()->setSize(fPoint(30.f, 30.f));
+	getCollider()->setShape(eSHAPE::RECT);
+
+	createAnimator();
 }
 
 CMissile::~CMissile()
@@ -40,17 +44,6 @@ void CMissile::update()
 
 void CMissile::render(HDC hDC)
 {
-	fPoint pos = getPos();
-	fPoint scale = getSize();
-
-	fPoint fptRenderPos = rendPos(pos);
-
-	Ellipse(hDC,
-		(int)(fptRenderPos.x - scale.x / 2.f),
-		(int)(fptRenderPos.y - scale.y / 2.f),
-		(int)(fptRenderPos.x + scale.x / 2.f),
-		(int)(fptRenderPos.y + scale.y / 2.f));
-
 	componentRender(hDC);
 }
 
@@ -65,9 +58,24 @@ void CMissile::setDir(float theta)
 	m_fvDir.y = (float)sin(theta);
 }
 
+void CMissile::setTimer(float timer)
+{
+	m_fTimer = timer;
+}
+
 void CMissile::setSpeed(float spd)
 {
 	m_fSpeed = spd;
+}
+
+void CMissile::setTex(const wstring& strName, const wstring& strPath)
+{
+	m_pTex = loadTex(strName, strPath);
+}
+
+CTexture* CMissile::getTex()
+{
+	return m_pTex;
 }
 
 float CMissile::getSpeed()
@@ -75,7 +83,50 @@ float CMissile::getSpeed()
 	return m_fSpeed;
 }
 
+float CMissile::getTimer()
+{
+	return m_fTimer;
+}
+
+fVec2 CMissile::getDir()
+{
+	return m_fvDir;
+}
+
 void CMissile::collisionEnter(CCollider* pOther)
+{
+	CObject* pOtherObj = pOther->getOwner();
+
+	if (eOBJNAME::MISSILE_PLAYER == getName())
+	{	// 플레이어 미사일인 경우
+		switch (pOther->getOwner()->getName())
+		{
+		case eOBJNAME::MONSTER:
+		case eOBJNAME::BOSS:
+		case eOBJNAME::TILE:
+		{
+			// TODO 이펙트 생성
+			break;
+		}
+
+		}
+	}
+	else if (eOBJNAME::MISSILE_MONSTER == getName())
+	{	// 몬스터의 미사일인 경우
+		switch (pOther->getOwner()->getName())
+		{
+		case eOBJNAME::PLAYER:
+		case eOBJNAME::TILE:
+		{
+			// TODO 이펙트 생성
+			break;
+		}
+
+		}
+	}
+}
+
+void CMissile::collisionKeep(CCollider* pOther)
 {
 	CObject* pOtherObj = pOther->getOwner();
 

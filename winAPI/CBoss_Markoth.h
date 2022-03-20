@@ -18,7 +18,7 @@ class CBoss_Markoth : public CMonster
 public:
 	CBoss_Markoth();
 	virtual ~CBoss_Markoth();
-	virtual CBoss_Markoth* clone();
+	virtual CBoss_Markoth* clone();	// 몬스터 상속해서 보스도 clone이 있어야 하는데 ?
 
 	virtual void update();
 	virtual void render(HDC hDC);
@@ -32,4 +32,6 @@ private:
 	void createSpear();
 	void createShield();
 	fPoint randSpearPos();
+
+	void phaseInit();
 };

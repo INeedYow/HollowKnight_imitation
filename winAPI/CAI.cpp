@@ -32,21 +32,26 @@ void CAI::addState(CState* pState)
 void CAI::changeState(eSTATE_PLAYER nextState)
 {
 	CState* pNextState = findState(nextState);
-	assert(m_pCurState != pNextState);
+	//assert(m_pCurState != pNextState);
 
 	m_pCurState->exit();
 	m_pCurState = pNextState;
 	m_pCurState->enter();
 }
 
-void CAI::update()
+void CAI::update(UINT& chk)
 {
-	m_pCurState->update();
+	m_pCurState->update(chk);
 }
 
 CPlayer* CAI::getOwner()
 {
 	return m_pOwner;
+}
+
+CState* CAI::getCurState()
+{
+	return m_pCurState;
 }
 
 CState* CAI::findState(eSTATE_PLAYER state)

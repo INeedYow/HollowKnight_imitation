@@ -1,5 +1,6 @@
 #include "framework.h"
 #include "CAttack.h"
+#include "CPlayer.h"
 
 CAttack::CAttack()
 {
@@ -7,6 +8,7 @@ CAttack::CAttack()
 	setSize(fPoint(0.f, 0.f));
 	setName(eOBJNAME::ATTACK);
 
+	m_pOwner = nullptr;
 	m_eDir = eDIR::NONE;
 	m_fDura = 0.1f;
 	m_uiDmg = 1;
@@ -68,5 +70,23 @@ CObject* CAttack::getOwner()
 
 void CAttack::collisionEnter(CCollider* pOther)
 {
+	CObject* pOwner = getOwner();
+	CObject* pTarget = pOther->getOwner();
 
+	if (eOBJNAME::PLAYER == pOwner->getName())
+	{
+		tPlayerInfo info = ((CPlayer*)pOwner)->getPlayerInfo();
+
+		switch (pTarget->getName())
+		{
+		case eOBJNAME::BOSS:
+		{
+			info.fvKnockBackDir = (pOwner->getPos() - pTarget->getPos());
+			info.uiSoul += 10;
+			break;
+		}
+		}
+		
+		((CPlayer*)pOwner)->setPlayerInfo(info);
+	}
 }

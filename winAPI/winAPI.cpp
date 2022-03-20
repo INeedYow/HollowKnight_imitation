@@ -45,6 +45,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg;
 
+    srand((UINT)time(nullptr));
+
     CCore::getInst()->init();
 
     while (true)
