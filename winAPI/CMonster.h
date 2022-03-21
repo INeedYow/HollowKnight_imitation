@@ -8,7 +8,7 @@ class CMonster : public CObject
 private:
 	UINT	m_uiCheck;
 
-	UINT	m_uiHP;
+	int		m_iHP;
 	float	m_fSpd;
 
 	CAI*	m_pAI;
@@ -26,7 +26,7 @@ public:
 	void collisionExit(CCollider* pOther){}
 
 	void setCheck(UINT chk, bool isOn);
-	void setHP(UINT hp);
+	void setHP(int hp);
 	void setSpd(float spd);
 
 	bool isCheck(UINT chk);

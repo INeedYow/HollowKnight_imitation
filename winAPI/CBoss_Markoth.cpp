@@ -11,11 +11,11 @@ CBoss_Markoth::CBoss_Markoth()
 	setSize(fPoint(0.f, 0.f));
 	setName(eOBJNAME::BOSS);
 	
-	setHP(20);
+	setHP(SB_HPMAX);
 	setSpd(200.f);
 	setCheck(SB_NORMAL,true);
 
-	m_ucPhase = 1;
+	m_ucPhase = 0;
 	m_fTimer = 0.f;
 	m_fvDir = {};
 
@@ -46,33 +46,19 @@ CBoss_Markoth* CBoss_Markoth::clone()
 
 // TODO boss패턴
 // 방패 맞은 편에 생성하는 방법 고민
-// 방패 방향 전환
+// 방패 방향에 대한 변수 있어야 방패들이 같은 방향으로 돌도록 할 수 있을듯
+
 void CBoss_Markoth::update()
 {
-	if (getHP() <= 0)
-	{
-		// death
-		m_ucPhase = 1;
-		setHP(20);
-	}
-
 	fPoint pos = getPos();
 	
 	m_fTimer += fDT;
 
-	if (getHP() <= SB_HPMAX / 2 && m_ucPhase == 1)
-	{
-		m_ucPhase = 2;
-		phaseInit();
-	}
-
-	
 	PLAY(L"st_Normal");
 
 	if (m_fDelay < 0.f)
 	{
 		createSpear();
-		setRandDelay();
 	}
 	
 	if (m_fTimer > 12.f && isCheck(SB_NORMAL))
@@ -101,9 +87,12 @@ void CBoss_Markoth::update()
 	{
 		PLAY(L"st_Skill");
 
+		
 		if (m_fTimer < 4.f)
-		{
-			for (int i = 0; i < m_vecShield.size(); i++)
+		{	// 방패 최소 1개는 주위에서 돌게
+			int i = m_vecShield.size() >= 2 ? 1 : 0;
+
+			for (; i < m_vecShield.size(); i++)
 			{
 				m_vecShield[i]->setfSpeed(m_vecShield[i]->getSpeed() + 0.25f * fDT);
 				m_vecShield[i]->setRadius(m_vecShield[i]->getRadius() + 130.f * fDT);
@@ -111,7 +100,9 @@ void CBoss_Markoth::update()
 		}
 		else
 		{
-			for (int i = 0; i < m_vecShield.size(); i++)
+			int i = m_vecShield.size() >= 2 ? 1 : 0;
+
+			for (; i < m_vecShield.size(); i++)
 			{
 				m_vecShield[i]->setfSpeed(m_vecShield[i]->getSpeed() - 0.25f * fDT);
 				m_vecShield[i]->setRadius(m_vecShield[i]->getRadius() - 130.f * fDT);
@@ -135,6 +126,19 @@ void CBoss_Markoth::update()
 	else
 	{
 		m_fDelay -= fDT;
+
+		if (getHP() <= 0)
+		{
+			// death
+			m_ucPhase = 1;
+			phaseInit();
+			setHP(SB_HPMAX);
+		}
+
+		else if (getHP() <= SB_HPMAX / 2 && m_ucPhase == 1)
+		{
+			phaseInit();
+		}
 	}
 
 	pos.x += getSpd() * m_fvDir.x * fDT;
@@ -152,17 +156,23 @@ void CBoss_Markoth::render(HDC hDC)
 
 		wchar_t bufX[255] = {};
 		wchar_t bufY[255] = {};
-		wchar_t buffHP[255] = {};
+		wchar_t bufHP[255] = {};
+		wchar_t bufCool[255] = {};
+		wchar_t buffPhase[255] = {};
 
-		swprintf_s(buffHP, L"HP = %d", getHP());
+		swprintf_s(buffPhase, L"Phase = %d", (int)m_ucPhase);
+		swprintf_s(bufHP, L"HP = %d", getHP());
 		swprintf_s(bufX, L"x = %d", (int)pos.x);
 		swprintf_s(bufY, L"y = %d", (int)pos.y);
+		swprintf_s(bufCool, L"cd = %.2f", m_fDelay);
 
 		pos = rendPos(pos);
 
-		TextOutW(hDC, (int)pos.x - 160, (int)pos.y + 120, buffHP, (int)wcslen(buffHP));
-		TextOutW(hDC, (int)pos.x - 160, (int)pos.y + 135, bufX, (int)wcslen(bufX));
-		TextOutW(hDC, (int)pos.x - 160, (int)pos.y + 150, bufY, (int)wcslen(bufY));
+		TextOutW(hDC, (int)pos.x - 180, (int)pos.y + 105, buffPhase, (int)wcslen(buffPhase));
+		TextOutW(hDC, (int)pos.x - 180, (int)pos.y + 120, bufHP, (int)wcslen(bufHP));
+		TextOutW(hDC, (int)pos.x - 180, (int)pos.y + 135, bufX, (int)wcslen(bufX));
+		TextOutW(hDC, (int)pos.x - 180, (int)pos.y + 150, bufY, (int)wcslen(bufY));
+		TextOutW(hDC, (int)pos.x - 180, (int)pos.y + 165, bufCool, (int)wcslen(bufCool));
 	}
 
 	componentRender(hDC);
@@ -204,14 +214,18 @@ void CBoss_Markoth::setRandDelay()
 	case 2:
 		randDelay += 0.05f;
 	case 3:
-		randDelay += 0.85f;
+	{
+		if (1 == m_ucPhase)
+			randDelay += 0.15f;
+		else
+			randDelay += 0.1f;
+		break;
+	}
 	}
 	m_fDelay = randDelay;
 }
 
 // TODO
-// 소환된 창이 일정시간 후에 이동하도록 하려면 새로 클래스 만들거나
-	// 미사일에 대기시간등 추가로 만들어야(해당 기능 안쓰는 경우 낭비일듯)
 // 플레이어 좌표로 날아오게 하려면 플레이어 좌표 받아올 수 있어야
 	// 임시로 카메라 중심으로 날아가도록 (이렇게 해도 될듯?)
 // 플레이어 너무 근처에서 생성 되지 않도록
@@ -231,18 +245,21 @@ void CBoss_Markoth::createSpear()
 	pSpear->getAnimator()->play(L"Spear_normal");
 
 	createObj(pSpear, eOBJ::MISSILE_MONSTER);
+
+	setRandDelay();
 }
 
 void CBoss_Markoth::createShield()
 {
 	CShield* pShield = new CShield();
-	pShield->setPos(getPos() + fPoint(0.f, -270.f));
+	pShield->setPos(getPos() + fPoint(0.f, 270.f));
 	pShield->setOwner(this);
 	pShield->calculateRad();
 	pShield->setTex(L"Shield_Boss", L"texture\\boss\\boss_shield.bmp");
 	pShield->createAnim(L"Shield_rot", pShield->getTex(), 
 		fPoint(0.f, 0.f), fPoint(166.f, 308.f), fPoint(166.f, 0.f), 0.3f, 3);
 	pShield->getAnimator()->play(L"Shield_rot");
+	pShield->setTheta((float)(m_vecShield.size() * PI));			// 반대 방향에서 생성
 
 	createObj(pShield, eOBJ::SHIELD);
 
@@ -278,18 +295,23 @@ fPoint CBoss_Markoth::randSpearPos()
 
 void CBoss_Markoth::phaseInit()
 {
+	// TODO 모션
+	for (int i = 0; i < m_vecShield.size(); i++)
+	{
+		deleteObj(m_vecShield[i]);
+	}
+	m_vecShield.clear();
+
+	m_ucPhase++;
+
 	switch (m_ucPhase)
 	{
-	case 1:
-	{
-		// TODO
+	case 3:
+		m_ucPhase = 2;
 		break;
-	}
 	case 2:
-	{
-
-		break;
+		createShield();
+	case 1:
+		createShield();
 	}
-	}
-	createShield();
 }

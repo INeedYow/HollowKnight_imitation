@@ -6,7 +6,7 @@
 CMonster::CMonster()
 {
 	m_uiCheck = 0;
-	m_uiHP = 1;
+	m_iHP = 1;
 	m_fSpd = 10.f;
 
 	setName(eOBJNAME::MONSTER);
@@ -27,9 +27,9 @@ void CMonster::setCheck(UINT chk, bool isOn)
 		m_uiCheck &= ~(chk);
 }
 
-void CMonster::setHP(UINT hp)
+void CMonster::setHP(int hp)
 {
-	m_uiHP = hp;
+	m_iHP = hp;
 }
 
 void CMonster::setSpd(float spd)
@@ -44,7 +44,7 @@ bool CMonster::isCheck(UINT chk)
 
 UINT CMonster::getHP()
 {
-	return m_uiHP;
+	return m_iHP;
 }
 
 float CMonster::getSpd()

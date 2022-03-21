@@ -23,11 +23,13 @@ public:
 	virtual void update();
 	virtual void render(HDC hDC);
 
-	void setRot(bool isRight);
 	void toggleRot();
+
+	void setRot(bool isRight);
 	void setOwner(CObject* pOwner);
 	void setfSpeed(float spd);
-	void setRadius(float rad);			
+	void setRadius(float rad);
+	void setTheta(float theta);
 	void setTex(const wstring& strName, const wstring& strPath);
 
 	CTexture* getTex();

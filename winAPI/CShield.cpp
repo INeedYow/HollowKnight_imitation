@@ -112,6 +112,11 @@ void CShield::setRadius(float rad)
 	m_fRadius = rad;
 }
 
+void CShield::setTheta(float theta)
+{
+	m_fTheta = theta;
+}
+
 void CShield::setTex(const wstring& strName, const wstring& strPath)
 {
 	m_pTex = loadTex(strName, strPath);

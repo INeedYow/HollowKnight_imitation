@@ -42,7 +42,7 @@ void CScene_Stage01::enter()
 	//addObject(pMonster, eOBJ::MONSTER);
 
 	CBoss_Markoth* pBoss = new CBoss_Markoth;
-	pBoss->setPos(fPoint(1200.f, 1270.f));
+	pBoss->setPos(fPoint(900.f, 1270.f));
 	pBoss->setSize(fPoint(300.f, 400.f));
 	pBoss->getCollider()->setSize(fPoint(200.f, 310.f));
 	pBoss->getCollider()->setOffset(fPoint(0.f, 20.f));
