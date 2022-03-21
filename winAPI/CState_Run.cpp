@@ -36,8 +36,6 @@ void CState_Run::update(UINT& chk)
 
 	if (KEY_ON('Z'))
 	{
-		chk |= SP_JUMPHOLD;
-		chk |= SP_AIR;
 		changeAIState(getOwner(), eSTATE_PLAYER::JUMP);
 	}
 

@@ -87,17 +87,17 @@ void CScene_Stage01::enter()
 	checkGrp(eOBJ::PLAYER, eOBJ::MISSILE_MONSTER);
 	checkGrp(eOBJ::PLAYER, eOBJ::SHIELD);
 	checkGrp(eOBJ::PLAYER, eOBJ::TILE);
-	//checkGrp(eOBJ::PLAYER, eOBJ::GROUND);
+	checkGrp(eOBJ::PLAYER, eOBJ::GROUND);
 
 	checkGrp(eOBJ::MONSTER, eOBJ::TILE);
-	//checkGrp(eOBJ::MONSTER, eOBJ::GROUND);
+	checkGrp(eOBJ::MONSTER, eOBJ::GROUND);
 
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::MONSTER);
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::BOSS);
 
 	checkGrp(eOBJ::ATTACK, eOBJ::BOSS);
 
-	//camSetFocusNow(pPlayer->getPos());
+	camSetFocusNow(pPlayer->getPos());
 	camSetTrace(pPlayer);
 }
 

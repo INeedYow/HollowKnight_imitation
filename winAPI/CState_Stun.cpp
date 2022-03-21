@@ -24,8 +24,14 @@ void CState_Stun::update(UINT& chk)
 
 	if (m_fTimer >= (float)P_STUNDURA)
 	{
-		chk |= SP_AIR;
-		changeAIState(getOwner(), eSTATE_PLAYER::FALL);
+		if (chk & SP_AIR)
+		{
+			changeAIState(getOwner(), eSTATE_PLAYER::FALL);
+		}
+		else
+		{
+			changeAIState(getOwner(), eSTATE_PLAYER::IDLE);
+		}
 	}
 
 	m_fvDir = m_fvDir.normalize();
@@ -60,7 +66,6 @@ void CState_Stun::enter()
 void CState_Stun::exit()
 {
 	getPlayer()->setCheck(SP_STOPANIM, false);
-	//getPlayer()->setCheck(SP_NODMG, false);
 
 	m_fTimer = 0.f;
 	m_fvDir = {};

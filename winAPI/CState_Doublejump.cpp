@@ -37,7 +37,6 @@ void CState_Doublejump::update(UINT& chk)
 
 	if (info.fSpdY + m_fAccel < info.fGravity)
 	{
-		chk |= SP_GODOWN;
 		changeAIState(getOwner(), eSTATE_PLAYER::FALL);
 	}
 
@@ -64,13 +63,13 @@ void CState_Doublejump::enter()
 {
 	getPlayer()->playAnim(L"DoubleJump");
 	getPlayer()->setCheck(SP_STOPANIM, true);
-	getPlayer()->setCheck(SP_GODOWN, false);
+	//getPlayer()->setCheck(SP_GODOWN, false);
+	getPlayer()->setCheck(SP_DBJUMP, true);
+	getPlayer()->setCheck(SP_JUMPHOLD, true);
 
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	info.fGravity = 0.f;
 	getPlayer()->setPlayerInfo(info);
-	getPlayer()->setCheck(SP_JUMPHOLD, true);
-	getPlayer()->setCheck(SP_DBJUMP, true);
 
 	m_fTimer = 0.f;
 	m_fAccel = 0.f;

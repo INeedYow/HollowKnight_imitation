@@ -35,7 +35,6 @@ void CState_Jump::update(UINT& chk)
 
 	if (info.fSpdY < info.fGravity)
 	{
-		chk |= SP_GODOWN;
 		changeAIState(getOwner(), eSTATE_PLAYER::FALL);
 	}
 
@@ -92,10 +91,19 @@ void CState_Jump::enter()
 	getPlayer()->playAnim(L"Jump");
 	getPlayer()->setCheck(SP_STOPANIM, true);
 
+	getPlayer()->setCheck(SP_JUMPHOLD, true);
+	getPlayer()->setCheck(SP_AIR, true);
+	//getPlayer()->setCheck(SP_GOUP, true);
+	//getPlayer()->setCheck(SP_GODOWN, false);
+	getPlayer()->setCheck(SP_DBJUMP, false);
 	// 
-	fPoint pos = getPlayer()->getPos();
-	pos.y -= 1;
-	getPlayer()->setPos(pos);
+	//fPoint pos = getPlayer()->getPos();
+	//pos.y -= 1;
+	//getPlayer()->setPos(pos);
+
+	tPlayerInfo info = getPlayer()->getPlayerInfo();
+	info.fGravity = 0.f;
+	getPlayer()->setPlayerInfo(info);
 }
 
 void CState_Jump::exit()

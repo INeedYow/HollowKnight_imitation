@@ -34,7 +34,7 @@ class CPlayer : public CObject
 	tPlayerInfo m_tInfo;
 	tPrevInfo	m_tPrevInfo;
 
-	UINT		m_uiCheck;
+	UINT		m_uiCheck;			// 상태 추가정보
 
 	CAI*		m_pAI;
 	CTexture*	m_pTex;
@@ -110,7 +110,7 @@ enum class eSTATE_PLAYER
 // # state
 #define P_SIZEX					64
 #define P_SIZEY					128
-#define P_SPDX					160
+#define P_SPDX					180
 #define P_SPDY					500
 #define P_GRAV					2800
 #define P_GRAVMAX				(P_GRAV * 3)
@@ -132,12 +132,14 @@ enum class eSTATE_PLAYER
 
 // 플레이어 상태 추가정보 
 // (동시에 적용될 수 있는 개념은 비트로, 
-// 동시에 하나만 실행되는 경우는 상태 클래스로)
+// 동시에 하나만 실행되는 경우는 상태 클래스로,
+// state의 종류 받아오기보다 비트연산으로 구분하는 게 좋은 듯)
 #define SP_DIR					0x0001			// 좌, 우 방향
 #define SP_AIR					0x0002			// 공중에 뜸
 #define SP_JUMPHOLD				0x0004			// 점프 키 누르고 있는 상황
-#define SP_GODOWN				0x0008			// y값 증가 중
+#define SP_DBJUMP				0x0008
 
-#define SP_STOPANIM				0x0010
-#define SP_NODMG				0x0020
-#define SP_DBJUMP				0x0040
+//#define SP_GODOWN				0x0010			// y값 증가 중(fall)
+//#define SP_GOUP				0x0020			// y값 감소 중(jump)
+#define SP_STOPANIM				0x0040
+#define SP_NODMG				0x0080

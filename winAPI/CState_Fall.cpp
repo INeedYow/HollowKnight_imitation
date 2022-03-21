@@ -84,7 +84,8 @@ void CState_Fall::enter()
 	getPlayer()->setCheck(SP_STOPANIM, true);
 
 	getPlayer()->setCheck(SP_AIR, true);
-	getPlayer()->setCheck(SP_GODOWN, true);
+	//getPlayer()->setCheck(SP_GODOWN, true);
+	//getPlayer()->setCheck(SP_GOUP, false);
 
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	info.fGravity = 0.f;
@@ -95,6 +96,8 @@ void CState_Fall::enter()
 void CState_Fall::exit()
 {
 	getPlayer()->setCheck(SP_STOPANIM, false);
+
+	//getPlayer()->setCheck(SP_GODOWN, false);
 
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	info.fGravity = 0.f;

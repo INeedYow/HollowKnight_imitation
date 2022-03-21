@@ -16,8 +16,8 @@ eDIR collisionRectToRect(CCollider* coll1, CCollider* coll2)
 	}
 	else
 	{
-		if (pos1.y <= pos2.y - size2.y / 2) return eDIR::TOP;
-		if (pos1.y >= pos2.y + size2.y / 2) return eDIR::BOTTOM;
+		if (pos1.y < pos2.y /*- size2.y / 2*/) return eDIR::TOP;
+		if (pos1.y >= pos2.y /*+ size2.y / 2*/) return eDIR::BOTTOM;
 	}
 	return eDIR::NONE;
 }

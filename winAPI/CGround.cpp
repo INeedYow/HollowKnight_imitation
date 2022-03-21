@@ -21,16 +21,8 @@ void CGround::update()
 
 void CGround::render(HDC hDC)
 {
-	//if (g_bDebug) 
-	//	componentRender(hDC);
-	////
-	//fPoint pos = getPos();
-	//fPoint size = getSize();
-	//Rectangle(hDC,
-	//	(int)(pos.x - size.x / 2.f),
-	//	(int)(pos.y + size.y / 2.f),
-	//	(int)(pos.x - size.x / 2.f),
-	//	(int)(pos.y + size.y / 2.f));
+	if (g_bDebug) 
+		componentRender(hDC);
 }
 
 void CGround::collisionKeep(CCollider* pOther)

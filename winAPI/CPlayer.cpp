@@ -236,7 +236,7 @@ void CPlayer::playAnim(const wstring& keyWord)
 void CPlayer::update()
 {
 	if (KEY_ON('P')) g_bDebug = !g_bDebug;
-
+	if (g_bDebug && KEY_ON('O')) setPos(fPoint(0.f, 1400.f));
 	////////////////////////////
 	// 임시 // 회전테스트
 	// T Y U I 
@@ -247,16 +247,16 @@ void CPlayer::update()
 	//}
 	 // 임시 // 타일 없어서
 
-	/*fPoint pos = getPos();
-	if (pos.y > 1518.f)
-	{
-		pos.y = 1518.f;
-		m_uiCheck &= ~(SP_AIR);
-		m_uiCheck &= ~(SP_GODOWN);
-		m_uiCheck &= ~(SP_DBJUMP);
-		m_tInfo.fGravity = 0.f;
-	}
-	setPos(pos);*/
+	//fPoint pos = getPos();
+	//if (pos.y > 1518.f)
+	//{
+	//	pos.y = 1518.f;
+	//	m_uiCheck &= ~(SP_AIR);
+	//	m_uiCheck &= ~(SP_GODOWN);
+	//	m_uiCheck &= ~(SP_DBJUMP);
+	//	m_tInfo.fGravity = 0.f;
+	//}
+	//setPos(pos);
 
 	/////////////////////////
 
@@ -376,15 +376,18 @@ void CPlayer::collisionEnter(CCollider* pOther)
 		{
 		case eDIR::TOP:
 		{
-			if (m_uiCheck & SP_GODOWN)
-			{
+			/*if (m_uiCheck & SP_GODOWN)*/
+			if (m_pAI->getCurState()->getState() == eSTATE_PLAYER::FALL)
+			{	// 떨어지고 있던 경우 착지
 				fPoint pos = getPos();
-				pos.y = pOther->getPos().y - getCollider()->getOffset().y + pOther->getOffset().y
-					- (pOther->getSize().y + getCollider()->getSize().y) / 2 + 1;
+
+				pos.y = pOther->getPos().y - pOther->getSize().y / 2.f + pOther->getOffset().y 
+					- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y;
 				setPos(pos);
-				if (m_uiCheck & SP_AIR)
+				
+				if (m_uiCheck & SP_AIR)			// air를 fall exit에서 끄면 공중 동작 후 fall상태로 전환하기 힘듦
 					m_uiCheck &= ~(SP_AIR);
-				m_uiCheck &= ~(SP_DBJUMP);
+				//m_uiCheck &= ~(SP_GODOWN);	// fall exit에서 하는 중
 				m_tInfo.iBottomCnt++;
 			}
 			break;
@@ -395,7 +398,6 @@ void CPlayer::collisionEnter(CCollider* pOther)
 			pos.x = pOther->getPos().x + (getCollider()->getOffset().x + pOther->getOffset().x
 				- pOther->getSize().x - getCollider()->getSize().x) / 2;
 			setPos(pos);
-			//m_tInfo.fSpdX = 0.f;
 			break;
 		}
 		case eDIR::RIGHT:
@@ -404,12 +406,11 @@ void CPlayer::collisionEnter(CCollider* pOther)
 			pos.x = pOther->getPos().x + (getCollider()->getOffset().x + pOther->getOffset().x
 				+ pOther->getSize().x + getCollider()->getSize().x) / 2;
 			setPos(pos);
-			//m_tInfo.fSpdX = 0.f;
 			break;
 		}
 		case eDIR::BOTTOM:	// 머리 콩
 		{
-			//m_tInfo.fSpdY = 0.f;
+			m_tInfo.fGravity = m_tInfo.fSpdY;	// 올라가는 속도 0으로
 			fPoint pos = getPos();
 			pos.y = pOther->getPos().y + (getCollider()->getOffset().y + pOther->getOffset().y
 				+ pOther->getSize().y + getCollider()->getSize().y) / 2;
@@ -430,8 +431,9 @@ void CPlayer::collisionExit(CCollider* pOther)
 		switch (COLLRR(getCollider(), pOther))
 		{
 		case eDIR::TOP:
-			if (--m_tInfo.iBottomCnt <= 0)
-			{
+			if (--m_tInfo.iBottomCnt <= 0 && 
+				m_pAI->getCurState()->getState() != eSTATE_PLAYER::JUMP)
+			{	// 점프할 때도 exit에서 강제로 fall로 바꿔서 점프 안 됐었음
 				changeAIState(m_pAI, eSTATE_PLAYER::FALL);
 			}
 			break;
@@ -514,6 +516,7 @@ void CPlayer::printInfo(HDC hDC)
 	m_pAI->getCurState()->printInfo(hDC);
 
 	fPoint pos = getPos();
+	pos = rendPos(pos);
 
 	wchar_t bufX[255] = {};
 	wchar_t bufY[255] = {};
@@ -531,8 +534,6 @@ void CPlayer::printInfo(HDC hDC)
 	swprintf_s(bufSoul, L"Soul = %d", (int)m_tInfo.uiSoul);
 	swprintf_s(bufBot, L"BottomCnt = %d", (int)m_tInfo.iBottomCnt);
 
-
-	pos = rendPos(pos);
 
 	TextOutW(hDC, (int)pos.x - 20, (int)pos.y + 75, bufX, (int)wcslen(bufX));
 	TextOutW(hDC, (int)pos.x - 20, (int)pos.y + 90, bufY, (int)wcslen(bufY));
