@@ -56,7 +56,7 @@ void CState_Fire::exit()
 	m_fAttackDelay = 0.f;
 	getPlayer()->setCheck(SP_STOPANIM, false);
 
-	// 중간에 상태 강제로 이탈되면 soul 감소
+	// 중간에 상태 강제로 이탈되면 soul 결과값으로 바로 감소
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	info.uiSoul = m_uiResultSoul;
 	getPlayer()->setPlayerInfo(info);
@@ -66,6 +66,7 @@ void CState_Fire::printInfo(HDC hDC)
 {
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
+
 	LPCWSTR	strInfo = L"Fire";
 	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
 }

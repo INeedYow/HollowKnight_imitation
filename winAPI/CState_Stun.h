@@ -3,7 +3,7 @@
 class CState_Stun : public CState
 {
 	fVec2 m_fvDir;
-	float m_fTimer;
+	float m_fDura;
 	float m_fSpd;
 
 public:

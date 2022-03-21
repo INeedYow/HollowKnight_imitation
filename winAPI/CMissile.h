@@ -3,6 +3,7 @@
 
 class CTexture;
 
+// missile 이름으로 구분
 class CMissile : public CObject
 {
 private:

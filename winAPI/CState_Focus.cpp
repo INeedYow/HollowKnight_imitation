@@ -64,6 +64,7 @@ void CState_Focus::printInfo(HDC hDC)
 {
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
+
 	LPCWSTR	strInfo = L"Focus";
 	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
 }

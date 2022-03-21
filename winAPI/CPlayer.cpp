@@ -41,15 +41,14 @@ CPlayer::CPlayer()
 		5,
 		50,
 		0,
-		P_SPDX,
-		P_SPDY,
-		0.f,
+		(float)P_SPDX,
+		(float)P_SPDY,
+		(float)P_GRAV,
 		0.f,
 		0,
-		{},
-		//0.f
+		{}
 	};
-	m_tPrevInfo = {};
+	//m_tPrevInfo = {};
 
 	m_pAI = nullptr;
 	m_uiCheck = 0;
@@ -78,8 +77,8 @@ CPlayer::CPlayer()
 	createAnim(L"Land_R",		m_pTex,	fPoint(2328.f, 0.f),		fPoint(76.f, 127.f),		fPoint(76.f, 0.f),			0.3f,	3, false);
 	createAnim(L"Land_L",		m_pTex,	fPoint(2480.f, 127.f),		fPoint(76.f, 127.f),		fPoint(-76.f, 0.f),			0.3f,	3, false);
 
-	createAnim(L"Stun_R",		m_pTex,	fPoint(2556.f, 0.f),		fPoint(94.f, 127.f),		fPoint(94.f, 0.f),			0.3f,	1, false);
-	createAnim(L"Stun_L",		m_pTex,	fPoint(2556.f, 127.f),		fPoint(94.f, 127.f),		fPoint(94.f, 0.f),			0.3f,	1, false);
+	createAnim(L"Stun_R",		m_pTex,	fPoint(2556.f, 2.f),		fPoint(94.f, 126.f),		fPoint(94.f, 0.f),			0.3f,	1, false);
+	createAnim(L"Stun_L",		m_pTex,	fPoint(2556.f, 129.f),		fPoint(94.f, 126.f),		fPoint(94.f, 0.f),			0.3f,	1, false);
 
 	createAnim(L"Slash1_R",		m_pTex,	fPoint(0.f, 254.f),			fPoint(82.f, 127.f),		fPoint(82.f, 0.f),			0.2f,	5, false);
 	createAnim(L"Slash1_L",		m_pTex,	fPoint(328.f, 381.f),		fPoint(82.f, 127.f),		fPoint(-82.f, 0.f),			0.2f,	5, false);
@@ -102,8 +101,8 @@ CPlayer::CPlayer()
 	createAnim(L"Death_R",		m_pTex,	fPoint(128.f, 508.f),		fPoint(107.f, 127.f),		fPoint(107.f, 0.f),			0.2f,	12, false);
 	createAnim(L"Death_L",		m_pTex,	fPoint(1305.f, 635.f),		fPoint(107.f, 127.f),		fPoint(-107.f, 0.f),		0.2f,	12, false);
 
-	createAnim(L"Focus_R",		m_pTex,	fPoint(1412.f, 508.f),		fPoint(94.f, 127.f),		fPoint(94.f, 0.f),			0.2f,	10);
-	createAnim(L"Focus_L",		m_pTex,	fPoint(2258.f, 635.f),		fPoint(94.f, 127.f),		fPoint(-94.f, 0.f),			0.2f,	10);
+	createAnim(L"Focus_R",		m_pTex,	fPoint(1412.f, 513.f),		fPoint(94.f, 122.f),		fPoint(94.f, 0.f),			0.2f,	10);
+	createAnim(L"Focus_L",		m_pTex,	fPoint(2258.f, 640.f),		fPoint(94.f, 122.f),		fPoint(-94.f, 0.f),			0.2f,	10);
 
 	createAnim(L"Dash_R",		m_pTex,	fPoint(0.f, 762.f),			fPoint(172.f, 127.f),		fPoint(172.f, 0.f),			0.1f,	7, false);
 	createAnim(L"Dash_L",		m_pTex,	fPoint(1032.f, 889.f),		fPoint(172.f, 127.f),		fPoint(-172.f, 0.f),		0.1f,	7, false);
@@ -339,55 +338,59 @@ void CPlayer::collisionKeep(CCollider* pOther)
 	{
 		// 이렇게 많이 타고 들어가도 되나 // attack도 몬스터 플레이어 나눠야 하나
 		// ((CAttack*)pOther->getOwner())->getOwner()->getName()
-		
+
 		break;
 	}
 
 	case eOBJNAME::TILE:
 	case eOBJNAME::GROUND:
-		switch (COLLRR(getCollider(), pOther))
+		switch (COLLRRW(getCollider(), pOther))
 		{
 		case eDIR::LEFT:
 		{	// TODO state::hang
 			fPoint pos = getPos();
-			pos.x = pOther->getPos().x + (pOther->getOffset().x - pOther->getSize().x - getCollider()->getSize().x) / 2;
+
+			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f + pOther->getOffset().x
+				- getCollider()->getSize().x / 2.f - getCollider()->getOffset().x;
 			setPos(pos);
 			break;
 		}
 		case eDIR::RIGHT:
 		{
 			fPoint pos = getPos();
-			pos.x = pOther->getPos().x + (pOther->getOffset().x + pOther->getSize().x + getCollider()->getSize().x) / 2;
+
+			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f + pOther->getOffset().x
+				+ getCollider()->getSize().x / 2.f + getCollider()->getOffset().x;
 			setPos(pos);
 			break;
 		}
-		break;
 		}
 	}
 }
 
+// TODO 공중 공격 하다보면 추락함
 void CPlayer::collisionEnter(CCollider* pOther)
 {
 	switch (pOther->getOwner()->getName())
 	{	//벽 충돌
 	case eOBJNAME::TILE:
 	case eOBJNAME::GROUND:
-		switch (COLLRR(getCollider(), pOther))
+		switch (COLLRRW(getCollider(), pOther))
 		{
 		case eDIR::TOP:
 		{
-			/*if (m_uiCheck & SP_GODOWN)*/
-			if (m_pAI->getCurState()->getState() == eSTATE_PLAYER::FALL)
+			if (m_uiCheck & SP_GODOWN)
 			{	// 떨어지고 있던 경우 착지
 				fPoint pos = getPos();
 
 				pos.y = pOther->getPos().y - pOther->getSize().y / 2.f + pOther->getOffset().y 
 					- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y;
+
 				setPos(pos);
 				
 				if (m_uiCheck & SP_AIR)			// air를 fall exit에서 끄면 공중 동작 후 fall상태로 전환하기 힘듦
 					m_uiCheck &= ~(SP_AIR);
-				//m_uiCheck &= ~(SP_GODOWN);	// fall exit에서 하는 중
+				m_uiCheck &= ~(SP_GODOWN);
 				m_tInfo.iBottomCnt++;
 			}
 			break;
@@ -395,25 +398,27 @@ void CPlayer::collisionEnter(CCollider* pOther)
 		case eDIR::LEFT:
 		{
 			fPoint pos = getPos();
-			pos.x = pOther->getPos().x + (getCollider()->getOffset().x + pOther->getOffset().x
-				- pOther->getSize().x - getCollider()->getSize().x) / 2;
+			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f + pOther->getOffset().x
+				- getCollider()->getSize().x / 2.f + getCollider()->getOffset().x - 1;
 			setPos(pos);
 			break;
 		}
 		case eDIR::RIGHT:
 		{
 			fPoint pos = getPos();
-			pos.x = pOther->getPos().x + (getCollider()->getOffset().x + pOther->getOffset().x
-				+ pOther->getSize().x + getCollider()->getSize().x) / 2;
+			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f + pOther->getOffset().x
+				+ getCollider()->getSize().x / 2.f - getCollider()->getOffset().x + 1;
 			setPos(pos);
 			break;
 		}
 		case eDIR::BOTTOM:	// 머리 콩
-		{
-			m_tInfo.fGravity = m_tInfo.fSpdY;	// 올라가는 속도 0으로
+		{	// 올라가는 속도 0으로
+			m_tInfo.fSpdY = 0;	
 			fPoint pos = getPos();
-			pos.y = pOther->getPos().y + (getCollider()->getOffset().y + pOther->getOffset().y
-				+ pOther->getSize().y + getCollider()->getSize().y) / 2;
+
+			pos.y = pOther->getPos().y + pOther->getSize().y / 2.f + pOther->getOffset().y
+				+ getCollider()->getSize().y / 2.f - getCollider()->getOffset().y;
+
 			setPos(pos);
 			break;
 		}
@@ -428,15 +433,13 @@ void CPlayer::collisionExit(CCollider* pOther)
 	{
 	case eOBJNAME::TILE:
 	case eOBJNAME::GROUND:
-		switch (COLLRR(getCollider(), pOther))
+		if (isTopColl(getCollider(), pOther))
 		{
-		case eDIR::TOP:
-			if (--m_tInfo.iBottomCnt <= 0 && 
-				m_pAI->getCurState()->getState() != eSTATE_PLAYER::JUMP)
+			if (--m_tInfo.iBottomCnt <= 0 && m_pAI->getCurState()->getState() != eSTATE_PLAYER::JUMP)
 			{	// 점프할 때도 exit에서 강제로 fall로 바꿔서 점프 안 됐었음
+				m_tInfo.iBottomCnt = 0;
 				changeAIState(m_pAI, eSTATE_PLAYER::FALL);
 			}
-			break;
 		}
 		break;
 	}
@@ -448,23 +451,19 @@ void CPlayer::createMissile()
 	float mDir = 1.f;
 
 	CMissile* pMissile = new CMissile;
-
-	pMissile->setTex(L"Missile_player", L"texture\\missile\\missile_player.bmp");
 	
 	if (m_uiCheck & SP_DIR)
 	{
 		mPos.x += getSize().x / 2.f;
 		mDir = 1.f;
-		pMissile->createAnim(L"Missile_player_R", pMissile->getTex(),
-			fPoint(0.f, 0.f), fPoint(254.f, 108.f), fPoint(254.f, 0.f), 0.15f, 4, false);
+
 		pMissile->PLAY(L"Missile_player_R");
 	}
 	else
 	{
 		mPos.x -= getSize().x / 2.f;
 		mDir = -1.f;
-		pMissile->createAnim(L"Missile_player_L", pMissile->getTex(),
-			fPoint(762.f, 108.f), fPoint(254.f, 108.f), fPoint(-254.f, 0.f), 0.15f, 4, false);
+
 		pMissile->PLAY(L"Missile_player_L");
 	}
 	pMissile->setPos(fPoint(mPos.x, mPos.y));
@@ -516,11 +515,10 @@ void CPlayer::printInfo(HDC hDC)
 	m_pAI->getCurState()->printInfo(hDC);
 
 	fPoint pos = getPos();
-	pos = rendPos(pos);
 
 	wchar_t bufX[255] = {};
 	wchar_t bufY[255] = {};
-	wchar_t bufGrav[255] = {};
+	wchar_t bufSpdY[255] = {};
 
 	wchar_t bufHP[255] = {};
 	wchar_t bufSoul[255] = {};
@@ -528,27 +526,29 @@ void CPlayer::printInfo(HDC hDC)
 
 	swprintf_s(bufX, L"x = %d", (int)pos.x);
 	swprintf_s(bufY, L"y = %d", (int)pos.y);
-	swprintf_s(bufGrav, L"grav = %.2f", m_tInfo.fGravity);
+	swprintf_s(bufSpdY, L"grav = %.2f", m_tInfo.fSpdY);
 
 	swprintf_s(bufHP, L"HP = %d", (int)m_tInfo.uiHP);
 	swprintf_s(bufSoul, L"Soul = %d", (int)m_tInfo.uiSoul);
 	swprintf_s(bufBot, L"BottomCnt = %d", (int)m_tInfo.iBottomCnt);
 
+	// bufX,Y 출력보다 아래 위치해야 함
+	fPoint rendPos = rendPos(pos);
 
-	TextOutW(hDC, (int)pos.x - 20, (int)pos.y + 75, bufX, (int)wcslen(bufX));
-	TextOutW(hDC, (int)pos.x - 20, (int)pos.y + 90, bufY, (int)wcslen(bufY));
-	TextOutW(hDC, (int)pos.x - 20, (int)pos.y + 105, bufGrav, (int)wcslen(bufGrav));
+	TextOutW(hDC, (int)rendPos.x - 20, (int)rendPos.y + 75, bufX, (int)wcslen(bufX));
+	TextOutW(hDC, (int)rendPos.x - 20, (int)rendPos.y + 90, bufY, (int)wcslen(bufY));
+	TextOutW(hDC, (int)rendPos.x - 20, (int)rendPos.y + 105, bufSpdY, (int)wcslen(bufSpdY));
 
-	TextOutW(hDC, (int)pos.x - 140, (int)pos.y + 75, bufHP, (int)wcslen(bufHP));
-	TextOutW(hDC, (int)pos.x - 140, (int)pos.y + 90, bufSoul, (int)wcslen(bufSoul));
-	TextOutW(hDC, (int)pos.x - 140, (int)pos.y + 105, bufBot, (int)wcslen(bufBot));
+	TextOutW(hDC, (int)rendPos.x - 140, (int)rendPos.y + 75, bufHP, (int)wcslen(bufHP));
+	TextOutW(hDC, (int)rendPos.x - 140, (int)rendPos.y + 90, bufSoul, (int)wcslen(bufSoul));
+	TextOutW(hDC, (int)rendPos.x - 140, (int)rendPos.y + 105, bufBot, (int)wcslen(bufBot));
 
 
 	if (m_uiCheck & SP_NODMG)
 	{
 		wchar_t bufNoDmg[255] = {};
 		swprintf_s(bufNoDmg, L"NoDmg %.2f", m_tInfo.fNoDmgTimer);
-		TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 75, bufNoDmg, (int)wcslen(bufNoDmg));
+		TextOutW(hDC, (int)rendPos.x - 140, (int)rendPos.y - 75, bufNoDmg, (int)wcslen(bufNoDmg));
 	}
 }
 
@@ -583,15 +583,19 @@ void CPlayer::firstSlash()
 	{
 		mPos.x += PSLASH_OFFSETX;
 		pAttack->setDir(eDIR::RIGHT);
+		
+		pAttack->PLAY(L"Slash_player_R");
 	}
 	else
 	{
 		mPos.x -= PSLASH_OFFSETX;
 		pAttack->setDir(eDIR::LEFT);
+		
+		pAttack->PLAY(L"Slash_player_L");
 	}
 
 	pAttack->setPos(fPoint(mPos.x, mPos.y));
-	pAttack->setDura(0.5f);
+	pAttack->setDura(0.25f);
 	
 	createObj(pAttack, eOBJ::ATTACK);
 }
@@ -610,11 +614,20 @@ void CPlayer::upSlash()
 	pAttack->getCollider()->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEY));
 	pAttack->setOwner(this);
 
+	if (m_uiCheck & SP_DIR)
+	{
+		pAttack->PLAY(L"UpSlash_player_R");
+	}
+	else
+	{
+		pAttack->PLAY(L"UpSlash_player_L");
+	}
+
 	mPos.y -= PSLASH_OFFSETY;
 	pAttack->setDir(eDIR::TOP);
 
 	pAttack->setPos(fPoint(mPos.x, mPos.y));
-	pAttack->setDura(0.5f);
+	pAttack->setDura(0.25f);
 
 	createObj(pAttack, eOBJ::ATTACK);
 }
@@ -628,6 +641,15 @@ void CPlayer::downSlash()
 	pAttack->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEY));
 	pAttack->getCollider()->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEY));
 	pAttack->setOwner(this);
+
+	if (m_uiCheck & SP_DIR)
+	{
+		pAttack->PLAY(L"DownSlash_player_R");
+	}
+	else
+	{
+		pAttack->PLAY(L"DownSlash_player_L");
+	}
 
 	mPos.y += PSLASH_OFFSETY;
 	pAttack->setDir(eDIR::BOTTOM);

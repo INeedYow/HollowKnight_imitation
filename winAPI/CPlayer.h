@@ -3,6 +3,7 @@
 
 class CTexture;
 class CAI;
+class CEffector;
 enum class eSTATE_PLAYER;
 
 struct tPlayerInfo
@@ -20,30 +21,30 @@ struct tPlayerInfo
 	int			iBottomCnt;
 
 	fVec2		fvKnockBackDir;
-	//float		fKnockBackSpd;
 };
 
-struct tPrevInfo
-{
-	fPoint	fpPrevPos;
-	UINT	uiPrevHP;
-};
+//struct tPrevInfo
+//{
+//	fPoint	fpPrevPos;
+//	UINT	uiPrevHP;
+//};
 
 class CPlayer : public CObject
 {
 	tPlayerInfo m_tInfo;
-	tPrevInfo	m_tPrevInfo;
+	//tPrevInfo	m_tPrevInfo;
 
 	UINT		m_uiCheck;			// 상태 추가정보
 
 	CAI*		m_pAI;
 	CTexture*	m_pTex;
+	CEffector*	m_pEffector;		// 미구현 // 방법 고민 중
 
 private:
-	//void renewPrevInfo(fPoint pos);
 	void createRotTester();
 	void printInfo(HDC hDC);
 	void checkUpdate();
+	//void renewPrevInfo(fPoint pos);
 	//void addDirAndPlay(const wstring& keyWord);
 
 public:
@@ -113,7 +114,8 @@ enum class eSTATE_PLAYER
 #define P_SPDX					180
 #define P_SPDY					500
 #define P_GRAV					2800
-#define P_GRAVMAX				(P_GRAV * 3)
+#define P_SPDY_MIN				-750
+
 #define P_JUMPHOLDMAX			0.35
 #define P_FIRESOUL				30
 #define P_FOCUSSOUL				33
@@ -121,7 +123,7 @@ enum class eSTATE_PLAYER
 #define P_FIREDELAY				0.5
 #define P_ATTDELAY				0.4
 #define P_STUNDURA				0.5
-#define P_INVINTIMER_DEFAULT	1.0
+#define P_DURA_INVIN			1.0
 
 //
 #define PSLASH_SIZEX			120
@@ -139,7 +141,7 @@ enum class eSTATE_PLAYER
 #define SP_JUMPHOLD				0x0004			// 점프 키 누르고 있는 상황
 #define SP_DBJUMP				0x0008
 
-//#define SP_GODOWN				0x0010			// y값 증가 중(fall)
+#define SP_GODOWN				0x0010			// 하강
 //#define SP_GOUP				0x0020			// y값 감소 중(jump)
 #define SP_STOPANIM				0x0040
 #define SP_NODMG				0x0080

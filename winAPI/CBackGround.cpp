@@ -29,15 +29,16 @@ void CBackGround::render(HDC hDC)
 	fPoint renderPos = rendPos(pos);
 	fPoint camPos = getCamPos();
 
-	renderPos = pos + (renderPos - pos) / 5;
+	//renderPos = pos + (renderPos - pos) / 5;
 	
 	BitBlt(hDC,
 		0,0,
 		(int)size.x,
 		(int)size.y,
 		m_pTex->getDC(),
-		(int)(0),
-		(int)(0),
+		/*(int)(renderPos.x),
+		(int)(renderPos.y),*/
+		0,0,
 		SRCCOPY);
 
 }

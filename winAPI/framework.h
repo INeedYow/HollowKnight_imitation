@@ -52,11 +52,13 @@ extern bool			g_bDebug;
 #define ISCOLLRR			isCollisionRectToRect
 
 #define COLLRR				collisionRectToRect
+#define COLLRRW				collisionRectToRectWide
 
 #define PI					3.141592
 
 #define dir_left			false
 #define dir_right			true
+
 
  // enum class 열거형
 #define eOBJ		GROUP_OBJECT
@@ -69,10 +71,10 @@ enum class GROUP_OBJECT
 	TILE,
 	IMAGE,
 
-	ATTACK,
 	MISSILE_PLAYER,
 	MISSILE_MONSTER,
 	SHIELD,
+	ATTACK,
 
 	MONSTER,
 	BOSS,

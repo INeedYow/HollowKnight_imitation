@@ -21,10 +21,20 @@ void CState_Downslash::update(UINT& chk)
 
 	m_fAttackDelay += fDT;
 
-	if (info.fGravity < P_GRAVMAX)
-		info.fGravity += P_GRAV * fDT;
+	//if (info.fGravity < P_SPDY_MIN)
+	//	info.fGravity += P_GRAV * fDT;
 
-	pos.y += info.fGravity * fDT;
+	/*if (info.fGravity < info.fSpdY)
+		info.fGravity = info.fSpdY;*/
+	info.fSpdY -= info.fGravity * fDT;
+
+	if (info.fSpdY <= 0.f)
+		chk |= SP_GODOWN;
+
+	if (info.fSpdY < (float)P_SPDY_MIN)
+		info.fSpdY = (float)P_SPDY_MIN;
+
+	pos.y -= (info.fSpdY /*- info.fGravity*/) * fDT;
 	
 
 	if (m_fAttackDelay > (float)P_ATTDELAY)
@@ -60,6 +70,7 @@ void CState_Downslash::printInfo(HDC hDC)
 {
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
+
 	LPCWSTR	strInfo = L"DownSlash";
 	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
 }

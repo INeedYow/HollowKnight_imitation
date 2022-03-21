@@ -3,6 +3,8 @@
 #include "CAI.h"
 #include "CPlayer.h"
 
+#include "CEffect.h"
+
 CState_Slash1::CState_Slash1(eSTATE_PLAYER state)
 	: CState(state)
 {
@@ -13,9 +15,6 @@ CState_Slash1::~CState_Slash1()
 {
 }
 
-// TODO //pos.y -= (info.fSpdY - info.fGravity) * fDT; 하니까 오히려 올라가서 문제
-// // 고정된 y속도말고 (fSpdY - fGrav) 결과값을 갖는 y축 속도 변수를 주면 될듯
-// (모든 공중동작들 수정필요)
 // TODO slash2
 void CState_Slash1::update(UINT& chk)
 {
@@ -26,11 +25,21 @@ void CState_Slash1::update(UINT& chk)
 
 	if (chk & SP_AIR)
 	{	// 공중에서 공격할 때 중력적용
-		if (info.fGravity < P_GRAVMAX)
-			info.fGravity += P_GRAV * fDT;
+		info.fSpdY -= info.fGravity * fDT;
 
-		//pos.y -= (info.fSpdY - info.fGravity) * fDT;
-		pos.y += info.fGravity * fDT;
+		if (info.fSpdY <= 0.f)
+			chk |= SP_GODOWN;
+
+		if (info.fSpdY < (float)P_SPDY_MIN)
+			info.fSpdY = (float)P_SPDY_MIN;
+
+		/*if (info.fGravity < P_SPDY_MIN)
+			info.fGravity += P_GRAV * fDT;*/
+
+		//if (info.fGravity < info.fSpdY)
+		//	info.fGravity = info.fSpdY;
+
+		pos.y -= (info.fSpdY /*- info.fGravity*/) * fDT;
 	}
 	else
 	{
@@ -70,6 +79,7 @@ void CState_Slash1::printInfo(HDC hDC)
 {
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
+
 	LPCWSTR	strInfo = L"Slash1";
 	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
 }

@@ -11,11 +11,33 @@ CAttack::CAttack()
 	m_pOwner = nullptr;
 	m_eDir = eDIR::NONE;
 	m_fDura = 0.1f;
-	m_uiDmg = 1;
+	//m_uiDmg = 1;
+
+	// юс╫ц TODO
+	m_pTex = loadTex(L"Attack_Player", L"texture\\attack\\slash.bmp");
 
 	createCollider();
-	getCollider()->setSize(fPoint(0.f,0.f));
+	getCollider()->setSize(fPoint(30.f, 30.f));
 	getCollider()->setShape(eSHAPE::RECT);
+
+	createAnimator();
+
+	createAnim(L"Slash_player_R", m_pTex,
+		fPoint(516.f, 0.f), fPoint(151.f, 129.f), fPoint(151.f, 0.f), 0.1f, 2, false);
+	createAnim(L"Slash_player_L", m_pTex,
+		fPoint(667.f, 129.f), fPoint(151.f, 129.f), fPoint(-151.f, 0.f), 0.1f, 2, false);
+
+	createAnim(L"UpSlash_player_R", m_pTex,
+		fPoint(0.f, 0.f), fPoint(129.f, 151.f), fPoint(129.f, 0.f), 0.1f, 2, false);
+	createAnim(L"UpSlash_player_L", m_pTex,
+		fPoint(129.f, 151.f), fPoint(129.f, 151.f), fPoint(-129.f, 0.f), 0.1f, 2, false);
+
+	createAnim(L"DownSlash_player_R", m_pTex,
+		fPoint(258.f, 0.f), fPoint(129.f, 151.f), fPoint(129.f, 0.f), 0.1f, 2, false);
+	createAnim(L"DownSlash_player_L", m_pTex,
+		fPoint(387.f, 151.f), fPoint(129.f, 151.f), fPoint(-129.f, 0.f), 0.1f, 2, false);
+
+	PLAY(L"Slash_player_R");
 }
 
 CAttack::~CAttack()
@@ -33,6 +55,9 @@ void CAttack::update()
 
 	if (m_fDura < 0.f)
 		deleteObj(this);
+
+	if (nullptr != getAnimator())
+		getAnimator()->update();
 }
 
 void CAttack::render(HDC hDC)
@@ -50,19 +75,29 @@ void CAttack::setDura(float dura)
 	m_fDura = dura;
 }
 
-void CAttack::setDmg(UINT dmg)
-{
-	m_uiDmg = dmg;
-}
+//void CAttack::setDmg(UINT dmg)
+//{
+//	m_uiDmg = dmg;
+//}
 
 void CAttack::setOwner(CObject* pOwner)
 {
 	m_pOwner = pOwner;
 }
 
+void CAttack::setTex(const wstring& strName, const wstring& strPath)
+{
+	m_pTex = loadTex(strName, strPath);
+}
+
 CObject* CAttack::getOwner()
 {
 	return m_pOwner;
+}
+
+CTexture* CAttack::getTex()
+{
+	return m_pTex;
 }
 
 void CAttack::collisionEnter(CCollider* pOther)

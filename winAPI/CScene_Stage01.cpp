@@ -36,48 +36,44 @@ void CScene_Stage01::enter()
 	pPlayer->setPos(fPoint(20.f, 1500.f));
 	addObject(pPlayer, eOBJ::PLAYER);
 
-	//// Monster Ãß°¡
-	//CMonster* pMonster = new CMonster;
-	//pMonster->setPos(fPoint(1100, 350));
-	//addObject(pMonster, eOBJ::MONSTER);
-
 	CBoss_Markoth* pBoss = new CBoss_Markoth;
-	pBoss->setPos(fPoint(900.f, 1270.f));
+	pBoss->setPos(fPoint(1270.f, 1270.f));
 	pBoss->setSize(fPoint(300.f, 400.f));
 	pBoss->getCollider()->setSize(fPoint(200.f, 310.f));
 	pBoss->getCollider()->setOffset(fPoint(0.f, 20.f));
 	addObject(pBoss, eOBJ::BOSS);
 
 	CBackGround* pBGBack = new CBackGround;
-	pBGBack->load(L"BG_stage1B", L"texture\\background\\stage1_back.bmp");
+	pBGBack->load(L"BG_stage1B", L"texture\\background\\bossroom_sample.bmp");
 	pBGBack->setPos(fPoint(0.f, 0.f));
-	pBGBack->setSize(fPoint(991.f, 1518.f));
+	pBGBack->setSize(fPoint(3000.f, 1689.f));
+	//pBGBack->setSize(fPoint(2000.f, 1189.f));
 	addObject(pBGBack, eOBJ::BACKGROUND);
 
-	/*CBackGround* pBGFront = new CBackGround;
-	pBGFront->setName(OBJNAME::BACKGROUND);
-	pBGFront->setMove(false);
-	pBGFront->load(L"BG_stage1F", L"texture\\background\\stage1_front.bmp");
-	addObject(pBGFront, OBJ::BACKGROUND);*/
+	//CFrontGround* pBGFront = new CFrontGround;
+	//pBGFront->load(L"BG_stage1F", L"texture\\background\\bossStage_back.bmp");
+	//pBGFront->setPos(fPoint(0.f, 0.f));
+	//pBGFront->setSize(fPoint(3000.f, 1689.f));
+	//addObject(pBGFront, eOBJ::FRONTGROUND);
 
-	CGround* pGrd = new CGround;
-	pGrd->setPos(fPoint(0.f, 1700.f));
-	pGrd->getCollider()->setSize(fPoint(3000.f, 200.f));
-	addObject(pGrd, eOBJ::GROUND);
+	CGround* pGrd1 = new CGround;
+	pGrd1->setPos(fPoint(1800.f, 1889.f));
+	pGrd1->getCollider()->setSize(fPoint(4000.f, 400.f));
+	addObject(pGrd1, eOBJ::GROUND);
 
 	CGround* pGrd2 = new CGround;
-	pGrd2->setPos(fPoint(200.f, 1520.f));
-	pGrd2->getCollider()->setSize(fPoint(100.f, 100.f));
+	pGrd2->setPos(fPoint(700.f, 1639.f));
+	pGrd2->getCollider()->setSize(fPoint(150.f, 150.f));
 	addObject(pGrd2, eOBJ::GROUND);
 
 	CGround* pGrd3 = new CGround;
-	pGrd3->setPos(fPoint(-50.f, 1020.f));
-	pGrd3->getCollider()->setSize(fPoint(50.f, 500.f));
+	pGrd3->setPos(fPoint(300.f, 1500.f));
+	pGrd3->getCollider()->setSize(fPoint(150.f, 150.f));
 	addObject(pGrd3, eOBJ::GROUND);
 
 	CGround* pGrd4 = new CGround;
-	pGrd4->setPos(fPoint(400.f, 1400.f));
-	pGrd4->getCollider()->setSize(fPoint(200.f, 100.f));
+	pGrd4->setPos(fPoint(1000.f, 1500.f));
+	pGrd4->getCollider()->setSize(fPoint(200.f, 150.f));
 	addObject(pGrd4, eOBJ::GROUND);
 
 	g_bDebug = true;

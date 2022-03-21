@@ -53,6 +53,7 @@ void CState_Death::printInfo(HDC hDC)
 {
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
+
 	LPCWSTR	strInfo = L"Death";
 	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
 }

@@ -3,10 +3,23 @@
 
 class CTexture;
 class CShield;
+enum class eState
+{
+	IDLE,
+	MOVE,
+	SPAWN,
+	SKILL,
+	DEATH,
+
+	END
+};
 
 class CBoss_Markoth : public CMonster
 {
+	eState	m_eState;
+
 	UCHAR	m_ucPhase;
+
 	float	m_fTimer;
 	float	m_fDelay;
 	fVec2	m_fvDir;

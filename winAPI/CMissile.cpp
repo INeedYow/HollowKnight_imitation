@@ -16,12 +16,21 @@ CMissile::CMissile()
 	m_fSpeed = 0.f;
 	m_fTimer = 0.f;
 
+	// 역시 임시
+	m_pTex = loadTex(L"Missile_player", L"texture\\attack\\missile_player.bmp");
+
 	createCollider();
 	getCollider()->setSize(fPoint(30.f, 30.f));
 	getCollider()->setShape(eSHAPE::RECT);
 
 	createAnimator();
+
+	createAnim(L"Missile_player_R", m_pTex,
+		fPoint(0.f, 0.f), fPoint(254.f, 108.f), fPoint(254.f, 0.f), 0.15f, 4, false);
+	createAnim(L"Missile_player_L", m_pTex,
+		fPoint(762.f, 108.f), fPoint(254.f, 108.f), fPoint(-254.f, 0.f), 0.15f, 4, false);
 }
+
 
 CMissile::~CMissile()
 {

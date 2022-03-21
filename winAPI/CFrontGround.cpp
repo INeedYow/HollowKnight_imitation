@@ -26,12 +26,13 @@ void CFrontGround::render(HDC hDC)
 	fPoint pos = getPos();
 	fPoint size = getSize();
 	fPoint renderPos = rendPos(pos);
+	fPoint camPos = getCamPos();
 
 	renderPos = pos + (renderPos - pos) / 5;
 
 	TransparentBlt(hDC,
-		(int)(renderPos.x),
-		(int)(renderPos.y),
+		(int)(camPos.x - WINSIZEX / 2.f),
+		(int)(camPos.y - WINSIZEY / 2.f),
 		(int)WINSIZEX,
 		(int)WINSIZEY,
 		m_pTex->getDC(),

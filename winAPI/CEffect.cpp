@@ -2,14 +2,14 @@
 #include "CEffect.h"
 #include "CTexture.h"
 
-// TODO 이펙트 구현방법
+ //TODO 이펙트 구현방법
 CEffect::CEffect()
 {
 	m_pTex = nullptr;
 
 	m_tInfo = {};
 
-	setName(eOBJNAME::EFFECT);
+	CObject::setName(eOBJNAME::EFFECT);
 
 	createAnimator();
 }
@@ -23,10 +23,30 @@ void CEffect::setInfo(tEffectInfo info)
 	m_tInfo = info;
 }
 
+void CEffect::setName(const wstring& strName)
+{
+	m_strName = strName;
+}
+
+//void CEffect::setTex(const wstring& strName, const wstring& strPath)
+//{
+//	m_pTex = loadTex();
+//}
+
+const wstring& CEffect::getName()
+{
+	return m_strName;
+}
+
 const tEffectInfo& CEffect::getInfo()
 {
 	return m_tInfo;
 }
+
+//const CTexture* CEffect::getTex()
+//{
+//	return m_pTex;
+//}
 
 void CEffect::update()
 {

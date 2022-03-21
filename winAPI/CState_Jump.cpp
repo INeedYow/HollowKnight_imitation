@@ -24,8 +24,16 @@ void CState_Jump::update(UINT& chk)
 	}
 	else
 	{	// 중력 증가
-		if (info.fGravity < P_GRAVMAX)
-			info.fGravity += P_GRAV * fDT;
+		info.fSpdY -= info.fGravity * fDT;
+
+		if (info.fSpdY < 0.f)
+			chk |= SP_GODOWN;
+
+		if (info.fSpdY < (float)P_SPDY_MIN)
+			info.fSpdY = (float)P_SPDY_MIN;
+
+		/*if (info.fGravity < P_GRAVMAX)
+			info.fGravity += P_GRAV * fDT;*/
 	}
 
 	if (KEY_OFF('Z') || m_fTimer >= P_JUMPHOLDMAX)
@@ -33,7 +41,8 @@ void CState_Jump::update(UINT& chk)
 		chk &= ~(SP_JUMPHOLD);
 	}
 
-	if (info.fSpdY < info.fGravity)
+	//if (info.fSpdY < info.fGravity)
+	if (info.fSpdY < 0.f)
 	{
 		changeAIState(getOwner(), eSTATE_PLAYER::FALL);
 	}
@@ -80,7 +89,7 @@ void CState_Jump::update(UINT& chk)
 		}
 	}
 
-	pos.y -= (info.fSpdY - info.fGravity) * fDT;
+	pos.y -= (info.fSpdY /*- info.fGravity*/) * fDT;
 
 	getPlayer()->setPos(pos);
 	getPlayer()->setPlayerInfo(info);
@@ -93,16 +102,18 @@ void CState_Jump::enter()
 
 	getPlayer()->setCheck(SP_JUMPHOLD, true);
 	getPlayer()->setCheck(SP_AIR, true);
-	//getPlayer()->setCheck(SP_GOUP, true);
-	//getPlayer()->setCheck(SP_GODOWN, false);
 	getPlayer()->setCheck(SP_DBJUMP, false);
+	getPlayer()->setCheck(SP_GODOWN, false);
+
 	// 
+	//getPlayer()->setCheck(SP_GOUP, true);
 	//fPoint pos = getPlayer()->getPos();
 	//pos.y -= 1;
 	//getPlayer()->setPos(pos);
 
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
-	info.fGravity = 0.f;
+	info.fSpdY = (float)P_SPDY;
+	//info.fGravity = 0.f;
 	getPlayer()->setPlayerInfo(info);
 }
 
@@ -118,7 +129,10 @@ void CState_Jump::exit()
 void CState_Jump::printInfo(HDC hDC)
 {
 	fPoint pos = getPlayer()->getPos();
+	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	pos = rendPos(pos);
+
 	LPCWSTR	strInfo = L"Jump";
+
 	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
 }

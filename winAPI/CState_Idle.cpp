@@ -16,7 +16,6 @@ CState_Idle::~CState_Idle()
 // TODO getOwner() 두 단계 최선인가
 void CState_Idle::update(UINT& chk)
 {
-	// jump enter에서 pos.y--해주면 될듯?
 	if (KEY_HOLD(VK_LEFT))
 	{
 		chk &= ~(SP_DIR);

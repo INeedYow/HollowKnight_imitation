@@ -12,6 +12,7 @@ CObject::CObject()
 	m_fptSize = {};
 	m_pCollider = nullptr;
 	m_pAnimator = nullptr;
+	m_pEffector = nullptr;
 	m_bDead = false;
 	m_eName = eOBJNAME::DEFAULT;
 }
@@ -40,6 +41,14 @@ CObject::CObject(const CObject& other)
 	}
 	else
 		m_pAnimator = nullptr;
+
+	if (nullptr != other.m_pEffector)
+	{
+		m_pEffector = new CEffector(*other.m_pEffector);
+		m_pEffector->m_pOwner = this;
+	}
+	else
+		m_pEffector = nullptr;
 }
 
 
@@ -49,6 +58,8 @@ CObject::~CObject()
 		delete m_pCollider;
 	if (nullptr != m_pAnimator)
 		delete m_pAnimator;
+	if (nullptr != m_pEffector)
+		delete m_pEffector;
 }
 
 CObject* CObject::clone()
@@ -113,6 +124,8 @@ void CObject::componentRender(HDC hDC)
 		m_pCollider->render(hDC);
 	if (nullptr != m_pAnimator)
 		m_pAnimator->render(hDC);
+	if (nullptr != m_pEffector)
+		m_pEffector->render(hDC);
 }
 
 CCollider* CObject::getCollider()

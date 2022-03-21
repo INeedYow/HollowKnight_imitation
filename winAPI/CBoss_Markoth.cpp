@@ -130,12 +130,9 @@ void CBoss_Markoth::update()
 	{
 		PLAY(L"st_Normal");
 		m_fDelay -= fDT;
-
+		
 		if (getHP() <= 0)
-		{
-			// death
-			m_ucPhase = 1;
-			phaseInit();
+		{	// death
 			setHP(SB_HPMAX);
 		}
 

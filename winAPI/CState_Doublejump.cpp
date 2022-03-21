@@ -25,9 +25,14 @@ void CState_Doublejump::update(UINT& chk)
 		m_fAccel += 300 * fDT;
 	}
 	else
-	{	// 중력 증가
-		if (info.fGravity < P_GRAVMAX)
-			info.fGravity += P_GRAV * fDT;
+	{	// 중력 증가 가속도 추가
+		info.fSpdY -= (info.fGravity - m_fAccel) * fDT;
+
+		if (info.fSpdY < 0.f)
+			chk |= SP_GODOWN;
+
+		if (info.fSpdY < (float)P_SPDY_MIN)
+			info.fSpdY = (float)P_SPDY_MIN;
 	}
 
 	if (KEY_OFF('Z') || m_fTimer >= P_JUMPHOLDMAX)
@@ -35,7 +40,8 @@ void CState_Doublejump::update(UINT& chk)
 		chk &= ~(SP_JUMPHOLD);
 	}
 
-	if (info.fSpdY + m_fAccel < info.fGravity)
+	//if (info.fSpdY + m_fAccel < info.fGravity)
+	if (info.fSpdY < 0.f)
 	{
 		changeAIState(getOwner(), eSTATE_PLAYER::FALL);
 	}
@@ -53,7 +59,7 @@ void CState_Doublejump::update(UINT& chk)
 		getPlayer()->playAnim(L"DoubleJump");
 	}
 
-	pos.y -= (info.fSpdY + m_fAccel - info.fGravity) * fDT;
+	pos.y -= (info.fSpdY /*+ m_fAccel - info.fGravity*/) * fDT;
 
 	getPlayer()->setPos(pos);
 	getPlayer()->setPlayerInfo(info);
@@ -68,7 +74,7 @@ void CState_Doublejump::enter()
 	getPlayer()->setCheck(SP_JUMPHOLD, true);
 
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
-	info.fGravity = 0.f;
+	info.fSpdY = P_SPDY;
 	getPlayer()->setPlayerInfo(info);
 
 	m_fTimer = 0.f;
@@ -78,6 +84,7 @@ void CState_Doublejump::enter()
 void CState_Doublejump::exit()
 {
 	getPlayer()->setCheck(SP_STOPANIM, false);
+
 	m_fTimer = 0.f;
 	m_fAccel = 0.f;
 }
@@ -86,6 +93,7 @@ void CState_Doublejump::printInfo(HDC hDC)
 {
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
+
 	LPCWSTR	strInfo = L"DoubleJump";
 	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
 }

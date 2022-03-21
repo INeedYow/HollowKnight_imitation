@@ -13,6 +13,7 @@
 #include "CImage.h"
 
 void changeScene(DWORD_PTR param1, DWORD_PTR param2);
+void quitWindow(DWORD_PTR param1, DWORD_PTR param2);
 
 CScene_Title::CScene_Title()
 {
@@ -28,7 +29,7 @@ void CScene_Title::enter()
 	camSetFocusNow(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
 
 	CBackGround* pBG = new CBackGround;
-	pBG->load(L"BG_title", L"texture\\background\\BG_title.bmp");
+	pBG->load(L"BG_title", L"texture\\background\\BG_title3.bmp");
 	pBG->setPos(fPoint(0.f, 0.f));
 	pBG->setSize(fPoint((float)WINSIZEX, (float)WINSIZEY));
 	pBG->setName(eOBJNAME::BACKGROUND);
@@ -36,7 +37,7 @@ void CScene_Title::enter()
 
 	CImage* pImg = new CImage;
 	pImg->load(L"TextImage_title", L"texture\\image\\titleText.bmp");
-	pImg->setPos(fPoint(130.f, 100.f));
+	pImg->setPos(fPoint(130.f, 60.f));
 	pImg->setName(eOBJNAME::IMAGE);
 	addObject(pImg, eOBJ::IMAGE);
 
@@ -47,24 +48,21 @@ void CScene_Title::enter()
 
 	CButtonUI* pBtnStart = new CButtonUI();
 	pBtnStart->setSize(fPoint(150.f, 30.f));
-	pBtnStart->setPos(fPoint(90.f, 20.f));
+	pBtnStart->setPos(fPoint(90, 20.f));
 	pBtnStart->setClickedCallBack(changeScene, (DWORD_PTR)eSCENE::STAGE_01, 0);
 	pPanelUI->addChild(pBtnStart);
 
 	CButtonUI* pBtnTool = new CButtonUI();
 	pBtnTool->setSize(fPoint(150.f, 30.f));
-	pBtnTool->setPos(fPoint(90.f, 60.f));
+	pBtnTool->setPos(fPoint(90, 60.f));
 	pBtnTool->setClickedCallBack(changeScene, (DWORD_PTR)eSCENE::TOOL, 0);
 	pPanelUI->addChild(pBtnTool);
 
 	CButtonUI* pBtnExit = new CButtonUI();
 	pBtnExit->setSize(fPoint(150.f, 30.f));
-	pBtnExit->setPos(fPoint(90.f, 100.f));
-	pBtnExit->setClickedCallBack(changeScene, (DWORD_PTR)eSCENE::TITLE, 0);
+	pBtnExit->setPos(fPoint(90, 100.f));
+	pBtnExit->setClickedCallBack(quitWindow, 0, 0);
 	pPanelUI->addChild(pBtnExit);
-
-	//CBackGround_Title* pBGTitle = new CBackGround_Title();
-	//addObject(pBGTitle, OBJ::BACKGROUND);
 
 }
 
@@ -77,6 +75,11 @@ void CScene_Title::exit()
 
 
 void changeScene(DWORD_PTR param1, DWORD_PTR param2)
-{
+{	// 타이틀에서 씬 전환하는 버튼 UI 연결 함수
 	changeScn((eSCENE)param1);
+}
+
+void quitWindow(DWORD_PTR param1, DWORD_PTR param2)
+{
+	PostQuitMessage(0);
 }

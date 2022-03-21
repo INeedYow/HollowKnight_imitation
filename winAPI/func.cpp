@@ -3,8 +3,9 @@
 
 class CCollider;
 
+// == COLLRR
 eDIR collisionRectToRect(CCollider* coll1, CCollider* coll2)
-{	// 이미 충돌인 상태에서
+{	// 이미 충돌인 상태에서 적당히 검사(COLL exit() 상태에서 검사할 때 쓸 듯)
 	fPoint pos1 = coll1->getPos();
 	fPoint pos2 = coll2->getPos();
 	fPoint size2 = coll2->getOwner()->getSize();
@@ -16,10 +17,44 @@ eDIR collisionRectToRect(CCollider* coll1, CCollider* coll2)
 	}
 	else
 	{
-		if (pos1.y < pos2.y /*- size2.y / 2*/) return eDIR::TOP;
-		if (pos1.y >= pos2.y /*+ size2.y / 2*/) return eDIR::BOTTOM;
+		if (pos1.y <= pos2.y - size2.y / 2) return eDIR::TOP;
+		if (pos1.y >= pos2.y + size2.y / 2) return eDIR::BOTTOM;
 	}
 	return eDIR::NONE;
+}
+
+// == COLLRRW
+eDIR collisionRectToRectWide(CCollider* coll1, CCollider* coll2)
+{ // 타일, 땅과 좌우 검사에 대쉬 속도 감안해서 좀 더 여유롭게 판정(COLL enter(), keep() 상태에서 검사할 때 쓸 듯)
+	fPoint pos1 = coll1->getPos();
+	fPoint pos2 = coll2->getPos();
+	fPoint size1 = coll1->getOwner()->getSize();
+	fPoint size2 = coll2->getOwner()->getSize();
+
+	if (pos2.y - size2.y / 2.f - size1.y / 2.f < pos1.y && 
+		pos1.y < pos2.y + size2.y / 2.f + size1.y / 2.f)
+	{
+		if (pos1.x < pos2.x) return eDIR::LEFT;
+		else return eDIR::RIGHT;
+	}
+	else
+	{
+		if (pos1.y <= pos2.y) return eDIR::TOP;
+		else return eDIR::BOTTOM;
+	}
+	//return eDIR::NONE;
+}
+
+// == ISTOPEXIT
+// 마리오에서 했던 것처럼 leftSpd, rightSpd 나누면 쉽게 해결할 수 있을 듯
+bool isTopColl(CCollider* coll1, CCollider* coll2)
+{	// 땅과 exit() 상태에서 조금만 내려가도 left, right판정나면 x위치 고정돼서 
+	// exit()에서 땅타일과 위아래 충돌 검사만 할 목적으로
+	fPoint pos1 = coll1->getPos();
+	fPoint pos2 = coll2->getPos();
+	fPoint size2 = coll2->getOwner()->getSize();
+
+	return pos1.y <= pos2.y - size2.y / 2.f;
 }
 
 bool isLeftColl(CCollider* coll1, CCollider* coll2)

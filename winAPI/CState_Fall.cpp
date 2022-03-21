@@ -69,10 +69,22 @@ void CState_Fall::update(UINT& chk)
 		}
 	}
 
-	if (info.fGravity < P_GRAVMAX)
-		info.fGravity += P_GRAV * fDT;
+	/*if (info.fGravity < P_SPDY_MIN)
+		info.fGravity += P_GRAV * fDT;*/
 
-	pos.y += info.fGravity * fDT;
+	//if (info.fGravity < info.fSpdY)
+	//	info.fGravity = info.fSpdY;
+	info.fSpdY -= info.fGravity * fDT;
+
+	if (info.fSpdY < 0.f)
+		chk |= SP_GODOWN;
+
+	if (info.fSpdY < (float)P_SPDY_MIN)
+		info.fSpdY = (float)P_SPDY_MIN;
+
+	pos.y -= (info.fSpdY /*- info.fGravity*/) * fDT;
+
+	/*pos.y += info.fGravity * fDT;*/
 		
 	getPlayer()->setPos(pos);
 	getPlayer()->setPlayerInfo(info);
@@ -84,11 +96,11 @@ void CState_Fall::enter()
 	getPlayer()->setCheck(SP_STOPANIM, true);
 
 	getPlayer()->setCheck(SP_AIR, true);
-	//getPlayer()->setCheck(SP_GODOWN, true);
+	getPlayer()->setCheck(SP_GODOWN, true);
 	//getPlayer()->setCheck(SP_GOUP, false);
 
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
-	info.fGravity = 0.f;
+	//info.fGravity = 0.f;
 	info.iBottomCnt = 0;
 	getPlayer()->setPlayerInfo(info);
 }
@@ -100,14 +112,17 @@ void CState_Fall::exit()
 	//getPlayer()->setCheck(SP_GODOWN, false);
 
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
-	info.fGravity = 0.f;
+	info.fSpdY = 0.f;
 	getPlayer()->setPlayerInfo(info);
 }
 
 void CState_Fall::printInfo(HDC hDC)
 {
 	fPoint pos = getPlayer()->getPos();
+	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	pos = rendPos(pos);
+
 	LPCWSTR	strInfo = L"Fall";
+
 	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
 }
