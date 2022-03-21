@@ -29,6 +29,11 @@ void CState_Death::enter()
 	m_fDura = 2.4f;
 	getPlayer()->setCheck(SP_STOPANIM, true);
 	getPlayer()->setCheck(SP_NODMG, true);
+
+	tPlayerInfo info = getPlayer()->getPlayerInfo();
+	info.fNoDmgTimer = 1.5f + m_fDura;
+	getPlayer()->setPlayerInfo(info);
+
 	getPlayer()->playAnim(L"Death");
 }
 
@@ -38,9 +43,16 @@ void CState_Death::exit()
 	getPlayer()->setCheck(SP_STOPANIM, false);
 
 	// юс╫ц
-	//getPlayer()->setCheck(SP_NODMG, false);
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	info.uiHP = 5;
-	info.uiSoul = 0;
+	info.uiSoul = 50;
 	getPlayer()->setPlayerInfo(info);
+}
+
+void CState_Death::printInfo(HDC hDC)
+{
+	fPoint pos = getPlayer()->getPos();
+	pos = rendPos(pos);
+	LPCWSTR	strInfo = L"Death";
+	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
 }

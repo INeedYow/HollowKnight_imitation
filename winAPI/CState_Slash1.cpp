@@ -65,3 +65,11 @@ void CState_Slash1::exit()
 	m_fAttackDelay = 0.f;
 	getPlayer()->setCheck(SP_STOPANIM, false);
 }
+
+void CState_Slash1::printInfo(HDC hDC)
+{
+	fPoint pos = getPlayer()->getPos();
+	pos = rendPos(pos);
+	LPCWSTR	strInfo = L"Slash1";
+	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
+}

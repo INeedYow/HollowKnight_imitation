@@ -241,13 +241,13 @@ void CPlayer::update()
 	// 임시 // 회전테스트
 	// T Y U I 
 	// G H J
-	if (KEY_ON('Q'))
-	{
-		createRotTester();
-	}
+	//if (KEY_ON('Q'))
+	//{
+	//	createRotTester();
+	//}
 	 // 임시 // 타일 없어서
 
-	fPoint pos = getPos();
+	/*fPoint pos = getPos();
 	if (pos.y > 1518.f)
 	{
 		pos.y = 1518.f;
@@ -256,7 +256,7 @@ void CPlayer::update()
 		m_uiCheck &= ~(SP_DBJUMP);
 		m_tInfo.fGravity = 0.f;
 	}
-	setPos(pos);
+	setPos(pos);*/
 
 	/////////////////////////
 
@@ -467,7 +467,7 @@ void CPlayer::createMissile()
 	}
 	pMissile->setPos(fPoint(mPos.x, mPos.y));
 	pMissile->setSize(fPoint(40.f, 30.f));
-	pMissile->getCollider()->setSize(fPoint(40.f, 30.f));
+	pMissile->getCollider()->setSize(fPoint(100.f, 60.f));
 	pMissile->setDir(fVec2(mDir, 0.f));
 	pMissile->setName(eOBJNAME::MISSILE_PLAYER);
 	pMissile->setSpeed(1000.f);
@@ -511,6 +511,8 @@ void CPlayer::createRotTester()
 
 void CPlayer::printInfo(HDC hDC)
 {
+	m_pAI->getCurState()->printInfo(hDC);
+
 	fPoint pos = getPos();
 
 	wchar_t bufX[255] = {};
@@ -519,13 +521,7 @@ void CPlayer::printInfo(HDC hDC)
 
 	wchar_t bufHP[255] = {};
 	wchar_t bufSoul[255] = {};
-
 	wchar_t bufBot[255] = {};
-
-	// state 부분만 옮기기
-	//LPCWSTR	szAct = L"";
-	//TextOutW(hDC, (int)pos.x - 20, (int)pos.y + 60, szAct, (int)wcslen(szAct));
-	// 까지
 
 	swprintf_s(bufX, L"x = %d", (int)pos.x);
 	swprintf_s(bufY, L"y = %d", (int)pos.y);
@@ -567,6 +563,8 @@ void CPlayer::checkUpdate()
 			m_uiCheck &= ~(SP_NODMG);
 		}
 	}
+
+	// 
 }
 
 // Slash들 합쳐도 될듯

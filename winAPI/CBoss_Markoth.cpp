@@ -45,9 +45,13 @@ CBoss_Markoth* CBoss_Markoth::clone()
 	return nullptr;
 }
 
+
 // TODO boss패턴
 // 방패 맞은 편에 생성하는 방법 고민
 // 방패 방향에 대한 변수 있어야 방패들이 같은 방향으로 돌도록 할 수 있을듯
+// 어차피 한 번 스킬쓰고 나면 새로 생성하게 할거니까 생성할 때 통일되면 될듯
+
+// 스킬 쓸때 충돌체 크기 조정
 
 void CBoss_Markoth::update()
 {
@@ -184,7 +188,7 @@ void CBoss_Markoth::collisionEnter(CCollider* pOther)
 	switch (pOther->getOwner()->getName())
 	{	// att도 player, monster 구분해야 
 	case eOBJNAME::MISSILE_PLAYER:
-		setHP(getHP() - 1);
+		setHP(getHP() - 2);
 		break;
 
 	case eOBJNAME::ATTACK:
@@ -216,9 +220,9 @@ void CBoss_Markoth::setRandDelay()
 	case 3:
 	{
 		if (1 == m_ucPhase)
-			randDelay += 0.15f;
+			randDelay += 1.4f;
 		else
-			randDelay += 0.1f;
+			randDelay += 0.7f;
 		break;
 	}
 	}

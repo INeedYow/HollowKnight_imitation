@@ -56,3 +56,11 @@ void CState_Upslash::exit()
 	getPlayer()->setCheck(SP_STOPANIM, false);
 	m_fAttackDelay = 0.f;
 }
+
+void CState_Upslash::printInfo(HDC hDC)
+{
+	fPoint pos = getPlayer()->getPos();
+	pos = rendPos(pos);
+	LPCWSTR	strInfo = L"UpSlash";
+	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
+}

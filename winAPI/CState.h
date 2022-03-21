@@ -24,4 +24,5 @@ public:
 	virtual void update(UINT& chk) = 0;
 	virtual void enter() = 0;
 	virtual void exit() = 0;
+	virtual void printInfo(HDC hDC) = 0;
 };

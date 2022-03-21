@@ -82,3 +82,11 @@ void CState_Doublejump::exit()
 	m_fTimer = 0.f;
 	m_fAccel = 0.f;
 }
+
+void CState_Doublejump::printInfo(HDC hDC)
+{
+	fPoint pos = getPlayer()->getPos();
+	pos = rendPos(pos);
+	LPCWSTR	strInfo = L"DoubleJump";
+	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
+}

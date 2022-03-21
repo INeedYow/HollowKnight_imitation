@@ -3,7 +3,6 @@
 
 class CCollider;
 
-
 eDIR collisionRectToRect(CCollider* coll1, CCollider* coll2)
 {	// 이미 충돌인 상태에서
 	fPoint pos1 = coll1->getPos();

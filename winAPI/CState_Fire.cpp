@@ -61,3 +61,11 @@ void CState_Fire::exit()
 	info.uiSoul = m_uiResultSoul;
 	getPlayer()->setPlayerInfo(info);
 }
+
+void CState_Fire::printInfo(HDC hDC)
+{
+	fPoint pos = getPlayer()->getPos();
+	pos = rendPos(pos);
+	LPCWSTR	strInfo = L"Fire";
+	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
+}

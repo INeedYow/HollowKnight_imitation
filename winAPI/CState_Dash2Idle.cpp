@@ -35,3 +35,11 @@ void CState_Dash2Idle::exit()
 	getPlayer()->setCheck(SP_STOPANIM, false);
 	m_fDura = 0.f;
 }
+
+void CState_Dash2Idle::printInfo(HDC hDC)
+{
+	fPoint pos = getPlayer()->getPos();
+	pos = rendPos(pos);
+	LPCWSTR	strInfo = L"Dash2Idle";
+	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
+}

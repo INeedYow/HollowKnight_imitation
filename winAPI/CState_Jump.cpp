@@ -106,3 +106,11 @@ void CState_Jump::exit()
 
 	m_fTimer = 0.f;
 }
+
+void CState_Jump::printInfo(HDC hDC)
+{
+	fPoint pos = getPlayer()->getPos();
+	pos = rendPos(pos);
+	LPCWSTR	strInfo = L"Jump";
+	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
+}

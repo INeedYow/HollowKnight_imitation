@@ -100,3 +100,11 @@ void CState_Fall::exit()
 	info.fGravity = 0.f;
 	getPlayer()->setPlayerInfo(info);
 }
+
+void CState_Fall::printInfo(HDC hDC)
+{
+	fPoint pos = getPlayer()->getPos();
+	pos = rendPos(pos);
+	LPCWSTR	strInfo = L"Fall";
+	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
+}

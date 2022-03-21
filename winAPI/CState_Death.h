@@ -11,4 +11,5 @@ public:
 	virtual void update(UINT& chk);
 	virtual void enter();
 	virtual void exit();
+	virtual void printInfo(HDC hDC);
 };
