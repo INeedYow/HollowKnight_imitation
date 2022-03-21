@@ -23,12 +23,13 @@ CBoss_Markoth::CBoss_Markoth()
 	getCollider()->setSize(fPoint(200.f, 310.f));
 	getCollider()->setShape(eSHAPE::RECT);
 	
+
 	createAnimator();
-	createAnim(L"st_Normal",	m_pTex, fPoint(0.f, 0.f),		fPoint(280.f, 420.f),		fPoint(280.f, 0.f),		0.2f,	6);
+	createAnim(L"st_Normal",	m_pTex, fPoint(0.f, 0.f),		fPoint(280.f, 420.f),		fPoint(280.f, 0.f),		0.25f,	6);
 
 	createAnim(L"st_Middle",	m_pTex, fPoint(0.f, 420.f),		fPoint(300.f, 415.f),		fPoint(300.f, 0.f),		0.15f,	4);
 
-	createAnim(L"st_Skill",		m_pTex, fPoint(0.f, 835.f),		fPoint(448.f, 282.f),		fPoint(448.f, 0.f),		0.2f,	4);
+	createAnim(L"st_Skill",		m_pTex, fPoint(0.f, 835.f),		fPoint(448.f, 282.f),		fPoint(448.f, 0.f),		0.25f,	4);
 
 	PLAY(L"st_Normal");
 
@@ -53,8 +54,6 @@ void CBoss_Markoth::update()
 	fPoint pos = getPos();
 	
 	m_fTimer += fDT;
-
-	PLAY(L"st_Normal");
 
 	if (m_fDelay < 0.f)
 	{
@@ -89,7 +88,7 @@ void CBoss_Markoth::update()
 
 		
 		if (m_fTimer < 4.f)
-		{	// 방패 최소 1개는 주위에서 돌게
+		{	// 방패 2개 이상일 때 1개는 주위에서 돌게
 			int i = m_vecShield.size() >= 2 ? 1 : 0;
 
 			for (; i < m_vecShield.size(); i++)
@@ -125,6 +124,7 @@ void CBoss_Markoth::update()
 
 	else
 	{
+		PLAY(L"st_Normal");
 		m_fDelay -= fDT;
 
 		if (getHP() <= 0)

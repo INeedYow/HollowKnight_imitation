@@ -20,7 +20,7 @@ public:
 	void render(HDC hDC);
 
 	void createAnimation(const wstring& strName, CTexture* pTex, fPoint leftTop, fPoint slice,
-		fPoint step, float dura, UINT frmCnt);
+		fPoint step, float dura, UINT frmCnt, bool isRepeat = true);
 	CAnimation* findAnimation(const wstring& strName);
 	void play(const wstring& strName);
 };

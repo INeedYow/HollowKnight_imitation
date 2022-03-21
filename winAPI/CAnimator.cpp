@@ -42,7 +42,7 @@ void CAnimator::render(HDC hDC)
 }
 
 void CAnimator::createAnimation(const wstring& strName, CTexture* pTex, fPoint leftTop, fPoint slice,
-	fPoint step, float dura, UINT frmCnt)
+	fPoint step, float dura, UINT frmCnt, bool isRepeat)
 {
 	CAnimation* pAni = findAnimation(strName);
 
@@ -52,7 +52,7 @@ void CAnimator::createAnimation(const wstring& strName, CTexture* pTex, fPoint l
 
 	pAni->setName(strName);
 	pAni->m_pAnimator = this;
-	pAni->create(pTex, leftTop, slice, step, dura, frmCnt);
+	pAni->create(pTex, leftTop, slice, step, dura, frmCnt, isRepeat);
 
 	m_mapAni.insert(make_pair(strName, pAni));
 }
@@ -68,6 +68,15 @@ CAnimation* CAnimator::findAnimation(const wstring& strName)
 }
 
 void CAnimator::play(const wstring& strName)
-{
-	m_pCurAni = findAnimation(strName);
+{	// 같은 애니메이션 재생하는 경우 아니면 이전 프레임 0으로 해둠
+	CAnimation* pNextAni = findAnimation(strName);
+
+	if (pNextAni != m_pCurAni)
+	{
+		if (nullptr != m_pCurAni)
+		{
+			m_pCurAni->setFrame(0);
+		}
+	}
+	m_pCurAni = pNextAni;
 }

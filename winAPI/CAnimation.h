@@ -17,10 +17,14 @@ class CAnimation
 
 	wstring			m_strName;
 	CAnimator*		m_pAnimator;
+
 	CTexture*		m_pTex;
+
 	vector<tAniFrm> m_vecFrm;
 	UINT			m_uiCurFrm;
+
 	float			m_fTimer;
+	bool			m_bRepeat;
 
 public:
 	CAnimation();
@@ -32,10 +36,13 @@ public:
 	void setFrame(UINT frmIndex);
 	tAniFrm& getFrame(UINT frmIndex);
 
+	void setRepeat(bool isRepeat);
+	bool isRepeat();
+
 	void update();
 	void render(HDC hDC);
 
 	void create(CTexture* pTex, fPoint leftTop, fPoint slice,
-		fPoint step, float dura, UINT frmCnt);
+		fPoint step, float dura, UINT frmCnt, bool isRepeat = true);
 };
 

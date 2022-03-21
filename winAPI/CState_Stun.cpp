@@ -49,8 +49,11 @@ void CState_Stun::enter()
 	m_fvDir = getPlayer()->getPlayerInfo().fvKnockBackDir;
 
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
+
 	if (info.fGravity < info.fSpdY)
 		info.fGravity = info.fSpdY;
+	info.fNoDmgTimer = 2.0f + (float)P_STUNDURA;
+
 	getPlayer()->setPlayerInfo(info);
 }
 
@@ -58,10 +61,6 @@ void CState_Stun::exit()
 {
 	getPlayer()->setCheck(SP_STOPANIM, false);
 	//getPlayer()->setCheck(SP_NODMG, false);
-
-	tPlayerInfo info = getPlayer()->getPlayerInfo();
-	info.fNoDmgTimer = 2.0f;
-	getPlayer()->setPlayerInfo(info);
 
 	m_fTimer = 0.f;
 	m_fvDir = {};

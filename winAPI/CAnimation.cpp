@@ -37,6 +37,16 @@ tAniFrm& CAnimation::getFrame(UINT frmIndex)
 	return m_vecFrm[frmIndex];
 }
 
+void CAnimation::setRepeat(bool isRepeat)
+{
+	m_bRepeat = isRepeat;
+}
+
+bool CAnimation::isRepeat()
+{
+	return m_bRepeat;
+}
+
 void CAnimation::update()
 {
 	m_fTimer += fDT;
@@ -44,7 +54,17 @@ void CAnimation::update()
 	if (m_vecFrm[m_uiCurFrm].fDuration < m_fTimer)
 	{
 		m_uiCurFrm++;
-		m_uiCurFrm %= m_vecFrm.size();		// 순환하도록 (나머지 연산활용)
+
+		if (m_bRepeat)
+		{	// 반복 O (나머지 연산 활용)
+			m_uiCurFrm %= m_vecFrm.size();
+		}
+		else
+		{	// 반복 X (frm고정)
+			if (m_uiCurFrm >= m_vecFrm.size())
+				m_uiCurFrm = (UINT)(m_vecFrm.size() - 1);
+		}
+
 		m_fTimer = 0.f;
 	}
 }
@@ -72,7 +92,7 @@ void CAnimation::render(HDC hDC)
 }
 
 void CAnimation::create(CTexture* pTex, fPoint leftTop, fPoint slice,
-	fPoint step, float dura, UINT frmCnt)
+	fPoint step, float dura, UINT frmCnt, bool isRepeat)
 {
 	m_pTex = pTex;
 
@@ -85,4 +105,6 @@ void CAnimation::create(CTexture* pTex, fPoint leftTop, fPoint slice,
 
 		m_vecFrm.push_back(frm);
 	}
+
+	m_bRepeat = isRepeat;
 }
