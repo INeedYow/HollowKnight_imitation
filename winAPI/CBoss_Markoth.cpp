@@ -214,21 +214,48 @@ void CBoss_Markoth::render(HDC hDC)
 		wchar_t bufY[255] = {};
 		wchar_t bufHP[255] = {};
 		wchar_t bufCool[255] = {};
+		wchar_t bufCool2[255] = {};
 		wchar_t buffPhase[255] = {};
+		LPCWSTR strState = L"";
+
+		switch (m_eState)
+		{
+		case eSTATE_BOSS::IDLE:
+			strState = L"Idle";
+			break;
+		case eSTATE_BOSS::MOVE:
+			strState = L"Move";
+			break;
+		case eSTATE_BOSS::SPAWN:
+			strState = L"Spawn";
+			break;
+		case eSTATE_BOSS::READY:
+			strState = L"Ready";
+			break;
+		case eSTATE_BOSS::SKILL:
+			strState = L"Skill";
+			break;
+		case eSTATE_BOSS::DEATH:
+			strState = L"Death";
+			break;
+		}
 
 		swprintf_s(buffPhase, L"Phase = %d", (int)m_ucPhase);
 		swprintf_s(bufHP, L"HP = %d", getHP());
 		swprintf_s(bufX, L"x = %d", (int)pos.x);
 		swprintf_s(bufY, L"y = %d", (int)pos.y);
 		swprintf_s(bufCool, L"cd = %.2f", m_fSpawnTimer);
+		swprintf_s(bufCool2, L"cd = %.2f", m_fSkillTimer);
 
 		pos = rendPos(pos);
 
+		TextOutW(hDC, (int)pos.x - 180, (int)pos.y + 90, strState, (int)wcslen(strState));
 		TextOutW(hDC, (int)pos.x - 180, (int)pos.y + 105, buffPhase, (int)wcslen(buffPhase));
 		TextOutW(hDC, (int)pos.x - 180, (int)pos.y + 120, bufHP, (int)wcslen(bufHP));
 		TextOutW(hDC, (int)pos.x - 180, (int)pos.y + 135, bufX, (int)wcslen(bufX));
 		TextOutW(hDC, (int)pos.x - 180, (int)pos.y + 150, bufY, (int)wcslen(bufY));
 		TextOutW(hDC, (int)pos.x - 180, (int)pos.y + 165, bufCool, (int)wcslen(bufCool));
+		TextOutW(hDC, (int)pos.x - 180, (int)pos.y + 180, bufCool2, (int)wcslen(bufCool2));
 	}
 
 	componentRender(hDC);

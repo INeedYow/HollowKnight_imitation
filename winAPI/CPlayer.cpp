@@ -387,6 +387,7 @@ void CPlayer::collisionEnter(CCollider* pOther)
 					m_uiCheck &= ~(SP_AIR);
 				m_uiCheck &= ~(SP_GODOWN);
 				m_tInfo.iBottomCnt++;
+				m_tInfo.fSpdY = 0.f;
 			}
 			break;
 		}
