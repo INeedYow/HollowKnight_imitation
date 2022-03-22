@@ -3,6 +3,7 @@
 #include "CAI.h"
 #include "CPlayer.h"
 
+
 CState_Upslash::CState_Upslash(eSTATE_PLAYER state)
 	: CState(state) 
 {
@@ -71,6 +72,7 @@ void CState_Upslash::exit()
 
 void CState_Upslash::printInfo(HDC hDC)
 {
+	SelectGDI font(hDC, eFONT::COMIC18);
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 

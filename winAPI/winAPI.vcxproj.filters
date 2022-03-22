@@ -158,7 +158,7 @@
       <Filter>Engine\Component\AI\State\CState_Player</Filter>
     </ClCompile>
     <ClCompile Include="CSpear.cpp">
-      <Filter>Object\CAttack\NewFilter1</Filter>
+      <Filter>Object\CAttack\CSpear</Filter>
     </ClCompile>
     <ClCompile Include="CEffector.cpp">
       <Filter>Engine\Component\Effector</Filter>
@@ -180,6 +180,9 @@
     </ClCompile>
     <ClCompile Include="CGround.cpp">
       <Filter>Object\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="CScene_Stage02.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -361,7 +364,7 @@
       <Filter>Engine\Component\AI\State\CState_Player</Filter>
     </ClInclude>
     <ClInclude Include="CSpear.h">
-      <Filter>Object\CAttack\NewFilter1</Filter>
+      <Filter>Object\CAttack\CSpear</Filter>
     </ClInclude>
     <ClInclude Include="CEffector.h">
       <Filter>Engine\Component\Effector</Filter>
@@ -383,6 +386,9 @@
     </ClInclude>
     <ClInclude Include="CGround.h">
       <Filter>Object\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="CScene_Stage02.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -502,14 +508,14 @@
     <Filter Include="Engine\Component\AI\State\CState_Player">
       <UniqueIdentifier>{d8ceaa5c-d20a-4a81-92d3-9fa6dfd7e14f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\CAttack\NewFilter1">
-      <UniqueIdentifier>{3cffa103-1c8d-440c-96f1-f195f04c23b7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Component\Effector">
       <UniqueIdentifier>{705342b9-b269-4014-9170-73650d611350}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Component\Effector\CEffect">
       <UniqueIdentifier>{f9af9b91-70f8-479c-b9eb-f9bf231d268b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\CAttack\CSpear">
+      <UniqueIdentifier>{3cffa103-1c8d-440c-96f1-f195f04c23b7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

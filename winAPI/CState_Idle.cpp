@@ -83,6 +83,7 @@ void CState_Idle::exit()
 
 void CState_Idle::printInfo(HDC hDC)
 {
+	SelectGDI font(hDC, eFONT::COMIC18);
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 	LPCWSTR	strInfo = L"Idle";

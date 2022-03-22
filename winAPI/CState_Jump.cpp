@@ -111,9 +111,14 @@ void CState_Jump::enter()
 	//pos.y -= 1;
 	//getPlayer()->setPos(pos);
 
+	// 점프속도
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
-	info.fSpdY = (float)P_SPDY;
-	//info.fGravity = 0.f;
+
+	if (getPlayer()->isCheck(SP_DWSLASH))
+		info.fSpdY = (float)P_SPDY / 3.f;
+	else
+		info.fSpdY = (float)P_SPDY;
+
 	getPlayer()->setPlayerInfo(info);
 }
 
@@ -122,12 +127,13 @@ void CState_Jump::exit()
 	getPlayer()->setCheck(SP_STOPANIM, false);
 
 	getPlayer()->setCheck(SP_JUMPHOLD, false);
-
+	getPlayer()->setCheck(SP_DWSLASH, false);
 	m_fTimer = 0.f;
 }
 
 void CState_Jump::printInfo(HDC hDC)
 {
+	SelectGDI font(hDC, eFONT::COMIC18);
 	fPoint pos = getPlayer()->getPos();
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	pos = rendPos(pos);

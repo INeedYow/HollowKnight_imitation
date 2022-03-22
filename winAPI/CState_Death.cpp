@@ -51,6 +51,7 @@ void CState_Death::exit()
 
 void CState_Death::printInfo(HDC hDC)
 {
+	SelectGDI font(hDC, eFONT::COMIC18);
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 

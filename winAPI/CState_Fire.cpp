@@ -64,6 +64,7 @@ void CState_Fire::exit()
 
 void CState_Fire::printInfo(HDC hDC)
 {
+	SelectGDI font(hDC, eFONT::COMIC18);
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 

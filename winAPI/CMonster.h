@@ -30,20 +30,9 @@ public:
 	void setSpd(float spd);
 
 	bool isCheck(UINT chk);
-	UINT getHP();
+	int getHP();
 	float getSpd();
 };
 
 #define SM_DIR		0x01
 #define SM_AIR		0x02
-
-
-// boss
-
-#define SB_HPMAX	20
-
-#define SB_NORMAL	0x1000
-#define SB_MIDDLE	0x2000
-#define SB_SKILL	0x4000
-
-#define SB_TOGGLE	0x0100

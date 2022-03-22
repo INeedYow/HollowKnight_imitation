@@ -8,6 +8,7 @@
 #include "CMissile.h"
 #include "CAttack.h"
 #include "CAI.h"
+#include "SelectGDI.h"
 
 #pragma region Include_State
 #include "CState.h"
@@ -237,27 +238,13 @@ void CPlayer::update()
 	if (KEY_ON('P')) g_bDebug = !g_bDebug;
 	if (g_bDebug && KEY_ON('O')) setPos(fPoint(0.f, 1400.f));
 	////////////////////////////
-	// 임시 // 회전테스트
+	// 회전테스트
 	// T Y U I 
 	// G H J
 	//if (KEY_ON('Q'))
 	//{
 	//	createRotTester();
 	//}
-	 // 임시 // 타일 없어서
-
-	//fPoint pos = getPos();
-	//if (pos.y > 1518.f)
-	//{
-	//	pos.y = 1518.f;
-	//	m_uiCheck &= ~(SP_AIR);
-	//	m_uiCheck &= ~(SP_GODOWN);
-	//	m_uiCheck &= ~(SP_DBJUMP);
-	//	m_tInfo.fGravity = 0.f;
-	//}
-	//setPos(pos);
-
-	/////////////////////////
 
 	//playAnim();					// 
 	if (nullptr != m_pAI)
@@ -311,6 +298,11 @@ bool CPlayer::isCheck(UINT chk)
 UINT CPlayer::getCheck()
 {
 	return m_uiCheck;
+}
+
+CAI* CPlayer::getAI()
+{
+	return m_pAI;
 }
 
 void CPlayer::collisionKeep(CCollider* pOther)
@@ -514,6 +506,8 @@ void CPlayer::printInfo(HDC hDC)
 {
 	m_pAI->getCurState()->printInfo(hDC);
 
+	SelectGDI font(hDC, eFONT::COMIC18);
+
 	fPoint pos = getPos();
 
 	wchar_t bufX[255] = {};
@@ -526,7 +520,7 @@ void CPlayer::printInfo(HDC hDC)
 
 	swprintf_s(bufX, L"x = %d", (int)pos.x);
 	swprintf_s(bufY, L"y = %d", (int)pos.y);
-	swprintf_s(bufSpdY, L"grav = %.2f", m_tInfo.fSpdY);
+	swprintf_s(bufSpdY, L"SpdY = %.2f", m_tInfo.fSpdY);
 
 	swprintf_s(bufHP, L"HP = %d", (int)m_tInfo.uiHP);
 	swprintf_s(bufSoul, L"Soul = %d", (int)m_tInfo.uiSoul);

@@ -1,8 +1,9 @@
 #include "framework.h"
 #include "CShield.h"
 #include "CTexture.h"
-
 #include "SelectGDI.h"
+
+#include "CBoss_Markoth.h"
 
 CShield::CShield()
 {
@@ -11,7 +12,7 @@ CShield::CShield()
 	setPos(fPoint(0.f, 0.f));
 	setSize(fPoint(70.f, 70.f));
 	setName(eOBJNAME::SHIELD);
-	m_fSpd = 2.5f;
+	m_fSpd = (float)SB_SHIELD_SPD;
 	m_fTheta = 0.f;
 	m_fRadius = 0.f;
 	m_bRotRight = true;
@@ -63,13 +64,6 @@ void CShield::update()
 	{
 		m_fTheta -= m_fSpd * fDT;
 	}
-	
-	if (m_fTheta > 2 * PI)
-	{
-		m_fTheta = 0.f;
-		//m_pTex->setRotatedBitmap(m_fRadius, RGB(255, 0, 255));
-	}
-	
 
 	pos.x = m_fRadius * (float)cos(m_fTheta);
 	pos.y = m_fRadius * (float)sin(m_fTheta);
@@ -83,6 +77,17 @@ void CShield::update()
 
 void CShield::render(HDC hDC)
 {
+	fPoint pos = rendPos(getPos());
+
+	wchar_t bufTheta[255] = {};
+	wchar_t bufRad[255] = {};
+
+	swprintf_s(bufTheta, L"theta = %.2f", m_fTheta);
+	swprintf_s(bufRad, L"rad = %.2f", m_fRadius);
+
+	TextOutW(hDC, (int)pos.x - 40, (int)pos.y - 40, bufTheta, (int)wcslen(bufTheta));
+	TextOutW(hDC, (int)pos.x - 40, (int)pos.y - 40, bufRad, (int)wcslen(bufRad));
+	
 	componentRender(hDC);
 }
 
@@ -135,6 +140,11 @@ float CShield::getSpeed()
 float CShield::getRadius()
 {
 	return m_fRadius;
+}
+
+float CShield::getTheta()
+{
+	return m_fTheta;
 }
 
 void CShield::collisionEnter(CCollider* pOther)

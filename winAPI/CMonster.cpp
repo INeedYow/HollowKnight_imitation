@@ -42,7 +42,7 @@ bool CMonster::isCheck(UINT chk)
 	return m_uiCheck & chk;
 }
 
-UINT CMonster::getHP()
+int CMonster::getHP()
 {
 	return m_iHP;
 }

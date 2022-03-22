@@ -3,11 +3,12 @@
 
 class CTexture;
 class CShield;
-enum class eState
+enum class eSTATE_BOSS
 {
 	IDLE,
 	MOVE,
-	SPAWN,
+	SPAWN,				// 방패 소환
+	READY,				// skill 준비
 	SKILL,
 	DEATH,
 
@@ -16,13 +17,14 @@ enum class eState
 
 class CBoss_Markoth : public CMonster
 {
-	eState	m_eState;
+	eSTATE_BOSS	m_eState;
 
-	UCHAR	m_ucPhase;
+	UCHAR		m_ucPhase;
 
-	float	m_fTimer;
-	float	m_fDelay;
-	fVec2	m_fvDir;
+	float		m_fTimer;
+	float		m_fSkillTimer;
+	float		m_fSpawnTimer;
+	fVec2		m_fvDir;
 
 	vector<CShield*> m_vecShield;
 
@@ -44,8 +46,22 @@ public:
 private:
 	void setRandDelay();
 	void createSpear();
-	void createShield();
+	void createShield(float theta = 0.f);
 	fPoint randSpearPos();
 
-	void phaseInit();
+	void spawnShield();
 };
+
+// boss
+
+#define SB_HPMAX			20
+#define SB_READY_DURA		0.8
+#define SB_ACCEL			(2 * SB_SHIELD_SPD / SB_READY_DURA)
+
+#define SB_SKILL_DURA		8
+#define SB_SKILL_COOL		13
+
+#define SB_SHIELD_SPD		2.4			
+#define SB_SHIELD_RAD		270
+
+#define SB_TOGGLE			0x0001

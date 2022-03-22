@@ -118,6 +118,12 @@ void CAttack::collisionEnter(CCollider* pOther)
 			info.uiSoul += 20;
 			if (info.uiSoul > 100)
 				info.uiSoul = 100;
+
+			if (m_eDir == eDIR::BOTTOM)
+			{
+				((CPlayer*)pOwner)->setCheck(SP_DWSLASH, true);
+				changeAIState(((CPlayer*)pOwner)->getAI(), eSTATE_PLAYER::JUMP);
+			}
 			break;
 		}
 		}

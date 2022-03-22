@@ -68,6 +68,7 @@ public:
 
 	bool isCheck(UINT chk);
 	UINT getCheck();
+	CAI* getAI();
 
 	void createMissile();
 	// slash들 함수포인터로 묶을 수 있지 않을까
@@ -142,6 +143,6 @@ enum class eSTATE_PLAYER
 #define SP_DBJUMP				0x0008
 
 #define SP_GODOWN				0x0010			// 하강
-//#define SP_GOUP				0x0020			// y값 감소 중(jump)
+#define SP_DWSLASH				0x0020			// 
 #define SP_STOPANIM				0x0040
 #define SP_NODMG				0x0080

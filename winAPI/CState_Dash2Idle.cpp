@@ -38,6 +38,7 @@ void CState_Dash2Idle::exit()
 
 void CState_Dash2Idle::printInfo(HDC hDC)
 {
+	SelectGDI font(hDC, eFONT::COMIC18);
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 

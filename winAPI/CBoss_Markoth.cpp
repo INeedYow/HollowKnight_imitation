@@ -12,12 +12,14 @@ CBoss_Markoth::CBoss_Markoth()
 	setName(eOBJNAME::BOSS);
 	
 	setHP(SB_HPMAX);
-	setSpd(200.f);
-	setCheck(SB_NORMAL,true);
+	setSpd(110.f);
 
-	m_ucPhase = 0;
 	m_fTimer = 0.f;
+	m_fSkillTimer = (float)SB_SKILL_COOL;
+	m_fSpawnTimer = 4.f;
 	m_fvDir = {};
+
+	m_eState = eSTATE_BOSS::SPAWN;
 
 	createCollider();
 	getCollider()->setSize(fPoint(200.f, 310.f));
@@ -27,13 +29,15 @@ CBoss_Markoth::CBoss_Markoth()
 	createAnimator();
 	createAnim(L"st_Normal",	m_pTex, fPoint(0.f, 0.f),		fPoint(280.f, 420.f),		fPoint(280.f, 0.f),		0.25f,	6);
 
-	createAnim(L"st_Middle",	m_pTex, fPoint(0.f, 420.f),		fPoint(300.f, 415.f),		fPoint(300.f, 0.f),		0.15f,	4);
+	createAnim(L"st_Middle",	m_pTex, fPoint(0.f, 420.f),		fPoint(300.f, 415.f),		fPoint(300.f, 0.f),		0.2f,	4);
 
-	createAnim(L"st_Skill",		m_pTex, fPoint(0.f, 835.f),		fPoint(448.f, 282.f),		fPoint(448.f, 0.f),		0.25f,	4);
+	createAnim(L"st_Skill",		m_pTex, fPoint(0.f, 835.f),		fPoint(448.f, 282.f),		fPoint(448.f, 0.f),		0.12f,	4);
 
 	PLAY(L"st_Normal");
 
-	phaseInit();
+	//
+	m_ucPhase = 1;
+	createShield();
 }
 
 CBoss_Markoth::~CBoss_Markoth()
@@ -47,56 +51,112 @@ CBoss_Markoth* CBoss_Markoth::clone()
 
 
 // TODO boss패턴
-// 방패 맞은 편에 생성하는 방법 고민
-// 방패 방향에 대한 변수 있어야 방패들이 같은 방향으로 돌도록 할 수 있을듯
-// 어차피 한 번 스킬쓰고 나면 새로 생성하게 할거니까 생성할 때 통일되면 될듯
-
-// 스킬 쓸때 충돌체 크기 조정
+	// 스킬 쓸때 충돌체 크기 조정
 
 void CBoss_Markoth::update()
 {
 	fPoint pos = getPos();
-	
-	m_fTimer += fDT;
 
-	if (m_fDelay < 0.f)
+	switch (m_eState)
 	{
-		createSpear();
-	}
-	
-	if (m_fTimer > 12.f && isCheck(SB_NORMAL))
+	case eSTATE_BOSS::IDLE:
 	{
-		setCheck(SB_MIDDLE, true);
-		setCheck(SB_NORMAL, false);
-		m_fTimer = 0.f;
-	}
+		m_fSkillTimer -= fDT;
+		m_fSpawnTimer -= fDT;
 
-	else if (isCheck(SB_MIDDLE))
-	{
-		PLAY(L"st_Middle");
-		if (m_fTimer > 0.6f)
+		if (getHP() <= SB_HPMAX / 2 && m_ucPhase == 1)
+		{	// 2 페이즈
+			m_fTimer = 0.6f;
+			m_ucPhase++;
+			m_eState = eSTATE_BOSS::SPAWN;
+		}
+
+		if (m_fSpawnTimer < 0.f)
 		{
+			createSpear();
+		}
+
+		if (m_fSkillTimer < 0.f)
+		{	// 스킬 준비단계로
+			m_eState = eSTATE_BOSS::READY;
+			m_fSkillTimer = 0.f;
+			m_fSpawnTimer = 0.f;
+			m_fTimer = (float)SB_READY_DURA + 1.f;
+		}
+
+		PLAY(L"st_Normal");
+		break;
+	}
+	
+	case eSTATE_BOSS::MOVE:
+	{	// TODO MOVE랑 같은데 움직임만 추가하면 될 듯
+		m_eState = eSTATE_BOSS::IDLE;
+		break;
+	}
+
+	case eSTATE_BOSS::SPAWN:
+	{
+		m_fTimer -= fDT;
+
+		if (m_fTimer < 0.f)
+		{
+			spawnShield();
+			m_fTimer = 0.f;
+			m_eState = eSTATE_BOSS::IDLE;
+		}
+
+		PLAY(L"st_Middle");
+		break;
+	}
+
+	case eSTATE_BOSS::READY:
+	{
+
+		m_fTimer -= fDT;
+
+		if (m_fTimer > 1.4f)		// 변수하나 더 두기 싫어서 시간가지고 해봄
+		{	// 방패 감속
+			for (int i = 0; i < m_vecShield.size(); i++)
+			{
+				m_vecShield[i]->setfSpeed(m_vecShield[i]->getSpeed() - (float)SB_ACCEL * fDT);
+			}
+		}
+		else if (1.4f >= m_fTimer && m_fTimer > 0.4f)
+		{	// 방향 전환
 			for (int i = 0; i < m_vecShield.size(); i++)
 			{
 				m_vecShield[i]->toggleRot();
 			}
-			setCheck(SB_SKILL, true);
-			setCheck(SB_MIDDLE, false);
-			m_fTimer = 0.f;
+
+			m_fTimer = 0.4f;
 		}
+		else if (0.4f >= m_fTimer && m_fTimer > 0.f)
+		{	// 방패 가속
+			for (int i = 0; i < m_vecShield.size(); i++)
+			{
+				m_vecShield[i]->setfSpeed(m_vecShield[i]->getSpeed() + (float)SB_ACCEL * fDT);
+			}
+		}
+		else
+		{	// 
+			m_eState = eSTATE_BOSS::SKILL;
+			m_fTimer = (float)SB_SKILL_DURA;
+		}
+
+		PLAY(L"st_Middle");
+		break;
 	}
 
-	else if (isCheck(SB_SKILL))
+	case eSTATE_BOSS::SKILL:
 	{
-		PLAY(L"st_Skill");
+		m_fTimer -= fDT;
 
-		
-		if (m_fTimer < 4.f)
+		if (m_fTimer >= (float)SB_SKILL_DURA / 2.f)
 		{	// 방패 2개 이상일 때 1개는 주위에서 돌게
 			int i = m_vecShield.size() >= 2 ? 1 : 0;
 
 			for (; i < m_vecShield.size(); i++)
-			{
+			{	// 범위, 속도 증가
 				m_vecShield[i]->setfSpeed(m_vecShield[i]->getSpeed() + 0.25f * fDT);
 				m_vecShield[i]->setRadius(m_vecShield[i]->getRadius() + 130.f * fDT);
 			}
@@ -106,44 +166,39 @@ void CBoss_Markoth::update()
 			int i = m_vecShield.size() >= 2 ? 1 : 0;
 
 			for (; i < m_vecShield.size(); i++)
-			{
+			{	// 범위, 속도 감소
 				m_vecShield[i]->setfSpeed(m_vecShield[i]->getSpeed() - 0.25f * fDT);
 				m_vecShield[i]->setRadius(m_vecShield[i]->getRadius() - 130.f * fDT);
 			}
 		}
 
-		if (m_fTimer > 8.f)
+		if (m_fTimer < 0.f)
 		{
 			for (int i = 0; i < m_vecShield.size(); i++)
 			{
-				m_vecShield[i]->setfSpeed(2.5f);
-				m_vecShield[i]->setRadius(270.f);
-				m_vecShield[i]->toggleRot();
+				m_vecShield[i]->setfSpeed((float)SB_SHIELD_SPD);
+				m_vecShield[i]->setRadius((float)SB_SHIELD_RAD);
 			}
-			m_fTimer = 0;
-			setCheck(SB_NORMAL, true);
-			setCheck(SB_SKILL, false);
+
+			m_fTimer = 0.8f;
+			m_fSkillTimer = (float)SB_SKILL_COOL;
+			m_eState = eSTATE_BOSS::SPAWN;
 		}
+		PLAY(L"st_Skill");
+		break;
 	}
 
-	else
-	{
-		PLAY(L"st_Normal");
-		m_fDelay -= fDT;
-		
-		if (getHP() <= 0)
-		{	// death
-			setHP(SB_HPMAX);
-		}
-
-		else if (getHP() <= SB_HPMAX / 2 && m_ucPhase == 1)
-		{
-			phaseInit();
-		}
+	case eSTATE_BOSS::DEATH:
+	{	// TODO
+		setHP(SB_HPMAX);
+		m_eState = eSTATE_BOSS::IDLE;
+		break;
+	}
 	}
 
-	pos.x += getSpd() * m_fvDir.x * fDT;
-	pos.y += getSpd() * m_fvDir.y * fDT;
+	//
+	//pos.x += getSpd() * m_fvDir.x * fDT;
+	//pos.y += getSpd() * m_fvDir.y * fDT;
 	
 	setPos(pos);
 	getAnimator()->update();
@@ -165,7 +220,7 @@ void CBoss_Markoth::render(HDC hDC)
 		swprintf_s(bufHP, L"HP = %d", getHP());
 		swprintf_s(bufX, L"x = %d", (int)pos.x);
 		swprintf_s(bufY, L"y = %d", (int)pos.y);
-		swprintf_s(bufCool, L"cd = %.2f", m_fDelay);
+		swprintf_s(bufCool, L"cd = %.2f", m_fSpawnTimer);
 
 		pos = rendPos(pos);
 
@@ -204,32 +259,29 @@ void CBoss_Markoth::collisionExit(CCollider* pOther)
 
 void CBoss_Markoth::setRandDelay()
 {
-	float randDelay = (float)(rand() % 4);
+	float randDelay = (float)(rand() % 3);
 
 	switch ((int)randDelay)
 	{
 	case 0:
-		randDelay += 0.05f;
+		randDelay += 0.1f;
 	case 1:
-		randDelay += 0.05f;
+		randDelay += 0.1f;
 	case 2:
-		randDelay += 0.05f;
-	case 3:
 	{
 		if (1 == m_ucPhase)
-			randDelay += 1.4f;
+			randDelay += 2.0f;
 		else
-			randDelay += 0.7f;
+			randDelay += 1.3f;
 		break;
 	}
 	}
-	m_fDelay = randDelay;
+	m_fSpawnTimer = randDelay;
 }
 
 // TODO
 // 플레이어 좌표로 날아오게 하려면 플레이어 좌표 받아올 수 있어야
 	// 임시로 카메라 중심으로 날아가도록 (이렇게 해도 될듯?)
-// 플레이어 너무 근처에서 생성 되지 않도록
 void CBoss_Markoth::createSpear()
 {
 	fPoint pos = randSpearPos();
@@ -239,10 +291,10 @@ void CBoss_Markoth::createSpear()
 	pSpear->setPos(pos);
 	pSpear->setName(eOBJNAME::MISSILE_MONSTER);
 	pSpear->setMaxSpd(250.f);
-	pSpear->getCollider()->setSize(fPoint(50.f, 50.f));
+	pSpear->getCollider()->setSize(fPoint(60.f, 60.f));
 	pSpear->setTex(L"Spear_Boss", L"texture\\boss\\boss_spear.bmp");
 	pSpear->createAnim(L"Spear_normal", pSpear->getTex(), 
-		fPoint(0.f, 0.f), fPoint(362.f, 83.f), fPoint(362.f, 0.f), 0.7f, 1);
+		fPoint(0.f, 0.f), fPoint(362.f, 83.f), fPoint(362.f, 0.f), 0.7f, 1, false);
 	pSpear->getAnimator()->play(L"Spear_normal");
 
 	createObj(pSpear, eOBJ::MISSILE_MONSTER);
@@ -250,17 +302,16 @@ void CBoss_Markoth::createSpear()
 	setRandDelay();
 }
 
-void CBoss_Markoth::createShield()
+void CBoss_Markoth::createShield(float theta)
 {
 	CShield* pShield = new CShield();
-	pShield->setPos(getPos() + fPoint(0.f, 270.f));
 	pShield->setOwner(this);
-	pShield->calculateRad();
+	pShield->setRadius((float)SB_SHIELD_RAD);
 	pShield->setTex(L"Shield_Boss", L"texture\\boss\\boss_shield.bmp");
 	pShield->createAnim(L"Shield_rot", pShield->getTex(), 
 		fPoint(0.f, 0.f), fPoint(166.f, 308.f), fPoint(166.f, 0.f), 0.3f, 3);
 	pShield->getAnimator()->play(L"Shield_rot");
-	pShield->setTheta((float)(m_vecShield.size() * PI));			// 반대 방향에서 생성
+	pShield->setTheta((float)(theta + m_vecShield.size() * PI));			// 반대 방향에서 생성..
 
 	createObj(pShield, eOBJ::SHIELD);
 
@@ -294,25 +345,22 @@ fPoint CBoss_Markoth::randSpearPos()
 	return pos;
 }
 
-void CBoss_Markoth::phaseInit()
+void CBoss_Markoth::spawnShield()
 {
-	// TODO 모션
+	float theta = m_vecShield[0]->getTheta();
+
 	for (int i = 0; i < m_vecShield.size(); i++)
-	{
+	{	// 방패 제거
 		deleteObj(m_vecShield[i]);
 	}
 	m_vecShield.clear();
 
-	m_ucPhase++;
-
 	switch (m_ucPhase)
-	{
-	case 3:
-		m_ucPhase = 2;
-		break;
+	{	// 방패 생성
 	case 2:
-		createShield();
+		createShield(theta);
 	case 1:
-		createShield();
+		createShield(theta);
+		break;
 	}
 }

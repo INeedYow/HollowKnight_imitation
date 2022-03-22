@@ -80,6 +80,7 @@ void CState_Run::exit()
 
 void CState_Run::printInfo(HDC hDC)
 {
+	SelectGDI font(hDC, eFONT::COMIC18);
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 

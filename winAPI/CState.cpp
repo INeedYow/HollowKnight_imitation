@@ -2,6 +2,7 @@
 #include "CState.h"
 #include "CAI.h"
 #include "CPlayer.h"
+#include "SelectGDI.h"
 
 CState::CState(eSTATE_PLAYER state)
 {

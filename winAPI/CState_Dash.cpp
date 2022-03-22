@@ -86,6 +86,7 @@ void CState_Dash::exit()
 
 void CState_Dash::printInfo(HDC hDC)
 {
+	SelectGDI font(hDC, eFONT::COMIC18);
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 

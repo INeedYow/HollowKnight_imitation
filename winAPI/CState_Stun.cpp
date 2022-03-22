@@ -78,6 +78,7 @@ void CState_Stun::exit()
 
 void CState_Stun::printInfo(HDC hDC)
 {
+	SelectGDI font(hDC, eFONT::COMIC18);
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 

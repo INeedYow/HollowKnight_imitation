@@ -118,6 +118,7 @@ void CState_Fall::exit()
 
 void CState_Fall::printInfo(HDC hDC)
 {
+	SelectGDI font(hDC, eFONT::COMIC18);
 	fPoint pos = getPlayer()->getPos();
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	pos = rendPos(pos);

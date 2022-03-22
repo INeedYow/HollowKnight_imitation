@@ -145,6 +145,7 @@ enum class TYPE_PEN
 enum class TYPE_FONT
 {
 	COMIC24,
+	COMIC18,
 
 	SIZE
 };

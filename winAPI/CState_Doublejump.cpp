@@ -91,6 +91,7 @@ void CState_Doublejump::exit()
 
 void CState_Doublejump::printInfo(HDC hDC)
 {
+	SelectGDI font(hDC, eFONT::COMIC18);
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 

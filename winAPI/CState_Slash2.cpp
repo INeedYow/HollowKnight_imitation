@@ -42,6 +42,7 @@ void CState_Slash2::exit()
 
 void CState_Slash2::printInfo(HDC hDC)
 {
+	SelectGDI font(hDC, eFONT::COMIC18);
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 

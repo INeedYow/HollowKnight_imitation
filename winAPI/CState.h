@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SelectGDI.h"
+
 class CAI;
 class CPlayer;
 

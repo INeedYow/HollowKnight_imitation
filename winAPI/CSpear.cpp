@@ -45,9 +45,10 @@ void CSpear::update()
 		dist = camPos - pos;
 		distance = (float)(dist.y * dist.y) / (float)(dist.x * dist.x);
 		m_fTheta = (float)atan((double)distance);
-		setSpeed(m_fSpdMax * 0.4f);
+		setSpeed(m_fSpdMax * 0.5f);
 		m_uiStep++;
-		timer = 1.0f;
+		timer = 1.2f;
+
 		break;
 	}
 	case 1:
@@ -58,6 +59,15 @@ void CSpear::update()
 		setDir(dir);
 		distance = (float)(dist.y * dist.y) / (float)(dist.x * dist.x);
 		m_fTheta = (float)atan((double)distance);
+
+		////// ....
+		if (camPos.x < pos.x && camPos.y < pos.y)
+			m_fTheta += (float)PI;
+		else if (camPos.x < pos.x && camPos.y >= pos.y)
+			m_fTheta += (float)PI / 2.f;
+		else if (camPos.x >= pos.x && camPos.y < pos.y)
+			m_fTheta += (float)PI * 3 / 2.f;
+		//////
 
 		if (timer < 0.f)
 		{
@@ -74,6 +84,15 @@ void CSpear::update()
 		distance = (float)(dist.y * dist.y) / (float)(dist.x * dist.x);
 		m_fTheta = (float)atan((double)distance);
 
+		//////
+		if (camPos.x < pos.x && camPos.y < pos.y)
+			m_fTheta += (float)PI;
+		else if (camPos.x < pos.x && camPos.y >= pos.y)
+			m_fTheta += (float)PI / 2.f;
+		else if (camPos.x >= pos.x && camPos.y < pos.y)
+			m_fTheta += (float)PI * 3 / 2.f;
+		//////
+
 		if (timer < 0.f)
 		{
 			m_uiStep++;
@@ -82,9 +101,9 @@ void CSpear::update()
 		}
 		break;
 	}
-	case 3:
+	default:
 	{
-		int a = 0;
+		
 		break;
 	}
 	// shoot
@@ -102,7 +121,7 @@ void CSpear::update()
 
 void CSpear::render(HDC hDC)
 {
-	componentRender(hDC);
+	//componentRender(hDC);
 	//////////////////////////////
 	fPoint pos = getPos();
 	fPoint size = { 362.f, 83.f };

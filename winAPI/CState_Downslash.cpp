@@ -64,10 +64,12 @@ void CState_Downslash::enter()
 void CState_Downslash::exit()
 {
 	getPlayer()->setCheck(SP_STOPANIM, false);
+	m_fAttackDelay = 0.f;
 }
 
 void CState_Downslash::printInfo(HDC hDC)
 {
+	SelectGDI font(hDC, eFONT::COMIC18);
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 
