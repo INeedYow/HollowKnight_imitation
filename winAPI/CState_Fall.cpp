@@ -69,11 +69,6 @@ void CState_Fall::update(UINT& chk)
 		}
 	}
 
-	/*if (info.fGravity < P_SPDY_MIN)
-		info.fGravity += P_GRAV * fDT;*/
-
-	//if (info.fGravity < info.fSpdY)
-	//	info.fGravity = info.fSpdY;
 	info.fSpdY -= info.fGravity * fDT;
 
 	if (info.fSpdY < 0.f)
@@ -82,9 +77,7 @@ void CState_Fall::update(UINT& chk)
 	if (info.fSpdY < (float)P_SPDY_MIN)
 		info.fSpdY = (float)P_SPDY_MIN;
 
-	pos.y -= (info.fSpdY /*- info.fGravity*/) * fDT;
-
-	/*pos.y += info.fGravity * fDT;*/
+	pos.y -= info.fSpdY * fDT;
 		
 	getPlayer()->setPos(pos);
 	getPlayer()->setPlayerInfo(info);
@@ -97,10 +90,8 @@ void CState_Fall::enter()
 
 	getPlayer()->setCheck(SP_AIR, true);
 	getPlayer()->setCheck(SP_GODOWN, true);
-	//getPlayer()->setCheck(SP_GOUP, false);
 
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
-	//info.fGravity = 0.f;
 	info.iBottomCnt = 0;
 	getPlayer()->setPlayerInfo(info);
 }
@@ -109,7 +100,7 @@ void CState_Fall::exit()
 {
 	getPlayer()->setCheck(SP_STOPANIM, false);
 
-	//getPlayer()->setCheck(SP_GODOWN, false);
+	//getPlayer()->setCheck(SP_GODOWN, false);		// 슬래쉬처럼 공중 동작할 때에도 낙하하고 있는 경우 있음
 
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	info.fSpdY = 0.f;
@@ -118,12 +109,17 @@ void CState_Fall::exit()
 
 void CState_Fall::printInfo(HDC hDC)
 {
-	SelectGDI font(hDC, eFONT::COMIC18);
+	SelectGDI font(hDC, eFONT::COMIC28);
+
 	fPoint pos = getPlayer()->getPos();
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	pos = rendPos(pos);
 
 	LPCWSTR	strInfo = L"Fall";
+	wchar_t bufSpdY[255] = {};
+	
+	swprintf_s(bufSpdY, L"SpdY = %.1f", info.fSpdY);
 
-	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 150, strInfo, (int)wcslen(strInfo));
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 125, bufSpdY, (int)wcslen(bufSpdY));
 }

@@ -9,6 +9,9 @@
 #include "CGround.h"
 #include "CBoss_Markoth.h"
 
+#define STG01_SIZEX 3840
+#define STG01_SIZEY 2160
+
 CScene_Stage01::CScene_Stage01()
 {
 
@@ -28,45 +31,48 @@ void CScene_Stage01::update()
 	if (KEY_ON('N'))
 		changeScn(eSCENE::STAGE_02);
 
-	if (KEY_HOLD('H'))
-	{
-		CCameraManager::getInst()->scroll(fVec2(-1, 0), 400.f);
-	}
-	if (KEY_HOLD('K'))
-	{
-		CCameraManager::getInst()->scroll(fVec2(1, 0), 400.f);
-	}
-	if (KEY_HOLD('U'))
-	{
-		CCameraManager::getInst()->scroll(fVec2(0, -1), 400.f);
-	}
-	if (KEY_HOLD('J'))
-	{
-		CCameraManager::getInst()->scroll(fVec2(0, 1), 400.f);
-	}
+	// 씬 전환
+	vector<CObject*> vecPlayer = getGroupObject(eOBJ::PLAYER);
+	fPoint pos = vecPlayer[0]->getPos();
 
+	if (pos.y >= STG01_SIZEY)
+		changeScn(eSCENE::STAGE_02);
+
+	//if (KEY_HOLD('H'))
+	//{
+	//	CCameraManager::getInst()->scroll(fVec2(-1, 0), 400.f);
+	//}
+	//if (KEY_HOLD('K'))
+	//{
+	//	CCameraManager::getInst()->scroll(fVec2(1, 0), 400.f);
+	//}
+	//if (KEY_HOLD('U'))
+	//{
+	//	CCameraManager::getInst()->scroll(fVec2(0, -1), 400.f);
+	//}
+	//if (KEY_HOLD('J'))
+	//{
+	//	CCameraManager::getInst()->scroll(fVec2(0, 1), 400.f);
+	//}
 }
 
 void CScene_Stage01::enter()
 {
-	camFadeOut(0.6f);
-	camFadeIn(0.6f);
+	camFadeIn(0.8f);
 
 	// Player 추가
 	CObject* pPlayer = CPlayer::createNormal(fPoint(1200.f, 1430.f));
 	addObject(pPlayer, eOBJ::PLAYER);
 	
 	CBackGround* pBGBack = new CBackGround;
-	pBGBack->load(L"BG_stage1B", L"texture\\background\\stage0_back.bmp");
+	pBGBack->load(L"BG_stage1B", L"texture\\background\\stage1_back.bmp");
 	pBGBack->setPos(fPoint(0.f, 0.f));
-	//pBGBack->setSize(fPoint(STG01_SIZEX, STG01_SIZEY));	// load에서 해줌
 	addObject(pBGBack, eOBJ::BACKGROUND);
 
-	//CFrontGround* pBGFront = new CFrontGround;
-	//pBGFront->load(L"BG_stage1F", L"texture\\background\\bossStage_back.bmp");
-	//pBGFront->setPos(fPoint(0.f, 0.f));
-	//pBGFront->setSize(fPoint(3000.f, 1689.f));
-	//addObject(pBGFront, eOBJ::FRONTGROUND);
+	CFrontGround* pBGFront = new CFrontGround;
+	pBGFront->load(L"BG_stage1F", L"texture\\background\\stage1_front.bmp");
+	pBGFront->setPos(fPoint(0.f, 0.f));
+	addObject(pBGFront, eOBJ::FRONTGROUND);
 
 	CGround* pLeftWall = new CGround;
 	pLeftWall->setPos(fPoint(-450.f, 1600.f));
@@ -105,23 +111,20 @@ void CScene_Stage01::enter()
 
 	g_bDebug = true;
 
-	checkGrp(eOBJ::PLAYER, eOBJ::MONSTER);
-	checkGrp(eOBJ::PLAYER, eOBJ::BOSS);
-	checkGrp(eOBJ::PLAYER, eOBJ::MISSILE_MONSTER);
-	checkGrp(eOBJ::PLAYER, eOBJ::SHIELD);
 	checkGrp(eOBJ::PLAYER, eOBJ::TILE);
 	checkGrp(eOBJ::PLAYER, eOBJ::GROUND);
 
-	checkGrp(eOBJ::MONSTER, eOBJ::TILE);
-	checkGrp(eOBJ::MONSTER, eOBJ::GROUND);
+	checkGrp(eOBJ::ATTACK, eOBJ::TILE);
+	checkGrp(eOBJ::ATTACK, eOBJ::GROUND);
 
-	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::MONSTER);
-	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::BOSS);
-
-	checkGrp(eOBJ::ATTACK, eOBJ::BOSS);
+	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::TILE);
+	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::GROUND);
 
 	camSetFocusNow(pPlayer->getPos());
 	camSetTrace(pPlayer);
+
+	// TODO 실패..
+	camSetArea(0.f, 0.f, STG01_SIZEX, STG01_SIZEY);
 }
 
 void CScene_Stage01::exit()
@@ -129,4 +132,8 @@ void CScene_Stage01::exit()
 	// TODO 플레이어 캐릭터 등 모두 delete하면 안 될듯
 	deleteObjectAll();
 	resetGrp();
+
+	camFadeOut(0.8f);
+	camSetIsArea(false);
+	camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
 }

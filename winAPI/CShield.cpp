@@ -84,8 +84,8 @@ void CShield::render(HDC hDC)
 	wchar_t bufTheta[255] = {};
 	wchar_t bufRad[255] = {};
 
-	swprintf_s(bufTheta, L"tha = %.2f", m_fTheta);
-	swprintf_s(bufRad, L"rad = %.2f", m_fRadius);
+	swprintf_s(bufTheta, L"tha = %.1f", m_fTheta);
+	swprintf_s(bufRad, L"rad = %.1f", m_fRadius);
 
 	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 40, bufTheta, (int)wcslen(bufTheta));
 	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 60, bufRad, (int)wcslen(bufRad));

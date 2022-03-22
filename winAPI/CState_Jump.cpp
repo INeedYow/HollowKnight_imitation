@@ -133,12 +133,17 @@ void CState_Jump::exit()
 
 void CState_Jump::printInfo(HDC hDC)
 {
-	SelectGDI font(hDC, eFONT::COMIC18);
+	SelectGDI font(hDC, eFONT::COMIC28);
+
 	fPoint pos = getPlayer()->getPos();
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	pos = rendPos(pos);
 
 	LPCWSTR	strInfo = L"Jump";
+	wchar_t bufSpdY[255] = {};
 
-	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
+	swprintf_s(bufSpdY, L"SpdY = %.1f", info.fSpdY);
+
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 150, strInfo, (int)wcslen(strInfo));
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 125, bufSpdY, (int)wcslen(bufSpdY));
 }

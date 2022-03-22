@@ -33,13 +33,7 @@ void CState_Slash1::update(UINT& chk)
 		if (info.fSpdY < (float)P_SPDY_MIN)
 			info.fSpdY = (float)P_SPDY_MIN;
 
-		/*if (info.fGravity < P_SPDY_MIN)
-			info.fGravity += P_GRAV * fDT;*/
-
-		//if (info.fGravity < info.fSpdY)
-		//	info.fGravity = info.fSpdY;
-
-		pos.y -= (info.fSpdY /*- info.fGravity*/) * fDT;
+		pos.y -= info.fSpdY * fDT;
 	}
 	else
 	{
@@ -77,10 +71,24 @@ void CState_Slash1::exit()
 
 void CState_Slash1::printInfo(HDC hDC)
 {
-	SelectGDI font(hDC, eFONT::COMIC18);
+	SelectGDI font(hDC, eFONT::COMIC28);
+
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 
 	LPCWSTR	strInfo = L"Slash1";
-	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
+	wchar_t bufDelay[255] = {};
+
+	swprintf_s(bufDelay, L"Delay = %.1f", m_fAttackDelay);
+	
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 150, strInfo, (int)wcslen(strInfo));
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 125, bufDelay, (int)wcslen(bufDelay));
+
+	if (getPlayer()->isCheck(SP_AIR))
+	{
+		tPlayerInfo info = getPlayer()->getPlayerInfo();
+		wchar_t bufSpdY[255] = {};
+		swprintf_s(bufSpdY, L"SpdY = %.1f", info.fSpdY);
+		TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 125, bufSpdY, (int)wcslen(bufSpdY));
+	}
 }

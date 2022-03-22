@@ -214,12 +214,12 @@ void CBoss_Markoth::update()
 
 void CBoss_Markoth::render(HDC hDC)
 {
-	
-
 	if (g_bDebug)
 	{
-		SelectGDI font(hDC, eFONT::COMIC18);
+		SelectGDI font(hDC, eFONT::COMIC24);
+
 		fPoint pos = getPos();
+		fPoint camPos = getCamPos();
 
 		wchar_t bufX[255] = {};
 		wchar_t bufY[255] = {};
@@ -253,20 +253,27 @@ void CBoss_Markoth::render(HDC hDC)
 
 		swprintf_s(buffPhase, L"Phase = %d", (int)m_ucPhase);
 		swprintf_s(bufHP, L"HP = %d", getHP());
-		swprintf_s(bufX, L"x = %d", (int)pos.x);
-		swprintf_s(bufY, L"y = %d", (int)pos.y);
-		swprintf_s(bufCool, L"cd = %.2f", m_fSpawnTimer);
-		swprintf_s(bufCool2, L"cd = %.2f", m_fSkillTimer);
+		swprintf_s(bufX, L"x = %.1f", pos.x);
+		swprintf_s(bufY, L"y = %.1f", pos.y);
+		swprintf_s(bufCool, L"cd1 = %.1f", m_fSpawnTimer);
+		swprintf_s(bufCool2, L"cd2 = %.1f", m_fSkillTimer);
 
 		pos = rendPos(pos);
 
-		TextOutW(hDC, (int)pos.x - 180, (int)pos.y + 90, strState, (int)wcslen(strState));
-		TextOutW(hDC, (int)pos.x - 180, (int)pos.y + 105, buffPhase, (int)wcslen(buffPhase));
-		TextOutW(hDC, (int)pos.x - 180, (int)pos.y + 120, bufHP, (int)wcslen(bufHP));
-		TextOutW(hDC, (int)pos.x - 180, (int)pos.y + 135, bufX, (int)wcslen(bufX));
-		TextOutW(hDC, (int)pos.x - 180, (int)pos.y + 150, bufY, (int)wcslen(bufY));
-		TextOutW(hDC, (int)pos.x - 180, (int)pos.y + 165, bufCool, (int)wcslen(bufCool));
-		TextOutW(hDC, (int)pos.x - 180, (int)pos.y + 180, bufCool2, (int)wcslen(bufCool2));
+		// 보스가 화면 밖으로 나가도 보스 정보는 화면 끝 보스 방향에 출력 되도록 하고 싶었는데 실패 (TODO나중에 다시)
+	/*	pos.x = pos.x < camPos.x - WINSIZEX / 2.f ? camPos.x + WINSIZEX : pos.x;
+		pos.x = pos.x > camPos.x + WINSIZEX / 2.f ? camPos.x - WINSIZEX : pos.x;
+
+		pos.y = pos.y < camPos.y - WINSIZEY / 2.f ? camPos.y + WINSIZEY : pos.y;
+		pos.y = pos.y > camPos.y + WINSIZEY / 2.f ? camPos.y - WINSIZEY : pos.y;*/
+
+		TextOutW(hDC, (int)pos.x - 200, (int)pos.y + 150, strState, (int)wcslen(strState));
+		TextOutW(hDC, (int)pos.x - 200, (int)pos.y + 175, buffPhase, (int)wcslen(buffPhase));
+		TextOutW(hDC, (int)pos.x - 200, (int)pos.y + 200, bufHP, (int)wcslen(bufHP));
+		TextOutW(hDC, (int)pos.x - 100, (int)pos.y + 175, bufX, (int)wcslen(bufX));
+		TextOutW(hDC, (int)pos.x - 000, (int)pos.y + 175, bufY, (int)wcslen(bufY));
+		TextOutW(hDC, (int)pos.x - 100, (int)pos.y + 200, bufCool, (int)wcslen(bufCool));
+		TextOutW(hDC, (int)pos.x - 000, (int)pos.y + 200, bufCool2, (int)wcslen(bufCool2));
 	}
 
 	componentRender(hDC);

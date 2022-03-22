@@ -42,10 +42,16 @@ void CState_Slash2::exit()
 
 void CState_Slash2::printInfo(HDC hDC)
 {
-	SelectGDI font(hDC, eFONT::COMIC18);
+	SelectGDI font(hDC, eFONT::COMIC28);
+
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 
 	LPCWSTR	strInfo = L"Slash2";
-	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
+	wchar_t bufDelay[255] = {};
+
+	swprintf_s(bufDelay, L"delay = %.1f", m_fAttackDelay);
+
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 150, strInfo, (int)wcslen(strInfo));
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 125, bufDelay, (int)wcslen(bufDelay));
 }

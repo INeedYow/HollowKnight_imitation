@@ -21,11 +21,6 @@ void CState_Downslash::update(UINT& chk)
 
 	m_fAttackDelay += fDT;
 
-	//if (info.fGravity < P_SPDY_MIN)
-	//	info.fGravity += P_GRAV * fDT;
-
-	/*if (info.fGravity < info.fSpdY)
-		info.fGravity = info.fSpdY;*/
 	info.fSpdY -= info.fGravity * fDT;
 
 	if (info.fSpdY <= 0.f)
@@ -34,9 +29,8 @@ void CState_Downslash::update(UINT& chk)
 	if (info.fSpdY < (float)P_SPDY_MIN)
 		info.fSpdY = (float)P_SPDY_MIN;
 
-	pos.y -= (info.fSpdY /*- info.fGravity*/) * fDT;
+	pos.y -= info.fSpdY * fDT;
 	
-
 	if (m_fAttackDelay > (float)P_ATTDELAY)
 	{
 		if (chk & SP_AIR)
@@ -69,10 +63,19 @@ void CState_Downslash::exit()
 
 void CState_Downslash::printInfo(HDC hDC)
 {
-	SelectGDI font(hDC, eFONT::COMIC18);
+	SelectGDI font(hDC, eFONT::COMIC28);
+
+	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 
 	LPCWSTR	strInfo = L"DownSlash";
-	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
+	wchar_t bufSpdY[255] = {};
+	wchar_t bufDelay[255] = {};
+	
+	swprintf_s(bufSpdY, L"SpdY = %.1f", info.fSpdY);
+	
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 150, strInfo, (int)wcslen(strInfo));
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 125, bufSpdY, (int)wcslen(bufSpdY));
+	
 }

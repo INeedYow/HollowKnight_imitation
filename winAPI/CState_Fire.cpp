@@ -64,10 +64,18 @@ void CState_Fire::exit()
 
 void CState_Fire::printInfo(HDC hDC)
 {
-	SelectGDI font(hDC, eFONT::COMIC18);
+	SelectGDI font(hDC, eFONT::COMIC28);
+
+	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 
 	LPCWSTR	strInfo = L"Fire";
-	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
+	wchar_t bufDelay[255] = {};
+
+	swprintf_s(bufDelay, L"Delay = %.1f", m_fAttackDelay);
+
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 150, strInfo, (int)wcslen(strInfo));
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 125, bufDelay, (int)wcslen(bufDelay));
+		
 }

@@ -184,6 +184,12 @@
     <ClCompile Include="CScene_Stage02.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="CScene_Stage03.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CScene_Stage04.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCollider.h">
@@ -388,6 +394,12 @@
       <Filter>Object\Tile</Filter>
     </ClInclude>
     <ClInclude Include="CScene_Stage02.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CScene_Stage03.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CScene_Stage04.h">
       <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>

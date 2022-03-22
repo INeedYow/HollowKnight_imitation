@@ -49,7 +49,8 @@ private:
 	CTexture*			m_pTex;
 
 	// TODO
-	tCamArea	m_tCamArea;			// 카메라 최대 최소 좌표 범위
+	bool		m_bArea;			// 카메라 범위 적용여부
+	tCamArea	m_tCamArea;			// 카메라 범위 지정
 
 private:
 	void calculateDiff();
@@ -62,6 +63,9 @@ public:
 	void setFocusNow(fPoint focus);
 	void setFocusOn(fPoint focus);
 	void setTraceObj(CObject* targetObj);
+
+	void setCameraArea(float minX, float minY, float maxX, float maxY);	// WINSIZE 고려해서 맞춰줌
+	void setIsArea(bool isOn);		
 
 	fPoint getFocus();
 	fPoint getRealPos(fPoint renderPos);

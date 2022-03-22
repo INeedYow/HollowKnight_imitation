@@ -14,6 +14,9 @@ CCameraManager::CCameraManager()
 	m_fAccTime		= 0.f;
 	m_fSpeed		= 0.f;
 
+	m_bArea = false;
+	m_tCamArea = {};
+
 	m_pTex = nullptr;
 }
 
@@ -38,7 +41,7 @@ void CCameraManager::update()
 		else
 			camSetFocus(m_pTraceObj->getPos());
 	}
-
+	
 	calculateDiff();
 }
 
@@ -116,6 +119,24 @@ void CCameraManager::setTraceObj(CObject* targetObj)
 	m_pTraceObj = targetObj;
 }
 
+void CCameraManager::setCameraArea(float minX, float minY, float maxX, float maxY)
+{											// 알아서 WINSIZE에 맞게 설정해주도록
+	m_tCamArea = { 
+		minX + WINSIZEX / 2.f, 
+		minY + WINSIZEY / 2.f, 
+		maxX - WINSIZEX / 2.f, 
+		maxY - WINSIZEY / 2.f 
+	};
+	m_bArea = true;							// 범위 설정했다는 건 사용하겠다고 보고 true로
+}
+
+void CCameraManager::setIsArea(bool isOn)
+{
+	m_bArea = isOn;
+}
+
+
+
 fPoint CCameraManager::getFocus()
 {
 	return m_fpCurFocus;
@@ -178,4 +199,20 @@ void CCameraManager::calculateDiff()
 
 		m_fpPrevFocus = m_fpCurFocus;
 	}
+
+	// TODO 배경까지 고정되고 실패..
+	//if (m_bArea)					// 범위 설정 돼있을 때
+	//{
+	//	if (m_fpCurFocus.x < m_tCamArea.fMinX)
+	//		m_fpCurFocus.x = m_tCamArea.fMinX;
+
+	//	if (m_fpCurFocus.y < m_tCamArea.fMinY)
+	//		m_fpCurFocus.y = m_tCamArea.fMinY;
+
+	//	if (m_fpCurFocus.x > m_tCamArea.fMaxX)
+	//		m_fpCurFocus.x = m_tCamArea.fMaxX;
+
+	//	if (m_fpCurFocus.y > m_tCamArea.fMaxY)
+	//		m_fpCurFocus.y = m_tCamArea.fMaxY;
+	//}
 }

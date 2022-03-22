@@ -429,7 +429,8 @@ void CPlayer::collisionExit(CCollider* pOther)
 	case eOBJNAME::TILE:
 	case eOBJNAME::GROUND:
 		if (isTopColl(getCollider(), pOther))
-		{
+			// TODO
+		{	// 충돌 해제 할 때도 이전 좌표 있으면 되겠네
 			if (--m_tInfo.iBottomCnt <= 0 && m_pAI->getCurState()->getState() != eSTATE_PLAYER::JUMP)
 			{	// 점프할 때도 exit에서 강제로 fall로 바꿔서 점프 안 됐었음
 				m_tInfo.iBottomCnt = 0;
@@ -509,43 +510,31 @@ void CPlayer::printInfo(HDC hDC)
 {
 	m_pAI->getCurState()->printInfo(hDC);
 
-	SelectGDI font(hDC, eFONT::COMIC18);
+	SelectGDI font(hDC, eFONT::COMIC24);
 
 	fPoint pos = getPos();
 
 	wchar_t bufX[255] = {};
 	wchar_t bufY[255] = {};
-	wchar_t bufSpdY[255] = {};
-
-	wchar_t bufHP[255] = {};
-	wchar_t bufSoul[255] = {};
 	wchar_t bufBot[255] = {};
 
-	swprintf_s(bufX, L"x = %d", (int)pos.x);
-	swprintf_s(bufY, L"y = %d", (int)pos.y);
-	swprintf_s(bufSpdY, L"SpdY = %.2f", m_tInfo.fSpdY);
-
-	swprintf_s(bufHP, L"HP = %d", (int)m_tInfo.uiHP);
-	swprintf_s(bufSoul, L"Soul = %d", (int)m_tInfo.uiSoul);
+	swprintf_s(bufX, L"x = %.1f", pos.x);
+	swprintf_s(bufY, L"y = %.1f", pos.y);
 	swprintf_s(bufBot, L"BottomCnt = %d", (int)m_tInfo.iBottomCnt);
 
 	// bufX,Y 출력보다 아래 위치해야 함
 	fPoint rendPos = rendPos(pos);
 
-	TextOutW(hDC, (int)rendPos.x - 20, (int)rendPos.y + 75, bufX, (int)wcslen(bufX));
-	TextOutW(hDC, (int)rendPos.x - 20, (int)rendPos.y + 90, bufY, (int)wcslen(bufY));
-	TextOutW(hDC, (int)rendPos.x - 20, (int)rendPos.y + 105, bufSpdY, (int)wcslen(bufSpdY));
-
-	TextOutW(hDC, (int)rendPos.x - 140, (int)rendPos.y + 75, bufHP, (int)wcslen(bufHP));
-	TextOutW(hDC, (int)rendPos.x - 140, (int)rendPos.y + 90, bufSoul, (int)wcslen(bufSoul));
-	TextOutW(hDC, (int)rendPos.x - 140, (int)rendPos.y + 105, bufBot, (int)wcslen(bufBot));
+	TextOutW(hDC, (int)rendPos.x - 50, (int)rendPos.y + 90, bufX, (int)wcslen(bufX));
+	TextOutW(hDC, (int)rendPos.x + 50, (int)rendPos.y + 90, bufY, (int)wcslen(bufY));
+	TextOutW(hDC, (int)rendPos.x - 50, (int)rendPos.y + 115, bufBot, (int)wcslen(bufBot));
 
 
 	if (m_uiCheck & SP_NODMG)
 	{
 		wchar_t bufNoDmg[255] = {};
-		swprintf_s(bufNoDmg, L"NoDmg %.2f", m_tInfo.fNoDmgTimer);
-		TextOutW(hDC, (int)rendPos.x - 140, (int)rendPos.y - 75, bufNoDmg, (int)wcslen(bufNoDmg));
+		swprintf_s(bufNoDmg, L"NoDmg %.1f", m_tInfo.fNoDmgTimer);
+		TextOutW(hDC, (int)rendPos.x - 50, (int)rendPos.y + 140, bufNoDmg, (int)wcslen(bufNoDmg));
 	}
 }
 

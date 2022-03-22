@@ -27,7 +27,7 @@ void CState_Dash2Idle::enter()
 {
 	getPlayer()->playAnim(L"Dash2Idle");
 	getPlayer()->setCheck(SP_STOPANIM, true);
-	m_fDura = 0.17f;
+	m_fDura = 0.2f;
 }
 
 void CState_Dash2Idle::exit()
@@ -38,10 +38,11 @@ void CState_Dash2Idle::exit()
 
 void CState_Dash2Idle::printInfo(HDC hDC)
 {
-	SelectGDI font(hDC, eFONT::COMIC18);
+	SelectGDI font(hDC, eFONT::COMIC28);
+
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 
 	LPCWSTR	strInfo = L"Dash2Idle";
-	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 150, strInfo, (int)wcslen(strInfo));
 }

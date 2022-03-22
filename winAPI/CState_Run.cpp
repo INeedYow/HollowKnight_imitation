@@ -80,10 +80,17 @@ void CState_Run::exit()
 
 void CState_Run::printInfo(HDC hDC)
 {
-	SelectGDI font(hDC, eFONT::COMIC18);
+	SelectGDI font(hDC, eFONT::COMIC28);
+
+	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 
 	LPCWSTR	strInfo = L"Run";
-	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
+	wchar_t bufSpdX[255] = {};
+
+	swprintf_s(bufSpdX, L"SpdX = %.1f", info.fSpdX);
+
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 150, strInfo, (int)wcslen(strInfo));
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 125, bufSpdX, (int)wcslen(bufSpdX));
 }

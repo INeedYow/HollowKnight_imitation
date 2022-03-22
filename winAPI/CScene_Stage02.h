@@ -1,8 +1,8 @@
 #pragma once
 #include "CScene.h"
-class CScene_Stage02 :
-    public CScene
+class CScene_Stage02 : public CScene
 {
+
 public:
 	CScene_Stage02();
 	virtual ~CScene_Stage02();

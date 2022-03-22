@@ -84,11 +84,19 @@ void CState_Dash::exit()
 
 void CState_Dash::printInfo(HDC hDC)
 {
-	SelectGDI font(hDC, eFONT::COMIC18);
+	SelectGDI font(hDC, eFONT::COMIC28);
+
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 
 	LPCWSTR	strInfo = L"Dash";
+	wchar_t bufDura[255] = {};
+	wchar_t bufSpd[255] = {};
 
-	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
+	swprintf_s(bufDura, L"Dura = %.1f", m_fDura);
+	swprintf_s(bufSpd, L"Accel = %.1f", (m_fSpd - m_fDecel));
+
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 150, strInfo, (int)wcslen(strInfo));
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 125, bufDura, (int)wcslen(bufDura));
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 100, bufSpd, (int)wcslen(bufSpd));
 }

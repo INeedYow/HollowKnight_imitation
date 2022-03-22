@@ -110,11 +110,11 @@ enum class eSTATE_PLAYER
 };
 
 // # state
-#define P_SIZEX					64
-#define P_SIZEY					128
-#define P_SPDX					270
-#define P_SPDY					650
-#define P_GRAV					3600
+#define P_SIZEX					62
+#define P_SIZEY					124
+#define P_SPDX					350
+#define P_SPDY					720
+#define P_GRAV					3700
 #define P_SPDY_MIN				-1000
 
 #define P_JUMPHOLDMAX			0.35

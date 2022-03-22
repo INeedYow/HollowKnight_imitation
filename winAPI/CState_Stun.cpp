@@ -78,15 +78,16 @@ void CState_Stun::exit()
 
 void CState_Stun::printInfo(HDC hDC)
 {
-	SelectGDI font(hDC, eFONT::COMIC18);
+	SelectGDI font(hDC, eFONT::COMIC28);
+
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 
 	LPCWSTR	strInfo = L"Stun";
 	wchar_t bufDura[255] = {};
 
-	swprintf_s(bufDura, L"x = %.2f", m_fDura);
+	swprintf_s(bufDura, L"dura = %.1f", m_fDura);
 
-	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
-	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 105, bufDura, (int)wcslen(bufDura));
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 150, strInfo, (int)wcslen(strInfo));
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 125, bufDura, (int)wcslen(bufDura));
 }

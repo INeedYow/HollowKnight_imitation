@@ -59,7 +59,7 @@ void CState_Doublejump::update(UINT& chk)
 		getPlayer()->playAnim(L"DoubleJump");
 	}
 
-	pos.y -= (info.fSpdY /*+ m_fAccel - info.fGravity*/) * fDT;
+	pos.y -=info.fSpdY * fDT;
 
 	getPlayer()->setPos(pos);
 	getPlayer()->setPlayerInfo(info);
@@ -69,7 +69,7 @@ void CState_Doublejump::enter()
 {
 	getPlayer()->playAnim(L"DoubleJump");
 	getPlayer()->setCheck(SP_STOPANIM, true);
-	//getPlayer()->setCheck(SP_GODOWN, false);
+	getPlayer()->setCheck(SP_GODOWN, false);
 	getPlayer()->setCheck(SP_DBJUMP, true);
 	getPlayer()->setCheck(SP_JUMPHOLD, true);
 
@@ -91,10 +91,21 @@ void CState_Doublejump::exit()
 
 void CState_Doublejump::printInfo(HDC hDC)
 {
-	SelectGDI font(hDC, eFONT::COMIC18);
+	SelectGDI font(hDC, eFONT::COMIC28);
+
+	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 
 	LPCWSTR	strInfo = L"DoubleJump";
-	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 120, strInfo, (int)wcslen(strInfo));
+	wchar_t bufSpdY[255] = {};
+	wchar_t bufAccel[255] = {};
+
+	swprintf_s(bufSpdY, L"SpdY = %.1f", info.fSpdY);
+	swprintf_s(bufAccel, L"Accel = %.1f", m_fAccel);
+
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 150, strInfo, (int)wcslen(strInfo));
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 125, bufSpdY, (int)wcslen(bufSpdY));
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 100, bufAccel, (int)wcslen(bufAccel));
+
 }

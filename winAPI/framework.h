@@ -63,10 +63,9 @@ extern bool			g_bDebug;
  // enum class 열거형
 #define eOBJ		GROUP_OBJECT
 enum class GROUP_OBJECT
-{
+{	// 순서따라 위에 그려짐
 	DEFAULT,
 	BACKGROUND,
-	FRONTGROUND,
 	GROUND,
 	TILE,
 	IMAGE,
@@ -84,6 +83,7 @@ enum class GROUP_OBJECT
 
 	TEST,
 
+	FRONTGROUND,
 	UI,
 	SIZE
 };
@@ -118,6 +118,8 @@ enum class GROUP_SCENE
 	TOOL,
 	STAGE_01,
 	STAGE_02,
+	STAGE_03,
+	STAGE_04,
 
 	SIZE
 };
@@ -144,7 +146,8 @@ enum class TYPE_PEN
 #define eFONT	TYPE_FONT
 enum class TYPE_FONT
 {
-	COMIC24,
+	COMIC24,		// 개발자 mode 정보 출력용 폰트
+	COMIC28,			// state 출력용 폰트
 	COMIC18,
 
 	SIZE
@@ -237,6 +240,8 @@ enum class COLL_DIR
 #define rendPos(pos)				CCameraManager::getInst()->getRenderPos(pos)
 #define realPos(pos)				CCameraManager::getInst()->getRealPos(pos)
 #define getCamPos()					CCameraManager::getInst()->getFocus()
+#define camSetArea(x, y, X, Y)		CCameraManager::getInst()->setCameraArea(x, y, X, Y);
+#define camSetIsArea(isOn)			CCameraManager::getInst()->setIsArea(isOn);
 
 #define loadTex(eName, wsPath)		CResourceManager::getInst()->loadTextrue(eName, wsPath)
 #define findTex(eName)				CResourceManager::getInst()->findTexture(eName)
