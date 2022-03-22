@@ -35,8 +35,8 @@ void CScene_Stage01::enter()
 	camFadeIn(0.6f);
 
 	// Player Ãß°¡
-	CObject* pPlayer = CPlayer::createNormal(fPoint(200.f, 1500.f));
-	pPlayer->setPos(fPoint(20.f, 1500.f));
+	CObject* pPlayer = CPlayer::createNormal(fPoint(20.f, 1610.f));
+	//pPlayer->setPos(fPoint(20.f, 1500.f));
 	addObject(pPlayer, eOBJ::PLAYER);
 
 	CBoss_Markoth* pBoss = new CBoss_Markoth;
@@ -69,17 +69,17 @@ void CScene_Stage01::enter()
 	addObject(pGrd2, eOBJ::GROUND);
 
 	CGround* pGrd3 = new CGround;
-	pGrd3->setPos(fPoint(300.f, 1530.f));
+	pGrd3->setPos(fPoint(300.f, 1480.f));
 	pGrd3->getCollider()->setSize(fPoint(170.f, 160.f));
 	addObject(pGrd3, eOBJ::GROUND);
 
 	CGround* pGrd4 = new CGround;
-	pGrd4->setPos(fPoint(1000.f, 1480.f));
+	pGrd4->setPos(fPoint(1000.f, 1440.f));
 	pGrd4->getCollider()->setSize(fPoint(200.f, 160.f));
 	addObject(pGrd4, eOBJ::GROUND);
 
 	CGround* pGrd5 = new CGround;
-	pGrd5->setPos(fPoint(1630.f, 1460.f));
+	pGrd5->setPos(fPoint(1630.f, 1420.f));
 	pGrd5->getCollider()->setSize(fPoint(240.f, 160.f));
 	addObject(pGrd5, eOBJ::GROUND);
 

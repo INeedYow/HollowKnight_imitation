@@ -252,6 +252,9 @@ void CPlayer::update()
 	if (nullptr != getAnimator())
 		getAnimator()->update();
 
+	if (getPos().y > 2000.f)
+		setPos(fPoint(20.f, 1580.f));
+
 	checkUpdate();
 	
 	//renewPrevInfo(getPos());			// anim 출력 후 이전 상황 갱신
