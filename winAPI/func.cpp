@@ -10,7 +10,8 @@ eDIR collisionRectToRect(CCollider* coll1, CCollider* coll2)
 	fPoint pos2 = coll2->getPos();
 	fPoint size2 = coll2->getOwner()->getSize();
 
-	if (pos2.y - size2.y / 2 <= pos1.y && pos1.y <= pos2.y + size2.y / 2)
+	if (pos2.y - size2.y / 2 <= pos1.y && 
+		pos1.y <= pos2.y + size2.y / 2)
 	{
 		if (pos1.x <= pos2.x - size2.x / 2) return eDIR::LEFT;
 		if (pos1.x >= pos2.x + size2.x / 2) return eDIR::RIGHT;

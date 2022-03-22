@@ -8,6 +8,8 @@ enum class CAM_EFFECT
 	FADE_IN,
 	FADE_OUT,
 
+	// TODO
+
 	NONE
 };
 
@@ -16,6 +18,15 @@ struct tCamEffect
 	CAM_EFFECT eEffect;
 	float fDura;
 	float fTimer;
+};
+
+// 카메라 최소 최대 범위
+struct tCamArea
+{
+	float fMinX;
+	float fMinY;
+	float fMaxX;
+	float fMaxY;
 };
 
 class CCameraManager
@@ -37,6 +48,8 @@ private:
 	list<tCamEffect>	m_listCamEffect;	// 리스트로 카메라 효과 순차적으로 실행
 	CTexture*			m_pTex;
 
+	// TODO
+	tCamArea	m_tCamArea;			// 카메라 최대 최소 좌표 범위
 
 private:
 	void calculateDiff();

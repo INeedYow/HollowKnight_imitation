@@ -27,6 +27,24 @@ void CScene_Stage01::update()
 
 	if (KEY_ON('N'))
 		changeScn(eSCENE::STAGE_02);
+
+	if (KEY_HOLD('H'))
+	{
+		CCameraManager::getInst()->scroll(fVec2(-1, 0), 400.f);
+	}
+	if (KEY_HOLD('K'))
+	{
+		CCameraManager::getInst()->scroll(fVec2(1, 0), 400.f);
+	}
+	if (KEY_HOLD('U'))
+	{
+		CCameraManager::getInst()->scroll(fVec2(0, -1), 400.f);
+	}
+	if (KEY_HOLD('J'))
+	{
+		CCameraManager::getInst()->scroll(fVec2(0, 1), 400.f);
+	}
+
 }
 
 void CScene_Stage01::enter()
@@ -35,21 +53,13 @@ void CScene_Stage01::enter()
 	camFadeIn(0.6f);
 
 	// Player 추가
-	CObject* pPlayer = CPlayer::createNormal(fPoint(20.f, 1610.f));
-	//pPlayer->setPos(fPoint(20.f, 1500.f));
+	CObject* pPlayer = CPlayer::createNormal(fPoint(1200.f, 1430.f));
 	addObject(pPlayer, eOBJ::PLAYER);
-
-	CBoss_Markoth* pBoss = new CBoss_Markoth;
-	pBoss->setPos(fPoint(1270.f, 1270.f));
-	pBoss->setSize(fPoint(300.f, 400.f));
-	pBoss->getCollider()->setSize(fPoint(200.f, 310.f));
-	pBoss->getCollider()->setOffset(fPoint(0.f, 20.f));
-	addObject(pBoss, eOBJ::BOSS);
-
+	
 	CBackGround* pBGBack = new CBackGround;
-	pBGBack->load(L"BG_stage1B", L"texture\\background\\bossroom_sample.bmp");
+	pBGBack->load(L"BG_stage1B", L"texture\\background\\stage0_back.bmp");
 	pBGBack->setPos(fPoint(0.f, 0.f));
-	pBGBack->setSize(fPoint(3000.f, 1689.f));
+	//pBGBack->setSize(fPoint(STG01_SIZEX, STG01_SIZEY));	// load에서 해줌
 	addObject(pBGBack, eOBJ::BACKGROUND);
 
 	//CFrontGround* pBGFront = new CFrontGround;
@@ -58,30 +68,40 @@ void CScene_Stage01::enter()
 	//pBGFront->setSize(fPoint(3000.f, 1689.f));
 	//addObject(pBGFront, eOBJ::FRONTGROUND);
 
-	CGround* pGrd1 = new CGround;
-	pGrd1->setPos(fPoint(1800.f, 1889.f));
-	pGrd1->getCollider()->setSize(fPoint(4000.f, 400.f));
-	addObject(pGrd1, eOBJ::GROUND);
+	CGround* pLeftWall = new CGround;
+	pLeftWall->setPos(fPoint(-450.f, 1600.f));
+	pLeftWall->getCollider()->setSize(fPoint(1000.f, 1600.f));
+	addObject(pLeftWall, eOBJ::GROUND);
 
-	CGround* pGrd2 = new CGround;
-	pGrd2->setPos(fPoint(700.f, 1280.f));
-	pGrd2->getCollider()->setSize(fPoint(150.f, 160.f));
-	addObject(pGrd2, eOBJ::GROUND);
+	CGround* pGround1 = new CGround;
+	pGround1->setPos(fPoint(1417.f, STG01_SIZEY));
+	pGround1->getCollider()->setSize(fPoint(2834.f, 1230.f));
+	addObject(pGround1, eOBJ::GROUND);
 
-	CGround* pGrd3 = new CGround;
-	pGrd3->setPos(fPoint(300.f, 1480.f));
-	pGrd3->getCollider()->setSize(fPoint(170.f, 160.f));
-	addObject(pGrd3, eOBJ::GROUND);
+	CGround* pStair1 = new CGround;
+	pStair1->setPos(fPoint(1504.f, STG01_SIZEY));
+	pStair1->getCollider()->setSize(fPoint(3008.f, 1130.f));
+	addObject(pStair1, eOBJ::GROUND);
 
-	CGround* pGrd4 = new CGround;
-	pGrd4->setPos(fPoint(1000.f, 1440.f));
-	pGrd4->getCollider()->setSize(fPoint(200.f, 160.f));
-	addObject(pGrd4, eOBJ::GROUND);
+	CGround* pStair2 = new CGround;
+	pStair2->setPos(fPoint(1593.f, STG01_SIZEY));
+	pStair2->getCollider()->setSize(fPoint(3186.f, 1040.f));
+	addObject(pStair2, eOBJ::GROUND);
 
-	CGround* pGrd5 = new CGround;
-	pGrd5->setPos(fPoint(1630.f, 1420.f));
-	pGrd5->getCollider()->setSize(fPoint(240.f, 160.f));
-	addObject(pGrd5, eOBJ::GROUND);
+	CGround* pGround2 = new CGround;
+	pGround2->setPos(fPoint(1747.f, STG01_SIZEY));
+	pGround2->getCollider()->setSize(fPoint(3494.f, 962.f));
+	addObject(pGround2, eOBJ::GROUND);
+
+	CGround* pGround3 = new CGround;
+	pGround3->setPos(fPoint(STG01_SIZEX, STG01_SIZEY));
+	pGround3->getCollider()->setSize(fPoint(348.f, 962.f));
+	addObject(pGround3, eOBJ::GROUND);
+
+	CGround* pRightWall = new CGround;
+	pRightWall->setPos(fPoint(STG01_SIZEX + 450, 1600.f));
+	pRightWall->getCollider()->setSize(fPoint(1000.f, 1600.f));
+	addObject(pRightWall, eOBJ::GROUND);
 
 	g_bDebug = true;
 
@@ -106,6 +126,7 @@ void CScene_Stage01::enter()
 
 void CScene_Stage01::exit()
 {
+	// TODO 플레이어 캐릭터 등 모두 delete하면 안 될듯
 	deleteObjectAll();
 	resetGrp();
 }

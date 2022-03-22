@@ -77,17 +77,20 @@ void CShield::update()
 
 void CShield::render(HDC hDC)
 {
+	SelectGDI font(hDC, eFONT::COMIC24);
+
 	fPoint pos = rendPos(getPos());
 
 	wchar_t bufTheta[255] = {};
 	wchar_t bufRad[255] = {};
 
-	swprintf_s(bufTheta, L"theta = %.2f", m_fTheta);
+	swprintf_s(bufTheta, L"tha = %.2f", m_fTheta);
 	swprintf_s(bufRad, L"rad = %.2f", m_fRadius);
 
-	TextOutW(hDC, (int)pos.x - 40, (int)pos.y - 40, bufTheta, (int)wcslen(bufTheta));
-	TextOutW(hDC, (int)pos.x - 40, (int)pos.y - 40, bufRad, (int)wcslen(bufRad));
-	
+	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 40, bufTheta, (int)wcslen(bufTheta));
+	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 60, bufRad, (int)wcslen(bufRad));
+
+
 	componentRender(hDC);
 }
 

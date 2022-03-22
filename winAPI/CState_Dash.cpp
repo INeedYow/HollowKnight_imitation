@@ -36,7 +36,7 @@ void CState_Dash::update(UINT& chk)
 	}
 	else if (m_fDura < 0.1f)
 	{
-		m_fDecel += 5000 * fDT;
+		m_fDecel += 6000 * fDT;
 
 		if (m_fDecel > m_fSpd)
 			m_fDecel = m_fSpd;
@@ -55,8 +55,6 @@ void CState_Dash::update(UINT& chk)
 	getPlayer()->setPlayerInfo(info);
 }
 
-// TODO 현재
-// noDmg true 해놔도 player update()에서 timer 재서 SP_NODMG 꺼버림
 void CState_Dash::enter()
 {
 	getPlayer()->playAnim(L"Dash");
@@ -68,7 +66,7 @@ void CState_Dash::enter()
 	getPlayer()->setPlayerInfo(info);
 
 	m_fDura = 0.35f;
-	m_fSpd = 1100.f;
+	m_fSpd = 1350.f;
 	m_fDecel = 0.f;
 }
 

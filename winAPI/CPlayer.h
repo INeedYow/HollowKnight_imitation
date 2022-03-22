@@ -71,7 +71,7 @@ public:
 	CAI* getAI();
 
 	void createMissile();
-	// slash들 함수포인터로 묶을 수 있지 않을까
+	
 	void firstSlash();
 	void secondSlash();
 	void upSlash();
@@ -112,10 +112,10 @@ enum class eSTATE_PLAYER
 // # state
 #define P_SIZEX					64
 #define P_SIZEY					128
-#define P_SPDX					180
-#define P_SPDY					500
-#define P_GRAV					2800
-#define P_SPDY_MIN				-750
+#define P_SPDX					270
+#define P_SPDY					650
+#define P_GRAV					3600
+#define P_SPDY_MIN				-1000
 
 #define P_JUMPHOLDMAX			0.35
 #define P_FIRESOUL				30
@@ -127,11 +127,11 @@ enum class eSTATE_PLAYER
 #define P_DURA_INVIN			1.0
 
 //
-#define PSLASH_SIZEX			120
-#define PSLASH_SIZEY			120
+#define PSLASH_WIDTH			180
+#define PSLASH_HEIGHT			120
 
-#define PSLASH_OFFSETX			(P_SIZEX / 2 + PSLASH_SIZEX / 2)
-#define PSLASH_OFFSETY			(P_SIZEY / 2 + PSLASH_SIZEY / 2)
+#define PSLASH_OFFSETX			(P_SIZEX / 2 + PSLASH_WIDTH / 2)
+#define PSLASH_OFFSETY			(P_SIZEY / 2 + PSLASH_HEIGHT / 2)
 
 // 플레이어 상태 추가정보 
 // (동시에 적용될 수 있는 개념은 비트로, 
@@ -140,7 +140,7 @@ enum class eSTATE_PLAYER
 #define SP_DIR					0x0001			// 좌, 우 방향
 #define SP_AIR					0x0002			// 공중에 뜸
 #define SP_JUMPHOLD				0x0004			// 점프 키 누르고 있는 상황
-#define SP_DBJUMP				0x0008
+#define SP_DBJUMP				0x0008			// 더블점프 사용했는지
 
 #define SP_GODOWN				0x0010			// 하강
 #define SP_DWSLASH				0x0020			// 

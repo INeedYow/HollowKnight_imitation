@@ -2,6 +2,7 @@
 #include "CBoss_Markoth.h"
 #include "CShield.h"
 #include "CSpear.h"
+#include "SelectGDI.h"
 
 CBoss_Markoth::CBoss_Markoth()
 {
@@ -22,7 +23,7 @@ CBoss_Markoth::CBoss_Markoth()
 	m_eState = eSTATE_BOSS::SPAWN;
 
 	createCollider();
-	getCollider()->setSize(fPoint(200.f, 310.f));
+	getCollider()->setSize(fPoint(SB_MdSIZEX, SB_MdSIZEY));
 	getCollider()->setShape(eSHAPE::RECT);
 	
 
@@ -31,7 +32,7 @@ CBoss_Markoth::CBoss_Markoth()
 
 	createAnim(L"st_Middle",	m_pTex, fPoint(0.f, 420.f),		fPoint(300.f, 415.f),		fPoint(300.f, 0.f),		0.2f,	4);
 
-	createAnim(L"st_Skill",		m_pTex, fPoint(0.f, 835.f),		fPoint(448.f, 282.f),		fPoint(448.f, 0.f),		0.12f,	4);
+	createAnim(L"st_Skill",		m_pTex, fPoint(0.f, 835.f),		fPoint(448.f, 282.f),		fPoint(448.f, 0.f),		0.15f,	4);
 
 	PLAY(L"st_Normal");
 
@@ -69,6 +70,7 @@ void CBoss_Markoth::update()
 			m_fTimer = 0.6f;
 			m_ucPhase++;
 			m_eState = eSTATE_BOSS::SPAWN;
+			getCollider()->setSize(fPoint(210.f, 280.f));
 		}
 
 		if (m_fSpawnTimer < 0.f)
@@ -79,6 +81,7 @@ void CBoss_Markoth::update()
 		if (m_fSkillTimer < 0.f)
 		{	// 스킬 준비단계로
 			m_eState = eSTATE_BOSS::READY;
+			getCollider()->setSize(fPoint(210.f, 280.f));
 			m_fSkillTimer = 0.f;
 			m_fSpawnTimer = 0.f;
 			m_fTimer = (float)SB_READY_DURA + 1.f;
@@ -91,6 +94,7 @@ void CBoss_Markoth::update()
 	case eSTATE_BOSS::MOVE:
 	{	// TODO MOVE랑 같은데 움직임만 추가하면 될 듯
 		m_eState = eSTATE_BOSS::IDLE;
+		getCollider()->setSize(fPoint(SB_NmSIZEX, SB_NmSIZEY));
 		break;
 	}
 
@@ -103,6 +107,7 @@ void CBoss_Markoth::update()
 			spawnShield();
 			m_fTimer = 0.f;
 			m_eState = eSTATE_BOSS::IDLE;
+			getCollider()->setSize(fPoint(SB_NmSIZEX, SB_NmSIZEY));
 		}
 
 		PLAY(L"st_Middle");
@@ -140,6 +145,7 @@ void CBoss_Markoth::update()
 		else
 		{	// 
 			m_eState = eSTATE_BOSS::SKILL;
+			getCollider()->setSize(fPoint(SB_SkSIZEX, SB_SkSIZEY));
 			m_fTimer = (float)SB_SKILL_DURA;
 		}
 
@@ -183,6 +189,7 @@ void CBoss_Markoth::update()
 			m_fTimer = 0.8f;
 			m_fSkillTimer = (float)SB_SKILL_COOL;
 			m_eState = eSTATE_BOSS::SPAWN;
+			getCollider()->setSize(fPoint(SB_MdSIZEX, SB_MdSIZEY));
 		}
 		PLAY(L"st_Skill");
 		break;
@@ -192,6 +199,7 @@ void CBoss_Markoth::update()
 	{	// TODO
 		setHP(SB_HPMAX);
 		m_eState = eSTATE_BOSS::IDLE;
+		getCollider()->setSize(fPoint(SB_NmSIZEX, SB_NmSIZEY));
 		break;
 	}
 	}
@@ -206,8 +214,11 @@ void CBoss_Markoth::update()
 
 void CBoss_Markoth::render(HDC hDC)
 {
+	
+
 	if (g_bDebug)
 	{
+		SelectGDI font(hDC, eFONT::COMIC18);
 		fPoint pos = getPos();
 
 		wchar_t bufX[255] = {};
@@ -297,9 +308,9 @@ void CBoss_Markoth::setRandDelay()
 	case 2:
 	{
 		if (1 == m_ucPhase)
-			randDelay += 2.0f;
+			randDelay += 2.4f;
 		else
-			randDelay += 1.3f;
+			randDelay += 1.6f;
 		break;
 	}
 	}
@@ -317,11 +328,11 @@ void CBoss_Markoth::createSpear()
 	CSpear* pSpear = new CSpear;
 	pSpear->setPos(pos);
 	pSpear->setName(eOBJNAME::MISSILE_MONSTER);
-	pSpear->setMaxSpd(250.f);
+	pSpear->setMaxSpd((float)SB_SPEAR_SPD);
 	pSpear->getCollider()->setSize(fPoint(60.f, 60.f));
 	pSpear->setTex(L"Spear_Boss", L"texture\\boss\\boss_spear.bmp");
 	pSpear->createAnim(L"Spear_normal", pSpear->getTex(), 
-		fPoint(0.f, 0.f), fPoint(362.f, 83.f), fPoint(362.f, 0.f), 0.7f, 1, false);
+		fPoint(0.f, 0.f), fPoint(240.f, 55.f), fPoint(240.f, 0.f), 0.7f, 1, false);
 	pSpear->getAnimator()->play(L"Spear_normal");
 
 	createObj(pSpear, eOBJ::MISSILE_MONSTER);

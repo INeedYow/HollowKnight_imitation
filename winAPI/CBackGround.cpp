@@ -32,15 +32,14 @@ void CBackGround::render(HDC hDC)
 	//renderPos = pos + (renderPos - pos) / 5;
 	
 	BitBlt(hDC,
-		0,0,
-		(int)size.x,
-		(int)size.y,
+		(int)(0),
+		(int)(0),
+		(int)(WINSIZEX),
+		(int)(WINSIZEY),
 		m_pTex->getDC(),
-		/*(int)(renderPos.x),
-		(int)(renderPos.y),*/
-		0,0,
+		(int)(camPos.x - WINSIZEX / 2.f),
+		(int)(camPos.y - WINSIZEY / 2.f),
 		SRCCOPY);
-
 }
 
 void CBackGround::load(const wstring& strKey, const wstring& strPath)

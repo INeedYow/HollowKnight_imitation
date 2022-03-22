@@ -58,10 +58,18 @@ private:
 #define SB_READY_DURA		0.8
 #define SB_ACCEL			(2 * SB_SHIELD_SPD / SB_READY_DURA)
 
+// collider size
+#define SB_NmSIZEX			190		
+#define SB_NmSIZEY			300
+#define SB_MdSIZEX			210	
+#define SB_MdSIZEY			280
+#define SB_SkSIZEX			390
+#define SB_SkSIZEY			215
+
 #define SB_SKILL_DURA		8
 #define SB_SKILL_COOL		13
 
-#define SB_SHIELD_SPD		2.4			
+#define SB_SHIELD_SPD		1.8
 #define SB_SHIELD_RAD		270
 
-#define SB_TOGGLE			0x0001
+#define SB_SPEAR_SPD		300

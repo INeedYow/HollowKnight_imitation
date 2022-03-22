@@ -43,7 +43,7 @@ CPlayer::CPlayer()
 		50,
 		0,
 		(float)P_SPDX,
-		(float)P_SPDY,
+		0,
 		(float)P_GRAV,
 		0.f,
 		0,
@@ -163,14 +163,18 @@ CPlayer* CPlayer::createNormal(fPoint pos)
 	pAI->addState(new CState_Stun(eSTATE_PLAYER::STUN));
 	pAI->addState(new CState_Death(eSTATE_PLAYER::DEATH));
 
-	pAI->setCurState(eSTATE_PLAYER::IDLE);
+	pAI->setCurState(eSTATE_PLAYER::FALL);
 	pPlayer->setAI(pAI);
+	
 #pragma endregion
+	// 
+	pPlayer->setCheck(SP_AIR, true);
+	pPlayer->setCheck(SP_GODOWN, true);
+
 	return pPlayer;
 }
 
 
-// 좌우 이동시 fSpdX에 -1 곱해서 하면 상황별로 애니메이션 하기 편할듯
 void CPlayer::playAnim(const wstring& keyWord)
 {
 	wstring strKey = keyWord;
@@ -230,13 +234,11 @@ void CPlayer::playAnim(const wstring& keyWord)
 //	PLAY(strKey);
 //}
 
-// TODO : 현재 애니메이션 준비동작까지 반복돼서 같은 동작 오래 지속하면 부자연스러움
-	// 애니메이션 반복 여부 설정
-// TODO : 한 번씩 키 씹히는 것 같은데
 void CPlayer::update()
 {
 	if (KEY_ON('P')) g_bDebug = !g_bDebug;
-	if (g_bDebug && KEY_ON('O')) setPos(fPoint(0.f, 1400.f));
+	if (g_bDebug && KEY_ON('O')) 
+		setPos(fPoint(1200.f, 1400.f));
 	////////////////////////////
 	// 회전테스트
 	// T Y U I 
@@ -251,9 +253,6 @@ void CPlayer::update()
 		m_pAI->update(m_uiCheck);
 	if (nullptr != getAnimator())
 		getAnimator()->update();
-
-	if (getPos().y > 2000.f)
-		setPos(fPoint(20.f, 1580.f));
 
 	checkUpdate();
 	
@@ -573,8 +572,8 @@ void CPlayer::firstSlash()
 
 	CAttack* pAttack = new CAttack;
 	pAttack->setName(eOBJNAME::ATTACK);
-	pAttack->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEY));
-	pAttack->getCollider()->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEX));
+	pAttack->setSize(fPoint(PSLASH_WIDTH, PSLASH_HEIGHT));
+	pAttack->getCollider()->setSize(fPoint(PSLASH_WIDTH, PSLASH_HEIGHT));
 	pAttack->setOwner(this);
 
 	if (m_uiCheck & SP_DIR)
@@ -608,8 +607,8 @@ void CPlayer::upSlash()
 
 	CAttack* pAttack = new CAttack;
 	pAttack->setName(eOBJNAME::ATTACK);
-	pAttack->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEY));
-	pAttack->getCollider()->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEY));
+	pAttack->setSize(fPoint(PSLASH_HEIGHT, PSLASH_WIDTH));
+	pAttack->getCollider()->setSize(fPoint(PSLASH_HEIGHT, PSLASH_WIDTH));
 	pAttack->setOwner(this);
 
 	if (m_uiCheck & SP_DIR)
@@ -636,8 +635,8 @@ void CPlayer::downSlash()
 
 	CAttack* pAttack = new CAttack;
 	pAttack->setName(eOBJNAME::ATTACK);
-	pAttack->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEY));
-	pAttack->getCollider()->setSize(fPoint(PSLASH_SIZEX, PSLASH_SIZEY));
+	pAttack->setSize(fPoint(PSLASH_HEIGHT, PSLASH_WIDTH));
+	pAttack->getCollider()->setSize(fPoint(PSLASH_HEIGHT, PSLASH_WIDTH));
 	pAttack->setOwner(this);
 
 	if (m_uiCheck & SP_DIR)

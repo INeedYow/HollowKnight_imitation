@@ -14,3 +14,5 @@ public:
 	virtual void exit();
 };
 
+#define STG01_SIZEX 3840
+#define STG01_SIZEY 2160

@@ -118,7 +118,7 @@ void CSpear::update()
 }
 
 
-
+// TODO
 void CSpear::render(HDC hDC)
 {
 	//componentRender(hDC);
