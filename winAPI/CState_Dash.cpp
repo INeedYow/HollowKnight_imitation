@@ -1,10 +1,10 @@
 #include "framework.h"
 #include "CState_Dash.h"
-#include "CAI.h"
+#include "CState_Player.h"
 #include "CPlayer.h"
 
 CState_Dash::CState_Dash(eSTATE_PLAYER state)
-	: CState(state)
+	: CState_Player(state)
 {
 	m_fDura = 0.f;
 	m_fSpd = 0.f;
@@ -27,11 +27,11 @@ void CState_Dash::update(UINT& chk)
 	{
 		if (chk & SP_AIR)
 		{
-			changeAIState(getOwner(), eSTATE_PLAYER::FALL);
+			changeMyState(getOwner(), eSTATE_PLAYER::FALL);
 		}
 		else
 		{
-			changeAIState(getOwner(), eSTATE_PLAYER::DASH2IDLE);
+			changeMyState(getOwner(), eSTATE_PLAYER::DASH2IDLE);
 		}
 	}
 	else if (m_fDura < 0.1f)

@@ -1,6 +1,6 @@
 #pragma once
-#include "CState.h"
-class CState_Dash2Idle :public CState
+#include "CState_Player.h"
+class CState_Dash2Idle :public CState_Player
 {
 	float m_fDura;
 

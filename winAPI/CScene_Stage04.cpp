@@ -10,6 +10,9 @@
 #include "CGround.h"
 #include "CBoss_Markoth.h"
 
+#define STG04_SIZEX		3000
+#define STG04_SIZEY		1689
+
 CScene_Stage04::CScene_Stage04()
 {
 }
@@ -25,7 +28,7 @@ void CScene_Stage04::update()
 
 void CScene_Stage04::enter()
 {
-	camFadeOut(0.6f);
+	camFadeOut(0.5f);
 	camFadeIn(0.6f);
 
 	// Player Ãß°¡
@@ -34,7 +37,6 @@ void CScene_Stage04::enter()
 
 	CBoss_Markoth* pBoss = new CBoss_Markoth;
 	pBoss->setPos(fPoint(1270.f, 1270.f));
-	pBoss->setSize(fPoint(300.f, 400.f));
 	pBoss->getCollider()->setSize(fPoint(200.f, 310.f));
 	pBoss->getCollider()->setOffset(fPoint(0.f, 20.f));
 	addObject(pBoss, eOBJ::BOSS);
@@ -95,8 +97,16 @@ void CScene_Stage04::enter()
 
 	camSetFocusNow(pPlayer->getPos());
 	camSetTrace(pPlayer);
+
+	camSetArea(0.f, 0.f, STG04_SIZEX, STG04_SIZEY);
 }
 
 void CScene_Stage04::exit()
 {
+	deleteObjectAll();
+	resetGrp();
+
+	camFadeOut(0.5f);
+	camSetIsArea(false);
+	camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
 }

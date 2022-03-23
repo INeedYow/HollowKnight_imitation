@@ -1,10 +1,10 @@
 #include "framework.h"
 #include "CState_Fire.h"
-#include "CAI.h"
+#include "CStatus.h"
 #include "CPlayer.h"
 
 CState_Fire::CState_Fire(eSTATE_PLAYER state)
-	: CState(state)
+	: CState_Player(state)
 {
 	m_fAttackDelay = 0.f;
 
@@ -28,11 +28,11 @@ void CState_Fire::update(UINT& chk)
 	{
 		if (chk & SP_AIR)
 		{
-			changeAIState(getOwner(), eSTATE_PLAYER::FALL);
+			changeMyState(getOwner(), eSTATE_PLAYER::FALL);
 		}
 		else
 		{
-			changeAIState(getOwner(), eSTATE_PLAYER::IDLE);
+			changeMyState(getOwner(), eSTATE_PLAYER::IDLE);
 		}
 	}
 

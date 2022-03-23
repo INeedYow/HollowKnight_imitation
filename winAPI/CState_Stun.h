@@ -1,6 +1,6 @@
 #pragma once
-#include "CState.h"
-class CState_Stun : public CState
+#include "CState_Player.h"
+class CState_Stun : public CState_Player
 {
 	fVec2 m_fvDir;
 	float m_fDura;

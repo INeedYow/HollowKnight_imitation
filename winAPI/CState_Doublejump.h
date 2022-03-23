@@ -1,6 +1,6 @@
 #pragma once
-#include "CState.h"
-class CState_Doublejump : public CState
+#include "CState_Player.h"
+class CState_Doublejump : public CState_Player
 {
 	float	m_fTimer;
 	float	m_fAccel;

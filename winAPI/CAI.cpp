@@ -1,6 +1,6 @@
 #include "framework.h"
 #include "CAI.h"
-#include "CState.h"
+#include "CState_Mons.h"
 
 CAI::CAI()
 {
@@ -10,7 +10,7 @@ CAI::CAI()
 
 CAI::~CAI()
 {
-	for (map<eSTATE_PLAYER, CState*>::iterator iter = m_mapState.begin(); 
+	for (map<eSTATE_MONS, CState_Mons*>::iterator iter = m_mapState.begin();
 		iter != m_mapState.end(); iter++)
 	{
 		if (nullptr != iter->second)
@@ -20,52 +20,43 @@ CAI::~CAI()
 	m_mapState.clear();
 }
 
-void CAI::addState(CState* pState)
+void CAI::update(UINT& chk)
 {
-	CState* pNewState = findState(pState->getState());
+}
+
+CMonster* CAI::getOwner()
+{
+	return m_pOwner;
+}
+
+CState_Mons* CAI::findState(eSTATE_MONS state)
+{
+	map<eSTATE_MONS, CState_Mons*>::iterator iter = m_mapState.find(state);
+
+	if (m_mapState.end() == iter)
+		return nullptr;
+
+	return iter->second;
+}
+
+eSTATE_MONS* CAI::getCurState()
+{
+	return m_pCurState;
+}
+
+void CAI::setCurState(eSTATE_MONS state)
+{
+}
+
+void CAI::addState(CState_Mons* pState)
+{
+	CState_Mons* pNewState = findState(pState->getState());
 	assert(!pNewState);
 
 	m_mapState.insert(make_pair(pState->getState(), pState));
 	pState->m_pOwner = this;
 }
 
-void CAI::changeState(eSTATE_PLAYER nextState)
+void CAI::changeState(eSTATE_MONS nextState)
 {
-	CState* pNextState = findState(nextState);
-	//assert(m_pCurState != pNextState);
-
-	m_pCurState->exit();
-	m_pCurState = pNextState;
-	m_pCurState->enter();
-}
-
-void CAI::update(UINT& chk)
-{
-	m_pCurState->update(chk);
-}
-
-CPlayer* CAI::getOwner()
-{
-	return m_pOwner;
-}
-
-CState* CAI::getCurState()
-{
-	return m_pCurState;
-}
-
-CState* CAI::findState(eSTATE_PLAYER state)
-{
-	map<eSTATE_PLAYER, CState*>::iterator iter = m_mapState.find(state);
-	
-	if (m_mapState.end() == iter)
-		return nullptr;
-	
-	return iter->second;
-}
-
-void CAI::setCurState(eSTATE_PLAYER state)
-{
-	m_pCurState = findState(state);
-	assert(m_pCurState);
 }

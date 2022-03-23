@@ -34,6 +34,9 @@ void CTimeManager::update()
 	++updateCnt;
 	updateOneSec += m_dDT;			// 걸린 시간 누적
 
+	if (m_dDT > 0.01)				// 포커스 놓쳐도 순간이동 하지 않게
+		m_dDT = 0.01;
+
 	if (updateOneSec >= 1.0)		//걸린 시간이 1초가 되면
 	{	// FPS는 update함수 호출 횟수
 		m_uiFPS = updateCnt;

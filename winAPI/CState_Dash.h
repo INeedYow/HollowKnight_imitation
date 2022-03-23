@@ -1,6 +1,7 @@
 #pragma once
-#include "CState.h"
-class CState_Dash :    public CState
+#include "CState_Player.h"
+
+class CState_Dash :    public CState_Player
 {
 	float	m_fDura;
 	float	m_fSpd;

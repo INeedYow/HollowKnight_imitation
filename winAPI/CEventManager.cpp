@@ -2,6 +2,7 @@
 #include "CEventManager.h"
 #include "CObject.h"
 #include "CScene.h"
+#include "CStatus.h"
 #include "CAI.h"
 
 CEventManager::CEventManager()
@@ -49,15 +50,26 @@ void CEventManager::execute(const tEvent& _event)
 	}
 	break;
 
-	case eEvent::CHANGE_AI_STATE:
+	case eEvent::CHANGE_MY_STATE:
+		// lParam : CStatus
+		// wParam : next state
+	{
+		CStatus* pSta = (CStatus*)_event.lParam;
+		eSTATE_PLAYER nextState = (eSTATE_PLAYER)_event.wParam;
+		pSta->changeState(nextState);
+	}
+	break;
+
+	case eEvent::CHANGE_MONS_STATE:
 		// lParam : CAI
 		// wParam : next state
 	{
 		CAI* pAI = (CAI*)_event.lParam;
-		eSTATE_PLAYER nextState = (eSTATE_PLAYER)_event.wParam;
+		eSTATE_MONS nextState = (eSTATE_MONS)_event.wParam;
 		pAI->changeState(nextState);
 	}
 	break;
+
 	}
 }
 
@@ -104,10 +116,20 @@ void CEventManager::eventChangeScene(eSCENE eScn)
 	addEvent(newEvent);
 }
 
-void CEventManager::eventChangeAIState(CAI* ai, eSTATE_PLAYER state)
+void CEventManager::eventChangeMyState(CStatus* status, eSTATE_PLAYER state)
 {
 	tEvent newEvent = {};
-	newEvent.eEvent = eEvent::CHANGE_AI_STATE;
+	newEvent.eEvent = eEvent::CHANGE_MY_STATE;
+	newEvent.lParam = (DWORD_PTR)status;
+	newEvent.wParam = (DWORD_PTR)state;
+
+	CEventManager::getInst()->addEvent(newEvent);
+}
+
+void CEventManager::eventChangeMonsState(CAI* ai, eSTATE_MONS state)
+{
+	tEvent newEvent = {};
+	newEvent.eEvent = eEvent::CHANGE_MONS_STATE;
 	newEvent.lParam = (DWORD_PTR)ai;
 	newEvent.wParam = (DWORD_PTR)state;
 

@@ -26,9 +26,8 @@ class CBoss_Markoth : public CMonster
 	float		m_fSpawnTimer;
 	fVec2		m_fvDir;
 
-	vector<CShield*> m_vecShield;
-
-	CTexture* m_pTex;
+	vector<CShield*>	m_vecShield;
+	//vector<CSpear*>		m_vecSpear;
 
 public:
 	CBoss_Markoth();
@@ -50,11 +49,14 @@ private:
 	fPoint randSpearPos();
 
 	void spawnShield();
+
+	virtual void death();
 };
 
 // boss
 
 #define SB_HPMAX			20
+#define SB_SPD				110
 #define SB_READY_DURA		0.8
 #define SB_ACCEL			(2 * SB_SHIELD_SPD / SB_READY_DURA)
 

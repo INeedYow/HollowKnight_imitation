@@ -1,10 +1,10 @@
 #include "framework.h"
 #include "CState_Jump.h"
-#include "CAI.h"
+#include "CStatus.h"
 #include "CPlayer.h"
 
 CState_Jump::CState_Jump(eSTATE_PLAYER state)
-	: CState(state)
+	: CState_Player(state)
 {
 	m_fTimer = 0.f;
 }
@@ -44,7 +44,7 @@ void CState_Jump::update(UINT& chk)
 	//if (info.fSpdY < info.fGravity)
 	if (info.fSpdY < 0.f)
 	{
-		changeAIState(getOwner(), eSTATE_PLAYER::FALL);
+		changeMyState(getOwner(), eSTATE_PLAYER::FALL);
 	}
 
 	if (KEY_HOLD(VK_LEFT))
@@ -64,28 +64,28 @@ void CState_Jump::update(UINT& chk)
 	{
 		if (KEY_HOLD(VK_UP))
 		{
-			changeAIState(getOwner(), eSTATE_PLAYER::UPSLASH);
+			changeMyState(getOwner(), eSTATE_PLAYER::UPSLASH);
 		}
 		else if (KEY_HOLD(VK_DOWN))
 		{
-			changeAIState(getOwner(), eSTATE_PLAYER::DOWNSLASH);
+			changeMyState(getOwner(), eSTATE_PLAYER::DOWNSLASH);
 		}
 		else
 		{
-			changeAIState(getOwner(), eSTATE_PLAYER::SLASH1);
+			changeMyState(getOwner(), eSTATE_PLAYER::SLASH1);
 		}
 	}
 
 	else if (KEY_ON('C'))
 	{
-		changeAIState(getOwner(), eSTATE_PLAYER::DASH);
+		changeMyState(getOwner(), eSTATE_PLAYER::DASH);
 	}
 
 	else if (KEY_ON('A'))
 	{
 		if (info.uiSoul >= P_FIRESOUL)
 		{
-			changeAIState(getOwner(), eSTATE_PLAYER::FIRE);
+			changeMyState(getOwner(), eSTATE_PLAYER::FIRE);
 		}
 	}
 

@@ -1,10 +1,10 @@
 #include "framework.h"
 #include "CState_Slash2.h"
-#include "CAI.h"
+#include "CStatus.h"
 #include "CPlayer.h"
 
 CState_Slash2::CState_Slash2(eSTATE_PLAYER state)
-	: CState(state)
+	: CState_Player(state)
 {
 	m_fAttackDelay = 0.f;
 }
@@ -21,7 +21,7 @@ void CState_Slash2::update(UINT& chk)
 
 	if (m_fAttackDelay > (float)P_ATTDELAY)
 	{
-		changeAIState(getOwner(), eSTATE_PLAYER::IDLE);
+		changeMyState(getOwner(), eSTATE_PLAYER::IDLE);
 	}
 
 	getPlayer()->setPlayerInfo(info);

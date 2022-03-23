@@ -1,6 +1,6 @@
 #pragma once
-#include "CState.h"
-class CState_Slash1 :    public CState
+#include "CState_Player.h"
+class CState_Slash1 :    public CState_Player
 {
 	float m_fAttackDelay;
 

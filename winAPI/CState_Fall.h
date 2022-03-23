@@ -1,6 +1,6 @@
 #pragma once
-#include "CState.h"
-class CState_Fall :    public CState
+#include "CState_Player.h"
+class CState_Fall :    public CState_Player
 {
 public:
 	CState_Fall(eSTATE_PLAYER state);	// CState에서 생성자 재정의 해서

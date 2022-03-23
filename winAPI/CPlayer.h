@@ -2,7 +2,7 @@
 #include "CObject.h"
 
 class CTexture;
-class CAI;
+class CStatus;
 class CEffector;
 enum class eSTATE_PLAYER;
 
@@ -20,14 +20,9 @@ struct tPlayerInfo
 
 	int			iBottomCnt;
 
+	//fPoint	fpPrevPos;
 	fVec2		fvKnockBackDir;
 };
-
-//struct tPrevInfo
-//{
-//	fPoint	fpPrevPos;
-//	UINT	uiPrevHP;
-//};
 
 class CPlayer : public CObject
 {
@@ -36,7 +31,7 @@ class CPlayer : public CObject
 
 	UINT		m_uiCheck;			// 상태 추가정보
 
-	CAI*		m_pAI;
+	CStatus*	m_pStatus;
 	CTexture*	m_pTex;
 	CEffector*	m_pEffector;		// 미구현 // 방법 고민 중
 
@@ -59,7 +54,7 @@ public:
 	virtual void update();
 	virtual void render(HDC hDC);
 
-	void setAI(CAI* ai);
+	void setStatus(CStatus* pStatus);
 	void setPlayerInfo(const tPlayerInfo& info);
 	
 	const tPlayerInfo& getPlayerInfo();
@@ -68,7 +63,7 @@ public:
 
 	bool isCheck(UINT chk);
 	UINT getCheck();
-	CAI* getAI();
+	CStatus* getAI();
 
 	void createMissile();
 	
@@ -117,17 +112,17 @@ enum class eSTATE_PLAYER
 // # state
 #define P_SIZEX					62
 #define P_SIZEY					124
-#define P_SPDX					350
-#define P_SPDY					720
-#define P_GRAV					3700
-#define P_SPDY_MIN				-1000
+#define P_SPDX					400
+#define P_SPDY					800
+#define P_GRAV					5600
+#define P_SPDY_MIN				-1300
 
 #define P_JUMPHOLDMAX			0.35
 #define P_FIRESOUL				30
 #define P_FOCUSSOUL				33
 #define P_FOCUSMAX				1.2
 #define P_FIREDELAY				0.5
-#define P_ATTDELAY				0.4
+#define P_ATTDELAY				0.3
 #define P_STUNDURA				0.5
 #define P_DURA_INVIN			1.0
 

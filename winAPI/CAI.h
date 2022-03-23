@@ -1,16 +1,16 @@
 #pragma once
 
-class CPlayer;
-class CState;
-enum class eSTATE_PLAYER;
+class CMonster;
+class CState_Mons;
+enum class eSTATE_MONS;
 
 class CAI
 {
-	friend class CPlayer;
+	friend class CMonster;
 
-	map<eSTATE_PLAYER, CState*> m_mapState;
-	CPlayer*		m_pOwner;
-	CState*			m_pCurState;
+	map<eSTATE_MONS, CState_Mons*> m_mapState;
+	CMonster*		m_pOwner;
+	eSTATE_MONS*	m_pCurState;
 
 public:
 	CAI();
@@ -18,16 +18,14 @@ public:
 
 	void update(UINT& chk);
 
-	CPlayer* getOwner();
+	CMonster* getOwner();
 
-	CState* findState(eSTATE_PLAYER state);
-	CState* getCurState();
+	CState_Mons* findState(eSTATE_MONS state);
+	eSTATE_MONS* getCurState();
 
-	void setCurState(eSTATE_PLAYER state);
+	void setCurState(eSTATE_MONS state);
 
-	void addState(CState* pState);				// map¿¡ Ãß°¡
-	void changeState(eSTATE_PLAYER nextState);
-
-
+	void addState(CState_Mons* pState);
+	void changeState(eSTATE_MONS nextState);
 };
 

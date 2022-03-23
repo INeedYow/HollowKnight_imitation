@@ -1,10 +1,10 @@
 #include "framework.h"
 #include "CState_Focus.h"
-#include "CAI.h"
+#include "CStatus.h"
 #include "CPlayer.h"
 
 CState_Focus::CState_Focus(eSTATE_PLAYER state)
-	: CState(state)
+	: CState_Player(state)
 {
 	m_fTimer = 0.f;
 	m_fSoul = 0.f;
@@ -21,7 +21,7 @@ void CState_Focus::update(UINT& chk)
 
 	if (KEY_OFF('A'))
 	{
-		changeAIState(getOwner(), eSTATE_PLAYER::IDLE);
+		changeMyState(getOwner(), eSTATE_PLAYER::IDLE);
 	}
 
 	m_fTimer += fDT;
@@ -31,15 +31,15 @@ void CState_Focus::update(UINT& chk)
 	{
 		info.uiHP++;
 		if (KEY_HOLD('A'))
-			changeAIState(getOwner(), eSTATE_PLAYER::FOCUS);
+			changeMyState(getOwner(), eSTATE_PLAYER::FOCUS);
 		else
-			changeAIState(getOwner(), eSTATE_PLAYER::IDLE);
+			changeMyState(getOwner(), eSTATE_PLAYER::IDLE);
 	}
 
 	if (m_fSoul < 0.f)
 	{
 		m_fSoul = 0.f;
-		changeAIState(getOwner(), eSTATE_PLAYER::IDLE);
+		changeMyState(getOwner(), eSTATE_PLAYER::IDLE);
 	}
 
 	info.uiSoul = (UINT)m_fSoul;

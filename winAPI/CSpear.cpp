@@ -41,10 +41,17 @@ void CSpear::update()
 	{
 	case 0:
 	{	// init
-		camPos = getCamPos();
+	/*	camPos = getCamPos();
 		dist = camPos - pos;
 		distance = (float)(dist.y * dist.y) / (float)(dist.x * dist.x);
 		m_fTheta = (float)atan((double)distance);
+		setSpeed(m_fSpdMax * 0.5f);
+		m_uiStep++;
+		timer = 1.2f;*/
+
+		camPos = getCamPos();
+		dist = camPos - pos;
+		m_fTheta = (float)atan2((double)dist.x, (double)dist.y);
 		setSpeed(m_fSpdMax * 0.5f);
 		m_uiStep++;
 		timer = 1.2f;
@@ -53,21 +60,26 @@ void CSpear::update()
 	}
 	case 1:
 	{	// pull and aim
-		camPos = getCamPos();
+		/*camPos = getCamPos();
 		dist = camPos - pos;
 		dir = pos - camPos;
 		setDir(dir);
 		distance = (float)(dist.y * dist.y) / (float)(dist.x * dist.x);
-		m_fTheta = (float)atan((double)distance);
+		m_fTheta = (float)atan((double)distance);*/
 
 		////// ....
-		if (camPos.x < pos.x && camPos.y < pos.y)
+		/*if (camPos.x < pos.x && camPos.y < pos.y)
 			m_fTheta += (float)PI;
 		else if (camPos.x < pos.x && camPos.y >= pos.y)
 			m_fTheta += (float)PI / 2.f;
 		else if (camPos.x >= pos.x && camPos.y < pos.y)
-			m_fTheta += (float)PI * 3 / 2.f;
+			m_fTheta += (float)PI * 3 / 2.f;*/
 		//////
+
+		camPos = getCamPos();
+		dist = camPos - pos;
+		m_fTheta = (float)atan2((double)dist.x, (double)dist.y);
+
 
 		if (timer < 0.f)
 		{
@@ -79,19 +91,23 @@ void CSpear::update()
 	}
 	case 2:
 	{	// hold and aim
+		//camPos = getCamPos();
+		//dist = camPos - pos;
+		//distance = (float)(dist.y * dist.y) / (float)(dist.x * dist.x);
+		//m_fTheta = (float)atan((double)distance);
+
+		////////
+		//if (camPos.x < pos.x && camPos.y < pos.y)
+		//	m_fTheta += (float)PI;
+		//else if (camPos.x < pos.x && camPos.y >= pos.y)
+		//	m_fTheta += (float)PI / 2.f;
+		//else if (camPos.x >= pos.x && camPos.y < pos.y)
+		//	m_fTheta += (float)PI * 3 / 2.f;
+		////////
+
 		camPos = getCamPos();
 		dist = camPos - pos;
-		distance = (float)(dist.y * dist.y) / (float)(dist.x * dist.x);
-		m_fTheta = (float)atan((double)distance);
-
-		//////
-		if (camPos.x < pos.x && camPos.y < pos.y)
-			m_fTheta += (float)PI;
-		else if (camPos.x < pos.x && camPos.y >= pos.y)
-			m_fTheta += (float)PI / 2.f;
-		else if (camPos.x >= pos.x && camPos.y < pos.y)
-			m_fTheta += (float)PI * 3 / 2.f;
-		//////
+		m_fTheta = (float)atan2((double)dist.x, (double)dist.y);
 
 		if (timer < 0.f)
 		{

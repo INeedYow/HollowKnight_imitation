@@ -8,6 +8,8 @@
 #include "CBackGround.h"
 #include "CFrontGround.h"
 #include "CGround.h"
+#include "CMonster_Melee.h"
+#include "CAI.h"
 
 #define STG02_SIZEX 3840
 #define STG02_SIZEY 2160
@@ -35,7 +37,7 @@ void CScene_Stage02::update()
 
 void CScene_Stage02::enter()
 {
-	camFadeIn(0.8f);
+	camFadeIn(0.5f);
 
 	CObject* pPlayer = CPlayer::createNormal(fPoint(1963, 0.f));
 	addObject(pPlayer, eOBJ::PLAYER);
@@ -108,7 +110,13 @@ void CScene_Stage02::enter()
 	CGround* pFloat4 = CGround::create(3250, 1374, 3364, 1406);
 	addObject(pFloat4, eOBJ::GROUND);
 
+	// monster
+	
 
+
+
+
+	// coll
 	checkGrp(eOBJ::PLAYER, eOBJ::MONSTER);
 	checkGrp(eOBJ::PLAYER, eOBJ::MISSILE_MONSTER);
 	checkGrp(eOBJ::PLAYER, eOBJ::TILE);
@@ -123,9 +131,13 @@ void CScene_Stage02::enter()
 	checkGrp(eOBJ::MISSILE_MONSTER, eOBJ::TILE);
 	checkGrp(eOBJ::MISSILE_MONSTER, eOBJ::GROUND);
 
+	checkGrp(eOBJ::ATTACK, eOBJ::BOSS);
+	checkGrp(eOBJ::ATTACK, eOBJ::MONSTER);
 
+	// cam
 	camSetFocusNow(pPlayer->getPos());
 	camSetTrace(pPlayer);
+	camSetArea(0.f, 0.f, STG02_SIZEX, STG02_SIZEY);
 }
 
 void CScene_Stage02::exit()
@@ -133,7 +145,7 @@ void CScene_Stage02::exit()
 	deleteObjectAll();
 	resetGrp();
 
-	camFadeOut(0.8f);
+	camFadeOut(0.5f);
 	camSetIsArea(false);
 	camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
 }

@@ -6,14 +6,17 @@
 
 CBoss_Markoth::CBoss_Markoth()
 {
-	m_pTex = loadTex(L"BossTex", L"texture\\boss\\boss_markoth.bmp");
+	setTex(L"BossTex", L"texture\\boss\\boss_markoth.bmp");
 
 	setPos(fPoint(0.f, 0.f));
-	setSize(fPoint(0.f, 0.f));
+	setSize(fPoint(300.f, 400.f));
 	setName(eOBJNAME::BOSS);
 	
-	setHP(SB_HPMAX);
-	setSpd(110.f);
+	tMonsInfo info = getMonsInfo();
+	info.m_iHP = SB_HPMAX;
+	info.m_fSpd = SB_SPD;
+	
+	setMonsInfo(info);
 
 	m_fTimer = 0.f;
 	m_fSkillTimer = (float)SB_SKILL_COOL;
@@ -25,14 +28,13 @@ CBoss_Markoth::CBoss_Markoth()
 	createCollider();
 	getCollider()->setSize(fPoint(SB_MdSIZEX, SB_MdSIZEY));
 	getCollider()->setShape(eSHAPE::RECT);
-	
 
 	createAnimator();
-	createAnim(L"st_Normal",	m_pTex, fPoint(0.f, 0.f),		fPoint(280.f, 420.f),		fPoint(280.f, 0.f),		0.25f,	6);
+	createAnim(L"st_Normal",	getTex(), fPoint(0.f, 0.f), fPoint(280.f, 420.f), fPoint(280.f, 0.f), 0.25f, 6);
 
-	createAnim(L"st_Middle",	m_pTex, fPoint(0.f, 420.f),		fPoint(300.f, 415.f),		fPoint(300.f, 0.f),		0.2f,	4);
+	createAnim(L"st_Middle",	getTex(), fPoint(0.f, 420.f),		fPoint(300.f, 415.f),		fPoint(300.f, 0.f),		0.2f,	4);
 
-	createAnim(L"st_Skill",		m_pTex, fPoint(0.f, 835.f),		fPoint(448.f, 282.f),		fPoint(448.f, 0.f),		0.15f,	4);
+	createAnim(L"st_Skill",		getTex(), fPoint(0.f, 835.f),		fPoint(448.f, 282.f),		fPoint(448.f, 0.f),		0.15f,	4);
 
 	PLAY(L"st_Normal");
 
@@ -43,6 +45,17 @@ CBoss_Markoth::CBoss_Markoth()
 
 CBoss_Markoth::~CBoss_Markoth()
 {
+	for (int i = 0; i < m_vecShield.size(); i++)
+	{
+		if (nullptr != m_vecShield[i])
+			delete m_vecShield[i];
+	}
+
+	//for (int i = 0; i < m_vecSpear.size(); i++)
+	//{
+	//	if (nullptr != m_vecSpear[i])
+	//		delete m_vecSpear[i];
+	//}
 }
 
 CBoss_Markoth* CBoss_Markoth::clone()
@@ -65,7 +78,7 @@ void CBoss_Markoth::update()
 		m_fSkillTimer -= fDT;
 		m_fSpawnTimer -= fDT;
 
-		if (getHP() <= SB_HPMAX / 2 && m_ucPhase == 1)
+		if (getMonsInfo().m_iHP <= SB_HPMAX / 2 && m_ucPhase == 1)
 		{	// 2 페이즈
 			m_fTimer = 0.6f;
 			m_ucPhase++;
@@ -139,7 +152,7 @@ void CBoss_Markoth::update()
 		{	// 방패 가속
 			for (int i = 0; i < m_vecShield.size(); i++)
 			{
-				m_vecShield[i]->setfSpeed(m_vecShield[i]->getSpeed() + (float)SB_ACCEL * fDT);
+				m_vecShield[i]->setfSpeed(m_vecShield[i]->getSpeed() + (float)SB_ACCEL * 2 * fDT);
 			}
 		}
 		else
@@ -162,8 +175,7 @@ void CBoss_Markoth::update()
 			int i = m_vecShield.size() >= 2 ? 1 : 0;
 
 			for (; i < m_vecShield.size(); i++)
-			{	// 범위, 속도 증가
-				m_vecShield[i]->setfSpeed(m_vecShield[i]->getSpeed() + 0.25f * fDT);
+			{	// 범위 증가
 				m_vecShield[i]->setRadius(m_vecShield[i]->getRadius() + 130.f * fDT);
 			}
 		}
@@ -172,8 +184,7 @@ void CBoss_Markoth::update()
 			int i = m_vecShield.size() >= 2 ? 1 : 0;
 
 			for (; i < m_vecShield.size(); i++)
-			{	// 범위, 속도 감소
-				m_vecShield[i]->setfSpeed(m_vecShield[i]->getSpeed() - 0.25f * fDT);
+			{	// 범위 감소
 				m_vecShield[i]->setRadius(m_vecShield[i]->getRadius() - 130.f * fDT);
 			}
 		}
@@ -197,9 +208,6 @@ void CBoss_Markoth::update()
 
 	case eSTATE_BOSS::DEATH:
 	{	// TODO
-		setHP(SB_HPMAX);
-		m_eState = eSTATE_BOSS::IDLE;
-		getCollider()->setSize(fPoint(SB_NmSIZEX, SB_NmSIZEY));
 		break;
 	}
 	}
@@ -252,20 +260,13 @@ void CBoss_Markoth::render(HDC hDC)
 		}
 
 		swprintf_s(buffPhase, L"Phase = %d", (int)m_ucPhase);
-		swprintf_s(bufHP, L"HP = %d", getHP());
+		swprintf_s(bufHP, L"HP = %d", getMonsInfo().m_iHP);
 		swprintf_s(bufX, L"x = %.1f", pos.x);
 		swprintf_s(bufY, L"y = %.1f", pos.y);
 		swprintf_s(bufCool, L"cd1 = %.1f", m_fSpawnTimer);
 		swprintf_s(bufCool2, L"cd2 = %.1f", m_fSkillTimer);
 
 		pos = rendPos(pos);
-
-		// 보스가 화면 밖으로 나가도 보스 정보는 화면 끝 보스 방향에 출력 되도록 하고 싶었는데 실패 (TODO나중에 다시)
-	/*	pos.x = pos.x < camPos.x - WINSIZEX / 2.f ? camPos.x + WINSIZEX : pos.x;
-		pos.x = pos.x > camPos.x + WINSIZEX / 2.f ? camPos.x - WINSIZEX : pos.x;
-
-		pos.y = pos.y < camPos.y - WINSIZEY / 2.f ? camPos.y + WINSIZEY : pos.y;
-		pos.y = pos.y > camPos.y + WINSIZEY / 2.f ? camPos.y - WINSIZEY : pos.y;*/
 
 		TextOutW(hDC, (int)pos.x - 200, (int)pos.y + 150, strState, (int)wcslen(strState));
 		TextOutW(hDC, (int)pos.x - 200, (int)pos.y + 175, buffPhase, (int)wcslen(buffPhase));
@@ -282,14 +283,20 @@ void CBoss_Markoth::render(HDC hDC)
 // TODO 충돌체끼리 방향벡터로 밀어내기
 void CBoss_Markoth::collisionEnter(CCollider* pOther)
 {
+	tMonsInfo info;
+
 	switch (pOther->getOwner()->getName())
 	{	// att도 player, monster 구분해야 
 	case eOBJNAME::MISSILE_PLAYER:
-		setHP(getHP() - 2);
+		info = getMonsInfo();
+		info.m_iHP -= 2;
+		setMonsInfo(info);
 		break;
 
 	case eOBJNAME::ATTACK:
-		setHP(getHP() - 1);
+		info = getMonsInfo();
+		info.m_iHP -= 1;
+		setMonsInfo(info);
 		break;
 	}
 }
@@ -337,9 +344,9 @@ void CBoss_Markoth::createSpear()
 	pSpear->setName(eOBJNAME::MISSILE_MONSTER);
 	pSpear->setMaxSpd((float)SB_SPEAR_SPD);
 	pSpear->getCollider()->setSize(fPoint(60.f, 60.f));
-	pSpear->setTex(L"Spear_Boss", L"texture\\boss\\boss_spear.bmp");
+	pSpear->setTex(L"Spear_Boss", L"texture\\boss\\boss_spearBig.bmp");
 	pSpear->createAnim(L"Spear_normal", pSpear->getTex(), 
-		fPoint(0.f, 0.f), fPoint(240.f, 55.f), fPoint(240.f, 0.f), 0.7f, 1, false);
+		fPoint(0.f, 0.f), fPoint(400.f, 91.f), fPoint(0.f, 0.f), 1.f, 1, false);
 	pSpear->getAnimator()->play(L"Spear_normal");
 
 	createObj(pSpear, eOBJ::MISSILE_MONSTER);
@@ -408,4 +415,9 @@ void CBoss_Markoth::spawnShield()
 		createShield(theta);
 		break;
 	}
+}
+
+void CBoss_Markoth::death()
+{
+	// TODO
 }

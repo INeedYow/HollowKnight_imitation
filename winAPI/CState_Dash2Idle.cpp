@@ -1,10 +1,10 @@
 #include "framework.h"
 #include "CState_Dash2Idle.h"
-#include "CAI.h"
+#include "CStatus.h"
 #include "CPlayer.h"
 
 CState_Dash2Idle::CState_Dash2Idle(eSTATE_PLAYER state)
-	: CState(state)
+	: CState_Player(state)
 {
 	m_fDura = 0.f;
 }
@@ -19,7 +19,7 @@ void CState_Dash2Idle::update(UINT& chk)
 
 	if (m_fDura < 0.f)
 	{
-		changeAIState(getOwner(), eSTATE_PLAYER::IDLE);
+		changeMyState(getOwner(), eSTATE_PLAYER::IDLE);
 	}
 }
 

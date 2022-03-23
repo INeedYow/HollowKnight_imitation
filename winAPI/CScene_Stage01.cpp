@@ -31,37 +31,19 @@ void CScene_Stage01::update()
 		changeScn(eSCENE::STAGE_02);
 
 	// 씬 전환
-	vector<CObject*> vecPlayer = getGroupObject(eOBJ::PLAYER);
-	fPoint pos = vecPlayer[0]->getPos();
-
-	if (pos.y >= STG01_SIZEY)
+	if (getMyPos().y >= STG01_SIZEY - 50)
 		changeScn(eSCENE::STAGE_02);
 
-	//if (KEY_HOLD('H'))
-	//{
-	//	CCameraManager::getInst()->scroll(fVec2(-1, 0), 400.f);
-	//}
-	//if (KEY_HOLD('K'))
-	//{
-	//	CCameraManager::getInst()->scroll(fVec2(1, 0), 400.f);
-	//}
-	//if (KEY_HOLD('U'))
-	//{
-	//	CCameraManager::getInst()->scroll(fVec2(0, -1), 400.f);
-	//}
-	//if (KEY_HOLD('J'))
-	//{
-	//	CCameraManager::getInst()->scroll(fVec2(0, 1), 400.f);
-	//}
 }
 
 void CScene_Stage01::enter()
 {
-	camFadeIn(0.8f);
+	camFadeIn(0.5f);
 
 	// Player 추가
-	CObject* pPlayer = CPlayer::createNormal(fPoint(1200.f, 1430.f));
+	CPlayer* pPlayer = CPlayer::createNormal(fPoint(1200.f, 1430.f));
 	addObject(pPlayer, eOBJ::PLAYER);
+	CSceneManager::getInst()->registerPlayer(pPlayer);
 	
 	CBackGround* pBg = new CBackGround;
 	pBg->load(L"BG_stage1", L"texture\\background\\stage1_back.bmp");
@@ -73,9 +55,8 @@ void CScene_Stage01::enter()
 	pFg->setPos(fPoint(0.f, 0.f));
 	addObject(pFg, eOBJ::FRONTGROUND);
 
-	CGround* pLeftWall = new CGround;
-	pLeftWall->setPos(fPoint(-450.f, 1600.f));
-	pLeftWall->getCollider()->setSize(fPoint(1000.f, 1600.f));
+	// ground
+	CGround* pLeftWall = CGround::create(-600, 0, 0, STG01_SIZEY);
 	addObject(pLeftWall, eOBJ::GROUND);
 
 	CGround* pGround1 = new CGround;
@@ -110,6 +91,7 @@ void CScene_Stage01::enter()
 
 	g_bDebug = true;
 
+	// 충돌 체크
 	checkGrp(eOBJ::PLAYER, eOBJ::TILE);
 	checkGrp(eOBJ::PLAYER, eOBJ::GROUND);
 
@@ -119,20 +101,20 @@ void CScene_Stage01::enter()
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::TILE);
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::GROUND);
 
+	// 카메라 설정
 	camSetFocusNow(pPlayer->getPos());
 	camSetTrace(pPlayer);
 
-	// TODO 실패..
 	camSetArea(0.f, 0.f, STG01_SIZEX, STG01_SIZEY);
 }
 
 void CScene_Stage01::exit()
 {
-	// TODO 플레이어 캐릭터 등 모두 delete하면 안 될듯
+	// TODO 캐릭터 정보 유지하는 법
 	deleteObjectAll();
 	resetGrp();
 
-	camFadeOut(0.8f);
+	camFadeOut(0.5f);
 	camSetIsArea(false);
 	camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
 }

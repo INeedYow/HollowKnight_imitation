@@ -10,7 +10,7 @@ CCameraManager::CCameraManager()
 	m_fpPrevFocus	= {};
 	m_pTraceObj		= nullptr;
 	m_fpDiff		= {};
-	m_fTime			= 0.5f;
+	m_fTime			= 0.2f;
 	m_fAccTime		= 0.f;
 	m_fSpeed		= 0.f;
 
@@ -99,6 +99,19 @@ void CCameraManager::render(HDC hDC)
 
 void CCameraManager::setFocusNow(fPoint focus)
 {
+	if (m_bArea)
+	{
+		if (focus.x < m_tCamArea.fMinX)
+			focus.x = m_tCamArea.fMinX;
+		if (focus.x > m_tCamArea.fMaxX)
+			focus.x = m_tCamArea.fMaxX;
+
+		if (focus.y < m_tCamArea.fMinY)
+			focus.y = m_tCamArea.fMinY;
+		if (focus.y > m_tCamArea.fMaxY)
+			focus.y = m_tCamArea.fMaxY;
+	}
+
 	m_fpCurFocus = focus;
 	m_fpFocus = focus;
 	m_fpPrevFocus = focus;
@@ -106,6 +119,19 @@ void CCameraManager::setFocusNow(fPoint focus)
 
 void CCameraManager::setFocusOn(fPoint focus)
 {
+	if (m_bArea)
+	{
+		if (focus.x < m_tCamArea.fMinX)
+			focus.x = m_tCamArea.fMinX;
+		if (focus.x > m_tCamArea.fMaxX)
+			focus.x = m_tCamArea.fMaxX;
+
+		if (focus.y < m_tCamArea.fMinY)
+			focus.y = m_tCamArea.fMinY;
+		if (focus.y > m_tCamArea.fMaxY)
+			focus.y = m_tCamArea.fMaxY;
+	}
+
 	m_fpFocus = focus;
 	float fMoveDist = (m_fpFocus - m_fpPrevFocus).length();
 
@@ -134,8 +160,6 @@ void CCameraManager::setIsArea(bool isOn)
 {
 	m_bArea = isOn;
 }
-
-
 
 fPoint CCameraManager::getFocus()
 {
@@ -181,6 +205,29 @@ void CCameraManager::scroll(fVec2 vec, float spd)
 	m_fpFocus		= m_fpFocus + vec * spd * fDT;
 	m_fpCurFocus	= m_fpCurFocus + vec * spd * fDT;
 
+	if (m_bArea)
+	{
+		if (m_fpFocus.x < m_tCamArea.fMinX)
+			m_fpFocus.x = m_tCamArea.fMinX;
+		if (m_fpFocus.x > m_tCamArea.fMaxX)
+			m_fpFocus.x = m_tCamArea.fMaxX;
+
+		if (m_fpFocus.y < m_tCamArea.fMinY)
+			m_fpFocus.y = m_tCamArea.fMinY;
+		if (m_fpFocus.y > m_tCamArea.fMaxY)
+			m_fpFocus.y = m_tCamArea.fMaxY;
+
+		if (m_fpCurFocus.x < m_tCamArea.fMinX)
+			m_fpCurFocus.x = m_tCamArea.fMinX;
+		if (m_fpCurFocus.x > m_tCamArea.fMaxX)
+			m_fpCurFocus.x = m_tCamArea.fMaxX;
+
+		if (m_fpCurFocus.y < m_tCamArea.fMinY)
+			m_fpCurFocus.y = m_tCamArea.fMinY;
+		if (m_fpCurFocus.y > m_tCamArea.fMaxY)
+			m_fpCurFocus.y = m_tCamArea.fMaxY;
+	}
+
 	fPoint fptCenter = fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f);
 	m_fpDiff = m_fpCurFocus - fptCenter;
 }
@@ -199,20 +246,4 @@ void CCameraManager::calculateDiff()
 
 		m_fpPrevFocus = m_fpCurFocus;
 	}
-
-	// TODO 배경까지 고정되고 실패..
-	//if (m_bArea)					// 범위 설정 돼있을 때
-	//{
-	//	if (m_fpCurFocus.x < m_tCamArea.fMinX)
-	//		m_fpCurFocus.x = m_tCamArea.fMinX;
-
-	//	if (m_fpCurFocus.y < m_tCamArea.fMinY)
-	//		m_fpCurFocus.y = m_tCamArea.fMinY;
-
-	//	if (m_fpCurFocus.x > m_tCamArea.fMaxX)
-	//		m_fpCurFocus.x = m_tCamArea.fMaxX;
-
-	//	if (m_fpCurFocus.y > m_tCamArea.fMaxY)
-	//		m_fpCurFocus.y = m_tCamArea.fMaxY;
-	//}
 }

@@ -1,10 +1,10 @@
 #include "framework.h"
 #include "CState_Run.h"
-#include "CAI.h"
+#include "CStatus.h"
 #include "CPlayer.h"
 
 CState_Run::CState_Run(eSTATE_PLAYER state)
-	: CState(state)
+	: CState_Player(state)
 {
 }
 
@@ -31,36 +31,36 @@ void CState_Run::update(UINT& chk)
 	}
 	else
 	{
-		changeAIState(getOwner(), eSTATE_PLAYER::IDLE);
+		changeMyState(getOwner(), eSTATE_PLAYER::IDLE);
 	}
 
 	if (KEY_ON('Z'))
 	{
-		changeAIState(getOwner(), eSTATE_PLAYER::JUMP);
+		changeMyState(getOwner(), eSTATE_PLAYER::JUMP);
 	}
 
 	else if (KEY_ON('X'))
 	{
 		if (KEY_HOLD(VK_UP))
 		{
-			changeAIState(getOwner(), eSTATE_PLAYER::UPSLASH);
+			changeMyState(getOwner(), eSTATE_PLAYER::UPSLASH);
 		}
 		else
 		{
-			changeAIState(getOwner(), eSTATE_PLAYER::SLASH1);
+			changeMyState(getOwner(), eSTATE_PLAYER::SLASH1);
 		}
 	}
 
 	else if (KEY_ON('C'))
 	{
-		changeAIState(getOwner(), eSTATE_PLAYER::DASH);
+		changeMyState(getOwner(), eSTATE_PLAYER::DASH);
 	}
 
 	else if (KEY_ON('A'))
 	{
 		if (getPlayer()->getPlayerInfo().uiSoul >= P_FIRESOUL)
 		{
-			changeAIState(getOwner(), eSTATE_PLAYER::FIRE);
+			changeMyState(getOwner(), eSTATE_PLAYER::FIRE);
 		}
 	}
 

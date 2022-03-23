@@ -70,15 +70,15 @@ enum class GROUP_OBJECT
 	TILE,
 	IMAGE,
 
-	MISSILE_PLAYER,
 	MISSILE_MONSTER,
 	SHIELD,
-	ATTACK,
+	MISSILE_PLAYER,
 
 	MONSTER,
 	BOSS,
 	PLAYER,
 
+	ATTACK,
 	EFFECT,
 
 	TEST,
@@ -94,21 +94,26 @@ enum class OBJECT_NAME
 	DEFAULT,
 	BACKGROUND,
 	FRONTGROUND,
+
 	TILE,
+	GROUND,
+
 	PLAYER,
 	MONSTER,
+	MONS_BEETLE,
+	BOSS,
+
 	ATTACK,
 	MISSILE_PLAYER,
 	MISSILE_MONSTER,
-	EFFECT,
-	BOSS,
 	SHIELD,
+
+	EFFECT,
 	IMAGE,
-	GROUND,
-	UI,
 
 	TEST,
 
+	UI,
 	SIZE
 };
 
@@ -121,6 +126,7 @@ enum class GROUP_SCENE
 	STAGE_02,
 	STAGE_03,
 	STAGE_04,
+
 
 	SIZE
 };
@@ -170,7 +176,8 @@ enum class TYPE_EVENT
 	CREATEOBJ,
 	DELETEOBJ,
 	SCENECHANGE,
-	CHANGE_AI_STATE,
+	CHANGE_MY_STATE,
+	CHANGE_MONS_STATE,
 
 	END
 };
@@ -212,37 +219,40 @@ enum class COLL_DIR
 #include "CCollider.h"
 #include "CAnimator.h"
 
-#define DT							CTimeManager::getInst()->getDT()
-#define fDT							CTimeManager::getInst()->getfDT()
+#define DT								CTimeManager::getInst()->getDT()
+#define fDT								CTimeManager::getInst()->getfDT()
 
-#define	KEY_HOLD(key)				CKeyManager::getInst()->isKeyHold(key)
-#define KEY_ON(key)					CKeyManager::getInst()->isKeyOn(key)
-#define KEY_OFF(key)				CKeyManager::getInst()->isKeyOff(key)
-#define KEY_NONE(key)				CKeyManager::getInst()->isKeyNone(key)
-#define mousePos()					CKeyManager::getInst()->getMousePos()
+#define	KEY_HOLD(key)					CKeyManager::getInst()->isKeyHold(key)
+#define KEY_ON(key)						CKeyManager::getInst()->isKeyOn(key)
+#define KEY_OFF(key)					CKeyManager::getInst()->isKeyOff(key)
+#define KEY_NONE(key)					CKeyManager::getInst()->isKeyNone(key)
+#define mousePos()						CKeyManager::getInst()->getMousePos()
 
-#define createObj(pObj, eGroup)		CEventManager::getInst()->eventCreateObject(pObj, eGroup)
-#define deleteObj(pObj)				CEventManager::getInst()->eventDeleteObject(pObj)
-#define changeScn(eScn)				CEventManager::getInst()->eventChangeScene(eScn)
-#define changeAIState(ai, state)	CEventManager::getInst()->eventChangeAIState(ai,state)
+#define createObj(pObj, eGroup)			CEventManager::getInst()->eventCreateObject(pObj, eGroup)
+#define deleteObj(pObj)					CEventManager::getInst()->eventDeleteObject(pObj)
+#define changeScn(eScn)					CEventManager::getInst()->eventChangeScene(eScn)
+#define changeMyState(status, state)	CEventManager::getInst()->eventChangeMyState(status,state)
+#define changeMonsState(ai, state)		CEventManager::getInst()->eventChangeMonsState(ai,state)
 
-#define checkGrp(eObj1, eObj2)		CCollisionManager::getInst()->checkGroup(eObj1, eObj2)
-#define unCheckGrp(eObj1, eObj2)	CCollisionManager::getInst()->unCheckGroup(eObj1, eObj2)
-#define resetGrp()					CCollisionManager::getInst()->resetGroup()
+#define checkGrp(eObj1, eObj2)			CCollisionManager::getInst()->checkGroup(eObj1, eObj2)
+#define unCheckGrp(eObj1, eObj2)		CCollisionManager::getInst()->unCheckGroup(eObj1, eObj2)
+#define resetGrp()						CCollisionManager::getInst()->resetGroup()
 
-#define createAnim					getAnimator()->createAnimation
-#define PLAY(name)					getAnimator()->play(name)
+#define createAnim						getAnimator()->createAnimation
+#define PLAY(name)						getAnimator()->play(name)
 
-#define camSetFocus(fp)				CCameraManager::getInst()->setFocusOn(fp)
-#define camSetFocusNow(fp)			CCameraManager::getInst()->setFocusNow(fp)
-#define camSetTrace(pObj)			CCameraManager::getInst()->setTraceObj(pObj)
-#define camFadeOut(fTime)			CCameraManager::getInst()->fadeOut(fTime)
-#define camFadeIn(fTime)			CCameraManager::getInst()->fadeIn(fTime)
-#define rendPos(pos)				CCameraManager::getInst()->getRenderPos(pos)
-#define realPos(pos)				CCameraManager::getInst()->getRealPos(pos)
-#define getCamPos()					CCameraManager::getInst()->getFocus()
-#define camSetArea(x, y, X, Y)		CCameraManager::getInst()->setCameraArea(x, y, X, Y);
-#define camSetIsArea(isOn)			CCameraManager::getInst()->setIsArea(isOn);
+#define camSetFocus(fp)					CCameraManager::getInst()->setFocusOn(fp)
+#define camSetFocusNow(fp)				CCameraManager::getInst()->setFocusNow(fp)
+#define camSetTrace(pObj)				CCameraManager::getInst()->setTraceObj(pObj)
+#define camFadeOut(fTime)				CCameraManager::getInst()->fadeOut(fTime)
+#define camFadeIn(fTime)				CCameraManager::getInst()->fadeIn(fTime)
+#define rendPos(pos)					CCameraManager::getInst()->getRenderPos(pos)
+#define realPos(pos)					CCameraManager::getInst()->getRealPos(pos)
+#define getCamPos()						CCameraManager::getInst()->getFocus()
+#define camSetArea(x, y, X, Y)			CCameraManager::getInst()->setCameraArea(x, y, X, Y);
+#define camSetIsArea(isOn)				CCameraManager::getInst()->setIsArea(isOn);
 
-#define loadTex(eName, wsPath)		CResourceManager::getInst()->loadTextrue(eName, wsPath)
-#define findTex(eName)				CResourceManager::getInst()->findTexture(eName)
+#define loadTex(eName, wsPath)			CResourceManager::getInst()->loadTextrue(eName, wsPath)
+#define findTex(eName)					CResourceManager::getInst()->findTexture(eName)
+
+#define getMyPos()						CSceneManager::getInst()->getPlayerPos()

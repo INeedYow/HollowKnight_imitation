@@ -122,7 +122,7 @@ void CAttack::collisionEnter(CCollider* pOther)
 			if (m_eDir == eDIR::BOTTOM)
 			{
 				((CPlayer*)pOwner)->setCheck(SP_DWSLASH, true);
-				changeAIState(((CPlayer*)pOwner)->getAI(), eSTATE_PLAYER::JUMP);
+				changeMyState(((CPlayer*)pOwner)->getAI(), eSTATE_PLAYER::JUMP);
 			}
 			break;
 		}

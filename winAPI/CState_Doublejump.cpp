@@ -1,10 +1,10 @@
 #include "framework.h"
 #include "CState_Doublejump.h"
-#include "CAI.h"
+#include "CStatus.h"
 #include "CPlayer.h"
 
 CState_Doublejump::CState_Doublejump(eSTATE_PLAYER state)
-	: CState(state)
+	: CState_Player(state)
 {
 	m_fTimer = 0.f;
 	m_fAccel = 0.f;
@@ -43,7 +43,7 @@ void CState_Doublejump::update(UINT& chk)
 	//if (info.fSpdY + m_fAccel < info.fGravity)
 	if (info.fSpdY < 0.f)
 	{
-		changeAIState(getOwner(), eSTATE_PLAYER::FALL);
+		changeMyState(getOwner(), eSTATE_PLAYER::FALL);
 	}
 
 	if (KEY_HOLD(VK_LEFT))

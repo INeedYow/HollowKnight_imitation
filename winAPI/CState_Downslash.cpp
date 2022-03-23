@@ -1,10 +1,10 @@
 #include "framework.h"
 #include "CState_Downslash.h"
-#include "CAI.h"
+#include "CStatus.h"
 #include "CPlayer.h"
 
 CState_Downslash::CState_Downslash(eSTATE_PLAYER state)
-	: CState(state)
+	: CState_Player(state)
 {
 	m_fAttackDelay = 0.f;
 }
@@ -35,11 +35,11 @@ void CState_Downslash::update(UINT& chk)
 	{
 		if (chk & SP_AIR)
 		{
-			changeAIState(getOwner(), eSTATE_PLAYER::FALL);
+			changeMyState(getOwner(), eSTATE_PLAYER::FALL);
 		}
 		else
 		{	// 혹시 모르니
-			changeAIState(getOwner(), eSTATE_PLAYER::IDLE);
+			changeMyState(getOwner(), eSTATE_PLAYER::IDLE);
 		}
 	}
 

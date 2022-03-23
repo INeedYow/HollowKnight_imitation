@@ -8,6 +8,8 @@
 #include "CScene_Stage03.h"
 #include "CScene_Stage04.h"
 
+#include "CPlayer.h"
+
 CSceneManager::CSceneManager()
 {
 	for (int i = 0; i < (int)eSCENE::SIZE; i++)
@@ -59,4 +61,14 @@ void CSceneManager::init()
 CScene* CSceneManager::getCurScene()
 {
 	return m_pCurScene;
+}
+
+void CSceneManager::registerPlayer(CPlayer* pPlayer)
+{
+	m_pPlayer = pPlayer;
+}
+
+fPoint CSceneManager::getPlayerPos()
+{
+	return m_pPlayer->getPos();
 }

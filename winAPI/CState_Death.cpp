@@ -1,10 +1,10 @@
 #include "framework.h"
 #include "CState_Death.h"
-#include "CAI.h"
+#include "CStatus.h"
 #include "CPlayer.h"
 
 CState_Death::CState_Death(eSTATE_PLAYER state)
-	: CState(state)
+	: CState_Player(state)
 {
 	m_fDura = 0.f;
 }
@@ -20,7 +20,7 @@ void CState_Death::update(UINT& chk)
 	// TODO
 	if (m_fDura < 0.f)
 	{
-		changeAIState(getOwner(), eSTATE_PLAYER::FALL);
+		changeMyState(getOwner(), eSTATE_PLAYER::FALL);
 	}
 }
 

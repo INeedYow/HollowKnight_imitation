@@ -7,11 +7,11 @@
 #include "CAnimation.h"
 #include "CMissile.h"
 #include "CAttack.h"
-#include "CAI.h"
+#include "CStatus.h"
 #include "SelectGDI.h"
 
 #pragma region Include_State
-#include "CState.h"
+#include "CState_Player.h"
 #include "CState_Idle.h"
 #include "CState_Run.h"
 #include "CState_Jump.h"
@@ -51,7 +51,7 @@ CPlayer::CPlayer()
 	};
 	//m_tPrevInfo = {};
 
-	m_pAI = nullptr;
+	m_pStatus = nullptr;
 	m_uiCheck = 0;
 
 	createCollider();
@@ -125,8 +125,8 @@ CPlayer::CPlayer()
 
 CPlayer::~CPlayer()
 {
-	if (nullptr != m_pAI)
-		delete m_pAI;
+	if (nullptr != m_pStatus)
+		delete m_pStatus;
 }
 
 CPlayer* CPlayer::clone()
@@ -141,7 +141,7 @@ CPlayer* CPlayer::createNormal(fPoint pos)
 	pPlayer = new CPlayer;
 	pPlayer->setPos(pos);
 
-	CAI* pAI = new CAI;
+	CStatus* pAI = new CStatus;
 #pragma region AddState
 	pAI->addState(new CState_Idle(eSTATE_PLAYER::IDLE));
 	pAI->addState(new CState_Run(eSTATE_PLAYER::RUN));
@@ -164,12 +164,13 @@ CPlayer* CPlayer::createNormal(fPoint pos)
 	pAI->addState(new CState_Death(eSTATE_PLAYER::DEATH));
 
 	pAI->setCurState(eSTATE_PLAYER::FALL);
-	pPlayer->setAI(pAI);
+	pPlayer->setStatus(pAI);
 	
 #pragma endregion
 	// 
 	pPlayer->setCheck(SP_AIR, true);
 	pPlayer->setCheck(SP_GODOWN, true);
+	pPlayer->setCheck(SP_DBJUMP, true);
 
 	return pPlayer;
 }
@@ -249,8 +250,8 @@ void CPlayer::update()
 	//}
 
 	//playAnim();					// 
-	if (nullptr != m_pAI)
-		m_pAI->update(m_uiCheck);
+	if (nullptr != m_pStatus)
+		m_pStatus->update(m_uiCheck);
 	if (nullptr != getAnimator())
 		getAnimator()->update();
 
@@ -268,10 +269,10 @@ void CPlayer::render(HDC hDC)
 	
 }
 
-void CPlayer::setAI(CAI* ai)
+void CPlayer::setStatus(CStatus* pStatus)
 {
-	m_pAI = ai;
-	m_pAI->m_pOwner = this;
+	m_pStatus = pStatus;
+	m_pStatus->m_pOwner = this;
 }
 
 void CPlayer::setPlayerInfo(const tPlayerInfo& info)
@@ -302,9 +303,9 @@ UINT CPlayer::getCheck()
 	return m_uiCheck;
 }
 
-CAI* CPlayer::getAI()
+CStatus* CPlayer::getAI()
 {
-	return m_pAI;
+	return m_pStatus;
 }
 
 void CPlayer::collisionKeep(CCollider* pOther)
@@ -322,9 +323,9 @@ void CPlayer::collisionKeep(CCollider* pOther)
 			m_tInfo.fvKnockBackDir = (getPos() - pTarget->getPos());
 
 			if (--m_tInfo.uiHP <= 0)
-				changeAIState(m_pAI, eSTATE_PLAYER::DEATH);
+				changeMyState(m_pStatus, eSTATE_PLAYER::DEATH);
 			else
-				changeAIState(m_pAI, eSTATE_PLAYER::STUN);
+				changeMyState(m_pStatus, eSTATE_PLAYER::STUN);
 		}
 		break;
 	}
@@ -431,10 +432,10 @@ void CPlayer::collisionExit(CCollider* pOther)
 		if (isTopColl(getCollider(), pOther))
 			// TODO
 		{	// 충돌 해제 할 때도 이전 좌표 있으면 되겠네
-			if (--m_tInfo.iBottomCnt <= 0 && m_pAI->getCurState()->getState() != eSTATE_PLAYER::JUMP)
+			if (--m_tInfo.iBottomCnt <= 0 && m_pStatus->getCurState()->getState() != eSTATE_PLAYER::JUMP)
 			{	// 점프할 때도 exit에서 강제로 fall로 바꿔서 점프 안 됐었음
 				m_tInfo.iBottomCnt = 0;
-				changeAIState(m_pAI, eSTATE_PLAYER::FALL);
+				changeMyState(m_pStatus, eSTATE_PLAYER::FALL);
 			}
 		}
 		break;
@@ -508,7 +509,7 @@ void CPlayer::createRotTester()
 
 void CPlayer::printInfo(HDC hDC)
 {
-	m_pAI->getCurState()->printInfo(hDC);
+	m_pStatus->getCurState()->printInfo(hDC);
 
 	SelectGDI font(hDC, eFONT::COMIC24);
 

@@ -1,8 +1,10 @@
 #pragma once
 
 class CObject;
+class CStatus;
 class CAI;
 enum class eSTATE_PLAYER;
+enum class eSTATE_MONS;
 
 struct tEvent
 {
@@ -30,7 +32,9 @@ public:
 	void eventCreateObject(CObject* pObj, eOBJ group);
 	void eventDeleteObject(CObject* pObj);
 	void eventChangeScene(eSCENE scn);
-	void eventChangeAIState(CAI* ai, eSTATE_PLAYER state);
+
+	void eventChangeMyState(CStatus* status, eSTATE_PLAYER state);
+	void eventChangeMonsState(CAI* ai, eSTATE_MONS state);
 };
 
 // 한 프레임 동안 발생한 이벤트(오브젝트 생성, 삭제, 씬전환 등)를 

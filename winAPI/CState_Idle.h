@@ -1,7 +1,7 @@
 #pragma once
-#include "CState.h"
+#include "CState_Player.h"
 
-class CState_Idle : public CState
+class CState_Idle : public CState_Player
 {
 	float	m_fTimer;
 

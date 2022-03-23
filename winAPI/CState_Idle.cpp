@@ -1,10 +1,10 @@
 #include "framework.h"
 #include "CState_Idle.h"
-#include "CAI.h"
+#include "CStatus.h"
 #include "CPlayer.h"
 
 CState_Idle::CState_Idle(eSTATE_PLAYER state)
-	: CState(state)
+	: CState_Player(state)
 {
 	m_fTimer = 0.f;
 }
@@ -19,35 +19,35 @@ void CState_Idle::update(UINT& chk)
 	if (KEY_HOLD(VK_LEFT))
 	{
 		chk &= ~(SP_DIR);
-		changeAIState(getOwner(), eSTATE_PLAYER::RUN);
+		changeMyState(getOwner(), eSTATE_PLAYER::RUN);
 	}
 
 	else if (KEY_HOLD(VK_RIGHT))
 	{
 		chk |= SP_DIR;
-		changeAIState(getOwner(), eSTATE_PLAYER::RUN);
+		changeMyState(getOwner(), eSTATE_PLAYER::RUN);
 	}
 	
 	else if (KEY_ON('Z'))
 	{
-		changeAIState(getOwner(), eSTATE_PLAYER::JUMP);
+		changeMyState(getOwner(), eSTATE_PLAYER::JUMP);
 	}
 	
 	else if (KEY_ON('X'))
 	{
 		if (KEY_HOLD(VK_UP))
 		{
-			changeAIState(getOwner(), eSTATE_PLAYER::UPSLASH);
+			changeMyState(getOwner(), eSTATE_PLAYER::UPSLASH);
 		}
 		else
 		{
-			changeAIState(getOwner(), eSTATE_PLAYER::SLASH1);
+			changeMyState(getOwner(), eSTATE_PLAYER::SLASH1);
 		}
 	}
 
 	else if (KEY_ON('C'))
 	{
-		changeAIState(getOwner(), eSTATE_PLAYER::DASH);
+		changeMyState(getOwner(), eSTATE_PLAYER::DASH);
 	}
 
 	if (KEY_HOLD('A'))
@@ -56,7 +56,7 @@ void CState_Idle::update(UINT& chk)
 
 		if (m_fTimer >= 0.5f)
 		{
-			changeAIState(getOwner(), eSTATE_PLAYER::FOCUS);
+			changeMyState(getOwner(), eSTATE_PLAYER::FOCUS);
 		}
 	}
 	
@@ -64,7 +64,7 @@ void CState_Idle::update(UINT& chk)
 	{
 		if (getPlayer()->getPlayerInfo().uiSoul >= P_FIRESOUL)
 		{
-			changeAIState(getOwner(), eSTATE_PLAYER::FIRE);
+			changeMyState(getOwner(), eSTATE_PLAYER::FIRE);
 		}
 	}
 }
