@@ -19,26 +19,22 @@ void CButtonUI_Image::update()
 // TODO
 void CButtonUI_Image::render(HDC hDC)
 {
-	if (nullptr == m_pTex)
-	{
-		
-	}
-	else
-	{
-		fPoint pos = getPos();
-		fPoint size = getSize();
+	if (nullptr == m_pTex) return;
 
-		TransparentBlt(hDC,
-			(int)pos.x,
-			(int)pos.y,
-			(int)size.x,
-			(int)size.y,
-			m_pTex->getDC(),
-			0, 0,
-			(int)size.x,
-			(int)size.y,
-			RGB(255, 0, 255));
-	}
+	fPoint pos = getPos();
+	fPoint size = getSize();
+
+	TransparentBlt(hDC,
+		(int)pos.x,
+		(int)pos.y,
+		(int)size.x,
+		(int)size.y,
+		m_pTex->getDC(),
+		0, 0,
+		(int)size.x,
+		(int)size.y,
+		RGB(255, 0, 255));
+
 }
 
 void CButtonUI_Image::load(const wstring& strKey, const wstring& strPath)

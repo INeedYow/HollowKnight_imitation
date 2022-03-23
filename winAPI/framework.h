@@ -105,6 +105,7 @@ enum class OBJECT_NAME
 	SHIELD,
 	IMAGE,
 	GROUND,
+	UI,
 
 	TEST,
 

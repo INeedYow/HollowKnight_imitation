@@ -11,8 +11,7 @@ struct tEffectInfo
 
 class CEffect : public CObject
 {
-	friend class CEffector;
-
+	//friend class CEffector;
 	CTexture* m_pTex;
 
 	wstring		m_strName;

@@ -7,7 +7,6 @@
 #include "CBackGround.h"
 #include "CFrontGround.h"
 #include "CGround.h"
-#include "CBoss_Markoth.h"
 
 #define STG01_SIZEX 3840
 #define STG01_SIZEY 2160
@@ -64,15 +63,15 @@ void CScene_Stage01::enter()
 	CObject* pPlayer = CPlayer::createNormal(fPoint(1200.f, 1430.f));
 	addObject(pPlayer, eOBJ::PLAYER);
 	
-	CBackGround* pBGBack = new CBackGround;
-	pBGBack->load(L"BG_stage1B", L"texture\\background\\stage1_back.bmp");
-	pBGBack->setPos(fPoint(0.f, 0.f));
-	addObject(pBGBack, eOBJ::BACKGROUND);
+	CBackGround* pBg = new CBackGround;
+	pBg->load(L"BG_stage1", L"texture\\background\\stage1_back.bmp");
+	pBg->setPos(fPoint(0.f, 0.f));
+	addObject(pBg, eOBJ::BACKGROUND);
 
-	CFrontGround* pBGFront = new CFrontGround;
-	pBGFront->load(L"BG_stage1F", L"texture\\background\\stage1_front.bmp");
-	pBGFront->setPos(fPoint(0.f, 0.f));
-	addObject(pBGFront, eOBJ::FRONTGROUND);
+	CFrontGround* pFg = new CFrontGround;
+	pFg->load(L"FG_stage1", L"texture\\background\\stage1_front.bmp");
+	pFg->setPos(fPoint(0.f, 0.f));
+	addObject(pFg, eOBJ::FRONTGROUND);
 
 	CGround* pLeftWall = new CGround;
 	pLeftWall->setPos(fPoint(-450.f, 1600.f));

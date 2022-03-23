@@ -5,6 +5,8 @@
 
 CUI::CUI(bool bCamAff)
 {
+	setName(eOBJNAME::UI);
+
 	m_pParentUI = nullptr;
 	m_fpFinalPos = {};
 	m_bCamAffect = false;

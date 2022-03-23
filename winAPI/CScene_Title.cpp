@@ -11,6 +11,7 @@
 #include "CButtonUI.h"
 #include "CBackGround.h"
 #include "CImage.h"
+#include "CButtonUI_Image.h"
 
 void changeScene(DWORD_PTR param1, DWORD_PTR param2);
 void quitWindow(DWORD_PTR param1, DWORD_PTR param2);
@@ -63,6 +64,14 @@ void CScene_Title::enter()
 	pBtnExit->setPos(fPoint(90, 100.f));
 	pBtnExit->setClickedCallBack(quitWindow, 0, 0);
 	pPanelUI->addChild(pBtnExit);
+
+	CButtonUI_Image* pTest = new CButtonUI_Image;
+	pTest->load(L"test11", L"texture\\UI\\enemy_missile.bmp");
+	pTest->setPos(fPoint(220.f, 520.f));
+	pTest->setSize(fPoint(100.f, 100.f));
+	pTest->setClickedCallBack(changeScene, (DWORD_PTR)eSCENE::STAGE_04, 0);
+	addObject(pTest, eOBJ::UI);
+
 
 }
 

@@ -43,10 +43,10 @@ const tEffectInfo& CEffect::getInfo()
 	return m_tInfo;
 }
 
-//const CTexture* CEffect::getTex()
-//{
-//	return m_pTex;
-//}
+CTexture* CEffect::getTex()
+{
+	return m_pTex;
+}
 
 void CEffect::update()
 {

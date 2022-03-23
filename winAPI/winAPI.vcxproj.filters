@@ -97,9 +97,6 @@
     <ClCompile Include="CMonster.cpp">
       <Filter>Object\Character\Monster</Filter>
     </ClCompile>
-    <ClCompile Include="CMonster_Mush.cpp">
-      <Filter>Object\Character\Monster</Filter>
-    </ClCompile>
     <ClCompile Include="CTest.cpp">
       <Filter>Object</Filter>
     </ClCompile>
@@ -163,9 +160,6 @@
     <ClCompile Include="CEffector.cpp">
       <Filter>Engine\Component\Effector</Filter>
     </ClCompile>
-    <ClCompile Include="CEffect.cpp">
-      <Filter>Engine\Component\Effector\CEffect</Filter>
-    </ClCompile>
     <ClCompile Include="CState_Death.cpp">
       <Filter>Engine\Component\AI\State\CState_Player</Filter>
     </ClCompile>
@@ -189,6 +183,12 @@
     </ClCompile>
     <ClCompile Include="CScene_Stage04.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CEffectManager.cpp">
+      <Filter>Engine\Manager\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="CEffect.cpp">
+      <Filter>Object\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -309,9 +309,6 @@
     <ClInclude Include="CMonster.h">
       <Filter>Object\Character\Monster</Filter>
     </ClInclude>
-    <ClInclude Include="CMonster_Mush.h">
-      <Filter>Object\Character\Monster</Filter>
-    </ClInclude>
     <ClInclude Include="CTest.h">
       <Filter>Object</Filter>
     </ClInclude>
@@ -375,9 +372,6 @@
     <ClInclude Include="CEffector.h">
       <Filter>Engine\Component\Effector</Filter>
     </ClInclude>
-    <ClInclude Include="CEffect.h">
-      <Filter>Engine\Component\Effector\CEffect</Filter>
-    </ClInclude>
     <ClInclude Include="CState_Death.h">
       <Filter>Engine\Component\AI\State\CState_Player</Filter>
     </ClInclude>
@@ -401,6 +395,12 @@
     </ClInclude>
     <ClInclude Include="CScene_Stage04.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CEffectManager.h">
+      <Filter>Engine\Manager\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="CEffect.h">
+      <Filter>Object\Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -528,6 +528,15 @@
     </Filter>
     <Filter Include="Object\CAttack\CSpear">
       <UniqueIdentifier>{3cffa103-1c8d-440c-96f1-f195f04c23b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Component\wait for ai">
+      <UniqueIdentifier>{bd1de1a5-1d88-48a1-8174-cb2fc6053340}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Manager\Effect">
+      <UniqueIdentifier>{023a2388-8406-4685-bbb1-44458c8d3652}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Effect">
+      <UniqueIdentifier>{b22f9017-60bd-46a4-90b3-c6b39f6a87b8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
