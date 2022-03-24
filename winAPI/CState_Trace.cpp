@@ -14,16 +14,37 @@ CState_Trace::~CState_Trace()
 
 void CState_Trace::update(UINT& chk)
 {
+	fPoint pos = getMonster()->getPos();
 	tMonsInfo info = getMonster()->getMonsInfo();
 
 	if (info.fDist > info.fTraceRange)
 	{
 		changeMonsState(getOwner(), eSTATE_MONS::STOP);
 	}
+
+	if (info.fAtkRange <= info.fDist)
+	{
+		changeMonsState(getOwner(), eSTATE_MONS::ATTACK);
+	}
+
+	if (chk & SM_AIR)
+	{
+		// TODO
+	}
+
+	pos.x += info.fvDir.x * info.fSpd * fDT;
+
+	getMonster()->setMonsInfo(info);
+	getMonster()->setPos(pos);
 }
 
 void CState_Trace::enter()
 {
+	tMonsInfo info = getMonster()->getMonsInfo();
+	
+	info.fvDir.x = getMyPos().x - getMonster()->getPos().x;
+
+	getMonster()->setMonsInfo(info);
 }
 
 void CState_Trace::exit()
@@ -40,4 +61,4 @@ void CState_Trace::printInfo(HDC hDC)
 	LPCWSTR	strInfo = L"Trace";
 	TextOutW(hDC, (int)pos.x + 0, (int)pos.y - 125, strInfo, (int)wcslen(strInfo));
 }
-}
+

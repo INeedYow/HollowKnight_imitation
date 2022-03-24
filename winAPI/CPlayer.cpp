@@ -45,11 +45,11 @@ CPlayer::CPlayer()
 		(float)P_SPDX,
 		0,
 		(float)P_GRAV,
-		0.f,
 		0,
+		0.f,
+		{},
 		{}
 	};
-	//m_tPrevInfo = {};
 
 	m_pStatus = nullptr;
 	m_uiCheck = 0;
@@ -186,41 +186,6 @@ void CPlayer::playAnim(const wstring& keyWord)
 		strKey += L"_L";
 
 	PLAY(strKey);
-#pragma region error
-	//if (strKey == L"\0" && SP_STOPANIM)
-	//{
-	//	fPoint pos = getPos();
-
-	//	if (m_tPrevInfo.uiPrevHP < m_tInfo.uiHP)
-	//		strKey = L"Stun";
-	//	else
-	//	{
-	//		if (m_tPrevInfo.fpPrevPos == pos)
-	//			strKey = L"Idle";
-	//		else
-	//			strKey = L"Run";
-
-	//		if (m_tPrevInfo.fpPrevPos.y > pos.y)
-	//			strKey = L"Jump";
-	//		else if (m_tPrevInfo.fpPrevPos.y < pos.y)
-	//			strKey = L"Fall";
-
-	//		// 이렇게 할 거면 키입력으로 하는 거랑 다를 게 없는 듯
-	//		//if (m_uiCheck & SP_SLASH1)
-	//		//	strKey = L"Slash1";
-	//		//else if (m_uiCheck & SP_SLASH2)
-	//		//	strKey = L"Slash2";
-	//		//else if (m_uiCheck & SP_UPSLASH)
-	//		//	strKey = L"UpSlash";
-	//		//else if (m_uiCheck & SP_DOWNSLASH)
-	//		//	strKey = L"DownSlash";
-	//		//else if (m_uiCheck & SP_FIRE)
-	//		//	strKey = L"Fire";
-	//		//else if (m_uiCheck & SP_FOCUS)
-	//	}
-	//}
-	//addDirAndPlay(strKey);
-#pragma endregion
 }
 
 //void CPlayer::addDirAndPlay(const wstring& keyWord)
@@ -255,9 +220,16 @@ void CPlayer::update()
 	if (nullptr != getAnimator())
 		getAnimator()->update();
 
-	checkUpdate();
 	
-	//renewPrevInfo(getPos());			// anim 출력 후 이전 상황 갱신
+	checkUpdate();	
+}
+
+void CPlayer::finalUpdate()
+{
+	CObject::finalUpdate();
+
+	// 콜라이더 충돌처리 진행하고 prevPos 갱신
+	m_tInfo.fpPrevPos = getPos();
 }
 
 void CPlayer::render(HDC hDC)
@@ -331,7 +303,6 @@ void CPlayer::collisionKeep(CCollider* pOther)
 	}
 	case eOBJNAME::ATTACK:
 	{
-		// 이렇게 많이 타고 들어가도 되나 // attack도 몬스터 플레이어 나눠야 하나
 		// ((CAttack*)pOther->getOwner())->getOwner()->getName()
 
 		break;
@@ -339,7 +310,8 @@ void CPlayer::collisionKeep(CCollider* pOther)
 
 	case eOBJNAME::TILE:
 	case eOBJNAME::GROUND:
-		switch (COLLRRW(getCollider(), pOther))
+		switch (COLLGRD(pOther))
+		//switch (COLLRRW(getCollider(), pOther))
 		{
 		case eDIR::LEFT:
 		{	// TODO state::hang
@@ -363,14 +335,14 @@ void CPlayer::collisionKeep(CCollider* pOther)
 	}
 }
 
-// TODO 공중 공격 하다보면 추락함
 void CPlayer::collisionEnter(CCollider* pOther)
 {
 	switch (pOther->getOwner()->getName())
 	{	//벽 충돌
 	case eOBJNAME::TILE:
 	case eOBJNAME::GROUND:
-		switch (COLLRRW(getCollider(), pOther))
+		switch (COLLGRD(pOther))
+		//switch (COLLRRW(getCollider(), pOther))
 		{
 		case eDIR::TOP:
 		{
@@ -440,6 +412,50 @@ void CPlayer::collisionExit(CCollider* pOther)
 		}
 		break;
 	}
+}
+
+// == COLLGRD
+eDIR CPlayer::collDirVersusGround(CCollider* pOther)
+{	// 이전 정보 갱신이 되고 나서야 충돌 함수에 들어오니까 dir이 항상 0임
+	fPoint a = getPos();
+	fPoint b = m_tInfo.fpPrevPos;
+
+	fVec2 myDir = getPos() - m_tInfo.fpPrevPos;
+
+	if (myDir.x * myDir.y == 0.f)	// x,y 중 최대 한쪽으로만 이동한 경우
+	{
+		if (myDir.x > 0.f) return eDIR::LEFT;		// 내 이동 방향이 오른쪽이면 왼쪽에서 충돌
+		if (myDir.x < 0.f) return eDIR::RIGHT;			// 방향 왼쪽 : 오른쪽 충돌
+
+		if (myDir.y > 0.f) return eDIR::TOP;			//
+		if (myDir.y < 0.f) return eDIR::BOTTOM;			//
+
+	}
+	else
+	{
+		fPoint size1 = getSize();
+		fPoint offSize = getCollider()->getOffset();
+		fPoint pos2 = pOther->getPos();
+		fPoint size2 = pOther->getSize();
+
+		if (m_tInfo.fpPrevPos.y < pos2.y - (size1.y + size2.y) / 2.f + offSize.y)
+		{	// 이전 y 좌표가 위쪽이면
+			return eDIR::TOP;
+		}
+		if (m_tInfo.fpPrevPos.y > pos2.y + (size1.y + size2.y) / 2.f + offSize.y)
+		{	// 이전 y 좌표가 아래쪽이면
+			return eDIR::BOTTOM;
+		}
+		if (m_tInfo.fpPrevPos.x < pos2.x - (size1.x + size2.x) / 2.f + offSize.x)
+		{	// 이전 x 좌표가 왼쪽이면
+			return eDIR::LEFT;
+		}
+		if (m_tInfo.fpPrevPos.x > pos2.x + (size1.x + size2.x) / 2.f + offSize.x)
+		{	// 이전 x 좌표가 오른쪽이면
+			return eDIR::RIGHT;
+		}
+	}
+	return eDIR::END;
 }
 
 void CPlayer::createMissile()
@@ -551,8 +567,6 @@ void CPlayer::checkUpdate()
 			m_uiCheck &= ~(SP_NODMG);
 		}
 	}
-
-	// 
 }
 
 // Slash들 합쳐도 될듯

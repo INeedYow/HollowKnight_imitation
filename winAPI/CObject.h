@@ -32,8 +32,8 @@ public:
 	void setSize(fPoint size);
 	void setName(eOBJNAME name);
 
-	fPoint	getPos();
-	fPoint	getSize();
+	fPoint		getPos();
+	fPoint		getSize();
 	eOBJNAME	getName();
 
 	bool isDead();

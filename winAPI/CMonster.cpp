@@ -38,19 +38,24 @@ void CMonster::update()
 
 CMonster* CMonster::create(eOBJNAME eName, fPoint pos)
 {
-	CMonster_Melee* pMonsMl;
-	CAI* pAI;
+	CMonster_Melee* pMonsMl = nullptr;
+	tMonsInfo info = {};
+	CAI* pAI = nullptr;
 
 	switch (eName)
 	{
 	case eOBJNAME::MONS_BEETLE:
 	{
+		info.iHP = M_BT_HP;
+		info.fSpd = M_BT_SPD;
+		info.fTraceRange = M_BT_TRACE_RNG;
+		info.fAtkRange = M_BT_ATK_RND;
+
 		pMonsMl = new CMonster_Melee;
 		pMonsMl->setPos(pos);	//
 		pMonsMl->setName(eOBJNAME::MONS_BEETLE);	//
 		pMonsMl->setSize(fPoint((float)M_BT_SIZEX, (float)M_BT_SIZEY));
-		pMonsMl->setMonsInfo(tMonsInfo(M_BT_HP, M_BT_SPD, M_BT_DIR,
-			fVec2(0.f, 0.f), 0.f, 0.f));
+		pMonsMl->setMonsInfo(info);
 		pMonsMl->getCollider()->setSize(fPoint((float)M_BT_SIZEX, (float)M_BT_SIZEY));
 		pMonsMl->getCollider()->setOffset(fPoint(0.f, 10.f));
 
@@ -115,7 +120,7 @@ void CMonster::setMonsInfo(const tMonsInfo& info)
 {
 	m_tInfo = info;
 
-	if (info.m_iHP <= 0)
+	if (info.iHP <= 0)
 		death();
 }
 

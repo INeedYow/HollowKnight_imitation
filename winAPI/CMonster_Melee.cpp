@@ -37,7 +37,7 @@ void CMonster_Melee::collisionEnter(CCollider* pOther)
 		if (eOBJNAME::PLAYER == ((CAttack*)pTarget)->getOwner()->getName())
 		{
 			tMonsInfo info = getMonsInfo();
-			info.m_iHP--;
+			info.iHP--;
 			setMonsInfo(info);
 		}
 		break;
@@ -45,7 +45,7 @@ void CMonster_Melee::collisionEnter(CCollider* pOther)
 	case eOBJNAME::MISSILE_PLAYER:
 	{
 		tMonsInfo info = getMonsInfo();
-		info.m_iHP -= 2;
+		info.iHP -= 2;
 		setMonsInfo(info);
 		break;
 	}

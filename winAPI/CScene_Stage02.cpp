@@ -52,6 +52,10 @@ void CScene_Stage02::enter()
 	pFg->setPos(fPoint(0.f, 0.f));
 	addObject(pFg, eOBJ::FRONTGROUND);
 
+	// monster
+	/*CMonster_Melee* pMon1 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(830, 1390));
+	addObject(pMon1, eOBJ::MONSTER);*/
+
 	// ground
 	CGround* pGrd1 = CGround::create(1444, 1430, 2378, 1580);
 	addObject(pGrd1, eOBJ::GROUND);

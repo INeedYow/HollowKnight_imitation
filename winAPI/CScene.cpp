@@ -64,6 +64,11 @@ void CScene::finalUpdate()
 			m_arrObj[i][j]->finalUpdate();
 		}
 	}
+
+	//for (UINT i = 0; i < m_arrObj[(UINT)eOBJ::PLAYER].size(); i++)
+	//{	// 플레이어 이전좌표 갱신용
+	//	m_arrObj[(UINT)eOBJ::PLAYER][i]->finalUpdate();
+	//}
 }
 
 void CScene::render(HDC hDC)

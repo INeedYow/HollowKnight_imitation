@@ -54,6 +54,8 @@ extern bool			g_bDebug;
 #define COLLRR				collisionRectToRect
 #define COLLRRW				collisionRectToRectWide
 
+#define COLLGRD				collDirVersusGround			// player 멤버함수
+
 #define PI					3.141592
 
 #define dir_left			false

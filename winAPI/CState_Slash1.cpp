@@ -39,6 +39,19 @@ void CState_Slash1::update(UINT& chk)
 	{
 		// TODO Slash2
 	}
+	
+	if (KEY_HOLD(VK_LEFT))
+	{
+		chk &= ~(SP_DIR);
+		pos.x -= info.fSpdX * fDT;
+		getPlayer()->playAnim(L"Run");
+	}
+	else if (KEY_HOLD(VK_RIGHT))
+	{
+		chk |= SP_DIR;
+		pos.x += info.fSpdX * fDT;
+		getPlayer()->playAnim(L"Run");
+	}
 
 	if (m_fAttackDelay > (float)P_ATTDELAY)
 	{

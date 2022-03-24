@@ -9,6 +9,7 @@ class CCollider;
 // // object에 prevPos를 줘서 prevPos보고 충돌방향 판정해도 될 것 같다는 생각이 갑자기
 //		// obj 다하면 그럴 것 같고 지형 처리에만 쓰게 플레이어 정도에만 두고 쓰면 되지 않나? 
 //			// 네 방향은 되는데 대각이 애매할듯
+
 eDIR collRect2Rect(CCollider* coll1, CCollider* coll2)
 {
 	fPoint pos1 = coll1->getPos();

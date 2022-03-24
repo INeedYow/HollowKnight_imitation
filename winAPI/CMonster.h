@@ -11,6 +11,7 @@ struct tMonsInfo
 	fVec2	fvDir;
 	float	fDist;					// 플레이어와 거리
 	float	fTraceRange;			// trace 하는 거리
+	float	fAtkRange;				// 공격 사거리
 
 	fVec2	fvKnockBackDir;
 	float	fKnockBackSpd;
@@ -70,8 +71,6 @@ public:
 	CTexture* getTex();
 	bool isCheck(UINT chk);
 
-
-private:
 	virtual void death() = 0;		// 죽었을 때 애니메이션 등 처리
 };
 
@@ -88,6 +87,5 @@ enum class eSTATE_MONS
 };
 
 //
-#define SM_DIR				0x0001
+#define SM_TRACE			0x0001		// 따라가는 기능이 있는 몬스터인지
 #define SM_AIR				0x0002
-#define SM_TRACE			0x0004		// 따라가는 기능이 있는 몬스터인지

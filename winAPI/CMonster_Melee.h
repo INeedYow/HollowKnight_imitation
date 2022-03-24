@@ -21,9 +21,10 @@ public:
 	virtual void death();
 };
 
-#define M_BT_SIZEX		100
-#define M_BT_SIZEY		120
+#define M_BT_SIZEX			100
+#define M_BT_SIZEY			120
 
-#define M_BT_HP			120
-#define M_BT_SPD		120
-#define M_BT_DIR		fVec2(1.f, 0.f)
+#define M_BT_HP				120
+#define M_BT_SPD			120
+#define M_BT_TRACE_RNG		300
+#define	M_BT_ATK_RND		60

@@ -14,11 +14,36 @@ CState_Patrol::~CState_Patrol()
 
 void CState_Patrol::update(UINT& chk)
 {
+	fPoint pos = getMonster()->getPos();
+	tMonsInfo info = getMonster()->getMonsInfo();
+
+	if (info.fDist > info.fTraceRange)
+	{
+		changeMonsState(getOwner(), eSTATE_MONS::STOP);
+	}
+
+	if (chk & SM_AIR)
+	{
+		// TODO
+	}
+
+	pos.x += info.fvDir.x * info.fSpd * fDT;
+
+	getMonster()->setMonsInfo(info);
+	getMonster()->setPos(pos);
 }
 
 void CState_Patrol::enter()
 {
 	m_fTimer = 3.f;
+
+	tMonsInfo info = getMonster()->getMonsInfo();
+
+	info.fvDir.x = (float)(rand() % 2);			// ÁÂ¿ì ·£´ý
+	if (!info.fvDir.x)
+		info.fvDir.x = -1;
+	
+	getMonster()->setMonsInfo(info);
 }
 
 void CState_Patrol::exit()

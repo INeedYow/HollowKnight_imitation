@@ -15,19 +15,18 @@ struct tPlayerInfo
 	float		fSpdX;
 	float		fSpdY;
 	float		fGravity;
+	int			iBottomCnt;
 
 	float		fNoDmgTimer;
 
-	int			iBottomCnt;
-
-	//fPoint	fpPrevPos;
 	fVec2		fvKnockBackDir;
+
+	fPoint		fpPrevPos;
 };
 
 class CPlayer : public CObject
 {
 	tPlayerInfo m_tInfo;
-	//tPrevInfo	m_tPrevInfo;
 
 	UINT		m_uiCheck;			// 상태 추가정보
 
@@ -39,7 +38,6 @@ private:
 	void createRotTester();
 	void printInfo(HDC hDC);
 	void checkUpdate();
-	//void renewPrevInfo(fPoint pos);
 	//void addDirAndPlay(const wstring& keyWord);
 
 public:
@@ -52,6 +50,7 @@ public:
 	void playAnim(const wstring& keyWord = L"\0");
 
 	virtual void update();
+	virtual void finalUpdate();
 	virtual void render(HDC hDC);
 
 	void setStatus(CStatus* pStatus);
@@ -75,6 +74,8 @@ public:
 	void collisionKeep(CCollider* pOther);
 	void collisionEnter(CCollider* pOther);
 	void collisionExit(CCollider* pOther);
+
+	eDIR collDirVersusGround(CCollider* pOther);
 };
 
 enum class eSTATE_PLAYER

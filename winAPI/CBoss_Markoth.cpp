@@ -13,8 +13,8 @@ CBoss_Markoth::CBoss_Markoth()
 	setName(eOBJNAME::BOSS);
 	
 	tMonsInfo info = getMonsInfo();
-	info.m_iHP = SB_HPMAX;
-	info.m_fSpd = SB_SPD;
+	info.iHP = SB_HPMAX;
+	info.fSpd = SB_SPD;
 	
 	setMonsInfo(info);
 
@@ -78,7 +78,7 @@ void CBoss_Markoth::update()
 		m_fSkillTimer -= fDT;
 		m_fSpawnTimer -= fDT;
 
-		if (getMonsInfo().m_iHP <= SB_HPMAX / 2 && m_ucPhase == 1)
+		if (getMonsInfo().iHP <= SB_HPMAX / 2 && m_ucPhase == 1)
 		{	// 2 페이즈
 			m_fTimer = 0.6f;
 			m_ucPhase++;
@@ -260,7 +260,7 @@ void CBoss_Markoth::render(HDC hDC)
 		}
 
 		swprintf_s(buffPhase, L"Phase = %d", (int)m_ucPhase);
-		swprintf_s(bufHP, L"HP = %d", getMonsInfo().m_iHP);
+		swprintf_s(bufHP, L"HP = %d", getMonsInfo().iHP);
 		swprintf_s(bufX, L"x = %.1f", pos.x);
 		swprintf_s(bufY, L"y = %.1f", pos.y);
 		swprintf_s(bufCool, L"cd1 = %.1f", m_fSpawnTimer);
@@ -289,13 +289,13 @@ void CBoss_Markoth::collisionEnter(CCollider* pOther)
 	{	// att도 player, monster 구분해야 
 	case eOBJNAME::MISSILE_PLAYER:
 		info = getMonsInfo();
-		info.m_iHP -= 2;
+		info.iHP -= 2;
 		setMonsInfo(info);
 		break;
 
 	case eOBJNAME::ATTACK:
 		info = getMonsInfo();
-		info.m_iHP -= 1;
+		info.iHP -= 1;
 		setMonsInfo(info);
 		break;
 	}
