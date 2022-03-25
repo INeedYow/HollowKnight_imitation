@@ -10,7 +10,7 @@ class CAI
 
 	map<eSTATE_MONS, CState_Mons*> m_mapState;
 	CMonster*		m_pOwner;
-	eSTATE_MONS*	m_pCurState;
+	CState_Mons*	m_pCurState;
 
 public:
 	CAI();
@@ -21,7 +21,7 @@ public:
 	CMonster* getOwner();
 
 	CState_Mons* findState(eSTATE_MONS state);
-	eSTATE_MONS* getCurState();
+	CState_Mons* getCurState();
 
 	void setCurState(eSTATE_MONS state);
 

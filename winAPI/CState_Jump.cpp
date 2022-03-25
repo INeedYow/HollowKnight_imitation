@@ -105,17 +105,15 @@ void CState_Jump::enter()
 	getPlayer()->setCheck(SP_DBJUMP, false);
 	getPlayer()->setCheck(SP_GODOWN, false);
 
-	// 
-	//getPlayer()->setCheck(SP_GOUP, true);
-	//fPoint pos = getPlayer()->getPos();
-	//pos.y -= 1;
-	//getPlayer()->setPos(pos);
+	fPoint pos = getPlayer()->getPos();
+	pos.y -= 1;
+	getPlayer()->setPos(pos);
 
 	// 점프속도
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 
 	if (getPlayer()->isCheck(SP_DWSLASH))
-		info.fSpdY = (float)P_SPDY / 3.f;
+		info.fSpdY = (float)P_SPDY / 2.f;
 	else
 		info.fSpdY = (float)P_SPDY;
 

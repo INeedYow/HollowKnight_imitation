@@ -35,9 +35,11 @@ void CScene_Stage03::update()
 void CScene_Stage03::enter()
 {
 	camFadeIn(0.5f);
+	camSetArea(0.f, 0.f, STG03_SIZEX, STG03_SIZEY);
 
-	CObject* pPlayer = CPlayer::createNormal(fPoint(260.f, 1340.f));
+	CPlayer* pPlayer = CPlayer::createNormal(fPoint(260.f, 1340.f));
 	addObject(pPlayer, eOBJ::PLAYER);
+	CGameManager::getInst()->registPlayer(pPlayer);
 
 	CBoss_Markoth* pBoss = new CBoss_Markoth;
 	pBoss->setPos(fPoint(2270.f, 1040.f));
@@ -79,8 +81,7 @@ void CScene_Stage03::enter()
 	//
 	camSetFocusNow(pPlayer->getPos());
 	camSetTrace(pPlayer);
-
-	camSetArea(0.f, 0.f, STG03_SIZEX, STG03_SIZEY);
+	//camSetTrace(pBoss);
 }
 
 void CScene_Stage03::exit()

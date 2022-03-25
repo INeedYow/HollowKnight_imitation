@@ -16,24 +16,6 @@ struct tMonsInfo
 	fVec2	fvKnockBackDir;
 	float	fKnockBackSpd;
 	float	fKnockBackTimer;
-
-	//tMonsInfo():
-	//	iHP(0),
-	//	fSpd(0.f),
-	//	fvDir(0.f,0.f),
-	//	fvKnockBackDir(0.f,0.f),
-	//	fKnockBackSpd(0.f),
-	//	fKnockBackTimer(0.f)
-	//{}
-	//tMonsInfo(int hp, float spd, fVec2 dir,
-	//	fVec2 kbDir, float kbSpd, float kbTimer): 
-	//	iHP(hp),
-	//	fSpd(spd),
-	//	fvDir(dir),
-	//	fvKnockBackDir(kbDir),
-	//	fKnockBackSpd(kbSpd),
-	//	fKnockBackTimer(kbTimer)
-	//{}	// 
 };
 
 
@@ -49,14 +31,15 @@ private:
 	CAI*		m_pAI;
 
 public:
+	void printInfo(HDC hDC);
+
+public:
 	CMonster();
 	virtual ~CMonster();
 	virtual CMonster* clone() = 0;
 
 	virtual void update();
 	virtual void render(HDC hDC) = 0;
-
-	static CMonster* create(eOBJNAME eName, fPoint pos);
 
 	void collisionEnter(CCollider* pOther){}
 	void collisionKeep(CCollider* pOther){}
@@ -69,9 +52,14 @@ public:
 
 	const tMonsInfo& getMonsInfo();
 	CTexture* getTex();
+	CAI* getAI();
 	bool isCheck(UINT chk);
 
 	virtual void death() = 0;		// 죽었을 때 애니메이션 등 처리
+
+	void playAnim(const wstring& keyWord);
+
+	static CMonster* create(eOBJNAME eName, fPoint pos);
 };
 
 //
@@ -82,10 +70,23 @@ enum class eSTATE_MONS
 	TRACE,
 	ATTACK,
 
+	DIE,
+
+
+	// boss
+	IDLE,
+	MOVE,
+	SPAWN,
+	READY,
+	SKILL,
+	DEATH,
 
 	END
 };
 
 //
-#define SM_TRACE			0x0001		// 따라가는 기능이 있는 몬스터인지
-#define SM_AIR				0x0002
+#define SM_TRACE			0x0001			// 따라가는 기능이 있는 몬스터인지
+#define SM_FALL				0x0002			// 떨어지는 중
+
+//
+#define SB_TIMER			0x00010000		// 보스 쿨타임 timer 도는 상태인지

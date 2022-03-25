@@ -37,10 +37,12 @@ void CScene_Stage02::update()
 
 void CScene_Stage02::enter()
 {
-	camFadeIn(0.5f);
+	camFadeIn(0.5f); 
+	camSetArea(0.f, 0.f, STG02_SIZEX, STG02_SIZEY);
 
-	CObject* pPlayer = CPlayer::createNormal(fPoint(1963, 0.f));
+	CPlayer* pPlayer = CPlayer::createNormal(fPoint(1963, 0.f));
 	addObject(pPlayer, eOBJ::PLAYER);
+	CGameManager::getInst()->registPlayer(pPlayer);
 
 	CBackGround* pBg = new CBackGround;
 	pBg->load(L"BG_stage2", L"texture\\background\\stage2_back.bmp");
@@ -53,8 +55,8 @@ void CScene_Stage02::enter()
 	addObject(pFg, eOBJ::FRONTGROUND);
 
 	// monster
-	/*CMonster_Melee* pMon1 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(830, 1390));
-	addObject(pMon1, eOBJ::MONSTER);*/
+	CMonster_Melee* pMon1 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(800, 1390));
+	addObject(pMon1, eOBJ::MONSTER);
 
 	// ground
 	CGround* pGrd1 = CGround::create(1444, 1430, 2378, 1580);
@@ -141,7 +143,6 @@ void CScene_Stage02::enter()
 	// cam
 	camSetFocusNow(pPlayer->getPos());
 	camSetTrace(pPlayer);
-	camSetArea(0.f, 0.f, STG02_SIZEX, STG02_SIZEY);
 }
 
 void CScene_Stage02::exit()

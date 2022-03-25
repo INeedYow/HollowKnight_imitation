@@ -47,10 +47,9 @@ CPlayer::CPlayer()
 		(float)P_GRAV,
 		0,
 		0.f,
-		{},
 		{}
 	};
-
+	m_tPrevInfo = {};
 	m_pStatus = nullptr;
 	m_uiCheck = 0;
 
@@ -141,30 +140,30 @@ CPlayer* CPlayer::createNormal(fPoint pos)
 	pPlayer = new CPlayer;
 	pPlayer->setPos(pos);
 
-	CStatus* pAI = new CStatus;
+	CStatus* pStatus = new CStatus;
 #pragma region AddState
-	pAI->addState(new CState_Idle(eSTATE_PLAYER::IDLE));
-	pAI->addState(new CState_Run(eSTATE_PLAYER::RUN));
-	pAI->addState(new CState_Jump(eSTATE_PLAYER::JUMP));
-	pAI->addState(new CState_Doublejump(eSTATE_PLAYER::DOUBLEJUMP));
-	pAI->addState(new CState_Fall(eSTATE_PLAYER::FALL));
+	pStatus->addState(new CState_Idle(eSTATE_PLAYER::IDLE));
+	pStatus->addState(new CState_Run(eSTATE_PLAYER::RUN));
+	pStatus->addState(new CState_Jump(eSTATE_PLAYER::JUMP));
+	pStatus->addState(new CState_Doublejump(eSTATE_PLAYER::DOUBLEJUMP));
+	pStatus->addState(new CState_Fall(eSTATE_PLAYER::FALL));
 
-	pAI->addState(new CState_Dash(eSTATE_PLAYER::DASH));
-	pAI->addState(new CState_Dash2Idle(eSTATE_PLAYER::DASH2IDLE));
+	pStatus->addState(new CState_Dash(eSTATE_PLAYER::DASH));
+	pStatus->addState(new CState_Dash2Idle(eSTATE_PLAYER::DASH2IDLE));
 
-	pAI->addState(new CState_Slash1(eSTATE_PLAYER::SLASH1));
-	pAI->addState(new CState_Slash2(eSTATE_PLAYER::SLASH2));
-	pAI->addState(new CState_Upslash(eSTATE_PLAYER::UPSLASH));
-	pAI->addState(new CState_Downslash(eSTATE_PLAYER::DOWNSLASH));
+	pStatus->addState(new CState_Slash1(eSTATE_PLAYER::SLASH1));
+	pStatus->addState(new CState_Slash2(eSTATE_PLAYER::SLASH2));
+	pStatus->addState(new CState_Upslash(eSTATE_PLAYER::UPSLASH));
+	pStatus->addState(new CState_Downslash(eSTATE_PLAYER::DOWNSLASH));
 
-	pAI->addState(new CState_Fire(eSTATE_PLAYER::FIRE));
-	pAI->addState(new CState_Focus(eSTATE_PLAYER::FOCUS));
+	pStatus->addState(new CState_Fire(eSTATE_PLAYER::FIRE));
+	pStatus->addState(new CState_Focus(eSTATE_PLAYER::FOCUS));
 
-	pAI->addState(new CState_Stun(eSTATE_PLAYER::STUN));
-	pAI->addState(new CState_Death(eSTATE_PLAYER::DEATH));
+	pStatus->addState(new CState_Stun(eSTATE_PLAYER::STUN));
+	pStatus->addState(new CState_Death(eSTATE_PLAYER::DEATH));
 
-	pAI->setCurState(eSTATE_PLAYER::FALL);
-	pPlayer->setStatus(pAI);
+	pStatus->setCurState(eSTATE_PLAYER::FALL);
+	pPlayer->setStatus(pStatus);
 	
 #pragma endregion
 	// 
@@ -188,18 +187,6 @@ void CPlayer::playAnim(const wstring& keyWord)
 	PLAY(strKey);
 }
 
-//void CPlayer::addDirAndPlay(const wstring& keyWord)
-//{
-//	wstring strKey = keyWord;
-//
-//	if (m_uiCheck & SP_DIR)
-//		strKey += L"_R";
-//	else
-//		strKey += L"_L";
-//
-//	PLAY(strKey);
-//}
-
 void CPlayer::update()
 {
 	if (KEY_ON('P')) g_bDebug = !g_bDebug;
@@ -222,14 +209,6 @@ void CPlayer::update()
 
 	
 	checkUpdate();	
-}
-
-void CPlayer::finalUpdate()
-{
-	CObject::finalUpdate();
-
-	// 콜라이더 충돌처리 진행하고 prevPos 갱신
-	m_tInfo.fpPrevPos = getPos();
 }
 
 void CPlayer::render(HDC hDC)
@@ -310,8 +289,8 @@ void CPlayer::collisionKeep(CCollider* pOther)
 
 	case eOBJNAME::TILE:
 	case eOBJNAME::GROUND:
-		switch (COLLGRD(pOther))
-		//switch (COLLRRW(getCollider(), pOther))
+		//switch (COLLGRD(pOther))
+		switch (COLLRR(getCollider(), pOther))
 		{
 		case eDIR::LEFT:
 		{	// TODO state::hang
@@ -331,6 +310,16 @@ void CPlayer::collisionKeep(CCollider* pOther)
 			setPos(pos);
 			break;
 		}
+		case eDIR::TOP:
+		{	// groun와 위쪽 충돌 진행 중인데 y값 증가하면(내려가면) 고정
+			fPoint pos = getPos();
+			if (pos.y > m_tPrevInfo.fpPrevPos.y)
+			{
+				pos.y = pOther->getPos().y - pOther->getSize().y / 2.f + pOther->getOffset().y
+					- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y + 1;
+			}
+			break;
+		}
 		}
 	}
 }
@@ -341,8 +330,8 @@ void CPlayer::collisionEnter(CCollider* pOther)
 	{	//벽 충돌
 	case eOBJNAME::TILE:
 	case eOBJNAME::GROUND:
-		switch (COLLGRD(pOther))
-		//switch (COLLRRW(getCollider(), pOther))
+		//switch (COLLGRD(pOther))
+		switch (COLLRRW(getCollider(), pOther))
 		{
 		case eDIR::TOP:
 		{
@@ -351,7 +340,7 @@ void CPlayer::collisionEnter(CCollider* pOther)
 				fPoint pos = getPos();
 
 				pos.y = pOther->getPos().y - pOther->getSize().y / 2.f + pOther->getOffset().y 
-					- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y;
+					- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y + 1;
 
 				setPos(pos);
 				
@@ -416,11 +405,11 @@ void CPlayer::collisionExit(CCollider* pOther)
 
 // == COLLGRD
 eDIR CPlayer::collDirVersusGround(CCollider* pOther)
-{	// 이전 정보 갱신이 되고 나서야 충돌 함수에 들어오니까 dir이 항상 0임
+{	// enter에서만 해야할듯 바닥에 서서 좌우 이동하면 좌우 충돌 판정이 나는 듯함
 	fPoint a = getPos();
-	fPoint b = m_tInfo.fpPrevPos;
+	fPoint b = m_tPrevInfo.fpPrevPos;
 
-	fVec2 myDir = getPos() - m_tInfo.fpPrevPos;
+	fVec2 myDir = getPos() - m_tPrevInfo.fpPrevPos;
 
 	if (myDir.x * myDir.y == 0.f)	// x,y 중 최대 한쪽으로만 이동한 경우
 	{
@@ -438,19 +427,19 @@ eDIR CPlayer::collDirVersusGround(CCollider* pOther)
 		fPoint pos2 = pOther->getPos();
 		fPoint size2 = pOther->getSize();
 
-		if (m_tInfo.fpPrevPos.y < pos2.y - (size1.y + size2.y) / 2.f + offSize.y)
+		if (m_tPrevInfo.fpPrevPos.y < pos2.y - (size1.y + size2.y) / 2.f + offSize.y)
 		{	// 이전 y 좌표가 위쪽이면
 			return eDIR::TOP;
 		}
-		if (m_tInfo.fpPrevPos.y > pos2.y + (size1.y + size2.y) / 2.f + offSize.y)
+		if (m_tPrevInfo.fpPrevPos.y > pos2.y + (size1.y + size2.y) / 2.f + offSize.y)
 		{	// 이전 y 좌표가 아래쪽이면
 			return eDIR::BOTTOM;
 		}
-		if (m_tInfo.fpPrevPos.x < pos2.x - (size1.x + size2.x) / 2.f + offSize.x)
+		if (m_tPrevInfo.fpPrevPos.x < pos2.x - (size1.x + size2.x) / 2.f + offSize.x)
 		{	// 이전 x 좌표가 왼쪽이면
 			return eDIR::LEFT;
 		}
-		if (m_tInfo.fpPrevPos.x > pos2.x + (size1.x + size2.x) / 2.f + offSize.x)
+		if (m_tPrevInfo.fpPrevPos.x > pos2.x + (size1.x + size2.x) / 2.f + offSize.x)
 		{	// 이전 x 좌표가 오른쪽이면
 			return eDIR::RIGHT;
 		}
@@ -489,13 +478,6 @@ void CPlayer::createMissile()
 	createObj(pMissile, eOBJ::MISSILE_PLAYER);
 }
 
-//void CPlayer::renewPrevInfo(fPoint pos)
-//{
-//	m_tPrevInfo.fpPrevPos = pos;
-//	m_tPrevInfo.uiPrevHP = m_tInfo.uiHP;
-//}
-
-/////////////////////////////////////// test
 void CPlayer::createRotTester()
 {	
 	fPoint mPos = getPos();
@@ -542,16 +524,16 @@ void CPlayer::printInfo(HDC hDC)
 	// bufX,Y 출력보다 아래 위치해야 함
 	fPoint rendPos = rendPos(pos);
 
-	TextOutW(hDC, (int)rendPos.x - 50, (int)rendPos.y + 90, bufX, (int)wcslen(bufX));
-	TextOutW(hDC, (int)rendPos.x + 50, (int)rendPos.y + 90, bufY, (int)wcslen(bufY));
-	TextOutW(hDC, (int)rendPos.x - 50, (int)rendPos.y + 115, bufBot, (int)wcslen(bufBot));
+	TextOutW(hDC, (int)rendPos.x + 100, (int)rendPos.y - 130, bufX, (int)wcslen(bufX));
+	TextOutW(hDC, (int)rendPos.x + 100, (int)rendPos.y - 100, bufY, (int)wcslen(bufY));
+	TextOutW(hDC, (int)rendPos.x + 100, (int)rendPos.y - 70, bufBot, (int)wcslen(bufBot));
 
 
 	if (m_uiCheck & SP_NODMG)
 	{
 		wchar_t bufNoDmg[255] = {};
 		swprintf_s(bufNoDmg, L"NoDmg %.1f", m_tInfo.fNoDmgTimer);
-		TextOutW(hDC, (int)rendPos.x - 50, (int)rendPos.y + 140, bufNoDmg, (int)wcslen(bufNoDmg));
+		TextOutW(hDC, (int)rendPos.x + 100, (int)rendPos.y - 40, bufNoDmg, (int)wcslen(bufNoDmg));
 	}
 }
 
@@ -567,6 +549,11 @@ void CPlayer::checkUpdate()
 			m_uiCheck &= ~(SP_NODMG);
 		}
 	}
+}
+
+void CPlayer::updatePrevInfo(tPlayerPrevInfo prevInfo)
+{
+	m_tPrevInfo = prevInfo;
 }
 
 // Slash들 합쳐도 될듯

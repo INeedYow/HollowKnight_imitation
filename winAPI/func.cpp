@@ -17,7 +17,6 @@ eDIR collRect2Rect(CCollider* coll1, CCollider* coll2)
 	fPoint size1 = coll1->getOwner()->getSize();
 	fPoint size2 = coll2->getOwner()->getSize();
 
-	// / 2.f 로 애매하면 * 0.52f는?
 	float distY = (size2.y + size1.y) / 2.f;
 	float distX = (size2.x + size1.x) / 2.f;
 
@@ -42,45 +41,19 @@ eDIR collRect2Rect(CCollider* coll1, CCollider* coll2)
 // == COLLRR
 eDIR collisionRectToRect(CCollider* coll1, CCollider* coll2)
 {	// 타일과 방향 구분할 때 사용 
-	/*fPoint pos1 = coll1->getPos();
+	fPoint pos1 = coll1->getPos();
 	fPoint pos2 = coll2->getPos();
 	fPoint size2 = coll2->getOwner()->getSize();
 
-	if (pos2.y - size2.y / 2 <= pos1.y && 
-		pos1.y <= pos2.y + size2.y / 2)
+	if (pos2.y - size2.y / 2 <= pos1.y && pos1.y <= pos2.y + size2.y / 2)
 	{
-		if (pos1.x <= pos2.x - size2.x / 2) return eDIR::LEFT;
-		if (pos1.x >= pos2.x + size2.x / 2) return eDIR::RIGHT;
+		if (pos1.x <= pos2.x + size2.x / 2) return eDIR::LEFT;
+		if (pos1.x >= pos2.x - size2.x / 2) return eDIR::RIGHT;
 	}
 	else
 	{
-		if (pos1.y <= pos2.y - size2.y / 2) return eDIR::TOP;
-		if (pos1.y >= pos2.y + size2.y / 2) return eDIR::BOTTOM;
-	}
-	return eDIR::NONE;*/
-
-	fPoint pos1 = coll1->getPos();
-	fPoint pos2 = coll2->getPos();
-	fPoint size1 = coll1->getOwner()->getSize();
-	fPoint size2 = coll2->getOwner()->getSize();
-
-	// / 2.f 로 애매하면 * 0.52f는?
-	float distY = (size2.y + size1.y) / 2.f;
-	float distX = (size2.x + size1.x) / 2.f;
-
-	if (pos2.y - distY < pos1.y && pos1.y < pos2.y + distY)
-	{
-		if (pos1.x < pos2.x - size2.x / 2.f)
-			return eDIR::LEFT;
-		if (pos1.x > pos2.x + size2.x / 2.f)
-			return eDIR::RIGHT;
-	}
-	else if (pos2.x - distX < pos1.x && pos1.x < pos2.x + distX)
-	{
-		if (pos1.y < pos2.y - size2.y / 2.f)
-			return eDIR::TOP;
-		if (pos1.y > pos2.y + size2.y / 2.f)
-			return eDIR::BOTTOM;
+		if (pos1.y <= pos2.y + size2.y / 2) return eDIR::TOP;
+		if (pos1.y >= pos2.y - size2.y / 2) return eDIR::BOTTOM;
 	}
 	return eDIR::NONE;
 }
@@ -93,8 +66,8 @@ eDIR collisionRectToRectWide(CCollider* coll1, CCollider* coll2)
 	fPoint size1 = coll1->getOwner()->getSize();
 	fPoint size2 = coll2->getOwner()->getSize();
 
-	if (pos2.y - (size2.y + size1.y) / 2.f < pos1.y && 
-		pos1.y < pos2.y + (size2.y + size1.y) / 2.f)
+	if (pos2.y - (size2.y + size1.y) / 2.f + 2 < pos1.y && 
+		pos1.y < pos2.y + (size2.y + size1.y) / 2.f - 2)
 	{
 		if (pos1.x < pos2.x) return eDIR::LEFT;
 		else return eDIR::RIGHT;
@@ -124,9 +97,7 @@ bool isLeftColl(CCollider* coll1, CCollider* coll2)
 	fPoint pos1 = coll1->getPos();
 	fPoint pos2 = coll2->getPos();
 
-	if (pos1.x < pos2.x)
-		return true;
-	return false;
+	return pos1.x < pos2.x;
 }
 
 bool isCollisionRectToRect(const fPoint& pos1, const fPoint& size1, const fPoint& pos2, const fPoint& size2)

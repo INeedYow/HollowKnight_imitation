@@ -3,6 +3,14 @@
 #include "CShield.h"
 #include "CSpear.h"
 #include "SelectGDI.h"
+#include "CPlayer.h"
+
+#include "CAI.h"
+#include "CState_BIdle.h"
+#include "CState_BMove.h"
+#include "CState_BSpawn.h"
+#include "CState_BReady.h"
+#include "CState_BSkill.h"
 
 CBoss_Markoth::CBoss_Markoth()
 {
@@ -21,22 +29,32 @@ CBoss_Markoth::CBoss_Markoth()
 	m_fTimer = 0.f;
 	m_fSkillTimer = (float)SB_SKILL_COOL;
 	m_fSpawnTimer = 4.f;
-	m_fvDir = {};
 
-	m_eState = eSTATE_BOSS::SPAWN;
+	setCheck(SB_TIMER, true);
 
 	createCollider();
 	getCollider()->setSize(fPoint(SB_MdSIZEX, SB_MdSIZEY));
 	getCollider()->setShape(eSHAPE::RECT);
 
 	createAnimator();
-	createAnim(L"st_Normal",	getTex(), fPoint(0.f, 0.f), fPoint(280.f, 420.f), fPoint(280.f, 0.f), 0.25f, 6);
+	createAnim(L"st_Normal",	getTex(), fPoint(0.f, 0.f),			fPoint(280.f, 420.f),		fPoint(280.f, 0.f),		0.25f,	6);
 
 	createAnim(L"st_Middle",	getTex(), fPoint(0.f, 420.f),		fPoint(300.f, 415.f),		fPoint(300.f, 0.f),		0.2f,	4);
 
 	createAnim(L"st_Skill",		getTex(), fPoint(0.f, 835.f),		fPoint(448.f, 282.f),		fPoint(448.f, 0.f),		0.15f,	4);
 
 	PLAY(L"st_Normal");
+
+	// TODO death
+	CAI* pAI = new CAI;
+	pAI->addState(new CState_BMove(eSTATE_MONS::MOVE));
+	pAI->addState(new CState_BIdle(eSTATE_MONS::IDLE));
+	pAI->addState(new CState_BSpawn(eSTATE_MONS::SPAWN));
+	pAI->addState(new CState_BReady(eSTATE_MONS::READY));
+	pAI->addState(new CState_BSkill(eSTATE_MONS::SKILL));
+
+	pAI->setCurState(eSTATE_MONS::IDLE);
+	setAI(pAI);
 
 	//
 	m_ucPhase = 1;
@@ -51,11 +69,11 @@ CBoss_Markoth::~CBoss_Markoth()
 			delete m_vecShield[i];
 	}
 
-	//for (int i = 0; i < m_vecSpear.size(); i++)
-	//{
-	//	if (nullptr != m_vecSpear[i])
-	//		delete m_vecSpear[i];
-	//}
+	for (int i = 0; i < m_vecSpear.size(); i++)
+	{
+		if (nullptr != m_vecSpear[i])
+			delete m_vecSpear[i];
+	}
 }
 
 CBoss_Markoth* CBoss_Markoth::clone()
@@ -63,27 +81,21 @@ CBoss_Markoth* CBoss_Markoth::clone()
 	return nullptr;
 }
 
-
-// TODO boss패턴
-	// 스킬 쓸때 충돌체 크기 조정
-
+// TODO 상태 정보 출력, 콜라이더 크기, chk 수정, player update 수정
 void CBoss_Markoth::update()
 {
-	fPoint pos = getPos();
+	CMonster::update();
 
-	switch (m_eState)
-	{
-	case eSTATE_BOSS::IDLE:
+	if (isCheck(SB_TIMER))			// 타이머 적용되는 상태
 	{
 		m_fSkillTimer -= fDT;
 		m_fSpawnTimer -= fDT;
 
+
 		if (getMonsInfo().iHP <= SB_HPMAX / 2 && m_ucPhase == 1)
 		{	// 2 페이즈
-			m_fTimer = 0.6f;
 			m_ucPhase++;
-			m_eState = eSTATE_BOSS::SPAWN;
-			getCollider()->setSize(fPoint(210.f, 280.f));
+			changeMonsState(getAI(), eSTATE_MONS::SPAWN);
 		}
 
 		if (m_fSpawnTimer < 0.f)
@@ -93,137 +105,19 @@ void CBoss_Markoth::update()
 
 		if (m_fSkillTimer < 0.f)
 		{	// 스킬 준비단계로
-			m_eState = eSTATE_BOSS::READY;
-			getCollider()->setSize(fPoint(210.f, 280.f));
 			m_fSkillTimer = 0.f;
 			m_fSpawnTimer = 0.f;
-			m_fTimer = (float)SB_READY_DURA + 1.f;
+			changeMonsState(getAI(), eSTATE_MONS::READY);
 		}
-
-		PLAY(L"st_Normal");
-		break;
 	}
-	
-	case eSTATE_BOSS::MOVE:
-	{	// TODO MOVE랑 같은데 움직임만 추가하면 될 듯
-		m_eState = eSTATE_BOSS::IDLE;
-		getCollider()->setSize(fPoint(SB_NmSIZEX, SB_NmSIZEY));
-		break;
-	}
-
-	case eSTATE_BOSS::SPAWN:
-	{
-		m_fTimer -= fDT;
-
-		if (m_fTimer < 0.f)
-		{
-			spawnShield();
-			m_fTimer = 0.f;
-			m_eState = eSTATE_BOSS::IDLE;
-			getCollider()->setSize(fPoint(SB_NmSIZEX, SB_NmSIZEY));
-		}
-
-		PLAY(L"st_Middle");
-		break;
-	}
-
-	case eSTATE_BOSS::READY:
-	{
-
-		m_fTimer -= fDT;
-
-		if (m_fTimer > 1.4f)		// 변수하나 더 두기 싫어서 시간가지고 해봄
-		{	// 방패 감속
-			for (int i = 0; i < m_vecShield.size(); i++)
-			{
-				m_vecShield[i]->setfSpeed(m_vecShield[i]->getSpeed() - (float)SB_ACCEL * fDT);
-			}
-		}
-		else if (1.4f >= m_fTimer && m_fTimer > 0.4f)
-		{	// 방향 전환
-			for (int i = 0; i < m_vecShield.size(); i++)
-			{
-				m_vecShield[i]->toggleRot();
-			}
-
-			m_fTimer = 0.4f;
-		}
-		else if (0.4f >= m_fTimer && m_fTimer > 0.f)
-		{	// 방패 가속
-			for (int i = 0; i < m_vecShield.size(); i++)
-			{
-				m_vecShield[i]->setfSpeed(m_vecShield[i]->getSpeed() + (float)SB_ACCEL * 2 * fDT);
-			}
-		}
-		else
-		{	// 
-			m_eState = eSTATE_BOSS::SKILL;
-			getCollider()->setSize(fPoint(SB_SkSIZEX, SB_SkSIZEY));
-			m_fTimer = (float)SB_SKILL_DURA;
-		}
-
-		PLAY(L"st_Middle");
-		break;
-	}
-
-	case eSTATE_BOSS::SKILL:
-	{
-		m_fTimer -= fDT;
-
-		if (m_fTimer >= (float)SB_SKILL_DURA / 2.f)
-		{	// 방패 2개 이상일 때 1개는 주위에서 돌게
-			int i = m_vecShield.size() >= 2 ? 1 : 0;
-
-			for (; i < m_vecShield.size(); i++)
-			{	// 범위 증가
-				m_vecShield[i]->setRadius(m_vecShield[i]->getRadius() + 130.f * fDT);
-			}
-		}
-		else
-		{
-			int i = m_vecShield.size() >= 2 ? 1 : 0;
-
-			for (; i < m_vecShield.size(); i++)
-			{	// 범위 감소
-				m_vecShield[i]->setRadius(m_vecShield[i]->getRadius() - 130.f * fDT);
-			}
-		}
-
-		if (m_fTimer < 0.f)
-		{
-			for (int i = 0; i < m_vecShield.size(); i++)
-			{
-				m_vecShield[i]->setfSpeed((float)SB_SHIELD_SPD);
-				m_vecShield[i]->setRadius((float)SB_SHIELD_RAD);
-			}
-
-			m_fTimer = 0.8f;
-			m_fSkillTimer = (float)SB_SKILL_COOL;
-			m_eState = eSTATE_BOSS::SPAWN;
-			getCollider()->setSize(fPoint(SB_MdSIZEX, SB_MdSIZEY));
-		}
-		PLAY(L"st_Skill");
-		break;
-	}
-
-	case eSTATE_BOSS::DEATH:
-	{	// TODO
-		break;
-	}
-	}
-
-	//
-	//pos.x += getSpd() * m_fvDir.x * fDT;
-	//pos.y += getSpd() * m_fvDir.y * fDT;
-	
-	setPos(pos);
-	getAnimator()->update();
 }
 
 void CBoss_Markoth::render(HDC hDC)
 {
 	if (g_bDebug)
 	{
+		getAI()->getCurState()->printInfo(hDC);
+
 		SelectGDI font(hDC, eFONT::COMIC24);
 
 		fPoint pos = getPos();
@@ -235,29 +129,6 @@ void CBoss_Markoth::render(HDC hDC)
 		wchar_t bufCool[255] = {};
 		wchar_t bufCool2[255] = {};
 		wchar_t buffPhase[255] = {};
-		LPCWSTR strState = L"";
-
-		switch (m_eState)
-		{
-		case eSTATE_BOSS::IDLE:
-			strState = L"Idle";
-			break;
-		case eSTATE_BOSS::MOVE:
-			strState = L"Move";
-			break;
-		case eSTATE_BOSS::SPAWN:
-			strState = L"Spawn";
-			break;
-		case eSTATE_BOSS::READY:
-			strState = L"Ready";
-			break;
-		case eSTATE_BOSS::SKILL:
-			strState = L"Skill";
-			break;
-		case eSTATE_BOSS::DEATH:
-			strState = L"Death";
-			break;
-		}
 
 		swprintf_s(buffPhase, L"Phase = %d", (int)m_ucPhase);
 		swprintf_s(bufHP, L"HP = %d", getMonsInfo().iHP);
@@ -268,7 +139,6 @@ void CBoss_Markoth::render(HDC hDC)
 
 		pos = rendPos(pos);
 
-		TextOutW(hDC, (int)pos.x - 200, (int)pos.y + 150, strState, (int)wcslen(strState));
 		TextOutW(hDC, (int)pos.x - 200, (int)pos.y + 175, buffPhase, (int)wcslen(buffPhase));
 		TextOutW(hDC, (int)pos.x - 200, (int)pos.y + 200, bufHP, (int)wcslen(bufHP));
 		TextOutW(hDC, (int)pos.x - 100, (int)pos.y + 175, bufX, (int)wcslen(bufX));
@@ -337,7 +207,7 @@ void CBoss_Markoth::setRandDelay()
 void CBoss_Markoth::createSpear()
 {
 	fPoint pos = randSpearPos();
-	fPoint camPos = getCamPos();
+	fPoint camPos = getCamPos(); // TODO
 
 	CSpear* pSpear = new CSpear;
 	pSpear->setPos(pos);
@@ -395,6 +265,16 @@ fPoint CBoss_Markoth::randSpearPos()
 		pos.y += randPos.y;
 
 	return pos;
+}
+
+void CBoss_Markoth::setSkillCooldown(float cd)
+{
+	m_fSkillTimer = cd;
+}
+
+vector<CShield*>& CBoss_Markoth::getVecShield()
+{
+	return m_vecShield;
 }
 
 void CBoss_Markoth::spawnShield()

@@ -148,6 +148,7 @@ enum class TYPE_PEN
 	RED,
 	GREEN,
 	BLUE,
+	WHITE,
 
 	SIZE
 };
@@ -197,7 +198,6 @@ enum class COLL_DIR
 };
 
 
-
 // # Util
 #include "struct.h"
 #include "SingleTon.h"
@@ -215,6 +215,7 @@ enum class COLL_DIR
 #include "CPathManager.h"
 #include "CCameraManager.h"
 #include "CUIManager.h"
+#include "CGameManager.h"
 
 #include "CObject.h"
 // # winAPI_2Dcopy.cpp에 static 멤버변수 초기화할 때 필요
@@ -257,4 +258,4 @@ enum class COLL_DIR
 #define loadTex(eName, wsPath)			CResourceManager::getInst()->loadTextrue(eName, wsPath)
 #define findTex(eName)					CResourceManager::getInst()->findTexture(eName)
 
-#define getMyPos()						CSceneManager::getInst()->getPlayerPos()
+#define gameGetPlayer()					CGameManager::getInst()->getPlayer()

@@ -3,6 +3,8 @@
 
 class CTexture;
 class CShield;
+class CSpear;
+
 enum class eSTATE_BOSS
 {
 	IDLE,
@@ -17,17 +19,14 @@ enum class eSTATE_BOSS
 
 class CBoss_Markoth : public CMonster
 {
-	eSTATE_BOSS	m_eState;
-
 	UCHAR		m_ucPhase;
 
 	float		m_fTimer;
 	float		m_fSkillTimer;
 	float		m_fSpawnTimer;
-	fVec2		m_fvDir;
 
 	vector<CShield*>	m_vecShield;
-	//vector<CSpear*>		m_vecSpear;
+	vector<CSpear*>		m_vecSpear;
 
 public:
 	CBoss_Markoth();
@@ -42,22 +41,31 @@ public:
 	void collisionKeep(CCollider* pOther);
 	void collisionExit(CCollider* pOther);
 
+	void setSkillCooldown(float cd);
+	vector<CShield*>& getVecShield();
+	void spawnShield();
 private:
 	void setRandDelay();
+	fPoint randSpearPos();
 	void createSpear();
 	void createShield(float theta = 0.f);
-	fPoint randSpearPos();
 
-	void spawnShield();
 
 	virtual void death();
 };
 
-// boss
+// skill
+#define SB_SKILL_DURA		8
+#define SB_SKILL_COOL		13
 
+// shield
+#define SB_SHIELD_SPD		1.8
+#define SB_SHIELD_RAD		270
+
+// boss
 #define SB_HPMAX			20
 #define SB_SPD				110
-#define SB_READY_DURA		0.8
+#define SB_READY_DURA		2
 #define SB_ACCEL			(2 * SB_SHIELD_SPD / SB_READY_DURA)
 
 // collider size
@@ -68,10 +76,13 @@ private:
 #define SB_SkSIZEX			390
 #define SB_SkSIZEY			215
 
-#define SB_SKILL_DURA		8
-#define SB_SKILL_COOL		13
-
-#define SB_SHIELD_SPD		1.8
-#define SB_SHIELD_RAD		270
-
+// spear
 #define SB_SPEAR_SPD		300
+
+// move state ฐüทร
+#define SB_AREA_x			250
+#define SB_AREA_y			620
+#define SB_AREA_X			2750
+#define SB_AREA_Y			1170
+#define SB_AREA_ADDX		600
+#define SB_AREA_ADDY		350

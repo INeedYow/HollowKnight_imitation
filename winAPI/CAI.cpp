@@ -22,6 +22,7 @@ CAI::~CAI()
 
 void CAI::update(UINT& chk)
 {
+	m_pCurState->update(chk);
 }
 
 CMonster* CAI::getOwner()
@@ -39,13 +40,15 @@ CState_Mons* CAI::findState(eSTATE_MONS state)
 	return iter->second;
 }
 
-eSTATE_MONS* CAI::getCurState()
+CState_Mons* CAI::getCurState()
 {
 	return m_pCurState;
 }
 
 void CAI::setCurState(eSTATE_MONS state)
 {
+	m_pCurState = findState(state);
+	assert(m_pCurState);
 }
 
 void CAI::addState(CState_Mons* pState)
@@ -59,4 +62,9 @@ void CAI::addState(CState_Mons* pState)
 
 void CAI::changeState(eSTATE_MONS nextState)
 {
+	CState_Mons* pNextState = findState(nextState);
+
+	m_pCurState->exit();
+	m_pCurState = pNextState;
+	m_pCurState->enter();
 }

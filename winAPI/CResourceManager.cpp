@@ -18,6 +18,7 @@ CResourceManager::~CResourceManager()
 	m_mapTex.clear();
 }
 
+
 CTexture* CResourceManager::findTexture(const wstring& strKey)
 {
 	map<wstring, CTexture*>::iterator iter = m_mapTex.find(strKey);

@@ -30,7 +30,7 @@ void CBackGround::render(HDC hDC)
 	fPoint camPos = getCamPos();
 
 	//renderPos = pos + (renderPos - pos) / 5;
-	
+
 	BitBlt(hDC,
 		(int)(0),
 		(int)(0),

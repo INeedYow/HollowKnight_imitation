@@ -1,6 +1,7 @@
 #include "framework.h"
 #include "CState_Patrol.h"
 #include "CMonster.h"
+#include "CPlayer.h"
 
 CState_Patrol::CState_Patrol(eSTATE_MONS state)
 	:CState_Mons(state) 
@@ -15,16 +16,26 @@ CState_Patrol::~CState_Patrol()
 void CState_Patrol::update(UINT& chk)
 {
 	fPoint pos = getMonster()->getPos();
+	fPoint playerPos = gameGetPlayer()->getPos();
+	fPoint size = getMonster()->getSize();
 	tMonsInfo info = getMonster()->getMonsInfo();
 
-	if (info.fDist > info.fTraceRange)
+	if (chk & SM_TRACE)
 	{
-		changeMonsState(getOwner(), eSTATE_MONS::STOP);
+		if (pos.y - size.y / 2.f < playerPos.y &&
+			playerPos.y < pos.y + size.y / 2.f)
+		{
+			if (info.fDist < info.fTraceRange)
+			{
+				changeMonsState(getOwner(), eSTATE_MONS::TRACE);
+			}
+		}
 	}
 
-	if (chk & SM_AIR)
+	m_fTimer -= fDT;
+	if (m_fTimer < 0.f)
 	{
-		// TODO
+		changeMonsState(getOwner(), eSTATE_MONS::STOP);
 	}
 
 	pos.x += info.fvDir.x * info.fSpd * fDT;
@@ -35,7 +46,7 @@ void CState_Patrol::update(UINT& chk)
 
 void CState_Patrol::enter()
 {
-	m_fTimer = 3.f;
+	m_fTimer = 3.5f;
 
 	tMonsInfo info = getMonster()->getMonsInfo();
 
@@ -44,6 +55,8 @@ void CState_Patrol::enter()
 		info.fvDir.x = -1;
 	
 	getMonster()->setMonsInfo(info);
+
+	getMonster()->playAnim(L"BT_Patrol");
 }
 
 void CState_Patrol::exit()
@@ -58,6 +71,6 @@ void CState_Patrol::printInfo(HDC hDC)
 	fPoint pos = getMonster()->getPos();
 	pos = rendPos(pos);
 
-	LPCWSTR	strInfo = L"Trace";
-	TextOutW(hDC, (int)pos.x + 0, (int)pos.y - 125, strInfo, (int)wcslen(strInfo));
+	LPCWSTR	strInfo = L"Patrol";
+	TextOutW(hDC, (int)pos.x + 0, (int)pos.y - 65, strInfo, (int)wcslen(strInfo));
 }

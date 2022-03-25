@@ -8,6 +8,8 @@
 #include "CFrontGround.h"
 #include "CGround.h"
 
+#include "CMonster_Melee.h"
+
 #define STG01_SIZEX 3840
 #define STG01_SIZEY 2160
 
@@ -31,19 +33,25 @@ void CScene_Stage01::update()
 		changeScn(eSCENE::STAGE_02);
 
 	// 씬 전환
-	if (getMyPos().y >= STG01_SIZEY - 50)
+	if (gameGetPlayer()->getPos().y >= STG01_SIZEY - 50)
 		changeScn(eSCENE::STAGE_02);
 
 }
 
 void CScene_Stage01::enter()
 {
+	// 카메라
 	camFadeIn(0.5f);
+	camSetArea(0.f, 0.f, STG01_SIZEX, STG01_SIZEY);
 
 	// Player 추가
 	CPlayer* pPlayer = CPlayer::createNormal(fPoint(1200.f, 1430.f));
 	addObject(pPlayer, eOBJ::PLAYER);
-	CSceneManager::getInst()->registerPlayer(pPlayer);
+	CGameManager::getInst()->registPlayer(pPlayer);
+
+	// monster test
+	CMonster_Melee* pMon1 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(1500, 1430));
+	addObject(pMon1, eOBJ::MONSTER);
 	
 	CBackGround* pBg = new CBackGround;
 	pBg->load(L"BG_stage1", L"texture\\background\\stage1_back.bmp");
@@ -94,18 +102,20 @@ void CScene_Stage01::enter()
 	// 충돌 체크
 	checkGrp(eOBJ::PLAYER, eOBJ::TILE);
 	checkGrp(eOBJ::PLAYER, eOBJ::GROUND);
+	checkGrp(eOBJ::PLAYER, eOBJ::MONSTER);
 
+	checkGrp(eOBJ::MONSTER, eOBJ::GROUND);
+
+	checkGrp(eOBJ::MONSTER, eOBJ::ATTACK);
 	checkGrp(eOBJ::ATTACK, eOBJ::TILE);
 	checkGrp(eOBJ::ATTACK, eOBJ::GROUND);
 
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::TILE);
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::GROUND);
 
-	// 카메라 설정
+	// 카메라
 	camSetFocusNow(pPlayer->getPos());
 	camSetTrace(pPlayer);
-
-	camSetArea(0.f, 0.f, STG01_SIZEX, STG01_SIZEY);
 }
 
 void CScene_Stage01::exit()

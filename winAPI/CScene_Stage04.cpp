@@ -32,8 +32,9 @@ void CScene_Stage04::enter()
 	camFadeIn(0.6f);
 
 	// Player Ãß°¡
-	CObject* pPlayer = CPlayer::createNormal(fPoint(20.f, 1610.f));
+	CPlayer* pPlayer = CPlayer::createNormal(fPoint(20.f, 1610.f));
 	addObject(pPlayer, eOBJ::PLAYER);
+	CGameManager::getInst()->registPlayer(pPlayer);
 
 	CBoss_Markoth* pBoss = new CBoss_Markoth;
 	pBoss->setPos(fPoint(1270.f, 1270.f));

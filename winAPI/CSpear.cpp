@@ -1,6 +1,7 @@
 #include "framework.h"
 #include "CSpear.h"
 #include "CTexture.h"
+#include "CPlayer.h"
 
 CSpear::CSpear()
 {
@@ -15,6 +16,7 @@ CSpear::CSpear()
 	m_uiStep = 0;
 	m_fTheta = 0.f;
 	m_fSpdMax = 1.f;
+	m_fpHead = {};
 }
 
 CSpear::~CSpear()
@@ -29,6 +31,7 @@ void CSpear::update()
 {
 	fPoint pos = getPos();
 	float timer = getTimer();
+	fPoint destPos = gameGetPlayer()->getPos();
 
 	fPoint camPos;
 	fPoint dist;
@@ -173,7 +176,7 @@ void CSpear::render(HDC hDC)
 		(int)size.y,
 		NULL,
 		0, 0);
-	
+	/*SetColorAdjustment();*/
 }
 
 void CSpear::collisionEnter(CCollider* pOther)
@@ -188,23 +191,3 @@ void CSpear::setMaxSpd(float spd)
 {
 	m_fSpdMax = spd;
 }
-
-//POINT* CSpear::rotate(fPoint pos1, /*fPoint pos2, fPoint pos3,*/ float theta)
-//{
-//	POINT posArr[3];
-//	POINT temp;
-//
-//	temp.x = (LONG)(pos1.x * cos(theta) - pos1.y * sin(theta));
-//	temp.y = (LONG)(pos1.x * sin(theta) + pos1.y * cos(theta));
-//	posArr[0] = temp;
-//
-//	//temp.x = (LONG)(pos2.x * cos(theta) - pos2.y * sin(theta));
-//	//temp.y = (LONG)(pos2.x * sin(theta) + pos2.y * cos(theta));
-//	//posArr[1] = temp;
-//
-//	//temp.x = (LONG)(pos3.x * cos(theta) - pos3.y * sin(theta));
-//	//temp.y = (LONG)(pos3.x * sin(theta) + pos3.y * cos(theta));
-//	//posArr[2] = temp;
-//
-//	return posArr;
-//}

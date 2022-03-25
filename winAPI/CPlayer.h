@@ -20,14 +20,19 @@ struct tPlayerInfo
 	float		fNoDmgTimer;
 
 	fVec2		fvKnockBackDir;
+};
 
+struct tPlayerPrevInfo
+{
 	fPoint		fpPrevPos;
 };
 
 class CPlayer : public CObject
 {
-	tPlayerInfo m_tInfo;
+	friend class CGameManager;
 
+	tPlayerInfo			m_tInfo;
+	tPlayerPrevInfo		m_tPrevInfo;
 	UINT		m_uiCheck;			// 상태 추가정보
 
 	CStatus*	m_pStatus;
@@ -38,6 +43,7 @@ private:
 	void createRotTester();
 	void printInfo(HDC hDC);
 	void checkUpdate();
+	void updatePrevInfo(tPlayerPrevInfo prevInfo);		// gameMgr가 갱신해주도록(collMgr처리 이후에)
 	//void addDirAndPlay(const wstring& keyWord);
 
 public:
@@ -50,7 +56,6 @@ public:
 	void playAnim(const wstring& keyWord = L"\0");
 
 	virtual void update();
-	virtual void finalUpdate();
 	virtual void render(HDC hDC);
 
 	void setStatus(CStatus* pStatus);

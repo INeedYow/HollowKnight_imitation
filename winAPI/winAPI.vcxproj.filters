@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="CCollider.cpp">
-      <Filter>Engine\Component\COllider</Filter>
+      <Filter>Engine\Component\Collider</Filter>
     </ClCompile>
     <ClCompile Include="CAnimator.cpp">
       <Filter>Engine\Component\Animator</Filter>
@@ -211,10 +211,31 @@
     <ClCompile Include="CState_Trace.cpp">
       <Filter>Engine\Component\Status &amp; AI\AI\State_Mons</Filter>
     </ClCompile>
+    <ClCompile Include="CGameManager.cpp">
+      <Filter>Engine\Manager\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_Die.cpp">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_BMove.cpp">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons\State_Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_BIdle.cpp">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons\State_Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_BSpawn.cpp">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons\State_Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_BReady.cpp">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons\State_Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_BSkill.cpp">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons\State_Boss</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCollider.h">
-      <Filter>Engine\Component\COllider</Filter>
+      <Filter>Engine\Component\Collider</Filter>
     </ClInclude>
     <ClInclude Include="CAnimator.h">
       <Filter>Engine\Component\Animator</Filter>
@@ -444,6 +465,27 @@
     <ClInclude Include="CState_Trace.h">
       <Filter>Engine\Component\Status &amp; AI\AI\State_Mons</Filter>
     </ClInclude>
+    <ClInclude Include="CGameManager.h">
+      <Filter>Engine\Manager\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_Die.h">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_BMove.h">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons\State_Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_BIdle.h">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons\State_Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_BSpawn.h">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons\State_Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_BSkill.h">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons\State_Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_BReady.h">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons\State_Boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -468,9 +510,6 @@
     </Filter>
     <Filter Include="Engine\Component\Animator">
       <UniqueIdentifier>{6714f96a-3388-4485-bb8e-fc6a06fdbcac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Component\COllider">
-      <UniqueIdentifier>{3ec1b448-e404-4bb7-90c6-b082f8d28b34}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Component\Animator\Animation">
       <UniqueIdentifier>{57298b5d-4a8b-44fa-8b44-021e458a92d4}</UniqueIdentifier>
@@ -582,6 +621,15 @@
     </Filter>
     <Filter Include="Engine\Component\Status &amp; AI\AI\State_Mons">
       <UniqueIdentifier>{c0aa632a-d42b-4dd2-be1d-10c1803a9a40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Manager\Game">
+      <UniqueIdentifier>{13ae3706-aba7-41af-81e4-36e1ad339e91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Component\Collider">
+      <UniqueIdentifier>{3ec1b448-e404-4bb7-90c6-b082f8d28b34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Component\Status &amp; AI\AI\State_Mons\State_Boss">
+      <UniqueIdentifier>{766e97a9-2a8d-4231-a3ca-75388cab65e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,7 @@
 #include "framework.h"
 #include "CCollisionManager.h"
 #include "CScene.h"
+#include "CPlayer.h"
 
 CCollisionManager::CCollisionManager()
 {

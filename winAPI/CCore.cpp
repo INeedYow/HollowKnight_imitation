@@ -23,7 +23,8 @@ CCore::~CCore()
 		DeleteObject(m_arrBrush[i]);
 	}
 	for (int i = 0; i < (int)ePEN::SIZE; i++)
-	{
+	{	// white ,, stock
+		if ((int)ePEN::WHITE == i) continue;
 		DeleteObject(m_arrPen[i]);
 	}
 	for (int i = 0; i < (int)eFONT::SIZE; i++)
@@ -40,7 +41,8 @@ void CCore::update()
 	CKeyManager::getInst()->update();
 
 	CSceneManager::getInst()->update();
-	CCollisionManager::getInst()->update();
+	CCollisionManager::getInst()->update();			//scnMgr 보다 아래
+	CGameManager::getInst()->update();				//collMgr 보다 아래
 	CCameraManager::getInst()->update();
 	CUIManager::getInst()->update();
 }
@@ -90,6 +92,7 @@ void CCore::CreateBrushPenFont()
 	m_arrPen[(UINT)TYPE_PEN::RED] = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
 	m_arrPen[(UINT)TYPE_PEN::GREEN] = CreatePen(PS_SOLID, 1, RGB(0, 255, 0));
 	m_arrPen[(UINT)TYPE_PEN::BLUE] = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
+	m_arrPen[(UINT)TYPE_PEN::WHITE] = (HPEN)GetStockObject(WHITE_PEN);
 }
 
 HBRUSH CCore::getBrush(eBRUSH type)

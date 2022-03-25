@@ -146,8 +146,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CAI.h" />
+    <ClInclude Include="CGameManager.h" />
     <ClInclude Include="CMonster_Melee.h" />
     <ClInclude Include="CState_Attack.h" />
+    <ClInclude Include="CState_BIdle.h" />
+    <ClInclude Include="CState_BMove.h" />
+    <ClInclude Include="CState_BReady.h" />
+    <ClInclude Include="CState_BSkill.h" />
+    <ClInclude Include="CState_BSpawn.h" />
+    <ClInclude Include="CState_Die.h" />
     <ClInclude Include="CState_Mons.h" />
     <ClInclude Include="CState_Patrol.h" />
     <ClInclude Include="CState_Stop.h" />
@@ -225,8 +232,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CAI.cpp" />
+    <ClCompile Include="CGameManager.cpp" />
     <ClCompile Include="CMonster_Melee.cpp" />
     <ClCompile Include="CState_Attack.cpp" />
+    <ClCompile Include="CState_BIdle.cpp" />
+    <ClCompile Include="CState_BMove.cpp" />
+    <ClCompile Include="CState_BReady.cpp" />
+    <ClCompile Include="CState_BSkill.cpp" />
+    <ClCompile Include="CState_BSpawn.cpp" />
+    <ClCompile Include="CState_Die.cpp" />
     <ClCompile Include="CState_Mons.cpp" />
     <ClCompile Include="CState_Patrol.cpp" />
     <ClCompile Include="CState_Stop.cpp" />

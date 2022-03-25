@@ -11,8 +11,6 @@ private:
 	CScene* m_pArrScene[(int)eSCENE::SIZE];
 	CScene* m_pCurScene;
 
-	CPlayer* m_pPlayer;
-
 public:
 	void sceneChange(eSCENE scene);
 
@@ -21,7 +19,4 @@ public:
 	void init();
 
 	CScene* getCurScene();
-
-	void registerPlayer(CPlayer* pPlayer);
-	fPoint getPlayerPos();
 };

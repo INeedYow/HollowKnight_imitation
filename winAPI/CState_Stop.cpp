@@ -1,8 +1,7 @@
 #include "framework.h"
 #include "CState_Stop.h"
 #include "CMonster.h"
-
-#include "SelectGDI.h"
+#include "CPlayer.h"
 
 CState_Stop::CState_Stop(eSTATE_MONS state)
 	:CState_Mons(state)
@@ -16,22 +15,23 @@ CState_Stop::~CState_Stop()
 
 void CState_Stop::update(UINT& chk)
 {
-	tMonsInfo info = getMonster()->getMonsInfo();
 	fPoint pos = getMonster()->getPos();
+	fPoint playerPos = gameGetPlayer()->getPos();
 	fPoint size = getMonster()->getSize();
-	// 상태끼리 변화는 되도록 상태내에서 처리하는게 유지 관리 하기 편할 것 같긴 한데
-	// 아무래도 여러 상태에서 중복으로 처리할 경우 그냥 해당 obj update()에서 하는 게
+	tMonsInfo info = getMonster()->getMonsInfo();
+
 	if (chk & SM_TRACE)
 	{
-		if (pos.y - size.y / 2.f < getMyPos().y &&
-			getMyPos().y < pos.y + size.y / 2.f)
+		if (info.fDist <= info.fTraceRange)
 		{
-			if (info.fDist < info.fTraceRange)
+			if (playerPos.y >= pos.y - size.y &&
+				playerPos.y <= pos.y + size.y / 2.f)
 			{
 				changeMonsState(getOwner(), eSTATE_MONS::TRACE);
 			}
 		}
 	}
+
 	m_fTimer -= fDT;
 
 	if (m_fTimer < 0.f)
@@ -42,7 +42,8 @@ void CState_Stop::update(UINT& chk)
 
 void CState_Stop::enter()
 {
-	m_fTimer = 2.5f;
+	m_fTimer = 2.f;
+	getMonster()->playAnim(L"BT_Stop");
 }
 
 void CState_Stop::exit()
@@ -58,5 +59,5 @@ void CState_Stop::printInfo(HDC hDC)
 	pos = rendPos(pos);
 
 	LPCWSTR	strInfo = L"Stop";
-	TextOutW(hDC, (int)pos.x + 0, (int)pos.y - 125, strInfo, (int)wcslen(strInfo));
+	TextOutW(hDC, (int)pos.x + 0, (int)pos.y - 65, strInfo, (int)wcslen(strInfo));
 }

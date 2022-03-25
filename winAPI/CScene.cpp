@@ -139,6 +139,8 @@ void CScene::deleteObjectGroup(eOBJ objGroup)
 
 void CScene::deleteObjectAll()
 {
+	CGameManager::getInst()->unRegistPlayer();		// 오브젝트 모두 지울 때 gameMgr에 등록된 플레이어도 리셋
+
 	for (UINT i = 0; i < (UINT)eOBJ::SIZE; i++)
 		deleteObjectGroup((eOBJ)i);
 }
