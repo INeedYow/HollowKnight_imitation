@@ -67,6 +67,7 @@ private:
 #define SB_SPD				110
 #define SB_READY_DURA		2
 #define SB_ACCEL			(2 * SB_SHIELD_SPD / SB_READY_DURA)
+#define SB_DMG_DELAY		0.35			// 플레이어 미사일로 부터 피해 입는 주기
 
 // collider size
 #define SB_NmSIZEX			190		

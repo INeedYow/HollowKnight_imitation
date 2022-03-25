@@ -16,7 +16,6 @@ void CButtonUI_Image::update()
 {
 }
 
-// TODO
 void CButtonUI_Image::render(HDC hDC)
 {
 	if (nullptr == m_pTex) return;

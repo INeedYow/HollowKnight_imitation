@@ -45,7 +45,6 @@ CBoss_Markoth::CBoss_Markoth()
 
 	PLAY(L"st_Normal");
 
-	// TODO death
 	CAI* pAI = new CAI;
 	pAI->addState(new CState_BMove(eSTATE_MONS::MOVE));
 	pAI->addState(new CState_BIdle(eSTATE_MONS::IDLE));
@@ -157,22 +156,69 @@ void CBoss_Markoth::collisionEnter(CCollider* pOther)
 
 	switch (pOther->getOwner()->getName())
 	{	// att도 player, monster 구분해야 
-	case eOBJNAME::MISSILE_PLAYER:
-		info = getMonsInfo();
-		info.iHP -= 2;
-		setMonsInfo(info);
-		break;
+		if (!isCheck(SM_DEATH))
+		{
+			info = getMonsInfo();
+
+			info.iHP -= 2;
+
+			info.fvKnockBackDir.x = 1.f;
+			if (((CMissile*)pOther->getOwner())->getDir().x < 0.f)		// 미사일 방향에 따른 넉백방향
+				info.fvKnockBackDir.x = -1.f;
+			info.fKnockBackSpd = (float)SM_KBSPD_M;
+			info.fKnockBackTimer = (float)SM_KBTIME;
+
+			m_fTimer = (float)SB_DMG_DELAY;
+			setMonsInfo(info);
+			break;
+		}
 
 	case eOBJNAME::ATTACK:
+	{
 		info = getMonsInfo();
+
 		info.iHP -= 1;
-		setMonsInfo(info);
+
+		info.fvKnockBackDir = getPos() - gameGetPlayer()->getPos();
+		info.fKnockBackSpd = (float)SM_KBSPD_L;
+		info.fKnockBackTimer = (float)SM_KBTIME;
+
+		setMonsInfo(info); 
+	}
 		break;
 	}
 }
 
 void CBoss_Markoth::collisionKeep(CCollider* pOther)
 {
+	tMonsInfo info;
+
+	switch (pOther->getOwner()->getName())
+	{	// att도 player, monster 구분해야 
+	case eOBJNAME::MISSILE_PLAYER:
+	{
+		m_fTimer -= fDT;
+
+		if (!isCheck(SM_DEATH) && m_fTimer < 0.f)
+		{
+			info = getMonsInfo();
+
+			info.iHP -= 2;
+
+			info.fvKnockBackDir.x = 1.f;
+			if (((CMissile*)pOther->getOwner())->getDir().x < 0.f)		// 미사일 방향에 따른 넉백방향
+				info.fvKnockBackDir.x = -1.f;
+			info.fvKnockBackDir.y = 0.f;
+			info.fKnockBackSpd = (float)SM_KBSPD_M;
+			info.fKnockBackTimer = (float)SM_KBTIME;
+
+			setMonsInfo(info);
+
+			m_fTimer = (float)SB_DMG_DELAY;
+			break;
+		}
+	}
+	}
 }
 
 void CBoss_Markoth::collisionExit(CCollider* pOther)

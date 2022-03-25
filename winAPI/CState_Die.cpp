@@ -36,15 +36,15 @@ void CState_Die::exit()
 
 void CState_Die::printInfo(HDC hDC)
 {
-	SelectGDI font(hDC, eFONT::COMIC24);
+	SelectGDI font(hDC, eFONT::COMIC28);
 
 	fPoint pos = getMonster()->getPos();
 	pos = rendPos(pos);
 
 	LPCWSTR	strInfo = L"Die";
-	TextOutW(hDC, (int)pos.x + 0, (int)pos.y - 65, strInfo, (int)wcslen(strInfo));
+	TextOutW(hDC, (int)pos.x + 0, (int)pos.y - 75, strInfo, (int)wcslen(strInfo));
 	
 	wchar_t bufTimer[255] = {};
 	swprintf_s(bufTimer, L"%.1fs", m_fTimer);
-	TextOutW(hDC, (int)pos.x + 0, (int)pos.y - 35, bufTimer, (int)wcslen(bufTimer));
+	TextOutW(hDC, (int)pos.x + 0, (int)pos.y - 45, bufTimer, (int)wcslen(bufTimer));
 }

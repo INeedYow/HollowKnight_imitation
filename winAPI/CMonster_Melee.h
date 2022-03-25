@@ -29,10 +29,10 @@ private:
 	void printInfo(HDC hDC);
 };
 
-// beetle
 #define M_GRAV				2000
 #define M_SPDY_MIN			-700
 
+// beetle
 #define M_BT_SIZEX			88
 #define M_BT_SIZEY			140
 #define M_BT_SIZEX_			186
@@ -42,9 +42,9 @@ private:
 #define M_BT_SPD			200
 #define M_BT_TRACE_RNG		450
 
-// larva
-#define M_LV_SIZEX			80
-#define M_LV_SIZEY			40
+// mush
+#define M_MS_SIZEX			110
+#define M_MS_SIZEY			100
 
-#define M_LV_HP				2
-#define M_LV_SPD			180
+#define M_MS_HP				3
+#define M_MS_SPD			250

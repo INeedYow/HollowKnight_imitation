@@ -122,8 +122,8 @@ void CMonster::playAnim(const wstring& keyWord)
 		strKey = L"BT_";
 		break;
 
-	case eOBJNAME::MONS_LARVA:
-		strKey = L"LV_";
+	case eOBJNAME::MONS_MUSH:
+		strKey = L"MS_";
 		break;
 
 	}
@@ -210,68 +210,53 @@ CMonster* CMonster::create(eOBJNAME eName, fPoint pos)
 		pMonsMl->PLAY(L"BT_Stop_L");
 		break;
 	}
-	case eOBJNAME::MONS_LARVA:
+
+	case eOBJNAME::MONS_MUSH:
 	{
-		info.iHP = M_LV_HP;
-		info.fSpd = M_LV_SPD;
+		info.iHP = M_MS_HP;
+		info.fSpd = M_MS_SPD;
 
 		pMonsMl = new CMonster_Melee;
 		pMonsMl->setPos(pos);	//
-		pMonsMl->setName(eOBJNAME::MONS_LARVA);	//
-		pMonsMl->setSize(fPoint((float)M_LV_SIZEX, (float)M_LV_SIZEY));
-		pMonsMl->getCollider()->setSize(fPoint((float)M_LV_SIZEX, (float)M_LV_SIZEY));
-		pMonsMl->getCollider()->setOffset(fPoint(0.f, 6.f));
+		pMonsMl->setName(eOBJNAME::MONS_MUSH);	//
+		pMonsMl->setSize(fPoint((float)M_MS_SIZEX, (float)M_MS_SIZEY));
+		pMonsMl->getCollider()->setSize(fPoint((float)M_MS_SIZEX, (float)M_MS_SIZEY));
+		pMonsMl->getCollider()->setOffset(fPoint(0.f, 10.f));
 		pMonsMl->setMonsInfo(info);
 		pMonsMl->setCheck(SM_TRACE, false);
 
 		CAI* pAI = new CAI;
 		pAI->addState(new CState_Stop(eSTATE_MONS::STOP));
 		pAI->addState(new CState_Patrol(eSTATE_MONS::PATROL));
-		pAI->addState(new CState_Trace(eSTATE_MONS::TRACE));
 		pAI->addState(new CState_Die(eSTATE_MONS::DIE));
 
 		pAI->setCurState(eSTATE_MONS::STOP);
 		pMonsMl->setAI(pAI);
 
-		/*pMonsMl->createAnimator();
-		pMonsMl->setTex(L"Mons_BeetleTex", L"texture\\monster\\mons_beetle\\mons_beetle.bmp");
+		pMonsMl->createAnimator();
+		pMonsMl->setTex(L"Mons_MushTex", L"texture\\monster\\mons_mush\\mons_mush.bmp");
 
-		pMonsMl->createAnim(L"BT_Stop_R", pMonsMl->getTex(),
-			fPoint(0, 0), fPoint(118, 192), fPoint(118, 0), 0.2f, 6);
-		pMonsMl->createAnim(L"BT_Stop_L", pMonsMl->getTex(),
-			fPoint(590, 192), fPoint(118, 192), fPoint(-118, 0), 0.2f, 6);
+		pMonsMl->createAnim(L"MS_Stop_R", pMonsMl->getTex(),
+			fPoint(125, 0), fPoint(125, 112), fPoint(125, 0), 0.5f, 1);
+		pMonsMl->createAnim(L"MS_Stop_L", pMonsMl->getTex(),
+			fPoint(250, 112), fPoint(125, 112), fPoint(-125, 0), 0.5f, 1);
 
-		pMonsMl->createAnim(L"BT_Patrol_R", pMonsMl->getTex(),
-			fPoint(708, 0), fPoint(139, 192), fPoint(139, 0), 0.2f, 7);
-		pMonsMl->createAnim(L"BT_Patrol_L", pMonsMl->getTex(),
-			fPoint(1542, 192), fPoint(139, 192), fPoint(-139, 0), 0.2f, 7);
+		pMonsMl->createAnim(L"MS_Patrol_R", pMonsMl->getTex(),
+			fPoint(125, 0), fPoint(125, 112), fPoint(125, 0), 0.25f, 4);
+		pMonsMl->createAnim(L"MS_Patrol_L", pMonsMl->getTex(),
+			fPoint(375, 112), fPoint(125, 112), fPoint(-125, 0), 0.25f, 4);
 
-		pMonsMl->createAnim(L"BT_Turn_R", pMonsMl->getTex(),
-			fPoint(1681, 0), fPoint(104, 192), fPoint(104, 0), 0.35f, 2);
-		pMonsMl->createAnim(L"BT_Turn_L", pMonsMl->getTex(),
-			fPoint(1785, 192), fPoint(104, 192), fPoint(-104, 0), 0.35f, 2);
+		pMonsMl->createAnim(L"MS_Turn_R", pMonsMl->getTex(),
+			fPoint(500, 0), fPoint(123, 107), fPoint(123, 0), 0.25f, 2, false);
+		pMonsMl->createAnim(L"MS_Turn_L", pMonsMl->getTex(),
+			fPoint(623, 107), fPoint(123, 107), fPoint(-123, 0), 0.25f, 2, false);
 
-		pMonsMl->createAnim(L"BT_TraceEnter_R", pMonsMl->getTex(),
-			fPoint(0, 384), fPoint(171, 190), fPoint(171, 0), 0.18f, 5);
-		pMonsMl->createAnim(L"BT_TraceEnter_L", pMonsMl->getTex(),
-			fPoint(684, 576), fPoint(171, 190), fPoint(-171, 0), 0.18f, 5);
+		pMonsMl->createAnim(L"MS_Die_R", pMonsMl->getTex(),
+			fPoint(0, 219), fPoint(151, 112), fPoint(151, 0), 0.25f, 3, false);
+		pMonsMl->createAnim(L"MS_Die_L", pMonsMl->getTex(),
+			fPoint(302, 331), fPoint(151, 112), fPoint(-151, 0), 0.25f, 3, false);
 
-		pMonsMl->createAnim(L"BT_Trace_R", pMonsMl->getTex(),
-			fPoint(855, 394), fPoint(199, 180), fPoint(199, 0), 0.4f, 4);
-		pMonsMl->createAnim(L"BT_Trace_L", pMonsMl->getTex(),
-			fPoint(1452, 586), fPoint(199, 180), fPoint(-199, 0), 0.4f, 4);
-
-		pMonsMl->createAnim(L"BT_TraceExit_R", pMonsMl->getTex(),
-			fPoint(1649, 394), fPoint(132, 183), fPoint(132, 0), 0.36f, 1);
-		pMonsMl->createAnim(L"BT_TraceExit_L", pMonsMl->getTex(),
-			fPoint(1649, 586), fPoint(132, 183), fPoint(-132, 0), 0.36f, 1);
-
-		pMonsMl->createAnim(L"BT_Die_R", pMonsMl->getTex(),
-			fPoint(0, 770), fPoint(190, 136), fPoint(190, 0), 0.22f, 9, false);
-		pMonsMl->createAnim(L"BT_Die_L", pMonsMl->getTex(),
-			fPoint(1520, 906), fPoint(190, 136), fPoint(-190, 0), 0.22f, 9, false);
-
-		pMonsMl->PLAY(L"BT_Stop_L");*/
+		pMonsMl->PLAY(L"MS_Stop_L");
 		break;
 	}
 

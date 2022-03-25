@@ -48,7 +48,6 @@ private:
 	list<tCamEffect>	m_listCamEffect;	// 리스트로 카메라 효과 순차적으로 실행
 	CTexture*			m_pTex;
 
-	// TODO
 	bool		m_bArea;			// 카메라 범위 적용여부
 	tCamArea	m_tCamArea;			// 카메라 범위 지정
 

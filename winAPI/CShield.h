@@ -42,4 +42,3 @@ public:
 private:
 	void calculateRad();
 };
-// TODO pos, owner 먼저 set해주고 radius도 set해줘야 하는데 // 실수 방지하는 방법은?

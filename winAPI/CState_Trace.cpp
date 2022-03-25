@@ -4,7 +4,6 @@
 #include "CMonster_Melee.h"
 #include "CPlayer.h"
 
-// TODO 생성자 재정의 해서 상태 변수값 받으면 어떤가
 CState_Trace::CState_Trace(eSTATE_MONS state)
 	:CState_Mons(state)
 {
@@ -99,12 +98,12 @@ void CState_Trace::exit()
 
 void CState_Trace::printInfo(HDC hDC)
 {
-	SelectGDI font(hDC, eFONT::COMIC24);
+	SelectGDI font(hDC, eFONT::COMIC28);
 
 	fPoint pos = getMonster()->getPos();
 	pos = rendPos(pos);
 
 	LPCWSTR	strInfo = L"Trace";
-	TextOutW(hDC, (int)pos.x + 0, (int)pos.y - 65, strInfo, (int)wcslen(strInfo));
+	TextOutW(hDC, (int)pos.x + 0, (int)pos.y - 75, strInfo, (int)wcslen(strInfo));
 }
 

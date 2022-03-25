@@ -66,11 +66,11 @@ void CState_Patrol::exit()
 
 void CState_Patrol::printInfo(HDC hDC)
 {
-	SelectGDI font(hDC, eFONT::COMIC24);
+	SelectGDI font(hDC, eFONT::COMIC28);
 
 	fPoint pos = getMonster()->getPos();
 	pos = rendPos(pos);
 
 	LPCWSTR	strInfo = L"Patrol";
-	TextOutW(hDC, (int)pos.x + 0, (int)pos.y - 65, strInfo, (int)wcslen(strInfo));
+	TextOutW(hDC, (int)pos.x + 0, (int)pos.y - 75, strInfo, (int)wcslen(strInfo));
 }

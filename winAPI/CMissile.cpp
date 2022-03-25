@@ -113,11 +113,16 @@ void CMissile::collisionEnter(CCollider* pOther)
 	{	// 플레이어 미사일인 경우
 		switch (pOther->getOwner()->getName())
 		{
-		case eOBJNAME::MONSTER:
+		case eOBJNAME::MONS_BEETLE:
+		case eOBJNAME::MONS_LARVA:
 		case eOBJNAME::BOSS:
-		case eOBJNAME::TILE:
 		{
-			// TODO 이펙트 생성
+			//TODO
+			break;
+		}
+		case eOBJNAME::TILE:
+		{	// TODO 이펙트 생성
+			deleteObj(this);
 			break;
 		}
 
@@ -146,15 +151,12 @@ void CMissile::collisionKeep(CCollider* pOther)
 	{	// 플레이어 미사일인 경우
 		switch (pOther->getOwner()->getName())
 		{
-		case eOBJNAME::MONSTER:
+		case eOBJNAME::MONS_BEETLE:
+		case eOBJNAME::MONS_LARVA:
 		case eOBJNAME::BOSS:
-		case eOBJNAME::TILE:
 		{
-			//deleteObj(this);
-			// TODO 이펙트 생성
 			break;
 		}
-
 		}
 	}
 	else if (eOBJNAME::MISSILE_MONSTER == getName())

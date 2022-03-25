@@ -54,11 +54,11 @@ void CState_Stop::exit()
 
 void CState_Stop::printInfo(HDC hDC)
 {
-	SelectGDI font(hDC, eFONT::COMIC24);
+	SelectGDI font(hDC, eFONT::COMIC28);
 
 	fPoint pos = getMonster()->getPos();
 	pos = rendPos(pos);
 
 	LPCWSTR	strInfo = L"Stop";
-	TextOutW(hDC, (int)pos.x + 0, (int)pos.y - 65, strInfo, (int)wcslen(strInfo));
+	TextOutW(hDC, (int)pos.x + 0, (int)pos.y - 75, strInfo, (int)wcslen(strInfo));
 }

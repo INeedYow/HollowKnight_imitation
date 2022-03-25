@@ -274,7 +274,7 @@ void CPlayer::collisionKeep(CCollider* pOther)
 	{
 	case eOBJNAME::MISSILE_MONSTER:
 	case eOBJNAME::MONS_BEETLE:
-	case eOBJNAME::MONS_LARVA:
+	case eOBJNAME::MONS_MUSH:
 	case eOBJNAME::SHIELD:
 	case eOBJNAME::BOSS:
 	{
@@ -403,7 +403,6 @@ void CPlayer::collisionExit(CCollider* pOther)
 	case eOBJNAME::TILE:
 	case eOBJNAME::GROUND:
 		if (isTopColl(getCollider(), pOther))
-			// TODO
 		{	// 충돌 해제 할 때도 이전 좌표 있으면 되겠네
 			if (--m_tInfo.iBottomCnt <= 0 && m_pStatus->getCurState()->getState() != eSTATE_PLAYER::JUMP)
 			{	// 점프할 때도 exit에서 강제로 fall로 바꿔서 점프 안 됐었음

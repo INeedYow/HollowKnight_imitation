@@ -3,7 +3,6 @@
 
 class CAI;
 
-// TODO 플레이어 수정
 struct tMonsInfo
 {
 	int		iHP;

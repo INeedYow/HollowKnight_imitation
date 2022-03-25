@@ -49,17 +49,21 @@ void CScene_Stage01::enter()
 	addObject(pPlayer, eOBJ::PLAYER);
 
 	if (CGameManager::getInst()->getPlayer() == nullptr)		
-	{	// 처음 nullptr일 땐 생성하고 등록
+	{	// 처음 nullptr일 땐 생성하고 등록만
 		CGameManager::getInst()->registPlayer(pPlayer);
 	}
 	else
 	{	// 저장해둔 정보 입력
+		CGameManager::getInst()->registPlayer(pPlayer);
 		CGameManager::getInst()->loadPlayerInfo(pPlayer);		
 	}
 
 	// monster test
 	CMonster_Melee* pMon1 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(1500, 1430));
 	addObject(pMon1, eOBJ::MONSTER);
+
+	CMonster_Melee* pMon2 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_MUSH, fPoint(1800, 1430));
+	addObject(pMon2, eOBJ::MONSTER);
 	
 	CBackGround* pBg = new CBackGround;
 	pBg->load(L"BG_stage1", L"texture\\background\\stage1_back.bmp");

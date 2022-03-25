@@ -68,7 +68,14 @@ void CState_Focus::printInfo(HDC hDC)
 	pos = rendPos(pos);
 
 	LPCWSTR	strInfo = L"Focus";
+	wchar_t bufTime[255] = {};
+	wchar_t bufMax[255] = {};
+
+	swprintf_s(bufTime, L"SpdY = %.1f", m_fTimer);
+	swprintf_s(bufMax, L"Max = %.1f", (float)P_FOCUSMAX);
 
 	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 150, strInfo, (int)wcslen(strInfo));
-	//TODO
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 125, bufTime, (int)wcslen(bufTime));
+	TextOutW(hDC, (int)pos.x - 150, (int)pos.y - 100, bufMax, (int)wcslen(bufMax));
+
 }

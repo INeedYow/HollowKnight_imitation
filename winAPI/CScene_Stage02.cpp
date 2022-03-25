@@ -65,8 +65,14 @@ void CScene_Stage02::enter()
 	CMonster_Melee* pMon2 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(230, 1610));
 	addObject(pMon2, eOBJ::MONSTER);
 
-	CMonster_Melee* pMon3 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(3230, 1590));
+	CMonster_Melee* pMon3 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(3000, 1300));
 	addObject(pMon3, eOBJ::MONSTER);
+
+	CMonster_Melee* pMon4 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_MUSH, fPoint(3800, 1600));
+	addObject(pMon2, eOBJ::MONSTER);
+
+	CMonster_Melee* pMon5 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_MUSH, fPoint(200, 1300));
+	addObject(pMon2, eOBJ::MONSTER);
 
 	// ground
 	CGround* pGrd1 = CGround::create(1444, 1430, 2378, 1580);
@@ -126,12 +132,6 @@ void CScene_Stage02::enter()
 	CGround* pFloat4 = CGround::create(3250, 1374, 3364, 1406);
 	addObject(pFloat4, eOBJ::GROUND);
 
-	// monster
-	
-
-
-
-
 	// coll
 	checkGrp(eOBJ::PLAYER, eOBJ::MONSTER);
 	checkGrp(eOBJ::PLAYER, eOBJ::MISSILE_MONSTER);
@@ -142,12 +142,10 @@ void CScene_Stage02::enter()
 	checkGrp(eOBJ::MONSTER, eOBJ::GROUND);
 
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::MONSTER);
-	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::BOSS);
 
 	checkGrp(eOBJ::MISSILE_MONSTER, eOBJ::TILE);
 	checkGrp(eOBJ::MISSILE_MONSTER, eOBJ::GROUND);
 
-	checkGrp(eOBJ::ATTACK, eOBJ::BOSS);
 	checkGrp(eOBJ::ATTACK, eOBJ::MONSTER);
 
 	// cam
