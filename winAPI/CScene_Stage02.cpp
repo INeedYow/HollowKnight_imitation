@@ -33,6 +33,9 @@ void CScene_Stage02::update()
 
 	if (KEY_ON('N'))
 		changeScn(eSCENE::STAGE_03);
+
+	if (gameGetPlayer()->getPos().x >= STG02_SIZEX - 40)
+		changeScn(eSCENE::STAGE_03);
 }
 
 void CScene_Stage02::enter()

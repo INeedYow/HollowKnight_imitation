@@ -16,6 +16,7 @@ struct tPlayerInfo
 	float		fSpdY;
 	float		fGravity;
 	int			iBottomCnt;
+	float		fLandTimer;
 
 	float		fNoDmgTimer;
 
@@ -97,6 +98,7 @@ enum class eSTATE_PLAYER
 	FOCUS,
 	DASH,
 	DASH2IDLE,
+	LAND,
 	STUN,
 	DEATH,
 
@@ -106,7 +108,6 @@ enum class eSTATE_PLAYER
 	HANG,
 	HANG2JUMP,
 
-	LAND,
 	LOOKUP,
 	LOOKDOWN,
 	LOOKUP2IDLE,
@@ -121,7 +122,8 @@ enum class eSTATE_PLAYER
 #define P_SPDX					400
 #define P_SPDY					800
 #define P_GRAV					5600
-#define P_SPDY_MIN				-1300
+#define P_SPDY_MIN				-1400
+#define P_LAND_TIMER			0.8				
 
 #define P_JUMPHOLDMAX			0.35
 #define P_FIRESOUL				30
@@ -130,7 +132,7 @@ enum class eSTATE_PLAYER
 #define P_FIREDELAY				0.5
 #define P_ATTDELAY				0.3
 #define P_STUNDURA				0.5
-#define P_DURA_INVIN			1.0
+#define P_DURA_INVIN			1.5
 
 //
 #define PSLASH_WIDTH			180

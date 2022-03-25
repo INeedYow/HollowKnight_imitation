@@ -7,6 +7,7 @@
 #include "CBackGround.h"
 #include "CFrontGround.h"
 #include "CGround.h"
+#include "CEffect.h"
 
 #include "CMonster_Melee.h"
 
@@ -33,9 +34,8 @@ void CScene_Stage01::update()
 		changeScn(eSCENE::STAGE_02);
 
 	// 씬 전환
-	if (gameGetPlayer()->getPos().y >= STG01_SIZEY - 50)
+	if (gameGetPlayer()->getPos().y >= STG01_SIZEY - 40)
 		changeScn(eSCENE::STAGE_02);
-
 }
 
 void CScene_Stage01::enter()
@@ -98,6 +98,21 @@ void CScene_Stage01::enter()
 	addObject(pRightWall, eOBJ::GROUND);
 
 	g_bDebug = true;
+
+	////////////////
+	CEffect* pEff = new CEffect;
+	pEff->setEffName(L"EF_dash_R");
+	pEff->load(L"Effect_dash", L"texture\\effect\\effect_dash.bmp");
+	pEff->setDuration(0.4f);
+	pEff->setFollow(pPlayer);
+	pEff->setOffset(fPoint(100.f, 0.f));
+	pEff->createAnim(L"effect_dash", pEff->getTex(),
+		fPoint(289, 0), fPoint(289, 146), fPoint(289, 0), 0.1f, 4, false);
+	CEffectManager::getInst()->addEffect(pEff);
+	pEff->PLAY(L"effect_dash");
+	addObject(pEff, eOBJ::EFFECT);
+
+	////////////////
 
 	// 충돌 체크
 	checkGrp(eOBJ::PLAYER, eOBJ::TILE);

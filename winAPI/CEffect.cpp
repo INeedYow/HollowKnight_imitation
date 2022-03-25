@@ -2,14 +2,14 @@
 #include "CEffect.h"
 #include "CTexture.h"
 
- //TODO 이펙트 구현방법
 CEffect::CEffect()
 {
-	m_pTex = nullptr;
-
-	m_tInfo = {};
-
 	CObject::setName(eOBJNAME::EFFECT);
+
+	m_pTex = nullptr;
+	m_pFollow = nullptr;
+	m_fDura = 0.f;
+	m_bActive = false;
 
 	createAnimator();
 }
@@ -18,29 +18,44 @@ CEffect::~CEffect()
 {
 }
 
-void CEffect::setInfo(tEffectInfo info)
+void CEffect::setDuration(float fDura)
 {
-	m_tInfo = info;
+	m_fDura = fDura;
 }
 
-void CEffect::setName(const wstring& strName)
+void CEffect::setFollow(CObject* pFollow)
+{
+	m_pFollow = pFollow;
+}
+
+void CEffect::setEffName(const wstring& strName)
 {
 	m_strName = strName;
 }
 
-//void CEffect::setTex(const wstring& strName, const wstring& strPath)
-//{
-//	m_pTex = loadTex();
-//}
-
-const wstring& CEffect::getName()
+void CEffect::setOffset(fPoint offset)
 {
-	return m_strName;
+	m_fpOffset = offset;
 }
 
-const tEffectInfo& CEffect::getInfo()
+void CEffect::setActive(bool isAct)
 {
-	return m_tInfo;
+	m_bActive = isAct;
+}
+
+void CEffect::setTex(CTexture* pTex)
+{
+	m_pTex = pTex;
+}
+
+fPoint CEffect::getOffset()
+{
+	return m_fpOffset;
+}
+
+const wstring& CEffect::getEffName()
+{
+	return m_strName;
 }
 
 CTexture* CEffect::getTex()
@@ -48,21 +63,37 @@ CTexture* CEffect::getTex()
 	return m_pTex;
 }
 
+bool CEffect::isActive()
+{
+	return m_bActive;
+}
+
 void CEffect::update()
 {
-	m_tInfo.fTimer += fDT;
+	if (!m_bActive) return;
 
-	if (m_tInfo.fDura <= m_tInfo.fTimer)
-		deleteObj(this);
+	m_fDura -= fDT;
+
+	if (m_fDura < 0.f)
+		m_bActive = false;
+
+	if (nullptr != m_pFollow)
+	{
+		setPos(m_pFollow->getPos() + m_fpOffset);
+	}
+
+	if (nullptr != getAnimator())
+		getAnimator()->update();
 }
 
 void CEffect::render(HDC hDC)
 {
+	if (!m_bActive) return;
+
 	componentRender(hDC);
 }
 
 void CEffect::load(const wstring& strKey, const wstring& strPath)
 {
 	m_pTex = loadTex(strKey, strPath);
-	setSize(fPoint((float)(m_pTex->getBmpWidth()), (float)(m_pTex->getBmpHeight())));
 }

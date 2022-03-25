@@ -2,6 +2,7 @@
 #include "CState_Dash.h"
 #include "CState_Player.h"
 #include "CPlayer.h"
+#include "CEffect.h"
 
 CState_Dash::CState_Dash(eSTATE_PLAYER state)
 	: CState_Player(state)
@@ -65,6 +66,30 @@ void CState_Dash::enter()
 	info.fNoDmgTimer += 0.5f;
 	getPlayer()->setPlayerInfo(info);
 
+	//////////////////////////////////////////////
+
+	/*fPoint pos = getPlayer()->getPos();
+
+	CEffect* pEff = new CEffect;
+	pEff->load(L"Effect_dash", L"texture\\effect\\effect_dash.bmp");
+	pEff->setPos(pos);
+	pEff->setDuration(0.4f);
+	if (getPlayer()->isCheck(SP_DIR))
+	{
+		pEff->createAnim(L"effect_dash", pEff->getTex(),
+			fPoint(289, 0), fPoint(289, 146), fPoint(289, 0), 0.1f, 4, false);
+	}
+	else
+	{
+		pEff->createAnim(L"effect_dash", pEff->getTex(),
+			fPoint(867, 146), fPoint(289, 146), fPoint(-289, 0), 0.1f, 4, false);
+	}
+	pEff->PLAY(L"effect_dash");
+	createObj(pEff, eOBJ::EFFECT);*/
+	///////////////////////////
+	CEffectManager::getInst()->showEffect(L"EF_dash_R", fPoint(1200.f, 1430.f));
+
+	//////////////////////////////////////////////
 	m_fDura = 0.35f;
 	m_fSpd = 1350.f;
 	m_fDecel = 0.f;

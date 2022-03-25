@@ -62,18 +62,18 @@ CBoss_Markoth::CBoss_Markoth()
 }
 
 CBoss_Markoth::~CBoss_Markoth()
-{
-	for (int i = 0; i < m_vecShield.size(); i++)
-	{
-		if (nullptr != m_vecShield[i])
-			delete m_vecShield[i];
-	}
+{	// scn에서 지울
+	//for (int i = 0; i < m_vecShield.size(); i++)
+	//{
+	//	if (nullptr != m_vecShield[i])
+	//		delete m_vecShield[i];
+	//}
 
-	for (int i = 0; i < m_vecSpear.size(); i++)
-	{
-		if (nullptr != m_vecSpear[i])
-			delete m_vecSpear[i];
-	}
+	//for (int i = 0; i < m_vecSpear.size(); i++)
+	//{
+	//	if (nullptr != m_vecSpear[i])
+	//		delete m_vecSpear[i];
+	//}
 }
 
 CBoss_Markoth* CBoss_Markoth::clone()

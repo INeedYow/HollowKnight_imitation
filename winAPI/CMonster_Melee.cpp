@@ -250,9 +250,9 @@ void CMonster_Melee::printInfo(HDC hDC)
 
 	swprintf_s(bufX, L"x = %.1f", pos.x);
 	swprintf_s(bufY, L"y = %.1f", pos.y);
-	swprintf_s(bufHP, L"y = %d", info.iHP);
+	swprintf_s(bufHP, L"HP = %d", info.iHP);
 	swprintf_s(bufDist, L"DistX = %.1f", info.fDist);
-	swprintf_s(bufTRng, L"TRange = %.1f", info.fTraceRange);
+	swprintf_s(bufTRng, L"TraceRange = %.1f", info.fTraceRange);
 	//swprintf_s(bufTest, L"playerPos = %.1f, \t %.1f", playerPos.x, playerPos.y);
 	// bufX,Y 출력보다 아래 위치해야 함
 	pos = rendPos(pos);

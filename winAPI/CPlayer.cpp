@@ -27,6 +27,7 @@
 #include "CState_Dash.h"
 #include "CState_Dash2Idle.h"
 #include "CState_Doublejump.h"
+#include "CState_Land.h"
 #pragma endregion
 
 // test
@@ -46,6 +47,7 @@ CPlayer::CPlayer()
 		0,
 		(float)P_GRAV,
 		0,
+		0.f,
 		0.f,
 		{}
 	};
@@ -74,8 +76,11 @@ CPlayer::CPlayer()
 	createAnim(L"Fall_R",		m_pTex,	fPoint(1806.f, 0.f),		fPoint(87.f, 127.f),		fPoint(87.f, 0.f),			0.2f,	6, false);
 	createAnim(L"Fall_L",		m_pTex,	fPoint(2241.f, 127.f),		fPoint(87.f, 127.f),		fPoint(-87.f, 0.f),			0.2f,	6, false);
 
-	createAnim(L"Land_R",		m_pTex,	fPoint(2328.f, 0.f),		fPoint(76.f, 127.f),		fPoint(76.f, 0.f),			0.3f,	3, false);
-	createAnim(L"Land_L",		m_pTex,	fPoint(2480.f, 127.f),		fPoint(76.f, 127.f),		fPoint(-76.f, 0.f),			0.3f,	3, false);
+	createAnim(L"Land_R",		m_pTex,	fPoint(2328.f, 0.f),		fPoint(76.f, 127.f),		fPoint(76.f, 0.f),			0.8f,	1, false);
+	createAnim(L"Land_L",		m_pTex,	fPoint(2480.f, 127.f),		fPoint(76.f, 127.f),		fPoint(-76.f, 0.f),			0.8f,	1, false);
+
+	createAnim(L"Land2Idle_R",	m_pTex,	fPoint(2404.f, 0.f),		fPoint(76.f, 127.f),		fPoint(76.f, 0.f),			0.2f,	2, false);
+	createAnim(L"Land2Idle_L",	m_pTex,	fPoint(2404.f, 127.f),		fPoint(76.f, 127.f),		fPoint(-76.f, 0.f),			0.2f,	2, false);
 
 	createAnim(L"Stun_R",		m_pTex,	fPoint(2556.f, 2.f),		fPoint(94.f, 126.f),		fPoint(94.f, 0.f),			0.3f,	1, false);
 	createAnim(L"Stun_L",		m_pTex,	fPoint(2556.f, 129.f),		fPoint(94.f, 126.f),		fPoint(94.f, 0.f),			0.3f,	1, false);
@@ -119,7 +124,7 @@ CPlayer::CPlayer()
 
 #pragma endregion
 
-	PLAY(L"Idle_R");
+	PLAY(L"Idle_L");
 }
 
 CPlayer::~CPlayer()
@@ -147,6 +152,7 @@ CPlayer* CPlayer::createNormal(fPoint pos)
 	pStatus->addState(new CState_Jump(eSTATE_PLAYER::JUMP));
 	pStatus->addState(new CState_Doublejump(eSTATE_PLAYER::DOUBLEJUMP));
 	pStatus->addState(new CState_Fall(eSTATE_PLAYER::FALL));
+	pStatus->addState(new CState_Land(eSTATE_PLAYER::LAND));
 
 	pStatus->addState(new CState_Dash(eSTATE_PLAYER::DASH));
 	pStatus->addState(new CState_Dash2Idle(eSTATE_PLAYER::DASH2IDLE));
@@ -311,7 +317,7 @@ void CPlayer::collisionKeep(CCollider* pOther)
 			break;
 		}
 		case eDIR::TOP:
-		{	// groun와 위쪽 충돌 진행 중인데 y값 증가하면(내려가면) 고정
+		{	// ground와 위쪽 충돌 진행 중인데 y값 증가하면(내려가면) 고정
 			fPoint pos = getPos();
 			if (pos.y > m_tPrevInfo.fpPrevPos.y)
 			{
@@ -344,6 +350,9 @@ void CPlayer::collisionEnter(CCollider* pOther)
 
 				setPos(pos);
 				
+				if (m_tInfo.fLandTimer > P_LAND_TIMER)
+					changeMyState(m_pStatus, eSTATE_PLAYER::LAND);
+
 				if (m_uiCheck & SP_AIR)			// air를 fall exit에서 끄면 공중 동작 후 fall상태로 전환하기 힘듦
 					m_uiCheck &= ~(SP_AIR);
 				m_uiCheck &= ~(SP_GODOWN);
@@ -548,6 +557,15 @@ void CPlayer::checkUpdate()
 			m_tInfo.fNoDmgTimer = 0.f;
 			m_uiCheck &= ~(SP_NODMG);
 		}
+	}
+
+	if (m_tInfo.fSpdY == P_SPDY_MIN)
+	{	// 최대 속력으로 낙하 중이면 landTimer 증가
+		m_tInfo.fLandTimer += fDT;
+	}
+	else
+	{
+		m_tInfo.fLandTimer = 0.f;
 	}
 }
 

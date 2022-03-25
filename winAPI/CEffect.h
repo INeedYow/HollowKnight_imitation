@@ -2,31 +2,34 @@
 #include "CObject.h"
 
 class CTexture;
-
-struct tEffectInfo
-{
-	float fTimer;
-	float fDura;
-};
+class CObject;
 
 class CEffect : public CObject
 {
-	//friend class CEffector;
-	CTexture* m_pTex;
-
 	wstring		m_strName;
-	tEffectInfo m_tInfo;
+	bool		m_bActive;		// 활성화 비활성화
+
+	float		m_fDura;
+	fPoint		m_fpOffset;
+
+	CObject*	m_pFollow;		// 따라다닐 오브젝트(nullptr)이면 제자리
+	CTexture*	m_pTex;
 
 public:
 	CEffect();
 	virtual ~CEffect();
 
-	void setInfo(tEffectInfo info);
-	void setName(const wstring& strName);
+	void setDuration(float fDura);
+	void setFollow(CObject* pFollow);
+	void setEffName(const wstring& strName);
+	void setOffset(fPoint offset);
+	void setActive(bool isAct);
+	void setTex(CTexture* pTex);
 
+	fPoint getOffset();
+	const wstring& getEffName();
 	CTexture* getTex();
-	const wstring& getName();
-	const tEffectInfo& getInfo();
+	bool isActive();
 
 	virtual void update();
 	virtual void render(HDC hDC);

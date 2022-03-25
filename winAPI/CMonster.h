@@ -87,6 +87,7 @@ enum class eSTATE_MONS
 //
 #define SM_TRACE			0x0001			// 따라가는 기능이 있는 몬스터인지
 #define SM_FALL				0x0002			// 떨어지는 중
+#define SM_DEATH			0x0004			// setInfo에서 중복 death호출 방지용
 
 //
 #define SB_TIMER			0x00010000		// 보스 쿨타임 timer 도는 상태인지

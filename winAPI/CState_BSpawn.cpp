@@ -18,7 +18,7 @@ void CState_BSpawn::update(UINT& chk)
 {
 	m_fDura -= fDT;
 
-	if (m_fDura < 0.2f)
+	if (m_fDura < 0.4f)
 	{
 		getMonster()->PLAY(L"st_Skill");
 	}

@@ -216,6 +216,7 @@ enum class COLL_DIR
 #include "CCameraManager.h"
 #include "CUIManager.h"
 #include "CGameManager.h"
+#include "CEffectManager.h"
 
 #include "CObject.h"
 // # winAPI_2Dcopy.cpp에 static 멤버변수 초기화할 때 필요

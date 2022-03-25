@@ -27,9 +27,6 @@ void CScene_Stage03::update()
 
 	if (KEY_ON(VK_ESCAPE))
 		changeScn(eSCENE::TITLE);
-
-	if (KEY_ON('N'))
-		changeScn(eSCENE::STAGE_04);
 }
 
 void CScene_Stage03::enter()
@@ -48,7 +45,7 @@ void CScene_Stage03::enter()
 	addObject(pBoss, eOBJ::BOSS);
 
 	CBackGround* pBg = new CBackGround;
-	pBg->load(L"BG_stage3", L"texture\\background\\stage3_a.bmp");
+	pBg->load(L"BG_stage3", L"texture\\background\\stage3_test.bmp");
 	pBg->setPos(fPoint(0.f, 0.f));
 	addObject(pBg, eOBJ::BACKGROUND);
 
@@ -61,10 +58,19 @@ void CScene_Stage03::enter()
 	CGround* pGrd1 = CGround::create(0, 1416, STG03_SIZEX, STG03_SIZEY);
 	addObject(pGrd1, eOBJ::GROUND);
 
+	// float
+	CGround* pFloat1 = CGround::create(1083, 1123, 1235, 1160);
+	addObject(pFloat1, eOBJ::GROUND);
+
+	CGround* pFloat2 = CGround::create(1540, 870, 1766, 923);
+	addObject(pFloat2, eOBJ::GROUND);
+
 	checkGrp(eOBJ::PLAYER, eOBJ::MONSTER);
 	checkGrp(eOBJ::PLAYER, eOBJ::MISSILE_MONSTER);
 	checkGrp(eOBJ::PLAYER, eOBJ::TILE);
 	checkGrp(eOBJ::PLAYER, eOBJ::GROUND);
+	checkGrp(eOBJ::PLAYER, eOBJ::SHIELD);
+	checkGrp(eOBJ::PLAYER, eOBJ::BOSS);
 
 	checkGrp(eOBJ::MONSTER, eOBJ::TILE);
 	checkGrp(eOBJ::MONSTER, eOBJ::GROUND);

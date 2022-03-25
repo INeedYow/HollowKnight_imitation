@@ -74,10 +74,10 @@ void CMonster::setMonsInfo(const tMonsInfo& info)
 {
 	m_tInfo = info;
 
-	if (info.iHP <= 0 && info.iHP > -4444)
+	if (info.iHP <= 0 && !(m_uiCheck & SM_DEATH))
 	{
 		death();
-		m_tInfo.iHP = -4444;
+		m_uiCheck |= SM_DEATH;
 	}
 }
 
