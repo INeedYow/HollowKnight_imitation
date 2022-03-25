@@ -16,7 +16,7 @@ CState_Dash::~CState_Dash()
 {
 }
 
-// TODO dash 연속사용 제어
+// TODO dash 연속사용 제어?
 void CState_Dash::update(UINT& chk)
 {
 	fPoint pos = getPlayer()->getPos();
@@ -68,7 +68,7 @@ void CState_Dash::enter()
 
 	//////////////////////////////////////////////
 
-	/*fPoint pos = getPlayer()->getPos();
+	fPoint pos = getPlayer()->getPos();
 
 	CEffect* pEff = new CEffect;
 	pEff->load(L"Effect_dash", L"texture\\effect\\effect_dash.bmp");
@@ -85,9 +85,9 @@ void CState_Dash::enter()
 			fPoint(867, 146), fPoint(289, 146), fPoint(-289, 0), 0.1f, 4, false);
 	}
 	pEff->PLAY(L"effect_dash");
-	createObj(pEff, eOBJ::EFFECT);*/
-	///////////////////////////
-	CEffectManager::getInst()->showEffect(L"EF_dash_R", fPoint(1200.f, 1430.f));
+	createObj(pEff, eOBJ::EFFECT);
+	/////////////////////////
+	//CEffectManager::getInst()->showEffect(L"EF_dash_R", fPoint(1200.f, 1430.f));
 
 	//////////////////////////////////////////////
 	m_fDura = 0.35f;

@@ -232,6 +232,9 @@
     <ClCompile Include="CState_Land.cpp">
       <Filter>Engine\Component\Status &amp; AI\Status\CState_Player</Filter>
     </ClCompile>
+    <ClCompile Include="CWall.cpp">
+      <Filter>Object\Tile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCollider.h">
@@ -485,6 +488,9 @@
     </ClInclude>
     <ClInclude Include="CState_Land.h">
       <Filter>Engine\Component\Status &amp; AI\Status\CState_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CWall.h">
+      <Filter>Object\Tile</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

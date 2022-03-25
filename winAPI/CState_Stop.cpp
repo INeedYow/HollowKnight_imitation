@@ -20,6 +20,8 @@ void CState_Stop::update(UINT& chk)
 	fPoint size = getMonster()->getSize();
 	tMonsInfo info = getMonster()->getMonsInfo();
 
+	getMonster()->playAnim(L"Stop");
+
 	if (chk & SM_TRACE)
 	{
 		if (info.fDist <= info.fTraceRange)
@@ -43,7 +45,6 @@ void CState_Stop::update(UINT& chk)
 void CState_Stop::enter()
 {
 	m_fTimer = 2.f;
-	getMonster()->playAnim(L"BT_Stop");
 }
 
 void CState_Stop::exit()

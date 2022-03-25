@@ -24,7 +24,6 @@ void CGameManager::update()
 	if (nullptr != m_pPlayer)
 		updatePrevInfo();
 
-	// gamaMgr에서 관리할 게 늘어나면 추가할 예정
 }
 
 void CGameManager::registPlayer(CPlayer* pPlayer)
@@ -35,6 +34,18 @@ void CGameManager::registPlayer(CPlayer* pPlayer)
 void CGameManager::unRegistPlayer()
 {
 	m_pPlayer = nullptr;
+}
+
+void CGameManager::savePlayerInfo()
+{
+	if (m_pPlayer == nullptr) return;
+	m_tPlayerInformation = m_pPlayer->getPlayerInfo();
+}
+
+void CGameManager::loadPlayerInfo(CPlayer* pNewPlayer)
+{
+	if (m_pPlayer == nullptr) return;
+	pNewPlayer->setPlayerInfo(m_tPlayerInformation);
 }
 
 CPlayer* CGameManager::getPlayer()

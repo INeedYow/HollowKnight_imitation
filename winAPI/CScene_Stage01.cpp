@@ -47,7 +47,15 @@ void CScene_Stage01::enter()
 	// Player 추가
 	CPlayer* pPlayer = CPlayer::createNormal(fPoint(1200.f, 1430.f));
 	addObject(pPlayer, eOBJ::PLAYER);
-	CGameManager::getInst()->registPlayer(pPlayer);
+
+	if (CGameManager::getInst()->getPlayer() == nullptr)		
+	{	// 처음 nullptr일 땐 생성하고 등록
+		CGameManager::getInst()->registPlayer(pPlayer);
+	}
+	else
+	{	// 저장해둔 정보 입력
+		CGameManager::getInst()->loadPlayerInfo(pPlayer);		
+	}
 
 	// monster test
 	CMonster_Melee* pMon1 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(1500, 1430));
@@ -100,7 +108,7 @@ void CScene_Stage01::enter()
 	g_bDebug = true;
 
 	////////////////
-	CEffect* pEff = new CEffect;
+	/*CEffect* pEff = new CEffect;
 	pEff->setEffName(L"EF_dash_R");
 	pEff->load(L"Effect_dash", L"texture\\effect\\effect_dash.bmp");
 	pEff->setDuration(0.4f);
@@ -110,7 +118,7 @@ void CScene_Stage01::enter()
 		fPoint(289, 0), fPoint(289, 146), fPoint(289, 0), 0.1f, 4, false);
 	CEffectManager::getInst()->addEffect(pEff);
 	pEff->PLAY(L"effect_dash");
-	addObject(pEff, eOBJ::EFFECT);
+	addObject(pEff, eOBJ::EFFECT);*/
 
 	////////////////
 
@@ -127,6 +135,7 @@ void CScene_Stage01::enter()
 
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::TILE);
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::GROUND);
+	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::MONSTER);
 
 	// 카메라
 	camSetFocusNow(pPlayer->getPos());
@@ -135,7 +144,8 @@ void CScene_Stage01::enter()
 
 void CScene_Stage01::exit()
 {
-	// TODO 캐릭터 정보 유지하는 법
+	CGameManager::getInst()->savePlayerInfo();
+
 	deleteObjectAll();
 	resetGrp();
 

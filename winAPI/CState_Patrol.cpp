@@ -20,6 +20,8 @@ void CState_Patrol::update(UINT& chk)
 	fPoint size = getMonster()->getSize();
 	tMonsInfo info = getMonster()->getMonsInfo();
 
+	getMonster()->playAnim(L"Patrol");
+
 	if (chk & SM_TRACE)
 	{
 		if (info.fDist <= info.fTraceRange)
@@ -55,8 +57,6 @@ void CState_Patrol::enter()
 		info.fvDir.x = -1;
 	
 	getMonster()->setMonsInfo(info);
-
-	getMonster()->playAnim(L"BT_Patrol");
 }
 
 void CState_Patrol::exit()

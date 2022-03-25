@@ -14,6 +14,7 @@ CMonster_Melee::CMonster_Melee()
 {
 	m_iBottomCnt = 0;
 	m_fSpdY = 0.f;
+	m_fTurnTimer = 0.f;
 }
 
 CMonster_Melee::~CMonster_Melee()
@@ -93,21 +94,32 @@ void CMonster_Melee::update()
 	info.fDist = abs(playerPos.x - getPos().x);
 	setMonsInfo(info);
 
-	CMonster::update();		// ai, anim update
+	CMonster::update();				// ai, anim update
+	
+	if (isCheck(SM_TURN))					// 방향전환 상태
+	{
+		playAnim(L"Turn");
+			
+		m_fTurnTimer -= fDT;
 
-	yPosUpdate();
+		if (m_fTurnTimer < 0.f)
+		{
+			setCheck(SM_TURN, false);		// 방향전환 상태 종료
+		}
+	}
+
+	extraUpdate();
 }
 
 void CMonster_Melee::render(HDC hDC)
 {
-	getAI()->getCurState()->printInfo(hDC);
-
-	componentRender(hDC);
-
 	if (g_bDebug)
 	{
 		printInfo(hDC);
+		getAI()->getCurState()->printInfo(hDC);
 	}
+
+	componentRender(hDC);
 }
 
 void CMonster_Melee::collisionEnter(CCollider* pOther)
@@ -118,10 +130,17 @@ void CMonster_Melee::collisionEnter(CCollider* pOther)
 	{
 	case eOBJNAME::ATTACK:
 	{	// attck의 오너가 플레이어일 때
-		if (eOBJNAME::PLAYER == ((CAttack*)pTarget)->getOwner()->getName())
+		if (eOBJNAME::PLAYER == ((CAttack*)pTarget)->getOwner()->getName() && !isCheck(SM_DEATH))
 		{
 			tMonsInfo info = getMonsInfo();
 			info.iHP--;
+
+			info.fvKnockBackDir.x = 1.f;
+			if (gameGetPlayer()->getPos().x > pOther->getPos().x)
+				info.fvKnockBackDir.x = -1.f;
+			info.fKnockBackSpd = (float)SM_KBSPD_L;
+			info.fKnockBackTimer = (float)SM_KBTIME;
+
 			setMonsInfo(info);
 		}
 		break;
@@ -129,9 +148,19 @@ void CMonster_Melee::collisionEnter(CCollider* pOther)
 
 	case eOBJNAME::MISSILE_PLAYER:
 	{
-		tMonsInfo info = getMonsInfo();
-		info.iHP -= 2;
-		setMonsInfo(info);
+		if (!isCheck(SM_DEATH))
+		{
+			tMonsInfo info = getMonsInfo();
+			info.iHP -= 2;
+
+			info.fvKnockBackDir.x = 1.f;
+			if (gameGetPlayer()->getPos().x > pOther->getPos().x)
+				info.fvKnockBackDir.x = -1.f;
+			info.fKnockBackSpd = (float)SM_KBSPD_M;
+			info.fKnockBackTimer = (float)SM_KBTIME;
+
+			setMonsInfo(info);
+		}
 		break;
 	}
 
@@ -163,7 +192,6 @@ void CMonster_Melee::collisionEnter(CCollider* pOther)
 		}
 		break;
 	}
-
 	}
 }
 
@@ -185,8 +213,8 @@ void CMonster_Melee::collisionKeep(CCollider* pOther)
 		else if (pos1.x <= pos2.x - edge)
 			pos1.x = pos2.x - edge;
 		
-		break;
 		setPos(pos1);
+		break;
 	}
 	}
 }
@@ -214,7 +242,7 @@ void CMonster_Melee::death()
 	changeMonsState(getAI(), eSTATE_MONS::DIE);
 }
 
-void CMonster_Melee::yPosUpdate()
+void CMonster_Melee::extraUpdate()
 {
 	fPoint pos = getPos();
 	tMonsInfo info = getMonsInfo();
@@ -230,6 +258,27 @@ void CMonster_Melee::yPosUpdate()
 
 		pos.y -= m_fSpdY * fDT;
 	}
+
+	// 방향전환
+	if (isCheck(SM_DIR) && info.fvDir.x < 0.f)
+	{
+		m_fTurnTimer = 0.5f;
+		setCheck(SM_TURN, true);
+
+		playAnim(L"Turn");
+		info.fvDir.x = -1.f;
+		setCheck(SM_DIR, false);
+	}
+	else if (!isCheck(SM_DIR) && info.fvDir.x > 0.f)
+	{
+		m_fTurnTimer = 0.5f;
+		setCheck(SM_TURN, true);
+
+		playAnim(L"Turn");
+		info.fvDir.x = 1.f;
+		setCheck(SM_DIR, true);
+	}
+
 	setPos(pos);
 	setMonsInfo(info);
 }
@@ -246,14 +295,13 @@ void CMonster_Melee::printInfo(HDC hDC)
 	wchar_t bufHP[255] = {};
 	wchar_t bufDist[255] = {};
 	wchar_t bufTRng[255] = {};
-	//wchar_t bufTest[255] = {};
 
 	swprintf_s(bufX, L"x = %.1f", pos.x);
 	swprintf_s(bufY, L"y = %.1f", pos.y);
 	swprintf_s(bufHP, L"HP = %d", info.iHP);
 	swprintf_s(bufDist, L"DistX = %.1f", info.fDist);
 	swprintf_s(bufTRng, L"TraceRange = %.1f", info.fTraceRange);
-	//swprintf_s(bufTest, L"playerPos = %.1f, \t %.1f", playerPos.x, playerPos.y);
+	
 	// bufX,Y 출력보다 아래 위치해야 함
 	pos = rendPos(pos);
 
@@ -262,5 +310,4 @@ void CMonster_Melee::printInfo(HDC hDC)
 	TextOutW(hDC, (int)pos.x + 100, (int)pos.y - 200, bufHP, (int)wcslen(bufHP));
 	TextOutW(hDC, (int)pos.x + 100, (int)pos.y - 175, bufDist, (int)wcslen(bufDist));
 	TextOutW(hDC, (int)pos.x + 100, (int)pos.y - 150, bufTRng, (int)wcslen(bufTRng));
-	//TextOutW(hDC, (int)pos.x + 100, (int)pos.y - 100, bufTest, (int)wcslen(bufTest));
 }

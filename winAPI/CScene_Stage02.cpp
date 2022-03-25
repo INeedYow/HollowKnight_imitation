@@ -46,6 +46,7 @@ void CScene_Stage02::enter()
 	CPlayer* pPlayer = CPlayer::createNormal(fPoint(1963, 0.f));
 	addObject(pPlayer, eOBJ::PLAYER);
 	CGameManager::getInst()->registPlayer(pPlayer);
+	CGameManager::getInst()->loadPlayerInfo(pPlayer);
 
 	CBackGround* pBg = new CBackGround;
 	pBg->load(L"BG_stage2", L"texture\\background\\stage2_back.bmp");
@@ -58,8 +59,14 @@ void CScene_Stage02::enter()
 	addObject(pFg, eOBJ::FRONTGROUND);
 
 	// monster
-	CMonster_Melee* pMon1 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(800, 1390));
+	CMonster_Melee* pMon1 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(1495, 1710));
 	addObject(pMon1, eOBJ::MONSTER);
+
+	CMonster_Melee* pMon2 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(230, 1610));
+	addObject(pMon2, eOBJ::MONSTER);
+
+	CMonster_Melee* pMon3 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(3230, 1590));
+	addObject(pMon3, eOBJ::MONSTER);
 
 	// ground
 	CGround* pGrd1 = CGround::create(1444, 1430, 2378, 1580);
@@ -150,6 +157,8 @@ void CScene_Stage02::enter()
 
 void CScene_Stage02::exit()
 {
+	CGameManager::getInst()->savePlayerInfo();
+
 	deleteObjectAll();
 	resetGrp();
 

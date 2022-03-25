@@ -9,6 +9,7 @@
 #include "CAttack.h"
 #include "CStatus.h"
 #include "SelectGDI.h"
+#include "CMonster.h"
 
 #pragma region Include_State
 #include "CState_Player.h"
@@ -272,11 +273,13 @@ void CPlayer::collisionKeep(CCollider* pOther)
 	switch (pOther->getOwner()->getName())
 	{
 	case eOBJNAME::MISSILE_MONSTER:
+	case eOBJNAME::MONS_BEETLE:
+	case eOBJNAME::MONS_LARVA:
 	case eOBJNAME::SHIELD:
 	case eOBJNAME::BOSS:
 	{
-		if (!(m_uiCheck & SP_NODMG))
-		{
+		if (!(m_uiCheck & SP_NODMG) && !((CMonster*)pOther->getOwner())->isCheck(SM_DEATH))
+		{	// 내가 무적 상태가 아니면서 몬스터가 죽은 상태가 아닌 경우
 			m_tInfo.fvKnockBackDir = (getPos() - pTarget->getPos());
 
 			if (--m_tInfo.uiHP <= 0)
@@ -524,18 +527,24 @@ void CPlayer::printInfo(HDC hDC)
 
 	wchar_t bufX[255] = {};
 	wchar_t bufY[255] = {};
+	wchar_t bufHP[255] = {};
+	wchar_t bufSoul[255] = {};
 	wchar_t bufBot[255] = {};
 
 	swprintf_s(bufX, L"x = %.1f", pos.x);
 	swprintf_s(bufY, L"y = %.1f", pos.y);
+	swprintf_s(bufHP, L"HP = %d", m_tInfo.uiHP);
+	swprintf_s(bufSoul, L"SOUL = %d", m_tInfo.uiSoul);
 	swprintf_s(bufBot, L"BottomCnt = %d", (int)m_tInfo.iBottomCnt);
 
 	// bufX,Y 출력보다 아래 위치해야 함
 	fPoint rendPos = rendPos(pos);
 
-	TextOutW(hDC, (int)rendPos.x + 100, (int)rendPos.y - 130, bufX, (int)wcslen(bufX));
-	TextOutW(hDC, (int)rendPos.x + 100, (int)rendPos.y - 100, bufY, (int)wcslen(bufY));
-	TextOutW(hDC, (int)rendPos.x + 100, (int)rendPos.y - 70, bufBot, (int)wcslen(bufBot));
+	TextOutW(hDC, (int)rendPos.x + 100, (int)rendPos.y - 165, bufX, (int)wcslen(bufX));
+	TextOutW(hDC, (int)rendPos.x + 100, (int)rendPos.y - 140, bufY, (int)wcslen(bufY));
+	TextOutW(hDC, (int)rendPos.x + 100, (int)rendPos.y - 115, bufHP, (int)wcslen(bufHP));
+	TextOutW(hDC, (int)rendPos.x + 100, (int)rendPos.y - 90, bufSoul, (int)wcslen(bufSoul));
+	TextOutW(hDC, (int)rendPos.x + 100, (int)rendPos.y - 65, bufBot, (int)wcslen(bufBot));
 
 
 	if (m_uiCheck & SP_NODMG)

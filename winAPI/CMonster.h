@@ -23,11 +23,9 @@ class CMonster : public CObject
 {
 private:
 	tMonsInfo	m_tInfo;
-
-	UINT		m_uiCheck;		// 비트 연산
+	UINT		m_uiCheck;		// 상태 비트체크용
 
 	CTexture*	m_pTex;
-
 	CAI*		m_pAI;
 
 public:
@@ -84,10 +82,17 @@ enum class eSTATE_MONS
 	END
 };
 
+#define SM_KBTIME				0.2
+#define SM_KBSPD_L				500
+#define SM_KBSPD_M				700
+
 //
-#define SM_TRACE			0x0001			// 따라가는 기능이 있는 몬스터인지
-#define SM_FALL				0x0002			// 떨어지는 중
-#define SM_DEATH			0x0004			// setInfo에서 중복 death호출 방지용
+#define SM_TRACE				0x0001		// 따라가는 기능이 있는 몬스터인지
+#define SM_FALL					0x0002		// 떨어지는 중
+#define SM_DEATH				0x0004		// setInfo에서 중복 death호출 방지용
+
+#define SM_DIR					0x0010		
+#define SM_TURN					0x0020		// 방향전환
 
 //
 #define SB_TIMER			0x00010000		// 보스 쿨타임 timer 도는 상태인지

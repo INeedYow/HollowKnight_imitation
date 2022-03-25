@@ -37,6 +37,7 @@ void CScene_Stage03::enter()
 	CPlayer* pPlayer = CPlayer::createNormal(fPoint(260.f, 1340.f));
 	addObject(pPlayer, eOBJ::PLAYER);
 	CGameManager::getInst()->registPlayer(pPlayer);
+	CGameManager::getInst()->loadPlayerInfo(pPlayer);
 
 	CBoss_Markoth* pBoss = new CBoss_Markoth;
 	pBoss->setPos(fPoint(2270.f, 1040.f));
@@ -92,6 +93,8 @@ void CScene_Stage03::enter()
 
 void CScene_Stage03::exit()
 {
+	CGameManager::getInst()->savePlayerInfo();
+
 	deleteObjectAll();
 	resetGrp();
 

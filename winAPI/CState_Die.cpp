@@ -26,7 +26,7 @@ void CState_Die::enter()
 {
 	m_fTimer = 2.4f;
 	
-	getMonster()->playAnim(L"BT_Die");
+	getMonster()->playAnim(L"Die");
 }
 
 void CState_Die::exit()

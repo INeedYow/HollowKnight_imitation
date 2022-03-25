@@ -1,6 +1,7 @@
 #include "framework.h"
 #include "CState_Trace.h"
 #include "CMonster.h"
+#include "CMonster_Melee.h"
 #include "CPlayer.h"
 
 // TODO 생성자 재정의 해서 상태 변수값 받으면 어떤가
@@ -35,7 +36,7 @@ void CState_Trace::update(UINT& chk)
 	{
 	case 0:
 	{
-		getMonster()->playAnim(L"BT_TraceEnter");
+		getMonster()->playAnim(L"TraceEnter");
 		if (m_fTimer > 0.9f)
 		{
 			m_iStep++;
@@ -45,7 +46,7 @@ void CState_Trace::update(UINT& chk)
 	}
 	case 1:
 	{
-		getMonster()->playAnim(L"BT_Trace");
+		getMonster()->playAnim(L"Trace");
 		if (m_fTimer > 1.6f)
 		{
 			m_iStep++;
@@ -55,7 +56,7 @@ void CState_Trace::update(UINT& chk)
 	}
 	case 2:
 	{
-		getMonster()->playAnim(L"BT_TraceExit");
+		getMonster()->playAnim(L"TraceExit");
 		if (m_fTimer > 0.5f)
 		{
 			changeMonsState(getOwner(), eSTATE_MONS::STOP);
@@ -82,12 +83,18 @@ void CState_Trace::enter()
 		info.fvDir.x = 1;
 
 	getMonster()->setMonsInfo(info);
+
+	if (getMonster()->getName() == eOBJNAME::MONS_BEETLE)
+		getMonster()->getCollider()->setSize(fPoint((float)M_BT_SIZEX_, (float)M_BT_SIZEY_));
 }
 
 void CState_Trace::exit()
 {
 	m_fTimer = 0.f;
 	m_iStep = 0;
+
+	if (getMonster()->getName() == eOBJNAME::MONS_BEETLE)
+		getMonster()->getCollider()->setSize(fPoint((float)M_BT_SIZEX, (float)M_BT_SIZEY));
 }
 
 void CState_Trace::printInfo(HDC hDC)
