@@ -69,10 +69,10 @@ void CScene_Stage02::enter()
 	addObject(pMon3, eOBJ::MONSTER);
 
 	CMonster_Melee* pMon4 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_MUSH, fPoint(3800, 1600));
-	addObject(pMon2, eOBJ::MONSTER);
+	addObject(pMon4, eOBJ::MONSTER);
 
 	CMonster_Melee* pMon5 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_MUSH, fPoint(200, 1300));
-	addObject(pMon2, eOBJ::MONSTER);
+	addObject(pMon5, eOBJ::MONSTER);
 
 	// ground
 	CGround* pGrd1 = CGround::create(1444, 1430, 2378, 1580);

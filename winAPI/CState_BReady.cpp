@@ -26,7 +26,7 @@ void CState_BReady::update(UINT& chk)
 	{	// 방패 감속
 		for (int i = 0; i < vecShd.size(); i++)
 		{
-			vecShd[i]->setfSpeed(vecShd[i]->getSpeed() - (float)SB_ACCEL * fDT);
+			vecShd[i]->setfSpeed(vecShd[i]->getSpeed() - (float)B_ACCEL * fDT);
 		}
 	}
 	else if (1.25f >= m_fDura && m_fDura > 0.75f)	// 단계에 대한 변수를 시간으로 대신 함
@@ -42,7 +42,7 @@ void CState_BReady::update(UINT& chk)
 	{	// 방패 가속
 		for (int i = 0; i < vecShd.size(); i++)
 		{
-			vecShd[i]->setfSpeed(vecShd[i]->getSpeed() + (float)SB_ACCEL * 2 * fDT);
+			vecShd[i]->setfSpeed(vecShd[i]->getSpeed() + (float)B_ACCEL * 2 * fDT);
 		}
 	}
 	else
@@ -55,7 +55,7 @@ void CState_BReady::update(UINT& chk)
 
 void CState_BReady::enter()
 {
-	m_fDura = SB_READY_DURA;
+	m_fDura = B_READY_DURA;
 	m_fSpd = 0.f;
 	getMonster()->PLAY(L"st_Middle");
 	getMonster()->setCheck(SB_TIMER, false);

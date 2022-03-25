@@ -23,7 +23,7 @@ void CState_BSkill::update(UINT& chk)
 
 	m_fDura -= fDT;
 
-	if (m_fDura >= (float)SB_SKILL_DURA / 2.f)
+	if (m_fDura >= (float)B_SKILL_DURA / 2.f)
 	{	// 방패 2개 이상일 때 1개는 주위에서 돌게
 		int i = vecShd.size() >= 2 ? 1 : 0;
 
@@ -71,7 +71,7 @@ void CState_BSkill::update(UINT& chk)
 
 void CState_BSkill::enter()
 {
-	m_fDura = (float)SB_SKILL_DURA;
+	m_fDura = (float)B_SKILL_DURA;
 	getMonster()->PLAY(L"st_Skill");
 	getMonster()->getCollider()->setSize(fPoint(SB_SkSIZEX, SB_SkSIZEY));
 }
@@ -79,7 +79,7 @@ void CState_BSkill::enter()
 void CState_BSkill::exit()
 {
 	getMonster()->setCheck(SB_TIMER, true);
-	((CBoss_Markoth*)getMonster())->setSkillCooldown((float)SB_SKILL_COOL);
+	((CBoss_Markoth*)getMonster())->setSkillCooldown((float)B_SKILL_COOL);
 }
 
 void CState_BSkill::printInfo(HDC hDC)

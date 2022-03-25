@@ -7,10 +7,11 @@ class CSpear : public CMissile
 {
 	float	m_fTheta;
 	UINT	m_uiStep;		// 0 뒤로 움직임 + 조준 // 1 조준 // 2 대기 // 3 발사
-	float	m_fSpdMax;
+	float	m_fSpd;
 
 	fPoint	m_fpHead;
 	fVec2	m_fvDir;
+
 public:
 	CSpear();
 	~CSpear();
@@ -21,6 +22,9 @@ public:
 	void collisionEnter(CCollider* pOther);
 	void collisionKeep(CCollider* pOther);
 
-	void setMaxSpd(float spd);
+	void setSpd(float spd);
+
+private:
+	void setRandPos();
 };
 

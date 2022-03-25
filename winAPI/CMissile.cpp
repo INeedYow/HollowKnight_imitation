@@ -114,7 +114,6 @@ void CMissile::collisionEnter(CCollider* pOther)
 		switch (pOther->getOwner()->getName())
 		{
 		case eOBJNAME::MONS_BEETLE:
-		case eOBJNAME::MONS_LARVA:
 		case eOBJNAME::BOSS:
 		{
 			//TODO
@@ -152,7 +151,6 @@ void CMissile::collisionKeep(CCollider* pOther)
 		switch (pOther->getOwner()->getName())
 		{
 		case eOBJNAME::MONS_BEETLE:
-		case eOBJNAME::MONS_LARVA:
 		case eOBJNAME::BOSS:
 		{
 			break;

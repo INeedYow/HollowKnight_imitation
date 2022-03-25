@@ -113,7 +113,6 @@ void CAttack::collisionEnter(CCollider* pOther)
 		{
 		case eOBJNAME::BOSS:
 		case eOBJNAME::MONS_BEETLE:
-		case eOBJNAME::MONS_LARVA:
 		{	// soul ȹ�淮
 			info.fvKnockBackDir = (pOwner->getPos() - pTarget->getPos());
 			info.uiSoul += 20;

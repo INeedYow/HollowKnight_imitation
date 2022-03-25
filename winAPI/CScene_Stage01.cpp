@@ -10,6 +10,7 @@
 #include "CEffect.h"
 
 #include "CMonster_Melee.h"
+#include "CSpear.h"
 
 #define STG01_SIZEX 3840
 #define STG01_SIZEY 2160
@@ -58,12 +59,27 @@ void CScene_Stage01::enter()
 		CGameManager::getInst()->loadPlayerInfo(pPlayer);		
 	}
 
-	// monster test
-	CMonster_Melee* pMon1 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(1500, 1430));
-	addObject(pMon1, eOBJ::MONSTER);
+	/////////////////////////////////////////////////////////
+	//CSpear* pSpear = new CSpear;
+	//pSpear->setPos(fPoint(1200.f, 1200.f));
+	//pSpear->setName(eOBJNAME::MISSILE_MONSTER);
+	//pSpear->setMaxSpd(1.f);
+	//pSpear->getCollider()->setSize(fPoint(60.f, 60.f));
+	//pSpear->setTex(L"Spear_Boss", L"texture\\boss\\boss_spearBig.bmp");
+	//pSpear->createAnim(L"Spear_normal", pSpear->getTex(),
+	//	fPoint(0.f, 0.f), fPoint(400.f, 91.f), fPoint(0.f, 0.f), 1.f, 1, false);
+	//pSpear->getAnimator()->play(L"Spear_normal");
 
-	CMonster_Melee* pMon2 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_MUSH, fPoint(1800, 1430));
-	addObject(pMon2, eOBJ::MONSTER);
+	//createObj(pSpear, eOBJ::MISSILE_MONSTER);
+	/////////////////////////////////////////////////////////
+
+
+	//// monster test
+	//CMonster_Melee* pMon1 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(1500, 1430));
+	//addObject(pMon1, eOBJ::MONSTER);
+
+	//CMonster_Melee* pMon2 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_MUSH, fPoint(1800, 1430));
+	//addObject(pMon2, eOBJ::MONSTER);
 	
 	CBackGround* pBg = new CBackGround;
 	pBg->load(L"BG_stage1", L"texture\\background\\stage1_back.bmp");

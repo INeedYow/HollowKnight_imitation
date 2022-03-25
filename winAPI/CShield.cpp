@@ -12,7 +12,7 @@ CShield::CShield()
 	setPos(fPoint(0.f, 0.f));
 	setSize(fPoint(70.f, 70.f));
 	setName(eOBJNAME::SHIELD);
-	m_fSpd = (float)SB_SHIELD_SPD;
+	m_fSpd = (float)B_SHD_SPD;
 	m_fTheta = 0.f;
 	m_fRadius = 0.f;
 	m_bRotRight = true;

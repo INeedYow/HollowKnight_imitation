@@ -17,17 +17,17 @@ CBoss_Markoth::CBoss_Markoth()
 	setTex(L"BossTex", L"texture\\boss\\boss_markoth.bmp");
 
 	setPos(fPoint(0.f, 0.f));
-	setSize(fPoint(300.f, 400.f));
+	setSize(fPoint(190.f, 300.f));
 	setName(eOBJNAME::BOSS);
 	
 	tMonsInfo info = getMonsInfo();
-	info.iHP = SB_HPMAX;
-	info.fSpd = SB_SPD;
-	
+	info.iHP = B_HPMAX;
+	info.fSpd = B_SPD;
 	setMonsInfo(info);
-
+	
+	m_ucPhase = 1;
 	m_fTimer = 0.f;
-	m_fSkillTimer = (float)SB_SKILL_COOL;
+	m_fSkillTimer = (float)B_SKILL_COOL;
 	m_fSpawnTimer = 4.f;
 
 	setCheck(SB_TIMER, true);
@@ -37,11 +37,9 @@ CBoss_Markoth::CBoss_Markoth()
 	getCollider()->setShape(eSHAPE::RECT);
 
 	createAnimator();
-	createAnim(L"st_Normal",	getTex(), fPoint(0.f, 0.f),			fPoint(280.f, 420.f),		fPoint(280.f, 0.f),		0.25f,	6);
-
-	createAnim(L"st_Middle",	getTex(), fPoint(0.f, 420.f),		fPoint(300.f, 415.f),		fPoint(300.f, 0.f),		0.2f,	4);
-
-	createAnim(L"st_Skill",		getTex(), fPoint(0.f, 835.f),		fPoint(448.f, 282.f),		fPoint(448.f, 0.f),		0.15f,	4);
+	createAnim(L"st_Normal",	getTex(), fPoint(0.f, 0.f),		fPoint(280.f, 420.f),	fPoint(280.f, 0.f),		0.25f,	6);
+	createAnim(L"st_Middle",	getTex(), fPoint(0.f, 420.f),	fPoint(300.f, 415.f),	fPoint(300.f, 0.f),		0.2f,	4);
+	createAnim(L"st_Skill",		getTex(), fPoint(0.f, 835.f),	fPoint(448.f, 282.f),	fPoint(448.f, 0.f),		0.2f,	4);
 
 	PLAY(L"st_Normal");
 
@@ -56,23 +54,12 @@ CBoss_Markoth::CBoss_Markoth()
 	setAI(pAI);
 
 	//
-	m_ucPhase = 1;
 	createShield();
+	createSpear();
 }
 
 CBoss_Markoth::~CBoss_Markoth()
-{	// scn에서 지울
-	//for (int i = 0; i < m_vecShield.size(); i++)
-	//{
-	//	if (nullptr != m_vecShield[i])
-	//		delete m_vecShield[i];
-	//}
-
-	//for (int i = 0; i < m_vecSpear.size(); i++)
-	//{
-	//	if (nullptr != m_vecSpear[i])
-	//		delete m_vecSpear[i];
-	//}
+{
 }
 
 CBoss_Markoth* CBoss_Markoth::clone()
@@ -91,14 +78,10 @@ void CBoss_Markoth::update()
 		m_fSpawnTimer -= fDT;
 
 
-		if (getMonsInfo().iHP <= SB_HPMAX / 2 && m_ucPhase == 1)
+		if (getMonsInfo().iHP <= B_HPMAX / 2 && m_ucPhase == 1)
 		{	// 2 페이즈
 			m_ucPhase++;
 			changeMonsState(getAI(), eSTATE_MONS::SPAWN);
-		}
-
-		if (m_fSpawnTimer < 0.f)
-		{
 			createSpear();
 		}
 
@@ -149,13 +132,13 @@ void CBoss_Markoth::render(HDC hDC)
 	componentRender(hDC);
 }
 
-// TODO 충돌체끼리 방향벡터로 밀어내기
 void CBoss_Markoth::collisionEnter(CCollider* pOther)
 {
 	tMonsInfo info;
 
 	switch (pOther->getOwner()->getName())
 	{	// att도 player, monster 구분해야 
+	case eOBJNAME::MISSILE_PLAYER:
 		if (!isCheck(SM_DEATH))
 		{
 			info = getMonsInfo();
@@ -168,7 +151,7 @@ void CBoss_Markoth::collisionEnter(CCollider* pOther)
 			info.fKnockBackSpd = (float)SM_KBSPD_M;
 			info.fKnockBackTimer = (float)SM_KBTIME;
 
-			m_fTimer = (float)SB_DMG_DELAY;
+			m_fTimer = (float)B_DMG_DELAY;
 			setMonsInfo(info);
 			break;
 		}
@@ -203,7 +186,7 @@ void CBoss_Markoth::collisionKeep(CCollider* pOther)
 		{
 			info = getMonsInfo();
 
-			info.iHP -= 2;
+			info.iHP -= 1;	// 다단히트 시 1 감소
 
 			info.fvKnockBackDir.x = 1.f;
 			if (((CMissile*)pOther->getOwner())->getDir().x < 0.f)		// 미사일 방향에 따른 넉백방향
@@ -214,7 +197,7 @@ void CBoss_Markoth::collisionKeep(CCollider* pOther)
 
 			setMonsInfo(info);
 
-			m_fTimer = (float)SB_DMG_DELAY;
+			m_fTimer = (float)B_DMG_DELAY;
 			break;
 		}
 	}
@@ -224,57 +207,56 @@ void CBoss_Markoth::collisionKeep(CCollider* pOther)
 void CBoss_Markoth::collisionExit(CCollider* pOther)
 {
 }
-
-void CBoss_Markoth::setRandDelay()
-{
-	float randDelay = (float)(rand() % 3);
-
-	switch ((int)randDelay)
-	{
-	case 0:
-		randDelay += 0.1f;
-	case 1:
-		randDelay += 0.1f;
-	case 2:
-	{
-		if (1 == m_ucPhase)
-			randDelay += 2.4f;
-		else
-			randDelay += 1.6f;
-		break;
-	}
-	}
-	m_fSpawnTimer = randDelay;
-}
+//
+//void CBoss_Markoth::setRandDelay()
+//{
+//	float randDelay = (float)(rand() % 3);
+//
+//	switch ((int)randDelay)
+//	{
+//	case 0:
+//		randDelay += 0.1f;
+//	case 1:
+//		randDelay += 0.1f;
+//	case 2:
+//	{
+//		if (1 == m_ucPhase)
+//			randDelay += 2.4f;
+//		else
+//			randDelay += 1.6f;
+//		break;
+//	}
+//	}
+//	m_fSpawnTimer = randDelay;
+//}
 
 // TODO
-// 플레이어 좌표로 날아오게 하려면 플레이어 좌표 받아올 수 있어야
-	// 임시로 카메라 중심으로 날아가도록 (이렇게 해도 될듯?)
-void CBoss_Markoth::createSpear()
-{
-	fPoint pos = randSpearPos();
-	fPoint camPos = getCamPos(); // TODO
-
-	CSpear* pSpear = new CSpear;
-	pSpear->setPos(pos);
-	pSpear->setName(eOBJNAME::MISSILE_MONSTER);
-	pSpear->setMaxSpd((float)SB_SPEAR_SPD);
-	pSpear->getCollider()->setSize(fPoint(60.f, 60.f));
-	pSpear->setTex(L"Spear_Boss", L"texture\\boss\\boss_spearBig.bmp");
-	pSpear->createAnim(L"Spear_normal", pSpear->getTex(), 
-		fPoint(0.f, 0.f), fPoint(400.f, 91.f), fPoint(0.f, 0.f), 1.f, 1, false);
-	pSpear->getAnimator()->play(L"Spear_normal");
-
-	createObj(pSpear, eOBJ::MISSILE_MONSTER);
-
-	setRandDelay();
-}
+// 계속 소환하게 하지말고 미리 소환해두고 그걸 계속 쓰는 방식으로 바꿔보기
+//void CBoss_Markoth::createSpear()
+//{
+//	fPoint pos = randSpearPos();
+//
+//	CSpear* pSpear = new CSpear;
+//	pSpear->setPos(pos);
+//	pSpear->setName(eOBJNAME::MISSILE_MONSTER);
+//	pSpear->setSpd((float)B_SPR_SPD_1P);
+//	pSpear->getCollider()->setSize(fPoint(60.f, 60.f));
+//	pSpear->setTex(L"Spear_Boss", L"texture\\boss\\boss_spear.bmp");
+//	pSpear->createAnim(L"Spear_normal", pSpear->getTex(), 
+//		fPoint(0.f, 0.f), fPoint(400.f, 91.f), fPoint(0.f, 0.f), 1.f, 1, false);
+//	pSpear->getAnimator()->play(L"Spear_normal");
+//
+//	createObj(pSpear, eOBJ::MISSILE_MONSTER);
+//
+//	m_vecSpear.push_back(pSpear);
+//	//setRandDelay();
+//}
 
 void CBoss_Markoth::createShield(float theta)
 {
 	CShield* pShield = new CShield();
 	pShield->setOwner(this);
-	pShield->setRadius((float)SB_SHIELD_RAD);
+	pShield->setRadius((float)B_SHD_RAD);
 	pShield->setTex(L"Shield_Boss", L"texture\\boss\\boss_shield.bmp");
 	pShield->createAnim(L"Shield_rot", pShield->getTex(), 
 		fPoint(0.f, 0.f), fPoint(166.f, 308.f), fPoint(166.f, 0.f), 0.3f, 3);
@@ -286,32 +268,42 @@ void CBoss_Markoth::createShield(float theta)
 	m_vecShield.push_back(pShield);
 }
 
-// 카메라 안에서 랜덤 위치에 생성
-fPoint CBoss_Markoth::randSpearPos()
+void CBoss_Markoth::createSpear()
 {
-	fPoint pos = CCameraManager::getInst()->getFocus();
-	iPoint maxArea = { (int)(WINSIZEX / 2) ,(int)(WINSIZEY / 2)};
-	iPoint minArea = { (int)(WINSIZEX / 4) ,(int)(WINSIZEY / 4)};
-	iPoint randPos;
-	int random;
-	
-	randPos.x = rand() % (maxArea.x - minArea.x + 1) + minArea.x;
-	randPos.y = rand() % (maxArea.y - minArea.y + 1) + minArea.y;
-
-	random = rand() % 2;
-	if (random)
-		pos.x -= randPos.x;
-	else
-		pos.x += randPos.x;
-
-	random = rand() % 2;
-	if (random)
-		pos.y -= randPos.y;
-	else
-		pos.y += randPos.y;
-
-	return pos;
+	CSpear* pSpear = new CSpear;
+	pSpear->setSpd(B_SPR_SPD_1P);
+	pSpear->getCollider()->setSize(fPoint(60.f, 60.f));
+	pSpear->setTex(L"Spear_Boss", L"texture\\boss\\boss_spear.bmp");
+	m_vecSpear.push_back(pSpear);
+	createObj(pSpear, eOBJ::MISSILE_MONSTER);
 }
+
+// 카메라 안에서 랜덤 위치에 생성
+//fPoint CBoss_Markoth::randSpearPos()
+//{
+//	fPoint pos = CCameraManager::getInst()->getFocus();
+//	iPoint maxArea = { (int)(WINSIZEX / 2) ,(int)(WINSIZEY / 2)};
+//	iPoint minArea = { (int)(WINSIZEX / 4) ,(int)(WINSIZEY / 4)};
+//	iPoint randPos;
+//	int random;
+//	
+//	randPos.x = rand() % (maxArea.x - minArea.x + 1) + minArea.x;
+//	randPos.y = rand() % (maxArea.y - minArea.y + 1) + minArea.y;
+//
+//	random = rand() % 2;
+//	if (random)
+//		pos.x -= randPos.x;
+//	else
+//		pos.x += randPos.x;
+//
+//	random = rand() % 2;
+//	if (random)
+//		pos.y -= randPos.y;
+//	else
+//		pos.y += randPos.y;
+//
+//	return pos;
+//}
 
 void CBoss_Markoth::setSkillCooldown(float cd)
 {

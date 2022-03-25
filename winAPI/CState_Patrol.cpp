@@ -72,5 +72,5 @@ void CState_Patrol::printInfo(HDC hDC)
 	pos = rendPos(pos);
 
 	LPCWSTR	strInfo = L"Patrol";
-	TextOutW(hDC, (int)pos.x + 0, (int)pos.y - 75, strInfo, (int)wcslen(strInfo));
+	TextOutW(hDC, (int)pos.x + 0, (int)pos.y - 95, strInfo, (int)wcslen(strInfo));
 }

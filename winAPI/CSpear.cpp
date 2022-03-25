@@ -3,6 +3,8 @@
 #include "CTexture.h"
 #include "CPlayer.h"
 
+#include "SelectGDI.h"
+
 CSpear::CSpear()
 {
 	setSize(fPoint(30.f, 30.f));
@@ -15,7 +17,7 @@ CSpear::CSpear()
 
 	m_uiStep = 0;
 	m_fTheta = 0.f;
-	m_fSpdMax = 1.f;
+	m_fSpd = 1.f;
 	m_fpHead = {};
 }
 
@@ -23,8 +25,7 @@ CSpear::~CSpear()
 {
 }
 
-// TODO Spear의 head를 플레이어한테 어떻게 맞추지
-// // 처음 좌표 구분해서?
+// TODO 
 // 마젠타 지우는 방법
 // mask 인자가 지우는 비트맵?
 void CSpear::update()
@@ -33,90 +34,55 @@ void CSpear::update()
 	float timer = getTimer();
 	fPoint destPos = gameGetPlayer()->getPos();
 
-	fPoint camPos;
-	fPoint dist;
-	float distance;
 	fVec2 dir;
 
+	float distX, distY;
+
 	timer -= fDT;
+	
 
 	switch (m_uiStep)
 	{
 	case 0:
 	{	// init
-	/*	camPos = getCamPos();
-		dist = camPos - pos;
-		distance = (float)(dist.y * dist.y) / (float)(dist.x * dist.x);
-		m_fTheta = (float)atan((double)distance);
-		setSpeed(m_fSpdMax * 0.5f);
-		m_uiStep++;
-		timer = 1.2f;*/
-
-		camPos = getCamPos();
-		dist = camPos - pos;
-		m_fTheta = (float)atan2((double)dist.x, (double)dist.y);
-		setSpeed(m_fSpdMax * 0.5f);
-		m_uiStep++;
+		distX = destPos.x - pos.x;
+		distY = destPos.y - pos.y;
+		m_fTheta = (float)atan2(distY, distX);
+		
 		timer = 1.2f;
+		setSpeed(m_fSpd * 0.5f);
+		m_uiStep++;
 
 		break;
 	}
 	case 1:
 	{	// pull and aim
-		/*camPos = getCamPos();
-		dist = camPos - pos;
-		dir = pos - camPos;
+		distX = destPos.x - pos.x;
+		distY = destPos.y - pos.y;
+		m_fTheta = (float)atan2(distY, distX);
+
+		dir = pos - destPos;
 		setDir(dir);
-		distance = (float)(dist.y * dist.y) / (float)(dist.x * dist.x);
-		m_fTheta = (float)atan((double)distance);*/
-
-		////// ....
-		/*if (camPos.x < pos.x && camPos.y < pos.y)
-			m_fTheta += (float)PI;
-		else if (camPos.x < pos.x && camPos.y >= pos.y)
-			m_fTheta += (float)PI / 2.f;
-		else if (camPos.x >= pos.x && camPos.y < pos.y)
-			m_fTheta += (float)PI * 3 / 2.f;*/
-		//////
-
-		camPos = getCamPos();
-		dist = camPos - pos;
-		m_fTheta = (float)atan2((double)dist.x, (double)dist.y);
-
 
 		if (timer < 0.f)
 		{
 			timer = 0.8f;
-			m_uiStep++;
 			setSpeed(0.f);
+			m_uiStep++;
 		}
 		break;
 	}
 	case 2:
 	{	// hold and aim
-		//camPos = getCamPos();
-		//dist = camPos - pos;
-		//distance = (float)(dist.y * dist.y) / (float)(dist.x * dist.x);
-		//m_fTheta = (float)atan((double)distance);
-
-		////////
-		//if (camPos.x < pos.x && camPos.y < pos.y)
-		//	m_fTheta += (float)PI;
-		//else if (camPos.x < pos.x && camPos.y >= pos.y)
-		//	m_fTheta += (float)PI / 2.f;
-		//else if (camPos.x >= pos.x && camPos.y < pos.y)
-		//	m_fTheta += (float)PI * 3 / 2.f;
-		////////
-
-		camPos = getCamPos();
-		dist = camPos - pos;
-		m_fTheta = (float)atan2((double)dist.x, (double)dist.y);
+		distX = destPos.x - pos.x;
+		distY = destPos.y - pos.y;
+		m_fTheta = (float)atan2(distY, distX);
 
 		if (timer < 0.f)
 		{
+			setSpeed(m_fSpd);
+			setDir(destPos - pos);
 			m_uiStep++;
-			setSpeed(m_fSpdMax);
-			setDir(camPos - pos);
 		}
 		break;
 	}
@@ -131,9 +97,19 @@ void CSpear::update()
 	dir.normalize();
 	pos.x += getSpeed() * getDir().x * fDT;
 	pos.y += getSpeed() * getDir().y * fDT;
-
 	setTimer(timer);
 	setPos(pos);
+
+	pos = rendPos(pos);
+
+	// step 조건 왜 안먹어
+	if (m_uiStep == 3 && 
+		pos.x < -300.f || pos.x > WINSIZEX + 300.f ||
+		pos.y < -300.f || pos.y > WINSIZEY + 300.f)
+	{	// 재활용
+		m_uiStep = 0;
+		setRandPos();
+	}
 }
 
 
@@ -145,9 +121,14 @@ void CSpear::render(HDC hDC)
 	fPoint pos = getPos();
 	fPoint size = { 362.f, 83.f };
 	
+	
+
 	POINT pThreeArr[3];
 	pos = rendPos(pos);
-
+	SelectGDI font(hDC, eFONT::COMIC24);
+	wchar_t b[255] = {};
+	swprintf_s(b, L"theta %f", m_fTheta);
+	TextOutW(hDC, (int)pos.x - 300, (int)pos.y + 100, b, (int)wcslen(b));
 	
 	fPoint arr[3] = {
 		fPoint(-size.x / 2.f, -size.y / 2.f),
@@ -187,7 +168,30 @@ void CSpear::collisionKeep(CCollider* pOther)
 {
 }
 
-void CSpear::setMaxSpd(float spd)
+void CSpear::setSpd(float spd)
 {
-	m_fSpdMax = spd;
+	m_fSpd = spd;
+}
+
+void CSpear::setRandPos()
+{
+	fPoint pos = CCameraManager::getInst()->getFocus();
+	iPoint maxArea = { (int)(WINSIZEX / 2) ,(int)(WINSIZEY / 2) };
+	iPoint minArea = { (int)(WINSIZEX / 4) ,(int)(WINSIZEY / 4) };
+	iPoint randPos;
+
+	randPos.x = rand() % (maxArea.x - minArea.x + 1) + minArea.x;
+	randPos.y = rand() % (maxArea.y - minArea.y + 1) + minArea.y;
+
+	if (rand() % 2)
+		pos.x -= randPos.x;
+	else
+		pos.x += randPos.x;
+
+	if (rand() % 2)
+		pos.y -= randPos.y;
+	else
+		pos.y += randPos.y;
+
+	setPos(fPoint(pos.x, pos.y));
 }

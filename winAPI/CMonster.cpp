@@ -242,7 +242,7 @@ CMonster* CMonster::create(eOBJNAME eName, fPoint pos)
 			fPoint(250, 112), fPoint(125, 112), fPoint(-125, 0), 0.5f, 1);
 
 		pMonsMl->createAnim(L"MS_Patrol_R", pMonsMl->getTex(),
-			fPoint(125, 0), fPoint(125, 112), fPoint(125, 0), 0.25f, 4);
+			fPoint(0, 0), fPoint(125, 112), fPoint(125, 0), 0.25f, 4);
 		pMonsMl->createAnim(L"MS_Patrol_L", pMonsMl->getTex(),
 			fPoint(375, 112), fPoint(125, 112), fPoint(-125, 0), 0.25f, 4);
 
@@ -252,9 +252,9 @@ CMonster* CMonster::create(eOBJNAME eName, fPoint pos)
 			fPoint(623, 107), fPoint(123, 107), fPoint(-123, 0), 0.25f, 2, false);
 
 		pMonsMl->createAnim(L"MS_Die_R", pMonsMl->getTex(),
-			fPoint(0, 219), fPoint(151, 112), fPoint(151, 0), 0.25f, 3, false);
+			fPoint(0, 219), fPoint(151, 112), fPoint(151, 0), 0.5f, 3, false);
 		pMonsMl->createAnim(L"MS_Die_L", pMonsMl->getTex(),
-			fPoint(302, 331), fPoint(151, 112), fPoint(-151, 0), 0.25f, 3, false);
+			fPoint(302, 331), fPoint(151, 112), fPoint(-151, 0), 0.5f, 3, false);
 
 		pMonsMl->PLAY(L"MS_Stop_L");
 		break;
