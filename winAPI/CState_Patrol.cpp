@@ -22,10 +22,10 @@ void CState_Patrol::update(UINT& chk)
 
 	if (chk & SM_TRACE)
 	{
-		if (pos.y - size.y / 2.f < playerPos.y &&
-			playerPos.y < pos.y + size.y / 2.f)
+		if (info.fDist <= info.fTraceRange)
 		{
-			if (info.fDist < info.fTraceRange)
+			if (playerPos.y >= pos.y - size.y &&
+				playerPos.y <= pos.y + size.y / 2.f)
 			{
 				changeMonsState(getOwner(), eSTATE_MONS::TRACE);
 			}

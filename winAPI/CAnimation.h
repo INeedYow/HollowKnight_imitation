@@ -37,7 +37,6 @@ public:
 	tAniFrm& getFrame(UINT frmIndex);
 
 	void setRepeat(bool isRepeat);
-	bool isRepeat();
 
 	void update();
 	void render(HDC hDC);

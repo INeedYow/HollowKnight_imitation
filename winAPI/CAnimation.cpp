@@ -42,11 +42,6 @@ void CAnimation::setRepeat(bool isRepeat)
 	m_bRepeat = isRepeat;
 }
 
-bool CAnimation::isRepeat()
-{
-	return m_bRepeat;
-}
-
 void CAnimation::update()
 {
 	m_fTimer += fDT;

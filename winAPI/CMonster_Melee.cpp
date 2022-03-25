@@ -90,13 +90,12 @@ void CMonster_Melee::update()
 {
 	fPoint playerPos = gameGetPlayer()->getPos();
 	tMonsInfo info = getMonsInfo();
-	info.fDist = playerPos.x - getPos().x;
+	info.fDist = abs(playerPos.x - getPos().x);
 	setMonsInfo(info);
 
 	CMonster::update();		// ai, anim update
 
 	yPosUpdate();
-	animUpdate();
 }
 
 void CMonster_Melee::render(HDC hDC)
@@ -233,10 +232,6 @@ void CMonster_Melee::yPosUpdate()
 	}
 	setPos(pos);
 	setMonsInfo(info);
-}
-
-void CMonster_Melee::animUpdate()
-{
 }
 
 void CMonster_Melee::printInfo(HDC hDC)

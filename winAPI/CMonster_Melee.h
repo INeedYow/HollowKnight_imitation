@@ -25,7 +25,6 @@ public:
 
 private:
 	void yPosUpdate();
-	void animUpdate();
 	void printInfo(HDC hDC);
 };
 
@@ -37,4 +36,4 @@ private:
 
 #define M_BT_HP				4
 #define M_BT_SPD			200
-#define M_BT_TRACE_RNG		400
+#define M_BT_TRACE_RNG		450

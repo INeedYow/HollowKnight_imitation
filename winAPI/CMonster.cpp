@@ -11,6 +11,9 @@
 #include "CState_Trace.h"
 #include "CState_Die.h"
 
+#include "CAnimation.h"
+#include "CAnimator.h"
+
 void CMonster::printInfo(HDC hDC)
 {
 }
@@ -125,7 +128,8 @@ CMonster* CMonster::create(eOBJNAME eName, fPoint pos)
 		pMonsMl->getCollider()->setSize(fPoint((float)M_BT_SIZEX, (float)M_BT_SIZEY));
 		pMonsMl->getCollider()->setOffset(fPoint(0.f, 10.f));
 		pMonsMl->setMonsInfo(info);
-
+		pMonsMl->setCheck(SM_TRACE, true);
+		
 		CAI* pAI = new CAI;
 		pAI->addState(new CState_Stop(eSTATE_MONS::STOP));
 		pAI->addState(new CState_Patrol(eSTATE_MONS::PATROL));
@@ -154,19 +158,19 @@ CMonster* CMonster::create(eOBJNAME eName, fPoint pos)
 			fPoint(1785, 192), fPoint(104, 192), fPoint(-104, 0), 0.35f, 2);
 
 		pMonsMl->createAnim(L"BT_TraceEnter_R", pMonsMl->getTex(),
-			fPoint(0, 384), fPoint(171, 190), fPoint(171, 0), 0.2f, 5);
+			fPoint(0, 384), fPoint(171, 190), fPoint(171, 0), 0.18f, 5);
 		pMonsMl->createAnim(L"BT_TraceEnter_L", pMonsMl->getTex(),
-			fPoint(684, 576), fPoint(171, 190), fPoint(-171, 0), 0.2f, 5);
+			fPoint(684, 576), fPoint(171, 190), fPoint(-171, 0), 0.18f, 5);
 
 		pMonsMl->createAnim(L"BT_Trace_R", pMonsMl->getTex(),
-			fPoint(855, 450), fPoint(199, 124), fPoint(199, 0), 0.3f, 4);
+			fPoint(855, 394), fPoint(199, 180), fPoint(199, 0), 0.4f, 4);
 		pMonsMl->createAnim(L"BT_Trace_L", pMonsMl->getTex(),
-			fPoint(1452, 642), fPoint(199, 124), fPoint(-199, 0), 0.3f, 4);
+			fPoint(1452, 586), fPoint(199, 180), fPoint(-199, 0), 0.4f, 4);
 
 		pMonsMl->createAnim(L"BT_TraceExit_R", pMonsMl->getTex(),
-			fPoint(1649, 394), fPoint(132, 183), fPoint(132, 0), 0.3f, 1);
+			fPoint(1649, 394), fPoint(132, 183), fPoint(132, 0), 0.36f, 1);
 		pMonsMl->createAnim(L"BT_TraceExit_L", pMonsMl->getTex(),
-			fPoint(1649, 586), fPoint(132, 183), fPoint(-132, 0), 0.3f, 1);
+			fPoint(1649, 586), fPoint(132, 183), fPoint(-132, 0), 0.36f, 1);
 
 		pMonsMl->createAnim(L"BT_Die_R", pMonsMl->getTex(),
 			fPoint(0, 770), fPoint(190, 136), fPoint(190, 0), 0.22f, 9, false);
