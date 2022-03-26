@@ -3,6 +3,7 @@
 class CState_BSpawn : public CState_Mons
 {
 	float m_fDura;
+	bool  m_bSpawn;
 
 public:
 	CState_BSpawn(eSTATE_MONS state);

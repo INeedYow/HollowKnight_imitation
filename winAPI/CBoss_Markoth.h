@@ -16,7 +16,7 @@ enum class eSTATE_BOSS
 
 	END
 };
-// TODOTODOTODOTODOTODOTDOTODO
+
 class CBoss_Markoth : public CMonster
 {
 	UCHAR		m_ucPhase;					// 1, 2 페이즈
@@ -47,7 +47,7 @@ public:
 	void spawnShield();
 
 private:
-	void createShield(float theta = 0.f);
+	void createShield(float theta = 0.f, bool rightRot = true);
 	void createSpear();
 
 	virtual void death();
@@ -70,7 +70,7 @@ private:
 
 // boss
 #define B_HPMAX				20
-#define B_SPD				120
+#define B_SPD				135
 #define B_READY_DURA		2
 #define B_ACCEL				(2 * B_SHD_SPD / B_READY_DURA)
 #define B_DMG_DELAY			0.4				// 플레이어 미사일로 부터 피해 입는 주기

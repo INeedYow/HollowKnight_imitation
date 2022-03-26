@@ -158,15 +158,15 @@ void CSpear::render(HDC hDC)
 
 	for (int i = 0; i < 3; i++)
 	{	// memDC 중앙 좌표로 이동
-		pThreeArr[i].x += (LONG)(MEMTEX_SIZE / 2);
-		pThreeArr[i].y += (LONG)(MEMTEX_SIZE / 2);
+		pThreeArr[i].x += (LONG)(SPR_MEMTEX_SIZE / 2);
+		pThreeArr[i].y += (LONG)(SPR_MEMTEX_SIZE / 2);
 	}
 
 	// memDC 마젠타로 채움
 	SelectGDI brush(m_pMemTex->getDC(), eBRUSH::MAGENTA);
 
 	Rectangle(m_pMemTex->getDC(), 
-		-1, -1, MEMTEX_SIZE + 1, MEMTEX_SIZE + 1);
+		-1, -1, SPR_MEMTEX_SIZE + 1, SPR_MEMTEX_SIZE + 1);
 
 	// 회전한 좌표로 memDC에 그림
 	PlgBlt(m_pMemTex->getDC(),
@@ -181,15 +181,15 @@ void CSpear::render(HDC hDC)
 
 	// memDC에 그렸던 것 통쨰로 가져오면 됨
 	TransparentBlt(hDC,
-		(int)(pos.x - MEMTEX_SIZE / 2),
-		(int)(pos.y - MEMTEX_SIZE / 2),
-		MEMTEX_SIZE,
-		MEMTEX_SIZE,
+		(int)(pos.x - SPR_MEMTEX_SIZE / 2),
+		(int)(pos.y - SPR_MEMTEX_SIZE / 2),
+		SPR_MEMTEX_SIZE,
+		SPR_MEMTEX_SIZE,
 		m_pMemTex->getDC(),
 		0,
 		0,
-		MEMTEX_SIZE,
-		MEMTEX_SIZE,
+		SPR_MEMTEX_SIZE,
+		SPR_MEMTEX_SIZE,
 		RGB(255, 0, 255)
 	);
 }
@@ -212,7 +212,7 @@ void CSpear::setActive(bool isOn)
 	m_bActive = isOn;
 }
 
-void CSpear::setMemTex(const wstring& texName, UINT sizeX, UINT sizeY)
+void CSpear::createMemTex(const wstring& texName, UINT sizeX, UINT sizeY)
 {
 	m_pMemTex = CResourceManager::getInst()->createTexture(texName, sizeX, sizeY);
 }

@@ -50,11 +50,11 @@ CBoss_Markoth::CBoss_Markoth()
 	pAI->addState(new CState_BReady(eSTATE_MONS::READY));
 	pAI->addState(new CState_BSkill(eSTATE_MONS::SKILL));
 
-	pAI->setCurState(eSTATE_MONS::IDLE);
+	pAI->setCurState(eSTATE_MONS::SPAWN);
 	setAI(pAI);
 
 	//
-	createShield();
+	//createShield(); spawn 상태에서 하게
 	createSpear();
 }
 
@@ -230,21 +230,44 @@ void CBoss_Markoth::collisionKeep(CCollider* pOther)
 	}
 }
 
-void CBoss_Markoth::createShield(float theta)
+// 테스트 중 원본 보관
+//void CBoss_Markoth::createShield(float theta)
+//{
+//	CShield* pShield = new CShield();
+//	pShield->setOwner(this);
+//	pShield->setRadius((float)B_SHD_RAD);
+//	pShield->setfSpeed((float)B_SHD_SPD);
+//	pShield->setTex(L"Shield_Boss", L"texture\\boss\\boss_shield.bmp");
+//	pShield->createAnim(L"Shield_rot", pShield->getTex(), 
+//		fPoint(0.f, 0.f), fPoint(166.f, 308.f), fPoint(166.f, 0.f), 0.1f, 3);
+//	pShield->getAnimator()->play(L"Shield_rot");
+//	pShield->setTheta((float)(theta + m_vecShield.size() * PI));			// 반대 방향에서 생성..
+//
+//	createObj(pShield, eOBJ::SHIELD);
+//
+//	m_vecShield.push_back(pShield);
+//}
+
+// 테스트 용
+void CBoss_Markoth::createShield(float theta, bool rightRot)
 {
 	CShield* pShield = new CShield();
 	pShield->setOwner(this);
 	pShield->setRadius((float)B_SHD_RAD);
 	pShield->setfSpeed((float)B_SHD_SPD);
-	pShield->setTex(L"Shield_Boss", L"texture\\boss\\boss_shield.bmp");
-	pShield->createAnim(L"Shield_rot", pShield->getTex(), 
-		fPoint(0.f, 0.f), fPoint(166.f, 308.f), fPoint(166.f, 0.f), 0.1f, 3);
-	pShield->getAnimator()->play(L"Shield_rot");
-	pShield->setTheta((float)(theta + m_vecShield.size() * PI));			// 반대 방향에서 생성..
+	pShield->setTex(L"Shield_Boss", L"texture\\boss\\test.bmp");
+	pShield->setTheta(theta);
+	pShield->setRot(rightRot);
+
+	m_vecShield.push_back(pShield);
+
+	wstring strMemTexName = L"Shield_MemTex_";
+	strMemTexName += to_wstring(m_vecShield.size());
+
+	pShield->createMemTex(strMemTexName, SHD_MEMTEX_SIZE, SHD_MEMTEX_SIZE);
 
 	createObj(pShield, eOBJ::SHIELD);
 
-	m_vecShield.push_back(pShield);
 }
 
 void CBoss_Markoth::createSpear()
@@ -259,7 +282,8 @@ void CBoss_Markoth::createSpear()
 	wstring strMemTexName = L"Spear_MemTex_";
 	strMemTexName += to_wstring(m_vecSpear.size() - 1);		// 생성 벡터 인덱스 숫자를 memTex 고유 이름번호로(collider ID처럼)
 	
-	pSpear->setMemTex(strMemTexName, MEMTEX_SIZE, MEMTEX_SIZE);
+	pSpear->createMemTex(strMemTexName, SPR_MEMTEX_SIZE, SPR_MEMTEX_SIZE);
+
 	createObj(pSpear, eOBJ::MISSILE_MONSTER);
 }
 
@@ -283,24 +307,22 @@ vector<CSpear*>& CBoss_Markoth::getVecSpear()
 	return m_vecSpear;
 }
 
-// TODO
 void CBoss_Markoth::spawnShield()
 {
-	float theta = m_vecShield[0]->getTheta();
-
-	for (int i = 0; i < m_vecShield.size(); i++)
-	{	// 방패 제거
-		deleteObj(m_vecShield[i]);
-	}
-	m_vecShield.clear();
-
 	switch (m_ucPhase)
-	{	// 방패 생성
-	case 2:
-		createShield(theta);
+	{
 	case 1:
-		createShield(theta);
+	{
+		createShield();
 		break;
+	}
+	case 2:
+	{	// 방패 0개 (처음 init)
+		float theta = m_vecShield[0]->getTheta();
+		bool isRight = m_vecShield[0]->isRotRight();
+		createShield((float)(theta + PI), isRight);
+		break;
+	}
 	}
 }
 

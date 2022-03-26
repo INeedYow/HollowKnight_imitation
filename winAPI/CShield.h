@@ -6,6 +6,7 @@ class CTexture;
 class CShield : public CObject
 {
 	CTexture* m_pTex;
+	CTexture* m_pMemTex;
 
 	CObject* m_pOwner;
 
@@ -31,6 +32,9 @@ public:
 	void setRadius(float rad);
 	void setTheta(float theta);
 	void setTex(const wstring& strName, const wstring& strPath);
+	void createMemTex(const wstring& texName, UINT sizeX, UINT sizeY);
+
+	bool isRotRight();
 
 	CTexture* getTex();
 	float getSpeed();
@@ -42,3 +46,9 @@ public:
 private:
 	void calculateRad();
 };
+
+#define SHD_SIZEX			166
+#define SHD_SIZEY			308
+
+
+#define SHD_MEMTEX_SIZE		(UINT)(SHD_SIZEY * 1.5f)

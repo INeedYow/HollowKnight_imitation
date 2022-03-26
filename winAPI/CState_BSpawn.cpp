@@ -8,6 +8,7 @@ CState_BSpawn::CState_BSpawn(eSTATE_MONS state)
 	:CState_Mons(state)
 {
 	m_fDura = 0;
+	m_bSpawn = false;
 }
 
 CState_BSpawn::~CState_BSpawn()
@@ -21,6 +22,13 @@ void CState_BSpawn::update(UINT& chk)
 	if (m_fDura < 0.4f)
 	{
 		getMonster()->PLAY(L"st_Skill");
+
+		if (!m_bSpawn)
+		{
+			((CBoss_Markoth*)getMonster())->spawnShield();
+			m_bSpawn = true;
+		}
+	
 	}
 
 	if (m_fDura < 0.f)
@@ -33,14 +41,15 @@ void CState_BSpawn::update(UINT& chk)
 void CState_BSpawn::enter()
 {
 	m_fDura = 0.9f;
+	m_bSpawn = false;
 	getMonster()->PLAY(L"st_Middle");
 	getMonster()->getCollider()->setSize(fPoint(SB_MdSIZEX, SB_MdSIZEY));
-	((CBoss_Markoth*)getMonster())->spawnShield();
 }
 
 void CState_BSpawn::exit()
 {
 	m_fDura = 0.f;
+	m_bSpawn = false;
 }
 
 void CState_BSpawn::printInfo(HDC hDC)

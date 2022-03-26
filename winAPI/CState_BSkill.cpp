@@ -46,15 +46,13 @@ void CState_BSkill::update(UINT& chk)
 
 	if (m_fDura < 0.f)
 	{
-		/*m_fDura = 0.f;
-
 		for (int i = 0; i < vecShd.size(); i++)
-		{
-			vecShd[i]->setfSpeed(vecShd[i]->getSpeed() - 1.8f * fDT);
+		{	// 속도 원래대로
+			vecShd[i]->setfSpeed((float)B_SHD_SPD);
+			vecShd[i]->setRadius((float)B_SHD_RAD);
+		}
 
-			if (vecShd[i]->getSpeed() <= B_SHD_SPD)*/
-				changeMonsState(getOwner(), eSTATE_MONS::SPAWN);
-		//}
+		changeMonsState(getOwner(), eSTATE_MONS::IDLE);
 	}
 
 	m_fSpd = vecShd[vecShd.size() - 1]->getSpeed();
@@ -82,7 +80,6 @@ void CState_BSkill::exit()
 	((CBoss_Markoth*)getMonster())->setSkillCooldown((float)B_SKILL_COOL);
 
 	((CBoss_Markoth*)getMonster())->setSpawnTimer(1.5f);
-
 }
 
 void CState_BSkill::printInfo(HDC hDC)
