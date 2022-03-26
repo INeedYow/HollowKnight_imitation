@@ -39,7 +39,7 @@ public:
 	void setRepeat(bool isRepeat);
 
 	void update();
-	void render(HDC hDC);
+	void render(HDC hDC, float theta = 0.f);
 
 	void create(CTexture* pTex, fPoint leftTop, fPoint slice,
 		fPoint step, float dura, UINT frmCnt, bool isRepeat = true);

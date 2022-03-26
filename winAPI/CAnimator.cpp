@@ -1,11 +1,13 @@
 #include "framework.h"
 #include "CAnimator.h"
 #include "CAnimation.h"
+#include "CTexture.h"
 
 CAnimator::CAnimator()
 {
 	m_pCurAni = nullptr;
 	m_pOwner = nullptr;
+	m_pMemTex = nullptr;
 }
 
 CAnimator::~CAnimator()
@@ -33,11 +35,11 @@ void CAnimator::update()
 	}
 }
 
-void CAnimator::render(HDC hDC)
+void CAnimator::render(HDC hDC, float theta)
 {
 	if (nullptr != m_pCurAni)
 	{
-		m_pCurAni->render(hDC);
+		m_pCurAni->render(hDC, theta);
 	}
 }
 
@@ -80,3 +82,14 @@ void CAnimator::play(const wstring& strName)
 	}
 	m_pCurAni = pNextAni;
 }
+
+void CAnimator::createMemTex(const wstring& texName, UINT sizeX, UINT sizeY)
+{
+	m_pMemTex = CResourceManager::getInst()->createTexture(texName, sizeX, sizeY);
+}
+
+CTexture* CAnimator::getMemTex()
+{
+	return m_pMemTex;
+}
+

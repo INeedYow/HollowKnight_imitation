@@ -40,7 +40,7 @@ public:
 	virtual void update() = 0;
 	virtual void finalUpdate();
 	virtual void render(HDC hDC);
-	virtual void componentRender(HDC hDC);
+	virtual void componentRender(HDC hDC, float theta = 0.f);
 
 	CCollider* getCollider();
 	void createCollider();

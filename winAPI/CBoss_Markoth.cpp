@@ -249,22 +249,30 @@ void CBoss_Markoth::collisionKeep(CCollider* pOther)
 //}
 
 // 테스트 용
+// MemTex 이름이 같으면 에러
 void CBoss_Markoth::createShield(float theta, bool rightRot)
 {
 	CShield* pShield = new CShield();
 	pShield->setOwner(this);
 	pShield->setRadius((float)B_SHD_RAD);
 	pShield->setfSpeed((float)B_SHD_SPD);
-	pShield->setTex(L"Shield_Boss", L"texture\\boss\\test.bmp");
+	pShield->setTex(L"Shield_Boss", L"texture\\boss\\boss_shield.bmp");
 	pShield->setTheta(theta);
 	pShield->setRot(rightRot);
 
+	pShield->getCollider()->setSize(fPoint(90.f, 250.f));
+
+	pShield->getAnimator()->createMemTex(addStrIDNumber(L"Shield"), SHD_MEMTEX_SIZE, SHD_MEMTEX_SIZE);
+	pShield->createAnim(L"Shield_rot", pShield->getTex(),
+				fPoint(0.f, 0.f), fPoint(166.f, 308.f), fPoint(166.f, 0.f), 0.1f, 3);
+			pShield->getAnimator()->play(L"Shield_rot");
+
 	m_vecShield.push_back(pShield);
 
-	wstring strMemTexName = L"Shield_MemTex_";
-	strMemTexName += to_wstring(m_vecShield.size());
+	//wstring strMemTexName = L"Shield_MemTex_";
+	//strMemTexName += to_wstring(m_vecShield.size());
 
-	pShield->createMemTex(strMemTexName, SHD_MEMTEX_SIZE, SHD_MEMTEX_SIZE);
+	//pShield->createMemTex(strMemTexName, SHD_MEMTEX_SIZE, SHD_MEMTEX_SIZE);
 
 	createObj(pShield, eOBJ::SHIELD);
 
@@ -274,7 +282,7 @@ void CBoss_Markoth::createSpear()
 {
 	CSpear* pSpear = new CSpear;
 	pSpear->setSpd(B_SPR_SPD_1P);
-	pSpear->getCollider()->setSize(fPoint(60.f, 60.f));
+	pSpear->getCollider()->setSize(fPoint(270.f, 35.f));
 	pSpear->setTex(L"Spear_Boss", L"texture\\boss\\boss_spear.bmp");
 
 	m_vecSpear.push_back(pSpear);

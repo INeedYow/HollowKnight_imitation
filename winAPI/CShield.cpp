@@ -21,7 +21,6 @@ CShield::CShield()
 	m_pOwner = nullptr;
 
 	createCollider();
-	getCollider()->setSize(fPoint(70.f, 70.f));
 	getCollider()->setShape(eSHAPE::RECT);
 
 	createAnimator();
@@ -99,60 +98,62 @@ void CShield::update()
 
 void CShield::render(HDC hDC)
 {
-	fPoint pos = rendPos(getPos());
-	fPoint size = { (float)sizex, (float)sizey };
+	//fPoint pos = rendPos(getPos());
+	//fPoint size = { (float)sizex, (float)sizey };
 
-	POINT pThreeArr[3];
+	//POINT pThreeArr[3];
 
-	// 좌상, 우상, 좌하 좌표 3개
-	fPoint arr[3] = {
-		fPoint(-size.x / 2.f, -size.y / 2.f),
-		fPoint(size.x / 2.f, -size.y / 2.f),
-		fPoint(-size.x / 2.f,  size.y / 2.f),
-	};
+	//// 좌상, 우상, 좌하 좌표 3개
+	//fPoint arr[3] = {
+	//	fPoint(-size.x / 2.f, -size.y / 2.f),
+	//	fPoint(size.x / 2.f, -size.y / 2.f),
+	//	fPoint(-size.x / 2.f,  size.y / 2.f),
+	//};
 
-	for (int i = 0; i < 3; i++)
-	{	// 좌표에 회전행렬로 회전적용
-		pThreeArr[i].x = -(LONG)(arr[i].x * cos(m_fTheta) - arr[i].y * sin(m_fTheta));
-		pThreeArr[i].y = -(LONG)(arr[i].x * sin(m_fTheta) + arr[i].y * cos(m_fTheta));
-	}
+	//for (int i = 0; i < 3; i++)
+	//{	// 좌표에 회전행렬로 회전적용
+	//	pThreeArr[i].x = -(LONG)(arr[i].x * cos(m_fTheta) - arr[i].y * sin(m_fTheta));
+	//	pThreeArr[i].y = -(LONG)(arr[i].x * sin(m_fTheta) + arr[i].y * cos(m_fTheta));
+	//}
 
-	for (int i = 0; i < 3; i++)
-	{	// memDC 중앙 좌표로 이동
-		pThreeArr[i].x += (LONG)(MEMTEX_SIZE / 2);
-		pThreeArr[i].y += (LONG)(MEMTEX_SIZE / 2);
-	}
+	//for (int i = 0; i < 3; i++)
+	//{	// memDC 중앙 좌표로 이동
+	//	pThreeArr[i].x += (LONG)(MEMTEX_SIZE / 2);
+	//	pThreeArr[i].y += (LONG)(MEMTEX_SIZE / 2);
+	//}
 
-	// memDC 마젠타로 채움
-	SelectGDI brush(m_pMemTex->getDC(), eBRUSH::MAGENTA);
+	//// memDC 마젠타로 채움
+	//SelectGDI brush(m_pMemTex->getDC(), eBRUSH::MAGENTA);
 
-	Rectangle(m_pMemTex->getDC(),
-		-1, -1, MEMTEX_SIZE + 1, MEMTEX_SIZE + 1);
+	//Rectangle(m_pMemTex->getDC(),
+	//	-1, -1, MEMTEX_SIZE + 1, MEMTEX_SIZE + 1);
 
-	// 회전한 좌표로 memDC에 그림
-	PlgBlt(m_pMemTex->getDC(),
-		pThreeArr,
-		m_pTex->getDC(),
-		0, 0,
-		(int)size.x,
-		(int)size.y,
-		NULL,
-		0, 0
-	);
+	//// 회전한 좌표로 memDC에 그림
+	//PlgBlt(m_pMemTex->getDC(),
+	//	pThreeArr,
+	//	m_pTex->getDC(),
+	//	0, 0,
+	//	(int)size.x,
+	//	(int)size.y,
+	//	NULL,
+	//	0, 0
+	//);
 
-	// memDC에 그렸던 것 통쨰로 가져오면 됨
-	TransparentBlt(hDC,
-		(int)(pos.x - MEMTEX_SIZE / 2),
-		(int)(pos.y - MEMTEX_SIZE / 2),
-		MEMTEX_SIZE,
-		MEMTEX_SIZE,
-		m_pMemTex->getDC(),
-		0,
-		0,
-		MEMTEX_SIZE,
-		MEMTEX_SIZE,
-		RGB(255, 0, 255)
-	);
+	//// memDC에 그렸던 것 통쨰로 가져오면 됨
+	//TransparentBlt(hDC,
+	//	(int)(pos.x - MEMTEX_SIZE / 2),
+	//	(int)(pos.y - MEMTEX_SIZE / 2),
+	//	MEMTEX_SIZE,
+	//	MEMTEX_SIZE,
+	//	m_pMemTex->getDC(),
+	//	0,
+	//	0,
+	//	MEMTEX_SIZE,
+	//	MEMTEX_SIZE,
+	//	RGB(255, 0, 255)
+	//);
+
+	componentRender(hDC, m_fTheta);
 }
 
 

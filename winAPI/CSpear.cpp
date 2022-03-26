@@ -14,7 +14,6 @@ CSpear::CSpear()
 	setDir(fVec2(0.f, 0.f));
 
 	getCollider()->setShape(eSHAPE::RECT);
-	getCollider()->setSize(fPoint(30.f, 30.f));
 
 	m_uiStep = 0;
 	m_fTheta = 0.f;
@@ -135,13 +134,13 @@ void CSpear::update()
 // TODO
 void CSpear::render(HDC hDC)
 {
-	componentRender(hDC);
+	componentRender(hDC, m_fTheta);
 	//////////////////////////////
 	fPoint pos = getPos();
 	fPoint size = { (float)SPR_SIZEX, (float)SPR_SIZEY };
-	
-	POINT pThreeArr[3];
 	pos = rendPos(pos);
+
+	POINT pThreeArr[3];
 	
 	// ÁÂ»ó, ¿ì»ó, ÁÂÇÏ ÁÂÇ¥ 3°³
 	fPoint arr[3] = {

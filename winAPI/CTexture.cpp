@@ -77,3 +77,7 @@ void CTexture::create(UINT width, UINT height)
 	GetObject(m_hBMP, sizeof(BITMAP), &m_bmpInfo);
 }
 
+UINT CTexture::getMaxSize()
+{
+	return (UINT)max(m_bmpInfo.bmWidth, m_bmpInfo.bmHeight);
+}

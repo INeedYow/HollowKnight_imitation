@@ -196,9 +196,10 @@ void CPlayer::playAnim(const wstring& keyWord)
 
 void CPlayer::update()
 {
-	if (KEY_ON('P')) g_bDebug = !g_bDebug;
+	if (KEY_ON('M')) g_bDebug = !g_bDebug;
 	if (g_bDebug && KEY_ON('O')) 
-		setPos(fPoint(1200.f, 1400.f));
+		setPos(mousePos());
+
 	////////////////////////////
 	// 회전테스트
 	// T Y U I 
@@ -208,13 +209,11 @@ void CPlayer::update()
 	//	createRotTester();
 	//}
 
-	//playAnim();					// 
 	if (nullptr != m_pStatus)
 		m_pStatus->update(m_uiCheck);
 	if (nullptr != getAnimator())
 		getAnimator()->update();
 
-	
 	checkUpdate();	
 }
 

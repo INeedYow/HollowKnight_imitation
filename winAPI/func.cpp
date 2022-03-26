@@ -3,6 +3,8 @@
 
 class CCollider;
 
+
+
 // TODO 충돌 방향 검사 함수들 개편 현재 판정이 너무 이상함
 	// enter일 때랑 keep일 때랑 쓰는 함수 다르게 할까 생각 중
 
@@ -158,4 +160,9 @@ bool isCollisionCircleToCircle(const fPoint& cp1, int cr1, const fPoint& cp2, in
 	float distance = (float)sqrt((double)x * x + (double)y * y);
 
 	return (distance <= cr1 + cr2);
+}
+
+wstring addStrIDNumber(const wstring& str)
+{
+	return str + to_wstring(g_IDNumbering++);
 }

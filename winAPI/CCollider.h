@@ -9,7 +9,7 @@ class CCollider
 	static UINT		s_uiID;				// 고유 키값 생성을 위한 static변수
 
 	CObject*		m_pOwner;			
-	fPoint			m_fpPos;
+	fPoint			m_fpPos;			// ownerPos + offsetPos
 	fPoint			m_fpSize;
 	fPoint			m_fpOffset;			// 유격, 편차
 	UINT			m_uiCollCnt;		// 충돌 카운트
@@ -38,7 +38,7 @@ public:
 	CCollider& operator==(const CCollider& other) = delete;		// 못 쓰게
 
 	virtual void finalUpdate();
-	void render(HDC hDC);
+	void render(HDC hDC, float theta = 0.f);
 
 	// 충돌 매니저에서 충돌 상태에 따라 호출해 줄 함수
 	void collisionKeep(CCollider* pOther);

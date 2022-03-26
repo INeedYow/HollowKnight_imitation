@@ -88,41 +88,76 @@ UINT CCollider::getID()
 void CCollider::finalUpdate()
 {
 	m_fpPos = m_pOwner->getPos() + m_fpOffset;
-	//m_fpSize = m_pOwner->getSize();
+
 }
 
-void CCollider::render(HDC hDC)
+void CCollider::render(HDC hDC, float theta)
 {
 	if (!g_bDebug) return;
 
-	fPoint fpRendPos = rendPos(m_fpPos);
+	fPoint pos = rendPos(m_fpPos);
 
 	SelectGDI pen(hDC, ePEN::RED, ePEN::GREEN, m_uiCollCnt);
 	SelectGDI brush(hDC, eBRUSH::HOLLOW);
 
-	switch (m_eShape)
-	{
-	case eSHAPE::CIRCLE:
-		Ellipse(hDC,
-			(int)(fpRendPos.x - m_fpSize.x / 2.f),
-			(int)(fpRendPos.y - m_fpSize.y / 2.f),
-			(int)(fpRendPos.x + m_fpSize.x / 2.f),
-			(int)(fpRendPos.y + m_fpSize.y / 2.f));
-		break;
-	case eSHAPE::RECT:
-		Rectangle(hDC,
-			(int)(fpRendPos.x - m_fpSize.x / 2.f),
-			(int)(fpRendPos.y - m_fpSize.y / 2.f),
-			(int)(fpRendPos.x + m_fpSize.x / 2.f),
-			(int)(fpRendPos.y + m_fpSize.y / 2.f));
-		break;
+	if (0.f == theta)
+	{	// 회전 X
+		switch (m_eShape)
+		{
+		case eSHAPE::CIRCLE:
+			Ellipse(hDC,
+				(int)(pos.x - m_fpSize.x / 2.f),
+				(int)(pos.y - m_fpSize.y / 2.f),
+				(int)(pos.x + m_fpSize.x / 2.f),
+				(int)(pos.y + m_fpSize.y / 2.f));
+			break;
+		case eSHAPE::RECT:
+			Rectangle(hDC,
+				(int)(pos.x - m_fpSize.x / 2.f),
+				(int)(pos.y - m_fpSize.y / 2.f),
+				(int)(pos.x + m_fpSize.x / 2.f),
+				(int)(pos.y + m_fpSize.y / 2.f));
+			break;
+		}
+	}
+	else
+	{	// 회전 O
+		if (m_eShape != eSHAPE::RECT) return;
+
+		POINT pPointArr[4];
+
+		// 좌상, 우상, 우하, 좌하 좌표 (LineTo로 이어 그리기 위해 순서 변형)
+		fPoint arr[4] = {
+			fPoint(-m_fpSize.x / 2.f, -m_fpSize.y / 2.f),
+			fPoint(m_fpSize.x / 2.f, -m_fpSize.y / 2.f),
+			fPoint(m_fpSize.x / 2.f,  m_fpSize.y / 2.f),
+			fPoint(-m_fpSize.x / 2.f,  m_fpSize.y / 2.f)
+		};
+
+		for (int i = 0; i < 4; i++)
+		{	// 좌표에 회전행렬로 회전적용
+			pPointArr[i].x = (LONG)(arr[i].x * cos(theta) - arr[i].y * sin(theta));
+			pPointArr[i].y = (LONG)(arr[i].x * sin(theta) + arr[i].y * cos(theta));
+		}
+
+		for (int i = 0; i < 4; i++)
+		{	// pos 만큼 위치로
+			pPointArr[i].x += (LONG)(pos.x);
+			pPointArr[i].y += (LONG)(pos.y);
+		}
+		
+		for (int i = 0; i < 4; i++)
+		{	// point [1]->[2]->[3]->[4]->[1] 선 그리기
+			MoveToEx(hDC, pPointArr[i].x, pPointArr[i].y, NULL);
+			LineTo(hDC, pPointArr[(i + 1) % 4].x, pPointArr[(i + 1) % 4].y);
+		}
 	}
 
 	// 정보 출력
+	SelectGDI font(hDC, eFONT::COMIC18);
 	WCHAR szBuffer[255] = {};
 	swprintf_s(szBuffer, L"%d", m_uiCollCnt);
-	TextOutW(hDC, (int)fpRendPos.x, (int)fpRendPos.y, szBuffer, (int)wcslen(szBuffer));
-
+	TextOutW(hDC, (int)pos.x, (int)pos.y, szBuffer, (int)wcslen(szBuffer));
 }
 
 void CCollider::collisionKeep(CCollider* pOther)

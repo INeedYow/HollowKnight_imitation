@@ -21,5 +21,6 @@ public:
 	void	load(const wstring& strPath);
 	void	create(UINT width, UINT height);
 
+	UINT	getMaxSize();				// tex bitmap 가로 세로 중 긴 것
 };
 
