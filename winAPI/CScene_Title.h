@@ -7,6 +7,8 @@ public:
 	CScene_Title();
 	virtual ~CScene_Title();
 
+
+	virtual void update();
 	virtual void enter();
 	virtual void exit();
 };

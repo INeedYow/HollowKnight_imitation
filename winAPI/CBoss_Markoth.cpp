@@ -28,7 +28,7 @@ CBoss_Markoth::CBoss_Markoth()
 	m_ucPhase = 1;
 	m_fTimer = 0.f;
 	m_fSkillTimer = (float)B_SKILL_COOL;
-	m_fSpawnTimer = 4.f;
+	m_fSpawnTimer = 0.f;
 
 	setCheck(SB_TIMER, true);
 
@@ -67,7 +67,6 @@ CBoss_Markoth* CBoss_Markoth::clone()
 	return nullptr;
 }
 
-// TODO 상태 정보 출력, 콜라이더 크기, chk 수정, player update 수정
 void CBoss_Markoth::update()
 {
 	CMonster::update();
@@ -75,14 +74,41 @@ void CBoss_Markoth::update()
 	if (isCheck(SB_TIMER))			// 타이머 적용되는 상태
 	{
 		m_fSkillTimer -= fDT;
-		m_fSpawnTimer -= fDT;
-
 
 		if (getMonsInfo().iHP <= B_HPMAX / 2 && m_ucPhase == 1)
 		{	// 2 페이즈
 			m_ucPhase++;
 			changeMonsState(getAI(), eSTATE_MONS::SPAWN);
 			createSpear();
+
+			for (int i = 0; i < m_vecSpear.size(); i++)
+			{	// spear 속도 증가
+				m_vecSpear[i]->setSpd(B_SPR_SPD_2P);
+			}
+		}
+
+		if (m_fSpawnTimer > 0.f)
+		{	// 스킬 후 spear 생성 시간차 주려고 
+			m_fSpawnTimer -= fDT;
+
+			if (m_fSpawnTimer < 0.f)
+			{
+				for (int i = 0; i <= m_vecSpear.size(); i++)	// i == size이면 활성할 게 없는 걸로 간주하고 종료할 생각으로 <= 씀(end iter처럼)
+				{
+					if (i == m_vecSpear.size())
+					{	// 활성화 할 게 없는 경우
+						m_fSpawnTimer = 0.f;
+						break;
+					}
+
+					if (!m_vecSpear[i]->isActive())			// 활성화 되지 않은 spear 찾으면
+					{
+						m_vecSpear[i]->setActive(true);		// 활성화 시킴
+						m_fSpawnTimer = 1.5f;
+						break;
+					}
+				}
+			}
 		}
 
 		if (m_fSkillTimer < 0.f)
@@ -204,62 +230,15 @@ void CBoss_Markoth::collisionKeep(CCollider* pOther)
 	}
 }
 
-void CBoss_Markoth::collisionExit(CCollider* pOther)
-{
-}
-//
-//void CBoss_Markoth::setRandDelay()
-//{
-//	float randDelay = (float)(rand() % 3);
-//
-//	switch ((int)randDelay)
-//	{
-//	case 0:
-//		randDelay += 0.1f;
-//	case 1:
-//		randDelay += 0.1f;
-//	case 2:
-//	{
-//		if (1 == m_ucPhase)
-//			randDelay += 2.4f;
-//		else
-//			randDelay += 1.6f;
-//		break;
-//	}
-//	}
-//	m_fSpawnTimer = randDelay;
-//}
-
-// TODO
-// 계속 소환하게 하지말고 미리 소환해두고 그걸 계속 쓰는 방식으로 바꿔보기
-//void CBoss_Markoth::createSpear()
-//{
-//	fPoint pos = randSpearPos();
-//
-//	CSpear* pSpear = new CSpear;
-//	pSpear->setPos(pos);
-//	pSpear->setName(eOBJNAME::MISSILE_MONSTER);
-//	pSpear->setSpd((float)B_SPR_SPD_1P);
-//	pSpear->getCollider()->setSize(fPoint(60.f, 60.f));
-//	pSpear->setTex(L"Spear_Boss", L"texture\\boss\\boss_spear.bmp");
-//	pSpear->createAnim(L"Spear_normal", pSpear->getTex(), 
-//		fPoint(0.f, 0.f), fPoint(400.f, 91.f), fPoint(0.f, 0.f), 1.f, 1, false);
-//	pSpear->getAnimator()->play(L"Spear_normal");
-//
-//	createObj(pSpear, eOBJ::MISSILE_MONSTER);
-//
-//	m_vecSpear.push_back(pSpear);
-//	//setRandDelay();
-//}
-
 void CBoss_Markoth::createShield(float theta)
 {
 	CShield* pShield = new CShield();
 	pShield->setOwner(this);
 	pShield->setRadius((float)B_SHD_RAD);
+	pShield->setfSpeed((float)B_SHD_SPD);
 	pShield->setTex(L"Shield_Boss", L"texture\\boss\\boss_shield.bmp");
 	pShield->createAnim(L"Shield_rot", pShield->getTex(), 
-		fPoint(0.f, 0.f), fPoint(166.f, 308.f), fPoint(166.f, 0.f), 0.3f, 3);
+		fPoint(0.f, 0.f), fPoint(166.f, 308.f), fPoint(166.f, 0.f), 0.1f, 3);
 	pShield->getAnimator()->play(L"Shield_rot");
 	pShield->setTheta((float)(theta + m_vecShield.size() * PI));			// 반대 방향에서 생성..
 
@@ -274,40 +253,26 @@ void CBoss_Markoth::createSpear()
 	pSpear->setSpd(B_SPR_SPD_1P);
 	pSpear->getCollider()->setSize(fPoint(60.f, 60.f));
 	pSpear->setTex(L"Spear_Boss", L"texture\\boss\\boss_spear.bmp");
+
 	m_vecSpear.push_back(pSpear);
+
+	wstring strMemTexName = L"Spear_MemTex_";
+	strMemTexName += to_wstring(m_vecSpear.size() - 1);		// 생성 벡터 인덱스 숫자를 memTex 고유 이름번호로(collider ID처럼)
+	
+	UINT uiSize = max(SPR_SIZEX, SPR_SIZEY);
+	uiSize *= 1.5f;											// 회전한 크기 모두 담을 수 있어야 함
+	pSpear->setMemTex(strMemTexName, uiSize, uiSize);
 	createObj(pSpear, eOBJ::MISSILE_MONSTER);
 }
-
-// 카메라 안에서 랜덤 위치에 생성
-//fPoint CBoss_Markoth::randSpearPos()
-//{
-//	fPoint pos = CCameraManager::getInst()->getFocus();
-//	iPoint maxArea = { (int)(WINSIZEX / 2) ,(int)(WINSIZEY / 2)};
-//	iPoint minArea = { (int)(WINSIZEX / 4) ,(int)(WINSIZEY / 4)};
-//	iPoint randPos;
-//	int random;
-//	
-//	randPos.x = rand() % (maxArea.x - minArea.x + 1) + minArea.x;
-//	randPos.y = rand() % (maxArea.y - minArea.y + 1) + minArea.y;
-//
-//	random = rand() % 2;
-//	if (random)
-//		pos.x -= randPos.x;
-//	else
-//		pos.x += randPos.x;
-//
-//	random = rand() % 2;
-//	if (random)
-//		pos.y -= randPos.y;
-//	else
-//		pos.y += randPos.y;
-//
-//	return pos;
-//}
 
 void CBoss_Markoth::setSkillCooldown(float cd)
 {
 	m_fSkillTimer = cd;
+}
+
+void CBoss_Markoth::setSpawnTimer(float time)
+{
+	m_fSpawnTimer = time;
 }
 
 vector<CShield*>& CBoss_Markoth::getVecShield()
@@ -315,6 +280,12 @@ vector<CShield*>& CBoss_Markoth::getVecShield()
 	return m_vecShield;
 }
 
+vector<CSpear*>& CBoss_Markoth::getVecSpear()
+{
+	return m_vecSpear;
+}
+
+// TODO
 void CBoss_Markoth::spawnShield()
 {
 	float theta = m_vecShield[0]->getTheta();

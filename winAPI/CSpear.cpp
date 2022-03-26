@@ -2,12 +2,13 @@
 #include "CSpear.h"
 #include "CTexture.h"
 #include "CPlayer.h"
+#include "CBoss_Markoth.h"
 
 #include "SelectGDI.h"
 
 CSpear::CSpear()
 {
-	setSize(fPoint(30.f, 30.f));
+	setSize(fPoint(SPR_SIZEX, SPR_SIZEY));
 	setName(eOBJNAME::MISSILE_MONSTER);
 	setTimer(0.f);
 	setDir(fVec2(0.f, 0.f));
@@ -18,7 +19,9 @@ CSpear::CSpear()
 	m_uiStep = 0;
 	m_fTheta = 0.f;
 	m_fSpd = 1.f;
-	m_fpHead = {};
+	m_bActive = true;
+
+	m_pMemTex = nullptr;
 }
 
 CSpear::~CSpear()
@@ -30,6 +33,11 @@ CSpear::~CSpear()
 // mask 인자가 지우는 비트맵?
 void CSpear::update()
 {
+	if (KEY_ON('U'))
+		camSetTrace(this);
+	if (KEY_ON('Y'))
+		camSetTrace(CGameManager::getInst()->getPlayer());
+
 	fPoint pos = getPos();
 	float timer = getTimer();
 	fPoint destPos = gameGetPlayer()->getPos();
@@ -40,21 +48,22 @@ void CSpear::update()
 
 	timer -= fDT;
 	
-
 	switch (m_uiStep)
 	{
+
 	case 0:
 	{	// init
 		distX = destPos.x - pos.x;
 		distY = destPos.y - pos.y;
 		m_fTheta = (float)atan2(distY, distX);
 		
-		timer = 1.2f;
-		setSpeed(m_fSpd * 0.5f);
+		timer = m_fSpd == B_SPR_SPD_1P ? 0.8f : 0.6f;
+		setSpeed(m_fSpd * 0.1f);
 		m_uiStep++;
 
 		break;
 	}
+
 	case 1:
 	{	// pull and aim
 		distX = destPos.x - pos.x;
@@ -66,12 +75,13 @@ void CSpear::update()
 
 		if (timer < 0.f)
 		{
-			timer = 0.8f;
+			timer = m_fSpd == B_SPR_SPD_1P ? 0.8f : 0.6f;
 			setSpeed(0.f);
 			m_uiStep++;
 		}
 		break;
 	}
+
 	case 2:
 	{	// hold and aim
 		distX = destPos.x - pos.x;
@@ -80,18 +90,38 @@ void CSpear::update()
 
 		if (timer < 0.f)
 		{
+			timer = 1.f;
 			setSpeed(m_fSpd);
 			setDir(destPos - pos);
 			m_uiStep++;
 		}
 		break;
 	}
-	default:
-	{
-		
+	
+	case 3:
+	{	//shoot						
+		if (timer < 0.f)			// 발사후 일정 시간 지나고
+		{
+			m_uiStep++;
+		}
 		break;
 	}
-	// shoot
+
+	default:
+	{	// 카메라 범위 나가면 재활용
+		if (!m_bActive) break;		// 보스 스킬 쓸 때 비활성화 되면 재생성은 안 되게
+
+		fPoint randPos = rendPos(pos);
+		if (randPos.x < (float)(-1 * SPR_SIZEX / 2.f) || randPos.x > (float)(WINSIZEX + SPR_SIZEX / 2.f) ||
+			randPos.y < (float)(-1 * SPR_SIZEY / 2.f) || randPos.y > (float)(WINSIZEX + SPR_SIZEY / 2.f))
+		{
+			m_uiStep = 0;
+			setSpeed(0.f);
+			pos = getRandPos();
+		}
+		break;
+	}
+	
 	}
 	
 	dir.normalize();
@@ -99,36 +129,19 @@ void CSpear::update()
 	pos.y += getSpeed() * getDir().y * fDT;
 	setTimer(timer);
 	setPos(pos);
-
-	pos = rendPos(pos);
-
-	// step 조건 왜 안먹어
-	if (m_uiStep == 3 && 
-		pos.x < -300.f || pos.x > WINSIZEX + 300.f ||
-		pos.y < -300.f || pos.y > WINSIZEY + 300.f)
-	{	// 재활용
-		m_uiStep = 0;
-		setRandPos();
-	}
 }
 
 
 // TODO
 void CSpear::render(HDC hDC)
 {
-	//componentRender(hDC);
+	componentRender(hDC);
 	//////////////////////////////
 	fPoint pos = getPos();
-	fPoint size = { 362.f, 83.f };
+	fPoint size = { (float)SPR_SIZEX, (float)SPR_SIZEY };
 	
-	
-
 	POINT pThreeArr[3];
 	pos = rendPos(pos);
-	SelectGDI font(hDC, eFONT::COMIC24);
-	wchar_t b[255] = {};
-	swprintf_s(b, L"theta %f", m_fTheta);
-	TextOutW(hDC, (int)pos.x - 300, (int)pos.y + 100, b, (int)wcslen(b));
 	
 	fPoint arr[3] = {
 		fPoint(-size.x / 2.f, -size.y / 2.f),
@@ -142,22 +155,45 @@ void CSpear::render(HDC hDC)
 		pThreeArr[i].y = (LONG)(arr[i].x * sin(m_fTheta) + arr[i].y * cos(m_fTheta));
 	}
 
-	
 	for (int i = 0; i < 3; i++)
-	{
-		pThreeArr[i].x += (LONG)pos.x;
-		pThreeArr[i].y += (LONG)pos.y;
+	{	// memDC 중앙으로 이동
+		pThreeArr[i].x += (LONG)(m_pMemTex->getBmpWidth() / 2);
+		pThreeArr[i].y += (LONG)(m_pMemTex->getBmpHeight() / 2);
 	}
 
-	PlgBlt(hDC,
+	SelectGDI brush(m_pMemTex->getDC(), eBRUSH::MAGENTA);
+	
+	Rectangle(m_pMemTex->getDC(), 
+		-1, -1, m_pMemTex->getBmpWidth() + 1, m_pMemTex->getBmpHeight() + 1);
+
+	PlgBlt(m_pMemTex->getDC(),
 		pThreeArr,
 		CMissile::getTex()->getDC(),
 		0, 0,
 		(int)size.x,
 		(int)size.y,
 		NULL,
-		0, 0);
-	/*SetColorAdjustment();*/
+		0, 0
+	);
+
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	pThreeArr[i].x += (LONG)pos.x - m_pMemTex->getBmpWidth();
+	//	pThreeArr[i].y += (LONG)pos.y;
+	//}
+
+	TransparentBlt(hDC,
+		(int)(pos.x - m_pMemTex->getBmpWidth() / 2),
+		(int)(pos.y - m_pMemTex->getBmpHeight() / 2),
+		m_pMemTex->getBmpWidth(),
+		m_pMemTex->getBmpHeight(),
+		m_pMemTex->getDC(),
+		0,
+		0,
+		m_pMemTex->getBmpWidth(),
+		m_pMemTex->getBmpHeight(),
+		RGB(255, 0, 255)
+	);
 }
 
 void CSpear::collisionEnter(CCollider* pOther)
@@ -173,25 +209,54 @@ void CSpear::setSpd(float spd)
 	m_fSpd = spd;
 }
 
-void CSpear::setRandPos()
+void CSpear::setActive(bool isOn)
+{
+	m_bActive = isOn;
+}
+
+void CSpear::setMemTex(const wstring& texName, UINT sizeX, UINT sizeY)
+{
+	m_pMemTex = CResourceManager::getInst()->createTexture(texName, sizeX, sizeY);
+}
+
+
+bool CSpear::isActive()
+{
+	return m_bActive;
+}
+
+
+fPoint CSpear::getRandPos()
 {
 	fPoint pos = CCameraManager::getInst()->getFocus();
-	iPoint maxArea = { (int)(WINSIZEX / 2) ,(int)(WINSIZEY / 2) };
-	iPoint minArea = { (int)(WINSIZEX / 4) ,(int)(WINSIZEY / 4) };
-	iPoint randPos;
 
-	randPos.x = rand() % (maxArea.x - minArea.x + 1) + minArea.x;
-	randPos.y = rand() % (maxArea.y - minArea.y + 1) + minArea.y;
-
-	if (rand() % 2)
-		pos.x -= randPos.x;
+	int max, min, random;
+	
+	random = rand() % 2;					// x 좌표 설정
+	if (random)
+	{	// left
+		max = (int)(pos.x - WINSIZEX / 4.f);
+		min = (int)(pos.x - WINSIZEX / 2.f);
+	}
 	else
-		pos.x += randPos.x;
+	{	// right
+		max = (int)(pos.x + WINSIZEX / 2.f);
+		min = (int)(pos.x + WINSIZEX / 4.f);
+	}
+	pos.x = (float)(rand() % (max - min + 1) + min);
 
-	if (rand() % 2)
-		pos.y -= randPos.y;
+	random = rand() % 2;					// y 좌표 설정
+	if (random)
+	{	// left
+		max = (int)(pos.y - WINSIZEY / 4.f);
+		min = (int)(pos.y - WINSIZEY / 2.f);
+	}
 	else
-		pos.y += randPos.y;
+	{	// right
+		max = (int)(pos.y + WINSIZEY / 2.f);
+		min = (int)(pos.y + WINSIZEY / 4.f);
+	}
+	pos.y = (float)(rand() % (max - min + 1) + min);
 
-	setPos(fPoint(pos.x, pos.y));
+	return fPoint(pos.x, pos.y);
 }

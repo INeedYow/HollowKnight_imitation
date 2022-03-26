@@ -25,6 +25,12 @@ CSceneManager::~CSceneManager()
 
 void CSceneManager::sceneChange(eSCENE scene)
 {
+	if (nullptr != CGameManager::getInst()->getPlayer())
+	{	// 씬 exit 전에 등록된 플레이어 개체가 있다면 정보 저장하고 등록해제 후 씬 전환 진행
+		CGameManager::getInst()->savePlayerInfo();
+		CGameManager::getInst()->unRegistPlayer();
+	}
+
 	m_pCurScene->exit();
 	m_pCurScene = m_pArrScene[(int)scene];
 	m_pCurScene->enter();

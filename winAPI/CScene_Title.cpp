@@ -24,6 +24,14 @@ CScene_Title::~CScene_Title()
 {
 }
 
+void CScene_Title::update()
+{
+	CScene::update();
+
+	if (KEY_ON('4'))
+		changeScn(eSCENE::STAGE_03);
+}
+
 void CScene_Title::enter()
 {
 	// Camera Look ÁöÁ¤

@@ -93,7 +93,7 @@ void CScene_Stage03::enter()
 
 void CScene_Stage03::exit()
 {
-	CGameManager::getInst()->savePlayerInfo();
+	//CGameManager::getInst()->savePlayerInfo();
 
 	deleteObjectAll();
 	resetGrp();

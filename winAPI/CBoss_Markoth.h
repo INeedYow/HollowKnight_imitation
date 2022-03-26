@@ -39,15 +39,14 @@ public:
 
 	void collisionEnter(CCollider* pOther);
 	void collisionKeep(CCollider* pOther);
-	void collisionExit(CCollider* pOther);
 
 	void setSkillCooldown(float cd);
+	void setSpawnTimer(float time);
 	vector<CShield*>& getVecShield();
+	vector<CSpear*>& getVecSpear();
 	void spawnShield();
+
 private:
-	//void setRandDelay();
-	//fPoint randSpearPos();
-	//void createSpear();
 	void createShield(float theta = 0.f);
 	void createSpear();
 
@@ -56,24 +55,25 @@ private:
 
 // skill
 #define B_SKILL_DURA		8
-#define B_SKILL_COOL		13
+#define B_SKILL_COOL		15
+#define B_SKILL_RAD			165
 
 // shield
 #define B_SHD_EA_MAX		2				// 방패 최대 개수
-#define B_SHD_SPD			1.8				// 쉴드 속도 (radian)
-#define B_SHD_RAD			270				// 회전 크기 반지름
+#define B_SHD_SPD			2.8				// 쉴드 속도 (radian)
+#define B_SHD_RAD			320				// 회전 크기 반지름
 
 // spear
 #define B_SPR_EA_MAX		2				// spear 최대 개수
-#define B_SPR_SPD_1P		600			// 1 페이즈 spear 속도
-#define B_SPR_SPD_2P		900				// 2
+#define B_SPR_SPD_1P		900				// 1 페이즈 spear 속도
+#define B_SPR_SPD_2P		1020			// 2
 
 // boss
-#define B_HPMAX				24
-#define B_SPD				110
+#define B_HPMAX				20
+#define B_SPD				120
 #define B_READY_DURA		2
 #define B_ACCEL				(2 * B_SHD_SPD / B_READY_DURA)
-#define B_DMG_DELAY			0.4			// 플레이어 미사일로 부터 피해 입는 주기
+#define B_DMG_DELAY			0.4				// 플레이어 미사일로 부터 피해 입는 주기
 
 // collider size
 #define SB_NmSIZEX			190				//

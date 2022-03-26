@@ -84,6 +84,7 @@ void CCore::CreateBrushPenFont()
 {	
 	// brush
 	m_arrBrush[(UINT)TYPE_BRUSH::HOLLOW] = (HBRUSH)GetStockObject(HOLLOW_BRUSH);	// 자주 쓰는 거 모아놓은 stock이 있음
+	m_arrBrush[(UINT)TYPE_BRUSH::MAGENTA] = (HBRUSH)CreateSolidBrush(RGB(255, 0, 255));
 	// font
 	m_arrFont[(UINT)TYPE_FONT::COMIC24] = CreateFont(24, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, _T("Comic Sans MS"));
 	m_arrFont[(UINT)TYPE_FONT::COMIC28] = CreateFont(28, 10, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, _T("Comic Sans MS"));

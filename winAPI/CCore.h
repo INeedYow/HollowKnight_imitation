@@ -10,8 +10,6 @@ private:
 	HDC			m_hDC;
 	CTexture*	m_pMemTex;
 
-	CTexture*	m_pMagentaTex;
-
 	// GDI
 	HBRUSH	m_arrBrush[(UINT)TYPE_BRUSH::SIZE];
 	HPEN	m_arrPen[(UINT)TYPE_PEN::SIZE];

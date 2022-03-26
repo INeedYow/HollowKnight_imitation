@@ -164,7 +164,7 @@ void CScene_Stage01::enter()
 
 void CScene_Stage01::exit()
 {
-	CGameManager::getInst()->savePlayerInfo();
+	//CGameManager::getInst()->savePlayerInfo();
 
 	deleteObjectAll();
 	resetGrp();

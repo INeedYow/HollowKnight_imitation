@@ -4,6 +4,8 @@
 #include "CShield.h"
 #include "CBoss_Markoth.h"
 #include "SelectGDI.h"
+#include "CSpear.h"
+
 
 CState_BSkill::CState_BSkill(eSTATE_MONS state)
 	:CState_Mons(state)
@@ -29,7 +31,7 @@ void CState_BSkill::update(UINT& chk)
 
 		for (; i < vecShd.size(); i++)
 		{	// 범위 증가
-			vecShd[i]->setRadius(vecShd[i]->getRadius() + 150.f * fDT);
+			vecShd[i]->setRadius(vecShd[i]->getRadius() + B_SKILL_RAD * fDT);
 		}
 	}
 	else
@@ -38,31 +40,21 @@ void CState_BSkill::update(UINT& chk)
 
 		for (; i < vecShd.size(); i++)
 		{	// 범위 감소
-			vecShd[i]->setRadius(vecShd[i]->getRadius() - 150.f * fDT);
+			vecShd[i]->setRadius(vecShd[i]->getRadius() - B_SKILL_RAD * fDT);
 		}
 	}
 
 	if (m_fDura < 0.f)
 	{
-		m_fDura = 0.f;
+		/*m_fDura = 0.f;
 
 		for (int i = 0; i < vecShd.size(); i++)
 		{
 			vecShd[i]->setfSpeed(vecShd[i]->getSpeed() - 1.8f * fDT);
 
-			if (vecShd[i]->getSpeed() <= 1.8f)
+			if (vecShd[i]->getSpeed() <= B_SHD_SPD)*/
 				changeMonsState(getOwner(), eSTATE_MONS::SPAWN);
-		}
-
-		/*if (vecShd[0]->getSpeed() <= 0.f)
-		{
-			for (int i = 0; i < vecShd.size(); i++)
-			{
-				vecShd[i]->setfSpeed((float)SB_SHIELD_SPD);
-				vecShd[i]->setRadius((float)SB_SHIELD_RAD);
-			}
-		}*/
-		/*changeMonsState(getOwner(), eSTATE_MONS::SPAWN);*/
+		//}
 	}
 
 	m_fSpd = vecShd[vecShd.size() - 1]->getSpeed();
@@ -74,12 +66,23 @@ void CState_BSkill::enter()
 	m_fDura = (float)B_SKILL_DURA;
 	getMonster()->PLAY(L"st_Skill");
 	getMonster()->getCollider()->setSize(fPoint(SB_SkSIZEX, SB_SkSIZEY));
+
+	vector<CSpear*> vecSpr = ((CBoss_Markoth*)getMonster())->getVecSpear();
+	{	// 스킬 쓰는 동안 비활성화
+		for (int i = 0; i < vecSpr.size(); i++)
+		{
+			vecSpr[i]->setActive(false);
+		}
+	}
 }
 
 void CState_BSkill::exit()
 {
 	getMonster()->setCheck(SB_TIMER, true);
 	((CBoss_Markoth*)getMonster())->setSkillCooldown((float)B_SKILL_COOL);
+
+	((CBoss_Markoth*)getMonster())->setSpawnTimer(1.5f);
+
 }
 
 void CState_BSkill::printInfo(HDC hDC)

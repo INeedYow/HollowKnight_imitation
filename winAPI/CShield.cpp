@@ -38,7 +38,6 @@ CShield::~CShield()
 {
 }
 
-
 CShield* CShield::clone()
 {
 	return new CShield(*this);
@@ -89,7 +88,6 @@ void CShield::render(HDC hDC)
 
 	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 40, bufTheta, (int)wcslen(bufTheta));
 	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 60, bufRad, (int)wcslen(bufRad));
-
 
 	componentRender(hDC);
 }

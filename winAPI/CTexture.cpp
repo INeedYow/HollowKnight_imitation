@@ -39,7 +39,7 @@ UINT CTexture::getBmpHeight()
 	return (int)(m_bmpInfo.bmHeight);
 }
 
-HBITMAP& CTexture::getTestBMP()
+HBITMAP CTexture::getBmpHandle()
 {
 	return m_hBMP;
 }

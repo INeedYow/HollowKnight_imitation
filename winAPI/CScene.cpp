@@ -49,11 +49,6 @@ void CScene::update()
 	{
 		for (UINT j = 0; j < m_arrObj[i].size(); j++)
 		{
-			if (i == (UINT)eOBJ::EFFECT)
-			{
-				int a = 0;
-			}
-
 			if (!m_arrObj[i][j]->isDead())					// 유예 중이면 업데이트 x
 				m_arrObj[i][j]->update();
 		}
