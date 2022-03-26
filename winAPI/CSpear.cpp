@@ -57,7 +57,7 @@ void CSpear::update()
 		distY = destPos.y - pos.y;
 		m_fTheta = (float)atan2(distY, distX);
 		
-		timer = m_fSpd == B_SPR_SPD_1P ? 0.8f : 0.6f;
+		timer = 0.6f;
 		setSpeed(m_fSpd * 0.1f);
 		m_uiStep++;
 
@@ -75,7 +75,7 @@ void CSpear::update()
 
 		if (timer < 0.f)
 		{
-			timer = m_fSpd == B_SPR_SPD_1P ? 0.8f : 0.6f;
+			timer = 0.6f;
 			setSpeed(0.f);
 			m_uiStep++;
 		}
@@ -143,6 +143,7 @@ void CSpear::render(HDC hDC)
 	POINT pThreeArr[3];
 	pos = rendPos(pos);
 	
+	// 좌상, 우상, 좌하 좌표 3개
 	fPoint arr[3] = {
 		fPoint(-size.x / 2.f, -size.y / 2.f),
 		fPoint(size.x / 2.f, -size.y / 2.f),
@@ -150,22 +151,24 @@ void CSpear::render(HDC hDC)
 	};
 	
 	for (int i = 0; i < 3; i++)
-	{
+	{	// 좌표에 회전행렬로 회전적용
 		pThreeArr[i].x = (LONG)(arr[i].x * cos(m_fTheta) - arr[i].y * sin(m_fTheta));
 		pThreeArr[i].y = (LONG)(arr[i].x * sin(m_fTheta) + arr[i].y * cos(m_fTheta));
 	}
 
 	for (int i = 0; i < 3; i++)
-	{	// memDC 중앙으로 이동
-		pThreeArr[i].x += (LONG)(m_pMemTex->getBmpWidth() / 2);
-		pThreeArr[i].y += (LONG)(m_pMemTex->getBmpHeight() / 2);
+	{	// memDC 중앙 좌표로 이동
+		pThreeArr[i].x += (LONG)(MEMTEX_SIZE / 2);
+		pThreeArr[i].y += (LONG)(MEMTEX_SIZE / 2);
 	}
 
+	// memDC 마젠타로 채움
 	SelectGDI brush(m_pMemTex->getDC(), eBRUSH::MAGENTA);
-	
-	Rectangle(m_pMemTex->getDC(), 
-		-1, -1, m_pMemTex->getBmpWidth() + 1, m_pMemTex->getBmpHeight() + 1);
 
+	Rectangle(m_pMemTex->getDC(), 
+		-1, -1, MEMTEX_SIZE + 1, MEMTEX_SIZE + 1);
+
+	// 회전한 좌표로 memDC에 그림
 	PlgBlt(m_pMemTex->getDC(),
 		pThreeArr,
 		CMissile::getTex()->getDC(),
@@ -176,22 +179,17 @@ void CSpear::render(HDC hDC)
 		0, 0
 	);
 
-	//for (int i = 0; i < 3; i++)
-	//{
-	//	pThreeArr[i].x += (LONG)pos.x - m_pMemTex->getBmpWidth();
-	//	pThreeArr[i].y += (LONG)pos.y;
-	//}
-
+	// memDC에 그렸던 것 통쨰로 가져오면 됨
 	TransparentBlt(hDC,
-		(int)(pos.x - m_pMemTex->getBmpWidth() / 2),
-		(int)(pos.y - m_pMemTex->getBmpHeight() / 2),
-		m_pMemTex->getBmpWidth(),
-		m_pMemTex->getBmpHeight(),
+		(int)(pos.x - MEMTEX_SIZE / 2),
+		(int)(pos.y - MEMTEX_SIZE / 2),
+		MEMTEX_SIZE,
+		MEMTEX_SIZE,
 		m_pMemTex->getDC(),
 		0,
 		0,
-		m_pMemTex->getBmpWidth(),
-		m_pMemTex->getBmpHeight(),
+		MEMTEX_SIZE,
+		MEMTEX_SIZE,
 		RGB(255, 0, 255)
 	);
 }

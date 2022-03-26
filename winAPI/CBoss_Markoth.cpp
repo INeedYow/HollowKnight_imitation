@@ -259,9 +259,7 @@ void CBoss_Markoth::createSpear()
 	wstring strMemTexName = L"Spear_MemTex_";
 	strMemTexName += to_wstring(m_vecSpear.size() - 1);		// 생성 벡터 인덱스 숫자를 memTex 고유 이름번호로(collider ID처럼)
 	
-	UINT uiSize = max(SPR_SIZEX, SPR_SIZEY);
-	uiSize *= 1.5f;											// 회전한 크기 모두 담을 수 있어야 함
-	pSpear->setMemTex(strMemTexName, uiSize, uiSize);
+	pSpear->setMemTex(strMemTexName, MEMTEX_SIZE, MEMTEX_SIZE);
 	createObj(pSpear, eOBJ::MISSILE_MONSTER);
 }
 
