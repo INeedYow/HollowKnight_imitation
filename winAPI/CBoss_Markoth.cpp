@@ -55,7 +55,7 @@ CBoss_Markoth::CBoss_Markoth()
 
 	//
 	//createShield(); spawn 상태에서 하게
-	createSpear();
+	//createSpear();
 }
 
 CBoss_Markoth::~CBoss_Markoth()
