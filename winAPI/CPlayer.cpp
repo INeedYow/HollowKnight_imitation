@@ -194,11 +194,6 @@ void CPlayer::update()
 	if (g_bDebug && KEY_ON('O')) 
 		setPos(mousePos());
 
-	if (KEY_ON('5'))
-		CCameraManager::getInst()->swing(1.f);
-	if (KEY_ON('6'))
-		CCameraManager::getInst()->swing(3.f);
-
 	////////////////////////////
 	// 회전테스트
 	// T Y U I 

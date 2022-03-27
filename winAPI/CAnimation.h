@@ -26,6 +26,8 @@ class CAnimation
 	float			m_fTimer;
 	bool			m_bRepeat;
 
+	float			m_fPrevTheta;			// 회전 연산 다시 할지 결정하기 위해 필요한 이전 세타값
+
 public:
 	CAnimation();
 	~CAnimation();
@@ -45,3 +47,4 @@ public:
 		fPoint step, float dura, UINT frmCnt, bool isRepeat = true);
 };
 
+#define STD_CAL		0.1f

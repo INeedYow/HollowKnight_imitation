@@ -41,7 +41,7 @@ void CState_BSpawn::update(UINT& chk)
 
 void CState_BSpawn::enter()
 {
-	m_fDura = 0.9f;
+	m_fDura = 0.8f;
 	m_bSpawn = false;
 	getMonster()->PLAY(L"st_Middle");
 	getMonster()->getCollider()->setSize(fPoint(SB_MdSIZEX, SB_MdSIZEY));

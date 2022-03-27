@@ -52,10 +52,6 @@ CBoss_Markoth::CBoss_Markoth()
 
 	pAI->setCurState(eSTATE_MONS::SPAWN);
 	setAI(pAI);
-
-	//
-	//createShield(); spawn 상태에서 하게
-	//createSpear();
 }
 
 CBoss_Markoth::~CBoss_Markoth()
@@ -79,7 +75,7 @@ void CBoss_Markoth::update()
 		{	// 2 페이즈
 			m_ucPhase++;
 			changeMonsState(getAI(), eSTATE_MONS::SPAWN);
-			createSpear();
+			//createSpear();
 
 			for (int i = 0; i < m_vecSpear.size(); i++)
 			{	// spear 속도 증가

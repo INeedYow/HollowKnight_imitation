@@ -13,6 +13,8 @@ CAnimation::CAnimation()
 	m_pTex = nullptr;
 	m_uiCurFrm = 0;
 	m_fTimer = 0.f;
+	
+	m_fPrevTheta = 0.f;
 }
 
 CAnimation::~CAnimation()
@@ -87,6 +89,27 @@ void CAnimation::render(HDC hDC, float theta, bool rotReverse)
 			(int)(frm.fpSlice.y),
 			RGB(255, 0, 255));
 	}
+
+	else if (abs(theta - m_fPrevTheta) < STD_CAL)
+	{	// 저장된 각도와 유효하게 차이가 나지않으면 새로 계산하는 작업을 빼서 최적화
+
+		UINT texSize = m_pAnimator->getMemTex()->getMaxSize();
+		HDC hMemDC = m_pAnimator->getMemTex()->getDC();
+
+		TransparentBlt(hDC,
+			(int)(pos.x - texSize / 2),
+			(int)(pos.y - texSize / 2),
+			texSize,
+			texSize,
+			hMemDC,
+			0,
+			0,
+			texSize,
+			texSize,
+			RGB(255, 0, 255)
+		);
+	}
+
 	else
 	{
 		POINT pointArr[3];
@@ -147,6 +170,9 @@ void CAnimation::render(HDC hDC, float theta, bool rotReverse)
 			texSize,
 			RGB(255, 0, 255)
 		);
+
+		// 새로 계산한 theta로 prevTheta 갱신
+		m_fPrevTheta = theta;
 	}
 }
 
