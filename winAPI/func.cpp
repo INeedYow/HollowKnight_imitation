@@ -77,20 +77,16 @@ eDIR collisionRectToRectWide(CCollider* coll1, CCollider* coll2)
 	//return eDIR::NONE;
 }
 
-// == ISTOPEXIT
-// 마리오에서 했던 것처럼 leftSpd, rightSpd 나누면 쉽게 해결할 수 있을 듯
 bool isTopColl(CCollider* coll1, CCollider* coll2)
-{	// 땅과 exit() 상태에서 조금만 내려가도 left, right판정나면 x위치 고정돼서 
-	// exit()에서 땅타일과 위아래 충돌 검사만 할 목적으로
+{	// GROUND 타일이랑 충돌 시 상하만 판정
 	fPoint pos1 = coll1->getPos();
 	fPoint pos2 = coll2->getPos();
-	fPoint size2 = coll2->getOwner()->getSize();
 
-	return pos1.y <= pos2.y - size2.y / 2.f;
+	return pos1.y < pos2.y;
 }
 
 bool isLeftColl(CCollider* coll1, CCollider* coll2)
-{
+{	// WALL 타일이랑 충돌 시 좌우만 판정
 	fPoint pos1 = coll1->getPos();
 	fPoint pos2 = coll2->getPos();
 

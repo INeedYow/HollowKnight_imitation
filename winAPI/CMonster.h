@@ -38,9 +38,9 @@ public:
 	virtual void update();
 	virtual void render(HDC hDC) = 0;
 
-	void collisionEnter(CCollider* pOther){}
-	void collisionKeep(CCollider* pOther){}
-	void collisionExit(CCollider* pOther){}
+	virtual void collisionEnter(CCollider* pOther){}
+	virtual void collisionKeep(CCollider* pOther){}
+	virtual void collisionExit(CCollider* pOther){}
 
 	void setAI(CAI* pAI);
 	void setTex(const wstring& strName, const wstring& strPath);

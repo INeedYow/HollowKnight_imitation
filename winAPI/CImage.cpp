@@ -24,6 +24,7 @@ void CImage::render(HDC hDC)
 {
 	fPoint pos = getPos();
 	fPoint size = getSize();
+	pos = rendPos(pos);
 
 	TransparentBlt(hDC,
 		(int)pos.x,
@@ -35,6 +36,11 @@ void CImage::render(HDC hDC)
 		(int)size.x,
 		(int)size.y,
 		RGB(255, 0, 255));
+}
+
+CTexture* CImage::getTex()
+{
+	return m_pTex;
 }
 
 void CImage::load(const wstring& strKey, const wstring& strPath)

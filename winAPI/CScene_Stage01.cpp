@@ -6,11 +6,9 @@
 #include "CUI.h"
 #include "CBackGround.h"
 #include "CFrontGround.h"
-#include "CGround.h"
 #include "CEffect.h"
-
-#include "CMonster_Melee.h"
-#include "CSpear.h"
+#include "CGround.h"
+#include "CWall.h"
 
 #define STG01_SIZEX 3840
 #define STG01_SIZEY 2160
@@ -73,6 +71,7 @@ void CScene_Stage01::enter()
 		CGameManager::getInst()->loadPlayerInfo(pPlayer);		
 	}
 
+	//test
 	/////////////////////////////////////////////////////////
 	//CSpear* pSpear = new CSpear;
 	//pSpear->setPos(fPoint(1200.f, 1200.f));
@@ -87,13 +86,6 @@ void CScene_Stage01::enter()
 	//createObj(pSpear, eOBJ::MISSILE_MONSTER);
 	/////////////////////////////////////////////////////////
 
-
-	//// monster test
-	//CMonster_Melee* pMon1 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(1500, 1430));
-	//addObject(pMon1, eOBJ::MONSTER);
-
-	//CMonster_Melee* pMon2 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_MUSH, fPoint(1800, 1430));
-	//addObject(pMon2, eOBJ::MONSTER);
 	
 	CBackGround* pBg = new CBackGround;
 	pBg->load(L"BG_stage1", L"texture\\background\\stage1_back.bmp");
@@ -105,39 +97,21 @@ void CScene_Stage01::enter()
 	pFg->setPos(fPoint(0.f, 0.f));
 	addObject(pFg, eOBJ::FRONTGROUND);
 
-	// ground
-	CGround* pLeftWall = CGround::create(-600, 0, 0, STG01_SIZEY);
-	addObject(pLeftWall, eOBJ::GROUND);
+	// ground, wall
+	CWall::create(-100, 0, 0, STG01_SIZEY);
+	CWall::create(STG01_SIZEX, 0, STG01_SIZEX + 100, STG01_SIZEY);
+	CGround::create(0, -30, STG01_SIZEX, 0);
 
-	CGround* pGround1 = new CGround;
-	pGround1->setPos(fPoint(1417.f, STG01_SIZEY));
-	pGround1->getCollider()->setSize(fPoint(2834.f, 1230.f));
-	addObject(pGround1, eOBJ::GROUND);
-
-	CGround* pStair1 = new CGround;
-	pStair1->setPos(fPoint(1504.f, STG01_SIZEY));
-	pStair1->getCollider()->setSize(fPoint(3008.f, 1130.f));
-	addObject(pStair1, eOBJ::GROUND);
-
-	CGround* pStair2 = new CGround;
-	pStair2->setPos(fPoint(1593.f, STG01_SIZEY));
-	pStair2->getCollider()->setSize(fPoint(3186.f, 1040.f));
-	addObject(pStair2, eOBJ::GROUND);
-
-	CGround* pGround2 = new CGround;
-	pGround2->setPos(fPoint(1747.f, STG01_SIZEY));
-	pGround2->getCollider()->setSize(fPoint(3494.f, 962.f));
-	addObject(pGround2, eOBJ::GROUND);
-
-	CGround* pGround3 = new CGround;
-	pGround3->setPos(fPoint(STG01_SIZEX, STG01_SIZEY));
-	pGround3->getCollider()->setSize(fPoint(348.f, 962.f));
-	addObject(pGround3, eOBJ::GROUND);
-
-	CGround* pRightWall = new CGround;
-	pRightWall->setPos(fPoint(STG01_SIZEX + 450, 1600.f));
-	pRightWall->getCollider()->setSize(fPoint(1000.f, 1600.f));
-	addObject(pRightWall, eOBJ::GROUND);
+	CGround::create(0, 1548, 2838, STG01_SIZEY);
+	CWall::create(2806, 1580, 2838, 1612);
+	CGround::create(0, 1590, 3010, STG01_SIZEY);
+	CWall::create(2978, 1622, 3010, 1654);
+	CGround::create(0, 1632, 3186, STG01_SIZEY);
+	CWall::create(3154, 1664, 3186, 1696);
+	CGround::create(0, 1674, 3500, 1706);
+	CWall::create(3468, 1706, 3500, STG01_SIZEY);
+	CGround::create(3670, 1674, STG01_SIZEX, 1706);
+	CWall::create(3670, 1706, STG01_SIZEX, STG01_SIZEY);
 
 	g_bDebug = true;
 
@@ -157,19 +131,14 @@ void CScene_Stage01::enter()
 	////////////////
 
 	// 충돌 체크
-	checkGrp(eOBJ::PLAYER, eOBJ::TILE);
+	checkGrp(eOBJ::PLAYER, eOBJ::WALL);
 	checkGrp(eOBJ::PLAYER, eOBJ::GROUND);
-	checkGrp(eOBJ::PLAYER, eOBJ::MONSTER);
 
-	checkGrp(eOBJ::MONSTER, eOBJ::GROUND);
-
-	checkGrp(eOBJ::MONSTER, eOBJ::ATTACK);
-	checkGrp(eOBJ::ATTACK, eOBJ::TILE);
+	checkGrp(eOBJ::ATTACK, eOBJ::WALL);
 	checkGrp(eOBJ::ATTACK, eOBJ::GROUND);
 
-	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::TILE);
+	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::WALL);
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::GROUND);
-	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::MONSTER);
 
 	// 카메라
 	camSetFocusNow(pPlayer->getPos());

@@ -25,23 +25,11 @@ void CGround::render(HDC hDC)
 		componentRender(hDC);
 }
 
-CGround* CGround::create(float left, float top, float right, float bottom)
+void CGround::create(float left, float top, float right, float bottom)
 {	// ÁÂÇ¥°ªÀ¸·Î ¶¥ »ý¼º
 	CGround* pNewGrd = new CGround;
 	pNewGrd->setPos(fPoint((left + right) / 2.f, (top + bottom) / 2.f));
 	pNewGrd->getCollider()->setSize(fPoint(right - left, bottom - top));
-	
-	return pNewGrd;
-}
 
-void CGround::collisionKeep(CCollider* pOther)
-{
-}
-
-void CGround::collisionEnter(CCollider* pOther)
-{
-}
-
-void CGround::collisionExit(CCollider* pOther)
-{
+	createObj(pNewGrd, eOBJ::GROUND);
 }

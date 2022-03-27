@@ -222,6 +222,7 @@
     <ClInclude Include="CUI.h" />
     <ClInclude Include="CUIManager.h" />
     <ClInclude Include="CWall.h" />
+    <ClInclude Include="CWarp.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="func.h" />
     <ClInclude Include="Logger.h" />
@@ -310,6 +311,7 @@
     <ClCompile Include="CUI.cpp" />
     <ClCompile Include="CUIManager.cpp" />
     <ClCompile Include="CWall.cpp" />
+    <ClCompile Include="CWarp.cpp" />
     <ClCompile Include="func.cpp" />
     <ClCompile Include="winAPI.cpp" />
   </ItemGroup>

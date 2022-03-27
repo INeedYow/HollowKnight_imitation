@@ -67,6 +67,17 @@ void CBoss_Markoth::update()
 {
 	CMonster::update();
 
+	fPoint pos = getPos();
+	if (pos.x < 330.f)
+		pos.x = 330.f;
+	else if (pos.x > 2640.f)
+		pos.x = 2640.f;
+	else if (pos.y > 1350.f)
+		pos.y = 1350.f;
+	else if (pos.y < 200.f)
+		pos.y = 200.f;
+	setPos(pos);
+
 	if (!isCheck(SB_TIMER))	return;		// 타이머 적용되는 상태
 	
 	m_fSkillTimer -= fDT;

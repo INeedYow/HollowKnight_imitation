@@ -48,7 +48,7 @@ void CSpear::update()
 		distY = destPos.y - pos.y;
 		m_fTheta = (float)atan2(distY, distX);
 		
-		timer = 0.6f;
+		timer = m_fSpd == B_SPR_SPD_1P ? 0.65f : 0.5f;
 		setSpeed(m_fSpd * 0.1f);
 		m_uiStep++;
 
@@ -66,7 +66,7 @@ void CSpear::update()
 
 		if (timer < 0.f)
 		{
-			timer = 0.6f;
+			timer = m_fSpd == B_SPR_SPD_1P ? 0.65f : 0.5f;
 			setSpeed(0.f);
 			m_uiStep++;
 		}

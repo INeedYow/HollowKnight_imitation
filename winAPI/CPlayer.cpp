@@ -282,47 +282,50 @@ void CPlayer::collisionKeep(CCollider* pOther)
 		}
 		break;
 	}
-	case eOBJNAME::ATTACK:
+
+	case eOBJNAME::WALL:
 	{
-		// ((CAttack*)pOther->getOwner())->getOwner()->getName()
-
-		break;
-	}
-
-	case eOBJNAME::TILE:
-	case eOBJNAME::GROUND:
-		//switch (COLLGRD(pOther))
-		switch (COLLRR(getCollider(), pOther))
-		{
-		case eDIR::LEFT:
-		{	// TODO state::hang
+		if (isLeftColl(getCollider(), pOther))
+		{	// 왼쪽에서 벽과 충돌
 			fPoint pos = getPos();
 
 			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f + pOther->getOffset().x
-				- getCollider()->getSize().x / 2.f - getCollider()->getOffset().x;
+				- getCollider()->getSize().x / 2.f - getCollider()->getOffset().x - 1;
 			setPos(pos);
-			break;
+
 		}
-		case eDIR::RIGHT:
-		{
+		else
+		{	// 오른쪽
 			fPoint pos = getPos();
 
 			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f + pOther->getOffset().x
-				+ getCollider()->getSize().x / 2.f + getCollider()->getOffset().x;
+				+ getCollider()->getSize().x / 2.f + getCollider()->getOffset().x + 1;
 			setPos(pos);
-			break;
+
 		}
-		case eDIR::TOP:
-		{	// ground와 위쪽 충돌 진행 중인데 y값 증가하면(내려가면) 고정
+		break;
+	}
+
+	case eOBJNAME::GROUND:
+	{
+		if (isTopColl(getCollider(), pOther))
+		{	// 위쪽에서 벽과 충돌
 			fPoint pos = getPos();
-			if (pos.y > m_tPrevInfo.fpPrevPos.y)
-			{
-				pos.y = pOther->getPos().y - pOther->getSize().y / 2.f + pOther->getOffset().y
-					- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y + 1;
-			}
-			break;
+
+			pos.y = pOther->getPos().y - pOther->getSize().y / 2.f + pOther->getOffset().y
+				- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y  + 1;
+			setPos(pos);
 		}
+		else
+		{	// 아래쪽
+			fPoint pos = getPos();
+
+			pos.y = pOther->getPos().y + pOther->getSize().y / 2.f + pOther->getOffset().y
+				+ getCollider()->getSize().y / 2.f + getCollider()->getOffset().y;
+			setPos(pos);
 		}
+		break;
+	}
 	}
 }
 
@@ -330,70 +333,66 @@ void CPlayer::collisionEnter(CCollider* pOther)
 {
 	switch (pOther->getOwner()->getName())
 	{	//벽 충돌
-	case eOBJNAME::TILE:
 	case eOBJNAME::GROUND:
-		//switch (COLLGRD(pOther))
-		switch (COLLRRW(getCollider(), pOther))
-		{
-		case eDIR::TOP:
-		{
+	{
+		if (isTopColl(getCollider(), pOther))
+		{	// 위
 			if (m_uiCheck & SP_GODOWN)
 			{	// 떨어지고 있던 경우 착지
 				fPoint pos = getPos();
 
-				pos.y = pOther->getPos().y - pOther->getSize().y / 2.f + pOther->getOffset().y 
+				pos.y = pOther->getPos().y - pOther->getSize().y / 2.f + pOther->getOffset().y
 					- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y + 1;
 
 				setPos(pos);
-				
+
 				if (m_tInfo.fLandTimer > P_LAND_TIMER)
 					changeMyState(m_pStatus, eSTATE_PLAYER::LAND);
 
-				if (m_uiCheck & SP_AIR)			// air를 fall exit에서 끄면 공중 동작 후 fall상태로 전환하기 힘듦
-					m_uiCheck &= ~(SP_AIR);
+				m_uiCheck &= ~(SP_AIR);
 				m_uiCheck &= ~(SP_GODOWN);
 				m_tInfo.iBottomCnt++;
 				m_tInfo.fSpdY = 0.f;
 			}
-			break;
 		}
-		case eDIR::LEFT:
-		{
-			fPoint pos = getPos();
-			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f + pOther->getOffset().x
-				- getCollider()->getSize().x / 2.f + getCollider()->getOffset().x - 1;
-			setPos(pos);
-			break;
-		}
-		case eDIR::RIGHT:
-		{
-			fPoint pos = getPos();
-			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f + pOther->getOffset().x
-				+ getCollider()->getSize().x / 2.f - getCollider()->getOffset().x + 1;
-			setPos(pos);
-			break;
-		}
-		case eDIR::BOTTOM:	// 머리 콩
-		{	// 올라가는 속도 0으로
-			m_tInfo.fSpdY = 0;	
+		else
+		{	// 아래
+			m_tInfo.fSpdY = 0;
 			fPoint pos = getPos();
 
 			pos.y = pOther->getPos().y + pOther->getSize().y / 2.f + pOther->getOffset().y
 				+ getCollider()->getSize().y / 2.f - getCollider()->getOffset().y;
 
 			setPos(pos);
-			break;
-		}
 		}
 		break;
 	}
+	case eOBJNAME::WALL:
+	{
+		if (isLeftColl(getCollider(), pOther))
+		{	// 좌
+			fPoint pos = getPos();
+			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f + pOther->getOffset().x
+				- getCollider()->getSize().x / 2.f + getCollider()->getOffset().x - 1;
+			setPos(pos);
+		}
+		else
+		{	// 우
+			fPoint pos = getPos();
+			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f + pOther->getOffset().x
+				+ getCollider()->getSize().x / 2.f - getCollider()->getOffset().x + 1;
+			setPos(pos);
+		}
+		break;
+	}
+	}
+
 }
 
 void CPlayer::collisionExit(CCollider* pOther)
 {
 	switch (pOther->getOwner()->getName())
 	{
-	case eOBJNAME::TILE:
 	case eOBJNAME::GROUND:
 		if (isTopColl(getCollider(), pOther))
 		{	// 충돌 해제 할 때도 이전 좌표 있으면 되겠네
@@ -405,50 +404,6 @@ void CPlayer::collisionExit(CCollider* pOther)
 		}
 		break;
 	}
-}
-
-// == COLLGRD
-eDIR CPlayer::collDirVersusGround(CCollider* pOther)
-{	// enter에서만 해야할듯 바닥에 서서 좌우 이동하면 좌우 충돌 판정이 나는 듯함
-	fPoint a = getPos();
-	fPoint b = m_tPrevInfo.fpPrevPos;
-
-	fVec2 myDir = getPos() - m_tPrevInfo.fpPrevPos;
-
-	if (myDir.x * myDir.y == 0.f)	// x,y 중 최대 한쪽으로만 이동한 경우
-	{
-		if (myDir.x > 0.f) return eDIR::LEFT;		// 내 이동 방향이 오른쪽이면 왼쪽에서 충돌
-		if (myDir.x < 0.f) return eDIR::RIGHT;			// 방향 왼쪽 : 오른쪽 충돌
-
-		if (myDir.y > 0.f) return eDIR::TOP;			//
-		if (myDir.y < 0.f) return eDIR::BOTTOM;			//
-
-	}
-	else
-	{
-		fPoint size1 = getSize();
-		fPoint offSize = getCollider()->getOffset();
-		fPoint pos2 = pOther->getPos();
-		fPoint size2 = pOther->getSize();
-
-		if (m_tPrevInfo.fpPrevPos.y < pos2.y - (size1.y + size2.y) / 2.f + offSize.y)
-		{	// 이전 y 좌표가 위쪽이면
-			return eDIR::TOP;
-		}
-		if (m_tPrevInfo.fpPrevPos.y > pos2.y + (size1.y + size2.y) / 2.f + offSize.y)
-		{	// 이전 y 좌표가 아래쪽이면
-			return eDIR::BOTTOM;
-		}
-		if (m_tPrevInfo.fpPrevPos.x < pos2.x - (size1.x + size2.x) / 2.f + offSize.x)
-		{	// 이전 x 좌표가 왼쪽이면
-			return eDIR::LEFT;
-		}
-		if (m_tPrevInfo.fpPrevPos.x > pos2.x + (size1.x + size2.x) / 2.f + offSize.x)
-		{	// 이전 x 좌표가 오른쪽이면
-			return eDIR::RIGHT;
-		}
-	}
-	return eDIR::END;
 }
 
 void CPlayer::createMissile()

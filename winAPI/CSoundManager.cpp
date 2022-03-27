@@ -27,13 +27,13 @@ void CSoundManager::init()
 
 	// sound ÀúÀå
 	CSoundManager::getInst()->addSound(L"bgm_stg1", L"sound\\bgm\\Dirtmouth1.wav", true);
-	CSoundManager::getInst()->addSound(L"bgm_stage3", L"sound\\bgm\\Boss_Battle.wav", true);
+	//CSoundManager::getInst()->addSound(L"bgm_stg3", L"sound\\bgm\\Boss_Battle.wav", true);
 
-	CSoundManager::getInst()->addSound(L"markoth_cast1", L"sound\\boss\\Markoth_cast_01.wav");
-	CSoundManager::getInst()->addSound(L"markoth_cast2", L"sound\\boss\\Markoth_cast_02.wav");
-	CSoundManager::getInst()->addSound(L"markoth_cast3", L"sound\\boss\\Markoth_cast_03.wav");
-	CSoundManager::getInst()->addSound(L"markoth_cast4", L"sound\\boss\\Markoth_cast_04.wav");
-	CSoundManager::getInst()->addSound(L"markoth_death", L"sound\\boss\\Markoth_Death.wav");
+	//CSoundManager::getInst()->addSound(L"markoth_cast1", L"sound\\boss\\Markoth_cast_01.wav");
+	//CSoundManager::getInst()->addSound(L"markoth_cast2", L"sound\\boss\\Markoth_cast_02.wav");
+	//CSoundManager::getInst()->addSound(L"markoth_cast3", L"sound\\boss\\Markoth_cast_03.wav");
+	//CSoundManager::getInst()->addSound(L"markoth_cast4", L"sound\\boss\\Markoth_cast_04.wav");
+	//CSoundManager::getInst()->addSound(L"markoth_death", L"sound\\boss\\Markoth_Death.wav");
 }
 
 void CSoundManager::update()

@@ -7,8 +7,9 @@
 #include "CUI.h"
 #include "CBackGround.h"
 #include "CFrontGround.h"
-#include "CGround.h"
 #include "CBoss_Markoth.h"
+#include "CGround.h"
+#include "CWall.h"
 
 #define STG04_SIZEX		3000
 #define STG04_SIZEY		1689

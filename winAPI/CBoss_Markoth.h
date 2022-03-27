@@ -37,8 +37,8 @@ public:
 	virtual void update();
 	virtual void render(HDC hDC);
 
-	void collisionEnter(CCollider* pOther);
-	void collisionKeep(CCollider* pOther);
+	virtual void collisionEnter(CCollider* pOther);
+	virtual void collisionKeep(CCollider* pOther);
 
 	void setSkillCooldown(float cd);
 	void setSpawnTimer(float time);

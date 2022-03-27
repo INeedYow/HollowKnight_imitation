@@ -95,9 +95,9 @@ void CMonster_Melee::update()
 	setMonsInfo(info);
 
 	CMonster::update();				// ai, anim update
-	
+
 	if (isCheck(SM_TURN))					// 방향전환 상태
-	{
+	{	
 		playAnim(L"Turn");
 			
 		m_fTurnTimer -= fDT;
@@ -166,30 +166,55 @@ void CMonster_Melee::collisionEnter(CCollider* pOther)
 
 	case eOBJNAME::GROUND:
 	{
-		switch (COLLRRW(getCollider(), pOther))
-		{
-		case eDIR::TOP:
+		if (isTopColl(getCollider(), pOther))
+		{	// 위
+			if (isCheck(SM_FALL))
+			{
+				fPoint pos = getPos();
+
+				pos.y = pOther->getPos().y - pOther->getSize().y / 2.f + pOther->getOffset().y
+					- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y + 1;
+
+				setPos(pos);
+				setCheck(SM_FALL, false);
+				m_iBottomCnt++;
+			}
+		}
+		else
 		{
 			fPoint pos = getPos();
 
-			pos.y = pOther->getPos().y - pOther->getSize().y / 2.f + pOther->getOffset().y
-				- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y + 1;
+			pos.y = pOther->getPos().y + pOther->getSize().y / 2.f + pOther->getOffset().y
+				+ getCollider()->getSize().y / 2.f + getCollider()->getOffset().y;
 
 			setPos(pos);
-			setCheck(SM_FALL, false);
-			m_iBottomCnt++;
+		}
+	}
+	case eOBJNAME::WALL:
+	{
+		if (isLeftColl(getCollider(), pOther))
+		{	// 좌
+			fPoint pos = getPos();
 
-			break;
+			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f + pOther->getOffset().x
+				- getCollider()->getSize().x / 2.f + getCollider()->getOffset().x;
+			
+			setPos(pos);
 		}
-		case eDIR::LEFT:
-		case eDIR::RIGHT:
-		{	// 좌우 벽-> 방향 전환
-			tMonsInfo info = getMonsInfo();
-			info.fvDir.x *= -1;
-			setMonsInfo(info);
-			break;
+		else
+		{	// 우
+			fPoint pos = getPos();
+
+			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f + pOther->getOffset().x
+				+ getCollider()->getSize().x / 2.f + getCollider()->getOffset().x;
+
+			setPos(pos);
 		}
-		}
+		// 좌우 -> 방향전환
+		tMonsInfo info = getMonsInfo();
+		info.fvDir.x *= -1;
+		setMonsInfo(info);
+
 		break;
 	}
 	}
@@ -199,22 +224,47 @@ void CMonster_Melee::collisionKeep(CCollider* pOther)
 {
 	switch (pOther->getOwner()->getName())
 	{
-	case eOBJNAME::TILE:
 	case eOBJNAME::GROUND:
 	{
-		fPoint pos1 = getPos();
-		fPoint size1 = getSize();
-		fPoint pos2 = pOther->getPos();
-		fPoint size2 = pOther->getSize();
-		float edge = (size2.x  - size1.x) / 2.f;
+		if (isTopColl(getCollider(), pOther))
+		{	// 위
+			fPoint pos = getPos();
 
-		if (pos1.x >= pos2.x + edge)
-			pos1.x = pos2.x + edge;
-		else if (pos1.x <= pos2.x - edge)
-			pos1.x = pos2.x - edge;
-		
-		setPos(pos1);
-		break;
+			pos.y = pOther->getPos().y - pOther->getSize().y / 2.f + pOther->getOffset().y
+				- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y + 1;
+
+			setPos(pos);
+		}
+		else
+		{
+			fPoint pos = getPos();
+
+			pos.y = pOther->getPos().y + pOther->getSize().y / 2.f + pOther->getOffset().y
+				+ getCollider()->getSize().y / 2.f + getCollider()->getOffset().y;
+
+			setPos(pos);
+		}
+	}
+	case eOBJNAME::WALL:
+	{
+		if (isLeftColl(getCollider(), pOther))
+		{	// 좌
+			fPoint pos = getPos();
+
+			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f + pOther->getOffset().x
+				- getCollider()->getSize().x / 2.f + getCollider()->getOffset().x;
+
+			setPos(pos);
+		}
+		else
+		{	// 우
+			fPoint pos = getPos();
+
+			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f + pOther->getOffset().x
+				+ getCollider()->getSize().x / 2.f + getCollider()->getOffset().x;
+
+			setPos(pos);
+		}
 	}
 	}
 }
@@ -223,7 +273,6 @@ void CMonster_Melee::collisionExit(CCollider* pOther)
 {
 	switch (pOther->getOwner()->getName())
 	{
-	case eOBJNAME::TILE:
 	case eOBJNAME::GROUND:
 		if (isTopColl(getCollider(), pOther))
 		{

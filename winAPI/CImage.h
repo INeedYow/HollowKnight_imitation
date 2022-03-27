@@ -16,5 +16,7 @@ public:
 	virtual void update();
 	virtual void render(HDC hDC);
 
+	CTexture* getTex();
+
 	void load(const wstring& strKey, const wstring& strPath);
 };

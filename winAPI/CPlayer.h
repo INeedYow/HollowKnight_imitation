@@ -77,11 +77,9 @@ public:
 	void upSlash();
 	void downSlash();
 
-	void collisionKeep(CCollider* pOther);
-	void collisionEnter(CCollider* pOther);
-	void collisionExit(CCollider* pOther);
-
-	eDIR collDirVersusGround(CCollider* pOther);
+	virtual void collisionKeep(CCollider* pOther);
+	virtual void collisionEnter(CCollider* pOther);
+	virtual void collisionExit(CCollider* pOther);
 };
 
 enum class eSTATE_PLAYER
@@ -121,7 +119,7 @@ enum class eSTATE_PLAYER
 #define P_SIZEY					124
 #define P_SPDX					420
 #define P_SPDY					820
-#define P_SPDY_DW				500
+#define P_SPDY_DW				470
 #define P_GRAV					7000
 #define P_SPDY_MIN				-1600
 #define P_LAND_TIMER			0.7				
