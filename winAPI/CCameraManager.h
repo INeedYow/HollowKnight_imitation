@@ -7,7 +7,7 @@ enum class CAM_EFFECT
 {
 	FADE_IN,
 	FADE_OUT,
-
+	SWING,
 	// TODO
 
 	NONE
@@ -73,8 +73,7 @@ public:
 	void fadeIn(float dura);
 	void fadeOut(float dura);
 
+	void swing(float dura);
+
 	void scroll(fVec2 vec, float spd);
 };
-
-// 한 오브젝트만 따라가거나 특정 좌표를 보게
-// 오브젝트가 렌더될 좌표 구해줘야

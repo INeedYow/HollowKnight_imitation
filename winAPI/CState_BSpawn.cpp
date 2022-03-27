@@ -26,6 +26,7 @@ void CState_BSpawn::update(UINT& chk)
 		if (!m_bSpawn)
 		{
 			((CBoss_Markoth*)getMonster())->spawnShield();
+			//((CBoss_Markoth*)getMonster())->createSpear();
 			m_bSpawn = true;
 		}
 	

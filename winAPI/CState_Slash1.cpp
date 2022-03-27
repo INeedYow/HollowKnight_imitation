@@ -15,7 +15,6 @@ CState_Slash1::~CState_Slash1()
 {
 }
 
-// TODO slash2
 void CState_Slash1::update(UINT& chk)
 {
 	fPoint pos = getPlayer()->getPos();

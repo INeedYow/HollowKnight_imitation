@@ -6,11 +6,6 @@ class CCollider;
 
 
 // TODO 충돌 방향 검사 함수들 개편 현재 판정이 너무 이상함
-	// enter일 때랑 keep일 때랑 쓰는 함수 다르게 할까 생각 중
-
-// // object에 prevPos를 줘서 prevPos보고 충돌방향 판정해도 될 것 같다는 생각이 갑자기
-//		// obj 다하면 그럴 것 같고 지형 처리에만 쓰게 플레이어 정도에만 두고 쓰면 되지 않나? 
-//			// 네 방향은 되는데 대각이 애매할듯
 
 eDIR collRect2Rect(CCollider* coll1, CCollider* coll2)
 {
@@ -161,6 +156,47 @@ bool isCollisionCircleToCircle(const fPoint& cp1, int cr1, const fPoint& cp2, in
 
 	return (distance <= cr1 + cr2);
 }
+
+//bool isCollisionObliqueRect(const fPoint& cp1, int cr1, float theta1, const fPoint& cp2, int cr2, float theta2)
+//{	//						// 사각형1 중심좌표, size 1/2, 회전각			// 사각형2 
+//	
+//	fPoint lt1 = ((cp1.x - cr1), (cp1.y - cr1));
+//	
+//	
+//	
+//	
+//	
+//	// lt, rt, lb, rb
+//	fPoint arr1[4] = {
+//		fPoint( -cr1, -cr2),
+//		fPoint(cr1, -cr1),
+//		fPoint(-cr1,  cr1),
+//		fPoint(-cr1,  cr1),
+//	};
+//
+//	for (int i = 0; i < 4; i++)
+//	{
+//		arr1[i].x = -(LONG)(arr1[i].x * cos(theta1) - arr1[i].y * sin(theta1));
+//		arr1[i].y = -(LONG)(arr1[i].x * sin(theta1) + arr1[i].y * cos(theta1));
+//	}
+//
+//	for (int i = 0; i < 4; i++)
+//	{
+//		arr1[i].x += (LONG)cp1.x;
+//		arr1[i].y += (LONG)cp1.y;
+//	}
+//
+//	// obj1의 우측방향 벡터
+//	fVec2 uVec = arr1[1] - arr1[0];
+//	uVec = uVec.normalize();
+//
+//	// obj1의 중심에서 한 꼭지점까지의 벡터
+//	fVec2 vec1 = arr1[1] - cp1;
+//	fVec2 iVec1 = sqrt((arr1[1].x - cp1.x) * (arr1[1].x - cp1.x) + arr1)
+//}
+
+
+
 
 wstring addStrIDNumber(const wstring& str)
 {

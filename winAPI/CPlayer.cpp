@@ -40,18 +40,11 @@ CPlayer::CPlayer()
 	setName(eOBJNAME::PLAYER);
 	setSize(fPoint(P_SIZEX, P_SIZEY));
 
-	m_tInfo = {
-		5,
-		50,
-		0,
-		(float)P_SPDX,
-		0,
-		(float)P_GRAV,
-		0,
-		0.f,
-		0.f,
-		{}
-	};
+	m_tInfo = {};
+	m_tInfo.uiHP = 5;
+	m_tInfo.fSpdX = (float)P_SPDX;
+	m_tInfo.fGravity = (float)P_GRAV;
+
 	m_tPrevInfo = {};
 	m_pStatus = nullptr;
 	m_uiCheck = 0;
@@ -197,8 +190,14 @@ void CPlayer::playAnim(const wstring& keyWord)
 void CPlayer::update()
 {
 	if (KEY_ON('M')) g_bDebug = !g_bDebug;
+
 	if (g_bDebug && KEY_ON('O')) 
 		setPos(mousePos());
+
+	if (KEY_ON('5'))
+		CCameraManager::getInst()->swing(1.f);
+	if (KEY_ON('6'))
+		CCameraManager::getInst()->swing(3.f);
 
 	////////////////////////////
 	// 회전테스트

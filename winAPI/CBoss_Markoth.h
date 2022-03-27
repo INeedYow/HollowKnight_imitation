@@ -44,11 +44,11 @@ public:
 	void setSpawnTimer(float time);
 	vector<CShield*>& getVecShield();
 	vector<CSpear*>& getVecSpear();
-	void spawnShield();
 
+	void spawnShield();
+	void createSpear();
 private:
 	void createShield(float theta = 0.f, bool rightRot = true);
-	void createSpear();
 
 	virtual void death();
 };
@@ -56,12 +56,12 @@ private:
 // skill
 #define B_SKILL_DURA		8
 #define B_SKILL_COOL		15
-#define B_SKILL_RAD			165
+#define B_SKILL_RAD			150
 
 // shield
 #define B_SHD_EA_MAX		2				// 방패 최대 개수
-#define B_SHD_SPD			2.8				// 쉴드 속도 (radian)
-#define B_SHD_RAD			320				// 회전 크기 반지름
+#define B_SHD_SPD			2.8f			// 쉴드 속도 (radian)
+#define B_SHD_RAD			300				// 회전 크기 반지름
 
 // spear
 #define B_SPR_EA_MAX		2				// spear 최대 개수

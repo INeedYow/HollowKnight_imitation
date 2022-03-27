@@ -13,7 +13,6 @@ CState_Idle::~CState_Idle()
 {
 }
 
-// TODO getOwner() 두 단계 최선인가
 void CState_Idle::update(UINT& chk)
 {
 	if (KEY_HOLD(VK_LEFT))

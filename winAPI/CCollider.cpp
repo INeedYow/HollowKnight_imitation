@@ -91,7 +91,7 @@ void CCollider::finalUpdate()
 
 }
 
-void CCollider::render(HDC hDC, float theta)
+void CCollider::render(HDC hDC, float theta, bool rotReverse)
 {
 	if (!g_bDebug) return;
 
@@ -138,6 +138,12 @@ void CCollider::render(HDC hDC, float theta)
 		{	// 좌표에 회전행렬로 회전적용
 			pPointArr[i].x = (LONG)(arr[i].x * cos(theta) - arr[i].y * sin(theta));
 			pPointArr[i].y = (LONG)(arr[i].x * sin(theta) + arr[i].y * cos(theta));
+
+			if (rotReverse)
+			{	// 반대로 회전 시 부호 변경
+				pPointArr[i].x *= -1;
+				pPointArr[i].y *= -1;
+			}
 		}
 
 		for (int i = 0; i < 4; i++)

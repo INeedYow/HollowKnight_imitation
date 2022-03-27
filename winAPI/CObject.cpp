@@ -107,12 +107,12 @@ void CObject::render(HDC hDC)
 	componentRender(hDC);
 }
 
-void CObject::componentRender(HDC hDC, float theta)
+void CObject::componentRender(HDC hDC, float theta, bool rotReverse)
 {
 	if (nullptr != m_pCollider)
-		m_pCollider->render(hDC, theta);
+		m_pCollider->render(hDC, theta, rotReverse);
 	if (nullptr != m_pAnimator)
-		m_pAnimator->render(hDC, theta);
+		m_pAnimator->render(hDC, theta, rotReverse);
 }
 
 CCollider* CObject::getCollider()

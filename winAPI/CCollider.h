@@ -38,7 +38,7 @@ public:
 	CCollider& operator==(const CCollider& other) = delete;		// 못 쓰게
 
 	virtual void finalUpdate();
-	void render(HDC hDC, float theta = 0.f);
+	void render(HDC hDC, float theta = 0.f, bool rotReverse = false);
 
 	// 충돌 매니저에서 충돌 상태에 따라 호출해 줄 함수
 	void collisionKeep(CCollider* pOther);

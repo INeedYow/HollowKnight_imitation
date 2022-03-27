@@ -35,11 +35,11 @@ void CAnimator::update()
 	}
 }
 
-void CAnimator::render(HDC hDC, float theta)
+void CAnimator::render(HDC hDC, float theta, bool rotReverse)
 {
 	if (nullptr != m_pCurAni)
 	{
-		m_pCurAni->render(hDC, theta);
+		m_pCurAni->render(hDC, theta, rotReverse);
 	}
 }
 

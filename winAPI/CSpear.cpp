@@ -27,16 +27,8 @@ CSpear::~CSpear()
 {
 }
 
-// TODO 
-// 마젠타 지우는 방법
-// mask 인자가 지우는 비트맵?
 void CSpear::update()
 {
-	if (KEY_ON('U'))
-		camSetTrace(this);
-	if (KEY_ON('Y'))
-		camSetTrace(CGameManager::getInst()->getPlayer());
-
 	fPoint pos = getPos();
 	float timer = getTimer();
 	fPoint destPos = gameGetPlayer()->getPos();
@@ -136,61 +128,61 @@ void CSpear::render(HDC hDC)
 {
 	componentRender(hDC, m_fTheta);
 	//////////////////////////////
-	fPoint pos = getPos();
-	fPoint size = { (float)SPR_SIZEX, (float)SPR_SIZEY };
-	pos = rendPos(pos);
+	//fPoint pos = getPos();
+	//fPoint size = { (float)SPR_SIZEX, (float)SPR_SIZEY };
+	//pos = rendPos(pos);
 
-	POINT pThreeArr[3];
-	
-	// 좌상, 우상, 좌하 좌표 3개
-	fPoint arr[3] = {
-		fPoint(-size.x / 2.f, -size.y / 2.f),
-		fPoint(size.x / 2.f, -size.y / 2.f),
-		fPoint(-size.x / 2.f,  size.y / 2.f),
-	};
-	
-	for (int i = 0; i < 3; i++)
-	{	// 좌표에 회전행렬로 회전적용
-		pThreeArr[i].x = (LONG)(arr[i].x * cos(m_fTheta) - arr[i].y * sin(m_fTheta));
-		pThreeArr[i].y = (LONG)(arr[i].x * sin(m_fTheta) + arr[i].y * cos(m_fTheta));
-	}
+	//POINT pThreeArr[3];
+	//
+	//// 좌상, 우상, 좌하 좌표 3개
+	//fPoint arr[3] = {
+	//	fPoint(-size.x / 2.f, -size.y / 2.f),
+	//	fPoint(size.x / 2.f, -size.y / 2.f),
+	//	fPoint(-size.x / 2.f,  size.y / 2.f),
+	//};
+	//
+	//for (int i = 0; i < 3; i++)
+	//{	// 좌표에 회전행렬로 회전적용
+	//	pThreeArr[i].x = (LONG)(arr[i].x * cos(m_fTheta) - arr[i].y * sin(m_fTheta));
+	//	pThreeArr[i].y = (LONG)(arr[i].x * sin(m_fTheta) + arr[i].y * cos(m_fTheta));
+	//}
 
-	for (int i = 0; i < 3; i++)
-	{	// memDC 중앙 좌표로 이동
-		pThreeArr[i].x += (LONG)(SPR_MEMTEX_SIZE / 2);
-		pThreeArr[i].y += (LONG)(SPR_MEMTEX_SIZE / 2);
-	}
+	//for (int i = 0; i < 3; i++)
+	//{	// memDC 중앙 좌표로 이동
+	//	pThreeArr[i].x += (LONG)(SPR_MEMTEX_SIZE / 2);
+	//	pThreeArr[i].y += (LONG)(SPR_MEMTEX_SIZE / 2);
+	//}
 
-	// memDC 마젠타로 채움
-	SelectGDI brush(m_pMemTex->getDC(), eBRUSH::MAGENTA);
+	//// memDC 마젠타로 채움
+	//SelectGDI brush(m_pMemTex->getDC(), eBRUSH::MAGENTA);
 
-	Rectangle(m_pMemTex->getDC(), 
-		-1, -1, SPR_MEMTEX_SIZE + 1, SPR_MEMTEX_SIZE + 1);
+	//Rectangle(m_pMemTex->getDC(), 
+	//	-1, -1, SPR_MEMTEX_SIZE + 1, SPR_MEMTEX_SIZE + 1);
 
-	// 회전한 좌표로 memDC에 그림
-	PlgBlt(m_pMemTex->getDC(),
-		pThreeArr,
-		CMissile::getTex()->getDC(),
-		0, 0,
-		(int)size.x,
-		(int)size.y,
-		NULL,
-		0, 0
-	);
+	//// 회전한 좌표로 memDC에 그림
+	//PlgBlt(m_pMemTex->getDC(),
+	//	pThreeArr,
+	//	CMissile::getTex()->getDC(),
+	//	0, 0,
+	//	(int)size.x,
+	//	(int)size.y,
+	//	NULL,
+	//	0, 0
+	//);
 
-	// memDC에 그렸던 것 통쨰로 가져오면 됨
-	TransparentBlt(hDC,
-		(int)(pos.x - SPR_MEMTEX_SIZE / 2),
-		(int)(pos.y - SPR_MEMTEX_SIZE / 2),
-		SPR_MEMTEX_SIZE,
-		SPR_MEMTEX_SIZE,
-		m_pMemTex->getDC(),
-		0,
-		0,
-		SPR_MEMTEX_SIZE,
-		SPR_MEMTEX_SIZE,
-		RGB(255, 0, 255)
-	);
+	//// memDC에 그렸던 것 통쨰로 가져오면 됨
+	//TransparentBlt(hDC,
+	//	(int)(pos.x - SPR_MEMTEX_SIZE / 2),
+	//	(int)(pos.y - SPR_MEMTEX_SIZE / 2),
+	//	SPR_MEMTEX_SIZE,
+	//	SPR_MEMTEX_SIZE,
+	//	m_pMemTex->getDC(),
+	//	0,
+	//	0,
+	//	SPR_MEMTEX_SIZE,
+	//	SPR_MEMTEX_SIZE,
+	//	RGB(255, 0, 255)
+	//);
 }
 
 void CSpear::collisionEnter(CCollider* pOther)

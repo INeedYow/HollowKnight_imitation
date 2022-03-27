@@ -171,6 +171,7 @@ enum class COLL_SHAPE
 	CIRCLE,
 	RECT,
 	POINT,
+	OBLIQUE,
 
 	END
 };

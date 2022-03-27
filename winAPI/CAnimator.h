@@ -20,7 +20,7 @@ public:
 	CObject* getOwner();
 
 	void update();
-	void render(HDC hDC, float theta = 0.f);
+	void render(HDC hDC, float theta = 0.f, bool rotReverse = false);
 
 	void createAnimation(const wstring& strName, CTexture* pTex, fPoint leftTop, fPoint slice,
 		fPoint step, float dura, UINT frmCnt, bool isRepeat = true);

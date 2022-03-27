@@ -93,7 +93,7 @@ void CBoss_Markoth::update()
 
 			if (m_fSpawnTimer < 0.f)
 			{
-				for (int i = 0; i <= m_vecSpear.size(); i++)	// i == size이면 활성할 게 없는 걸로 간주하고 종료할 생각으로 <= 씀(end iter처럼)
+				for (int i = 0; i <= m_vecSpear.size(); i++)	// i == size이면 활성할 게 없는 걸로 간주하고 종료
 				{
 					if (i == m_vecSpear.size())
 					{	// 활성화 할 게 없는 경우
@@ -104,6 +104,7 @@ void CBoss_Markoth::update()
 					if (!m_vecSpear[i]->isActive())			// 활성화 되지 않은 spear 찾으면
 					{
 						m_vecSpear[i]->setActive(true);		// 활성화 시킴
+						//m_vecSpear[i]->setSpd(m_ucPhase == 1? (float)B_SPR_SPD_1P : (float)B_SPR_SPD_2P);
 						m_fSpawnTimer = 1.5f;
 						break;
 					}
@@ -264,33 +265,28 @@ void CBoss_Markoth::createShield(float theta, bool rightRot)
 
 	pShield->getAnimator()->createMemTex(addStrIDNumber(L"Shield"), SHD_MEMTEX_SIZE, SHD_MEMTEX_SIZE);
 	pShield->createAnim(L"Shield_rot", pShield->getTex(),
-				fPoint(0.f, 0.f), fPoint(166.f, 308.f), fPoint(166.f, 0.f), 0.1f, 3);
-			pShield->getAnimator()->play(L"Shield_rot");
+				fPoint(0.f, 0.f), fPoint(166.f, 308.f), fPoint(166.f, 0.f), 0.2f, 3);
+	pShield->getAnimator()->play(L"Shield_rot");
 
 	m_vecShield.push_back(pShield);
 
-	//wstring strMemTexName = L"Shield_MemTex_";
-	//strMemTexName += to_wstring(m_vecShield.size());
-
-	//pShield->createMemTex(strMemTexName, SHD_MEMTEX_SIZE, SHD_MEMTEX_SIZE);
-
 	createObj(pShield, eOBJ::SHIELD);
-
 }
 
 void CBoss_Markoth::createSpear()
 {
 	CSpear* pSpear = new CSpear;
 	pSpear->setSpd(B_SPR_SPD_1P);
-	pSpear->getCollider()->setSize(fPoint(270.f, 35.f));
 	pSpear->setTex(L"Spear_Boss", L"texture\\boss\\boss_spear.bmp");
 
-	m_vecSpear.push_back(pSpear);
+	pSpear->getCollider()->setSize(fPoint(276.f, 34.f));
 
-	wstring strMemTexName = L"Spear_MemTex_";
-	strMemTexName += to_wstring(m_vecSpear.size() - 1);		// 생성 벡터 인덱스 숫자를 memTex 고유 이름번호로(collider ID처럼)
-	
-	pSpear->createMemTex(strMemTexName, SPR_MEMTEX_SIZE, SPR_MEMTEX_SIZE);
+	pSpear->getAnimator()->createMemTex(addStrIDNumber(L"Spear"), SPR_MEMTEX_SIZE, SPR_MEMTEX_SIZE);
+	pSpear->createAnim(L"Spear_1", pSpear->getTex(),
+		fPoint(0.f, 0.f), fPoint(380.f, 85.f), fPoint(380.f, 0.f), 0.5f, 1, false);
+	pSpear->getAnimator()->play(L"Spear_1");
+
+	m_vecSpear.push_back(pSpear);
 
 	createObj(pSpear, eOBJ::MISSILE_MONSTER);
 }

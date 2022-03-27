@@ -53,6 +53,7 @@ void CState_Downslash::enter()
 	getPlayer()->playAnim(L"DownSlash");
 	
 	getPlayer()->setCheck(SP_STOPANIM, true);
+	m_fAttackDelay = 0.f;
 }
 
 void CState_Downslash::exit()

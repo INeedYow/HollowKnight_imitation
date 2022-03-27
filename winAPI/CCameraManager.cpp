@@ -41,7 +41,6 @@ void CCameraManager::update()
 		else
 			camSetFocus(m_pTraceObj->getPos());
 	}
-	
 	calculateDiff();
 }
 
@@ -71,6 +70,14 @@ void CCameraManager::render(HDC hDC)
 	else if (CAM_EFFECT::FADE_IN == effect.eEffect)
 	{	// fade in 때는 (1 - 비율)로 반대 효과
 		iAlpha = (int)(255.f * (1.f - fRatio));
+	}
+	else if (CAM_EFFECT::SWING == effect.eEffect)
+	{
+		int random;
+		random = rand() % 71 - 35;
+		m_fpCurFocus.x += random;
+		random = rand() % 71 - 35;
+		m_fpCurFocus.y += random;
 	}
 
 	BLENDFUNCTION bf = {  };
@@ -192,6 +199,18 @@ void CCameraManager::fadeOut(float dura)
 {
 	tCamEffect ef = {};
 	ef.eEffect = CAM_EFFECT::FADE_OUT;
+	ef.fDura = dura;
+	ef.fTimer = 0.f;
+
+	m_listCamEffect.push_back(ef);
+
+	if (0.f == dura) assert(nullptr);
+}
+
+void CCameraManager::swing(float dura)
+{
+	tCamEffect ef = {};
+	ef.eEffect = CAM_EFFECT::SWING;
 	ef.fDura = dura;
 	ef.fTimer = 0.f;
 

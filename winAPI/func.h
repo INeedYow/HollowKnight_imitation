@@ -15,5 +15,7 @@ bool isCollisionPointToCircle(const fPoint& point, const fPoint& cp, int cr);
 bool isCollisionCircleToRect(const fPoint& cp, int cr, const RECT& rt);
 bool isCollisionCircleToCircle(const fPoint& cp1, int cr1, const fPoint& cp2, int cr2);
 
+//bool isCollisionObliqueRect(const fPoint& cp1, int cr1, float theta1, const fPoint& cp2, int cr2, float theta2);
+
 // createMemTex ID 생성용 (중복 이름 에러 방지)
 wstring addStrIDNumber(const wstring& str);

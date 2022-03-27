@@ -153,7 +153,7 @@ void CShield::render(HDC hDC)
 	//	RGB(255, 0, 255)
 	//);
 
-	componentRender(hDC, m_fTheta);
+	componentRender(hDC, m_fTheta, true);
 }
 
 

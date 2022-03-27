@@ -16,8 +16,8 @@ struct tPlayerInfo
 	float		fSpdY;
 	float		fGravity;
 	int			iBottomCnt;
-	float		fLandTimer;
 
+	float		fLandTimer;
 	float		fNoDmgTimer;
 
 	fVec2		fvKnockBackDir;
@@ -119,19 +119,19 @@ enum class eSTATE_PLAYER
 // # state
 #define P_SIZEX					62
 #define P_SIZEY					124
-#define P_SPDX					400
-#define P_SPDY					800
-#define P_GRAV					5600
-#define P_SPDY_MIN				-1400
-#define P_LAND_TIMER			0.8				
+#define P_SPDX					420
+#define P_SPDY					860
+#define P_GRAV					7000
+#define P_SPDY_MIN				-1600
+#define P_LAND_TIMER			0.68				
 
 #define P_JUMPHOLDMAX			0.35
 #define P_FIRESOUL				30
 #define P_FOCUSSOUL				33
 #define P_FOCUSMAX				1.2
-#define P_FIREDELAY				0.5
-#define P_ATTDELAY				0.3
-#define P_STUNDURA				0.5
+#define P_FIREDELAY				0.4
+#define P_ATTDELAY				0.2
+#define P_STUNDURA				0.4
 #define P_DURA_INVIN			1.5
 
 //

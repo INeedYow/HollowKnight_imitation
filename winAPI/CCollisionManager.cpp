@@ -159,6 +159,19 @@ bool CCollisionManager::isCollision(CCollider* pColl1, eSHAPE shape1, CCollider*
 			return (pos1 == pos2);
 		}
 		}
+		
+	case eSHAPE::OBLIQUE:
+	{
+		switch (shape2)
+		{
+		case eSHAPE::RECT:
+		case eSHAPE::OBLIQUE:
+		{
+			// TODO theta 받아 오는 법 (CObject에 getTheta()를 할 수도 없고)
+		}
+		}
+	}
+
 	}
 	return false;
 }

@@ -40,7 +40,7 @@ public:
 	virtual void update() = 0;
 	virtual void finalUpdate();
 	virtual void render(HDC hDC);
-	virtual void componentRender(HDC hDC, float theta = 0.f);
+	virtual void componentRender(HDC hDC, float theta = 0.f, bool rotReverse = false);
 
 	CCollider* getCollider();
 	void createCollider();

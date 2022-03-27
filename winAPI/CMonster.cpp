@@ -39,6 +39,7 @@ CMonster::~CMonster()
 		delete m_pAI;
 }
 
+// TODO 방향전환할 때 죽으면 turn anim 재생됨
 void CMonster::update()
 {
 	if (nullptr != m_pAI && !(m_uiCheck & SM_TURN))		// 방향전환 중일 때 
