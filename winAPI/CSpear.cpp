@@ -98,21 +98,28 @@ void CSpear::update()
 		break;
 	}
 
-	default:
-	{	// 카메라 범위 나가면 재활용
-		if (!m_bActive) break;		// 보스 스킬 쓸 때 비활성화 되면 재생성은 안 되게
-
+	case 4:
+	{	// 카메라 범위 나가면 비활성화
 		fPoint randPos = rendPos(pos);
-		if (randPos.x < (float)(-1 * SPR_SIZEX / 2.f) || randPos.x > (float)(WINSIZEX + SPR_SIZEX / 2.f) ||
-			randPos.y < (float)(-1 * SPR_SIZEY / 2.f) || randPos.y > (float)(WINSIZEX + SPR_SIZEY / 2.f))
+		if (randPos.x < (float)(SPR_SIZEX / -2.f) || randPos.x > (float)(WINSIZEX + SPR_SIZEX / 2.f) ||
+			randPos.y < (float)(SPR_SIZEY / -2.f) || randPos.y > (float)(WINSIZEX + SPR_SIZEY / 2.f))
 		{
-			m_uiStep = 0;
+			m_uiStep++;
+			m_bActive = false;
+			pos = fPoint(-444.f, -444.f);
 			setSpeed(0.f);
-			pos = getRandPos();
 		}
 		break;
 	}
-	
+	default:
+	{
+		if (m_bActive)
+		{
+			pos = getRandPos();
+			m_uiStep = 0;
+		}
+		break;
+	}
 	}
 	
 	dir.normalize();

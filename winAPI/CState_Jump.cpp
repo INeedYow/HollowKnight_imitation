@@ -31,9 +31,6 @@ void CState_Jump::update(UINT& chk)
 
 		if (info.fSpdY < (float)P_SPDY_MIN)
 			info.fSpdY = (float)P_SPDY_MIN;
-
-		/*if (info.fGravity < P_GRAVMAX)
-			info.fGravity += P_GRAV * fDT;*/
 	}
 
 	if (KEY_OFF('Z') || m_fTimer >= P_JUMPHOLDMAX)
@@ -51,7 +48,7 @@ void CState_Jump::update(UINT& chk)
 	{
 		chk &= ~(SP_DIR);
 		pos.x -= info.fSpdX * fDT;
-		getPlayer()->playAnim(L"Jump");
+		getPlayer()->playAnim(L"Jump");		// 좌우 방향에 따라 다시 재생
 	}
 	else if (KEY_HOLD(VK_RIGHT))
 	{
@@ -89,7 +86,7 @@ void CState_Jump::update(UINT& chk)
 		}
 	}
 
-	pos.y -= (info.fSpdY /*- info.fGravity*/) * fDT;
+	pos.y -= info.fSpdY * fDT;
 
 	getPlayer()->setPos(pos);
 	getPlayer()->setPlayerInfo(info);
@@ -113,7 +110,7 @@ void CState_Jump::enter()
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 
 	if (getPlayer()->isCheck(SP_DWSLASH))
-		info.fSpdY = (float)P_SPDY / 2.f;
+		info.fSpdY = (float)P_SPDY_DW;
 	else
 		info.fSpdY = (float)P_SPDY;
 

@@ -12,6 +12,7 @@
 #include "CBackGround.h"
 #include "CImage.h"
 #include "CButtonUI_Image.h"
+#include "CSound.h"
 
 void changeScene(DWORD_PTR param1, DWORD_PTR param2);
 void quitWindow(DWORD_PTR param1, DWORD_PTR param2);

@@ -26,7 +26,7 @@ class CBoss_Markoth : public CMonster
 	float		m_fTimer;					// 플레이어 미사일 피해주기 갱신용
 
 	vector<CShield*>	m_vecShield;
-	vector<CSpear*>		m_vecSpear;			// 속도 조절을 위해서 가지고 있어야 하나?
+	vector<CSpear*>		m_vecSpear;	
 
 public:
 	CBoss_Markoth();
@@ -60,13 +60,13 @@ private:
 
 // shield
 #define B_SHD_EA_MAX		2				// 방패 최대 개수
-#define B_SHD_SPD			2.8f			// 쉴드 속도 (radian)
-#define B_SHD_RAD			300				// 회전 크기 반지름
+#define B_SHD_SPD			2.8f			// 방패 속도 (radian)
+#define B_SHD_RAD			290				// 회전 크기 반지름
 
 // spear
 #define B_SPR_EA_MAX		2				// spear 최대 개수
 #define B_SPR_SPD_1P		900				// 1 페이즈 spear 속도
-#define B_SPR_SPD_2P		1020			// 2
+#define B_SPR_SPD_2P		1080			// 2
 
 // boss
 #define B_HPMAX				20

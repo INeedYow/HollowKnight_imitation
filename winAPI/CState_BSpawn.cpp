@@ -9,6 +9,7 @@ CState_BSpawn::CState_BSpawn(eSTATE_MONS state)
 {
 	m_fDura = 0;
 	m_bSpawn = false;
+	m_ucPhase = 1;
 }
 
 CState_BSpawn::~CState_BSpawn()
@@ -45,12 +46,18 @@ void CState_BSpawn::enter()
 	m_bSpawn = false;
 	getMonster()->PLAY(L"st_Middle");
 	getMonster()->getCollider()->setSize(fPoint(SB_MdSIZEX, SB_MdSIZEY));
+
+	if (1 == m_ucPhase)
+		CSoundManager::getInst()->play(L"markoth_cast1", 0.1f);
+	else
+		CSoundManager::getInst()->play(L"markoth_cast4", 0.1f);
 }
 
 void CState_BSpawn::exit()
 {
 	m_fDura = 0.f;
 	m_bSpawn = false;
+	m_ucPhase++;
 }
 
 void CState_BSpawn::printInfo(HDC hDC)

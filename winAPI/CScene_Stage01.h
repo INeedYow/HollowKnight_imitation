@@ -3,6 +3,7 @@
 
 class CScene_Stage01 : public CScene
 {
+	bool	m_bBGM;
 
 public:
 	CScene_Stage01();

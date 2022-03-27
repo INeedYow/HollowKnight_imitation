@@ -45,6 +45,7 @@ void CCore::update()
 	CGameManager::getInst()->update();				//collMgr 보다 아래
 	CCameraManager::getInst()->update();
 	CUIManager::getInst()->update();
+	CSoundManager::getInst()->update();
 }
 
 void CCore::render()
@@ -73,6 +74,7 @@ void CCore::init()
 	CCameraManager::getInst()->init();
 	CSceneManager::getInst()->init();
 	CCollisionManager::getInst()->init();
+	CSoundManager::getInst()->init();
 
 	m_hDC = GetDC(hWnd);
 

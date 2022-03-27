@@ -4,6 +4,7 @@ class CState_BSpawn : public CState_Mons
 {
 	float m_fDura;
 	bool  m_bSpawn;
+	UCHAR m_ucPhase;
 
 public:
 	CState_BSpawn(eSTATE_MONS state);

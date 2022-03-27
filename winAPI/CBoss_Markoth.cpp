@@ -67,53 +67,49 @@ void CBoss_Markoth::update()
 {
 	CMonster::update();
 
-	if (isCheck(SB_TIMER))			// 타이머 적용되는 상태
+	if (!isCheck(SB_TIMER))	return;		// 타이머 적용되는 상태
+	
+	m_fSkillTimer -= fDT;
+
+	if (getMonsInfo().iHP <= B_HPMAX / 2 && m_ucPhase == 1)
+	{	// 2 페이즈
+		m_ucPhase++;
+		changeMonsState(getAI(), eSTATE_MONS::SPAWN);
+		//createSpear();
+
+		for (int i = 0; i < m_vecSpear.size(); i++)
+		{	// spear 속도 증가
+			m_vecSpear[i]->setSpd(B_SPR_SPD_2P);
+		}
+	}
+
+	m_fSpawnTimer -= fDT;
+
+	if (m_fSpawnTimer <= 0.f)
 	{
-		m_fSkillTimer -= fDT;
-
-		if (getMonsInfo().iHP <= B_HPMAX / 2 && m_ucPhase == 1)
-		{	// 2 페이즈
-			m_ucPhase++;
-			changeMonsState(getAI(), eSTATE_MONS::SPAWN);
-			//createSpear();
-
-			for (int i = 0; i < m_vecSpear.size(); i++)
-			{	// spear 속도 증가
-				m_vecSpear[i]->setSpd(B_SPR_SPD_2P);
+		for (int i = 0; i <= m_vecSpear.size(); i++)	// i == size이면 활성할 게 없는 걸로 간주하고 종료
+		{
+			if (i == m_vecSpear.size())
+			{	// 활성화 할 게 없는 경우
+				m_fSpawnTimer = 0.f;
+				break;
 			}
-		}
 
-		if (m_fSpawnTimer > 0.f)
-		{	// 스킬 후 spear 생성 시간차 주려고 
-			m_fSpawnTimer -= fDT;
-
-			if (m_fSpawnTimer < 0.f)
+			if (!m_vecSpear[i]->isActive())			// 활성화 되지 않은 spear 찾으면
 			{
-				for (int i = 0; i <= m_vecSpear.size(); i++)	// i == size이면 활성할 게 없는 걸로 간주하고 종료
-				{
-					if (i == m_vecSpear.size())
-					{	// 활성화 할 게 없는 경우
-						m_fSpawnTimer = 0.f;
-						break;
-					}
-
-					if (!m_vecSpear[i]->isActive())			// 활성화 되지 않은 spear 찾으면
-					{
-						m_vecSpear[i]->setActive(true);		// 활성화 시킴
-						//m_vecSpear[i]->setSpd(m_ucPhase == 1? (float)B_SPR_SPD_1P : (float)B_SPR_SPD_2P);
-						m_fSpawnTimer = 1.5f;
-						break;
-					}
-				}
+				m_vecSpear[i]->setActive(true);		// 활성화 시킴
+				m_vecSpear[i]->setSpd(m_ucPhase == 1? (float)B_SPR_SPD_1P : (float)B_SPR_SPD_2P);
+				m_fSpawnTimer = 1.25f;
+				break;
 			}
 		}
-
-		if (m_fSkillTimer < 0.f)
-		{	// 스킬 준비단계로
-			m_fSkillTimer = 0.f;
-			m_fSpawnTimer = 0.f;
-			changeMonsState(getAI(), eSTATE_MONS::READY);
-		}
+	}
+	
+	if (m_fSkillTimer < 0.f)
+	{	// 스킬
+		m_fSkillTimer = 0.f;
+		m_fSpawnTimer = 0.f;
+		changeMonsState(getAI(), eSTATE_MONS::READY);
 	}
 }
 

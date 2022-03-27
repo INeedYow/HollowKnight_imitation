@@ -120,10 +120,11 @@ enum class eSTATE_PLAYER
 #define P_SIZEX					62
 #define P_SIZEY					124
 #define P_SPDX					420
-#define P_SPDY					860
+#define P_SPDY					820
+#define P_SPDY_DW				500
 #define P_GRAV					7000
 #define P_SPDY_MIN				-1600
-#define P_LAND_TIMER			0.68				
+#define P_LAND_TIMER			0.7				
 
 #define P_JUMPHOLDMAX			0.35
 #define P_FIRESOUL				30

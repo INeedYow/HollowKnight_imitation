@@ -15,6 +15,7 @@
 
 CScene_Stage03::CScene_Stage03()
 {
+	m_bBGM = true;
 }
 
 CScene_Stage03::~CScene_Stage03()
@@ -27,6 +28,20 @@ void CScene_Stage03::update()
 
 	if (KEY_ON(VK_ESCAPE))
 		changeScn(eSCENE::TITLE);
+
+	if (KEY_ON('M'))
+	{
+		if (m_bBGM)
+		{
+			CSoundManager::getInst()->play(L"bgm_stage3", 0.1f);
+			m_bBGM = !m_bBGM;
+		}
+		else
+		{
+			CSoundManager::getInst()->stop(L"bgm_stage3");
+			m_bBGM = !m_bBGM;
+		}
+	}
 }
 
 void CScene_Stage03::enter()
@@ -89,6 +104,8 @@ void CScene_Stage03::enter()
 	camSetFocusNow(pPlayer->getPos());
 	camSetTrace(pPlayer);
 	//camSetTrace(pBoss);
+
+	CSoundManager::getInst()->play(L"bgm_stage3", 0.1f);
 }
 
 void CScene_Stage03::exit()
@@ -101,4 +118,6 @@ void CScene_Stage03::exit()
 	camFadeOut(0.5f);
 	camSetIsArea(false);
 	camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
+
+	CSoundManager::getInst()->stop(L"bgm_stage3");
 }

@@ -33,3 +33,13 @@ const wchar_t* CPathManager::getContentPath()
 {
 	return m_strContentPath;
 }
+
+const wchar_t* CPathManager::getRelativeContentPath()
+{
+#ifdef _DEBUG
+	return L"..\\Release\\content\\";
+#else
+	return L"content\\";
+#endif
+
+}

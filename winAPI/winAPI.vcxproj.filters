@@ -235,6 +235,9 @@
     <ClCompile Include="CWall.cpp">
       <Filter>Object\Tile</Filter>
     </ClCompile>
+    <ClCompile Include="CSoundManager.cpp">
+      <Filter>Engine\Manager\Sound</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCollider.h">
@@ -492,6 +495,9 @@
     <ClInclude Include="CWall.h">
       <Filter>Object\Tile</Filter>
     </ClInclude>
+    <ClInclude Include="CSoundManager.h">
+      <Filter>Engine\Manager\Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -630,6 +636,9 @@
     </Filter>
     <Filter Include="Engine\Component\Status &amp; AI\AI\State_Mons\State_Boss">
       <UniqueIdentifier>{766e97a9-2a8d-4231-a3ca-75388cab65e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Manager\Sound">
+      <UniqueIdentifier>{fae49cee-a165-4741-bd0f-b5f253aba904}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -79,11 +79,11 @@ CPlayer::CPlayer()
 	createAnim(L"Stun_R",		m_pTex,	fPoint(2556.f, 2.f),		fPoint(94.f, 126.f),		fPoint(94.f, 0.f),			0.3f,	1, false);
 	createAnim(L"Stun_L",		m_pTex,	fPoint(2556.f, 129.f),		fPoint(94.f, 126.f),		fPoint(94.f, 0.f),			0.3f,	1, false);
 
-	createAnim(L"Slash1_R",		m_pTex,	fPoint(0.f, 254.f),			fPoint(82.f, 127.f),		fPoint(82.f, 0.f),			0.2f,	5, false);
-	createAnim(L"Slash1_L",		m_pTex,	fPoint(328.f, 381.f),		fPoint(82.f, 127.f),		fPoint(-82.f, 0.f),			0.2f,	5, false);
+	createAnim(L"Slash1_R",		m_pTex,	fPoint(0.f, 254.f),			fPoint(82.f, 127.f),		fPoint(82.f, 0.f),			0.06f,	5, false);
+	createAnim(L"Slash1_L",		m_pTex,	fPoint(328.f, 381.f),		fPoint(82.f, 127.f),		fPoint(-82.f, 0.f),			0.06f,	5, false);
 
-	createAnim(L"Slash2_R",		m_pTex,	fPoint(410.f, 254.f),		fPoint(118.f, 127.f),		fPoint(118.f, 0.f),			0.1f,	5, false);
-	createAnim(L"Slash2_L",		m_pTex,	fPoint(882.f, 381.f),		fPoint(118.f, 127.f),		fPoint(-118.f, 0.f),		0.1f,	5, false);
+	createAnim(L"Slash2_R",		m_pTex,	fPoint(410.f, 254.f),		fPoint(118.f, 127.f),		fPoint(118.f, 0.f),			0.06f,	5, false);
+	createAnim(L"Slash2_L",		m_pTex,	fPoint(882.f, 381.f),		fPoint(118.f, 127.f),		fPoint(-118.f, 0.f),		0.06f,	5, false);
 
 	createAnim(L"UpSlash_R",	m_pTex,	fPoint(1000.f, 254.f),		fPoint(95.f, 127.f),		fPoint(95.f, 0.f),			0.2f,	5, false);
 	createAnim(L"UpSlash_L",	m_pTex,	fPoint(1380.f, 381.f),		fPoint(95.f, 127.f),		fPoint(-95.f, 0.f),			0.2f,	5, false);
@@ -91,8 +91,8 @@ CPlayer::CPlayer()
 	createAnim(L"DownSlash_R",	m_pTex,	fPoint(1475.f, 254.f),		fPoint(118.f, 127.f),		fPoint(118.f, 0.f),			0.2f,	5, false);
 	createAnim(L"DownSlash_L",	m_pTex,	fPoint(1947.f, 381.f),		fPoint(118.f, 127.f),		fPoint(-118.f, 0.f),		0.2f,	5, false);
 
-	createAnim(L"Fire_R",		m_pTex,	fPoint(2065.f, 254.f),		fPoint(87.f, 127.f),		fPoint(87.f, 0.f),			0.07f,	7, false);
-	createAnim(L"Fire_L",		m_pTex,	fPoint(2587.f, 381.f),		fPoint(87.f, 127.f),		fPoint(-87.f, 0.f),			0.07f,	7, false);
+	createAnim(L"Fire_R",		m_pTex,	fPoint(2065.f, 254.f),		fPoint(87.f, 127.f),		fPoint(87.f, 0.f),			0.06f,	7, false);
+	createAnim(L"Fire_L",		m_pTex,	fPoint(2587.f, 381.f),		fPoint(87.f, 127.f),		fPoint(-87.f, 0.f),			0.06f,	7, false);
 
 	createAnim(L"Focus2Idle_R",	m_pTex,	fPoint(0.f, 508.f),			fPoint(64.f, 127.f),		fPoint(64.f, 0.f),			0.2f,	2, false);
 	createAnim(L"Focus2Idle_L",	m_pTex,	fPoint(64.f, 635.f),		fPoint(64.f, 127.f),		fPoint(-64.f, 0.f),			0.2f,	2, false);
@@ -189,7 +189,7 @@ void CPlayer::playAnim(const wstring& keyWord)
 
 void CPlayer::update()
 {
-	if (KEY_ON('M')) g_bDebug = !g_bDebug;
+	if (KEY_ON('P')) g_bDebug = !g_bDebug;
 
 	if (g_bDebug && KEY_ON('O')) 
 		setPos(mousePos());
@@ -537,7 +537,6 @@ void CPlayer::printInfo(HDC hDC)
 	TextOutW(hDC, (int)rendPos.x + 100, (int)rendPos.y - 115, bufHP, (int)wcslen(bufHP));
 	TextOutW(hDC, (int)rendPos.x + 100, (int)rendPos.y - 90, bufSoul, (int)wcslen(bufSoul));
 	TextOutW(hDC, (int)rendPos.x + 100, (int)rendPos.y - 65, bufBot, (int)wcslen(bufBot));
-
 
 	if (m_uiCheck & SP_NODMG)
 	{

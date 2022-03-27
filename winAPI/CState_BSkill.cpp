@@ -62,9 +62,16 @@ void CState_BSkill::update(UINT& chk)
 void CState_BSkill::enter()
 {
 	m_fDura = (float)B_SKILL_DURA;
+	getMonster()->setCheck(SB_TIMER, false);
+
 	getMonster()->PLAY(L"st_Skill");
 	getMonster()->getCollider()->setSize(fPoint(SB_SkSIZEX, SB_SkSIZEY));
 
+	if (rand() % 2)
+		CSoundManager::getInst()->play(L"markoth_cast2", 0.1f);
+	else
+		CSoundManager::getInst()->play(L"markoth_cast3", 0.1f);
+		
 	vector<CSpear*> vecSpr = ((CBoss_Markoth*)getMonster())->getVecSpear();
 	{	// 스킬 쓰는 동안 비활성화
 		for (int i = 0; i < vecSpr.size(); i++)

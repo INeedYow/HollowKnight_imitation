@@ -17,7 +17,7 @@
 
 CScene_Stage01::CScene_Stage01()
 {
-
+	m_bBGM = true;
 }
 
 CScene_Stage01::~CScene_Stage01()
@@ -37,6 +37,20 @@ void CScene_Stage01::update()
 	// 씬 전환
 	if (gameGetPlayer()->getPos().y >= STG01_SIZEY - 40)
 		changeScn(eSCENE::STAGE_02);
+
+	if (KEY_ON('M'))
+	{
+		if (m_bBGM)
+		{
+			CSoundManager::getInst()->play(L"bgm_stg1", 0.1f);
+			m_bBGM = !m_bBGM;
+		}
+		else
+		{
+			CSoundManager::getInst()->stop(L"bgm_stg1");
+			m_bBGM = !m_bBGM;
+		}
+	}
 }
 
 void CScene_Stage01::enter()
@@ -160,6 +174,8 @@ void CScene_Stage01::enter()
 	// 카메라
 	camSetFocusNow(pPlayer->getPos());
 	camSetTrace(pPlayer);
+
+	CSoundManager::getInst()->play(L"bgm_stg1", 0.1f);
 }
 
 void CScene_Stage01::exit()
@@ -172,4 +188,6 @@ void CScene_Stage01::exit()
 	camFadeOut(0.5f);
 	camSetIsArea(false);
 	camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
+
+	CSoundManager::getInst()->stop(L"bgm_stg1");
 }
