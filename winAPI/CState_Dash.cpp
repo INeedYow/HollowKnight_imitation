@@ -72,18 +72,22 @@ void CState_Dash::enter()
 
 	CEffect* pEff = new CEffect;
 	pEff->load(L"Effect_dash", L"texture\\effect\\effect_dash.bmp");
-	pEff->setPos(pos);
-	pEff->setDuration(0.4f);
+	pEff->setFollow(getPlayer());
+	pEff->setDuration(0.2f);
 	if (getPlayer()->isCheck(SP_DIR))
 	{
 		pEff->createAnim(L"effect_dash", pEff->getTex(),
-			fPoint(289, 0), fPoint(289, 146), fPoint(289, 0), 0.1f, 4, false);
+			fPoint(289, 0), fPoint(289, 146), fPoint(289, 0), 0.05f, 4, false);
+		pos.x -= 40.f;
+		
 	}
 	else
 	{
 		pEff->createAnim(L"effect_dash", pEff->getTex(),
-			fPoint(867, 146), fPoint(289, 146), fPoint(-289, 0), 0.1f, 4, false);
+			fPoint(867, 146), fPoint(289, 146), fPoint(-289, 0), 0.05f, 4, false);
+		pos.x += 40.f;
 	}
+	pEff->setPos(pos);
 	pEff->PLAY(L"effect_dash");
 	createObj(pEff, eOBJ::EFFECT);
 	/////////////////////////

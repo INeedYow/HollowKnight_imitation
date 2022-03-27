@@ -3,8 +3,8 @@
 class CState_BSkill : public CState_Mons
 {
 	float	m_fDura;
-	float	m_fSpd;
-	float	m_fRad;
+	//float	m_fSpd;
+	//float	m_fRad;
 
 public:
 	CState_BSkill(eSTATE_MONS state);

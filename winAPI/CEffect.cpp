@@ -68,19 +68,36 @@ bool CEffect::isActive()
 	return m_bActive;
 }
 
+//void CEffect::update()
+//{
+//	if (!m_bActive) return;
+//
+//	m_fDura -= fDT;
+//
+//	if (m_fDura < 0.f)
+//		m_bActive = false;
+//
+//	if (nullptr != m_pFollow)
+//	{
+//		setPos(m_pFollow->getPos() + m_fpOffset);
+//	}
+//
+//	if (nullptr != getAnimator())
+//		getAnimator()->update();
+//}
+
 void CEffect::update()
 {
-	if (!m_bActive) return;
-
 	m_fDura -= fDT;
 
 	if (m_fDura < 0.f)
-		m_bActive = false;
+		deleteObj(this);
 
-	if (nullptr != m_pFollow)
-	{
-		setPos(m_pFollow->getPos() + m_fpOffset);
-	}
+	// 어차피 애니메이션 위치가 중요해서 의미없음
+	//if (nullptr != m_pFollow)
+	//{
+	//	setPos(m_pFollow->getPos() + m_fpOffset);
+	//}
 
 	if (nullptr != getAnimator())
 		getAnimator()->update();
@@ -88,7 +105,7 @@ void CEffect::update()
 
 void CEffect::render(HDC hDC)
 {
-	if (!m_bActive) return;
+	//if (!m_bActive) return;
 
 	componentRender(hDC);
 }

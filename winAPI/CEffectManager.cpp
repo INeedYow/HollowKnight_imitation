@@ -66,7 +66,7 @@ void CEffectManager::showEffect(const wstring& effName, fPoint pos, float dura)
 
 	pEff->setPos(pos);
 	
-	if (dura)	// 지속 시간 
+	if (0.f != dura)	// 지속 시간 
 		pEff->setDuration(dura);
 
 	pEff->setActive(true);

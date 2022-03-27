@@ -25,7 +25,7 @@ void CSoundManager::init()
 	assert(m_pSystem);
 	m_pSystem->init(32, FMOD_INIT_NORMAL, nullptr);
 
-	// sound 저장
+	// sound 저장 TODO
 	CSoundManager::getInst()->addSound(L"bgm_stg1", L"sound\\bgm\\Dirtmouth1.wav", true);
 	//CSoundManager::getInst()->addSound(L"bgm_stg3", L"sound\\bgm\\Boss_Battle.wav", true);
 

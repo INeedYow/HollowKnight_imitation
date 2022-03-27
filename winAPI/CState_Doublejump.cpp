@@ -2,6 +2,7 @@
 #include "CState_Doublejump.h"
 #include "CStatus.h"
 #include "CPlayer.h"
+#include "CEffect.h"
 
 CState_Doublejump::CState_Doublejump(eSTATE_PLAYER state)
 	: CState_Player(state)
@@ -76,6 +77,29 @@ void CState_Doublejump::enter()
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	info.fSpdY = P_SPDY;
 	getPlayer()->setPlayerInfo(info);
+
+	fPoint pos = getPlayer()->getPos();
+
+	CEffect* pEff = new CEffect;
+	pEff->load(L"Effect_dbJump", L"texture\\effect\\effect_doublejump.bmp");
+	pEff->setFollow(getPlayer());
+	pEff->setDuration(0.2f);
+	if (getPlayer()->isCheck(SP_DIR))
+	{
+		pEff->createAnim(L"effect_dbjump", pEff->getTex(),
+			fPoint(0, 0), fPoint(146, 289), fPoint(146, 0), 0.05f, 4, false);
+		pos.x += 10.f;
+	}
+	else
+	{
+		pEff->createAnim(L"effect_dbjump", pEff->getTex(),
+			fPoint(438, 289), fPoint(146, 289), fPoint(-146, 0), 0.05f, 4, false);
+		pos.x -= 10.f;
+	}
+	pos.y += 75.f;
+	pEff->setPos(pos);
+	pEff->PLAY(L"effect_dbjump");
+	createObj(pEff, eOBJ::EFFECT);
 
 	m_fTimer = 0.f;
 	m_fAccel = 0.f;

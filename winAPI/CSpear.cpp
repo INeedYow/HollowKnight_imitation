@@ -3,6 +3,7 @@
 #include "CTexture.h"
 #include "CPlayer.h"
 #include "CBoss_Markoth.h"
+#include "CEffect.h"
 
 #include "SelectGDI.h"
 
@@ -51,6 +52,15 @@ void CSpear::update()
 		timer = m_fSpd == B_SPR_SPD_1P ? 0.65f : 0.5f;
 		setSpeed(m_fSpd * 0.1f);
 		m_uiStep++;
+
+		CEffect* pEff = new CEffect;
+		pEff->load(L"Effect_dream", L"texture\\effect\\dream_catcher_mini.bmp");
+		pEff->setDuration(1.f);
+		pEff->createAnim(L"effect_dream", pEff->getTex(),
+			fPoint(0, 0), fPoint(61, 61), fPoint(61, 0), 0.05f, 13, false);
+		pEff->setPos(pos);
+		pEff->PLAY(L"effect_dream");
+		createObj(pEff, eOBJ::EFFECT);
 
 		break;
 	}

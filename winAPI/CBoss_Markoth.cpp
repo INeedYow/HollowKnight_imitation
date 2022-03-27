@@ -86,7 +86,6 @@ void CBoss_Markoth::update()
 	{	// 2 페이즈
 		m_ucPhase++;
 		changeMonsState(getAI(), eSTATE_MONS::SPAWN);
-		//createSpear();
 
 		for (int i = 0; i < m_vecSpear.size(); i++)
 		{	// spear 속도 증가
@@ -110,7 +109,7 @@ void CBoss_Markoth::update()
 			{
 				m_vecSpear[i]->setActive(true);		// 활성화 시킴
 				m_vecSpear[i]->setSpd(m_ucPhase == 1? (float)B_SPR_SPD_1P : (float)B_SPR_SPD_2P);
-				m_fSpawnTimer = 1.25f;
+				m_fSpawnTimer = B_SPR_COOL;
 				break;
 			}
 		}
@@ -141,6 +140,8 @@ void CBoss_Markoth::render(HDC hDC)
 		wchar_t bufCool[255] = {};
 		wchar_t bufCool2[255] = {};
 		wchar_t buffPhase[255] = {};
+		wchar_t bufSHDSpd[255] = {};
+		wchar_t bufSHDRad[255] = {};
 
 		swprintf_s(buffPhase, L"Phase = %d", (int)m_ucPhase);
 		swprintf_s(bufHP, L"HP = %d", getMonsInfo().iHP);
@@ -148,6 +149,8 @@ void CBoss_Markoth::render(HDC hDC)
 		swprintf_s(bufY, L"y = %.1f", pos.y);
 		swprintf_s(bufCool, L"cd1 = %.1f", m_fSpawnTimer);
 		swprintf_s(bufCool2, L"cd2 = %.1f", m_fSkillTimer);
+		swprintf_s(bufSHDSpd, L"ShieldSpd = %.2f", m_vecShield[0]->getSpeed());
+		swprintf_s(bufSHDRad, L"ShieldRad = %.2f", m_vecShield[m_vecShield.size() - 1]->getRadius());
 
 		pos = rendPos(pos);
 
@@ -157,6 +160,8 @@ void CBoss_Markoth::render(HDC hDC)
 		TextOutW(hDC, (int)pos.x - 000, (int)pos.y + 175, bufY, (int)wcslen(bufY));
 		TextOutW(hDC, (int)pos.x - 100, (int)pos.y + 200, bufCool, (int)wcslen(bufCool));
 		TextOutW(hDC, (int)pos.x - 000, (int)pos.y + 200, bufCool2, (int)wcslen(bufCool2));
+		TextOutW(hDC, (int)pos.x + 180, (int)pos.y + 165, bufSHDSpd, (int)wcslen(bufSHDSpd));
+		TextOutW(hDC, (int)pos.x + 180, (int)pos.y + 185, bufSHDRad, (int)wcslen(bufSHDRad));
 	}
 
 	componentRender(hDC);

@@ -20,7 +20,10 @@ void CState_Death::update(UINT& chk)
 	// TODO
 	if (m_fDura < 0.f)
 	{
-		changeMyState(getOwner(), eSTATE_PLAYER::FALL);
+		if (chk & SP_AIR)
+			changeMyState(getOwner(), eSTATE_PLAYER::FALL);
+		else
+			changeMyState(getOwner(), eSTATE_PLAYER::IDLE);
 	}
 }
 
@@ -45,7 +48,7 @@ void CState_Death::exit()
 	// юс╫ц
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	info.uiHP = 5;
-	info.uiSoul = 50;
+	info.uiSoul = 100;
 	getPlayer()->setPlayerInfo(info);
 }
 

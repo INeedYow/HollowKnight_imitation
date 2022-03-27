@@ -11,8 +11,8 @@ CState_BSkill::CState_BSkill(eSTATE_MONS state)
 	:CState_Mons(state)
 {
 	m_fDura = 0.f;
-	m_fRad = 0.f;
-	m_fSpd = 0.f;
+	//m_fRad = 0.f;
+	//m_fSpd = 0.f;
 }
 
 CState_BSkill::~CState_BSkill()
@@ -55,8 +55,9 @@ void CState_BSkill::update(UINT& chk)
 		changeMonsState(getOwner(), eSTATE_MONS::IDLE);
 	}
 
-	m_fSpd = vecShd[vecShd.size() - 1]->getSpeed();
-	m_fRad = vecShd[vecShd.size() - 1]->getRadius();
+	// 출력용이었는데 보스쪽에서 출력하도록 했음
+	/*m_fSpd = vecShd[vecShd.size() - 1]->getSpeed();
+	m_fRad = vecShd[vecShd.size() - 1]->getRadius();*/
 }
 
 void CState_BSkill::enter()
@@ -64,8 +65,8 @@ void CState_BSkill::enter()
 	m_fDura = (float)B_SKILL_DURA;
 	getMonster()->setCheck(SB_TIMER, false);
 
-	getMonster()->PLAY(L"st_Skill");
-	getMonster()->getCollider()->setSize(fPoint(SB_SkSIZEX, SB_SkSIZEY));
+	//getMonster()->PLAY(L"st_Skill");
+	//getMonster()->getCollider()->setSize(fPoint(SB_SkSIZEX, SB_SkSIZEY));
 
 	if (rand() % 2)
 		CSoundManager::getInst()->play(L"markoth_cast2", 0.1f);
@@ -86,7 +87,7 @@ void CState_BSkill::exit()
 	getMonster()->setCheck(SB_TIMER, true);
 	((CBoss_Markoth*)getMonster())->setSkillCooldown((float)B_SKILL_COOL);
 
-	((CBoss_Markoth*)getMonster())->setSpawnTimer(1.5f);
+	((CBoss_Markoth*)getMonster())->setSpawnTimer(0.75f);
 }
 
 void CState_BSkill::printInfo(HDC hDC)
@@ -98,15 +99,15 @@ void CState_BSkill::printInfo(HDC hDC)
 
 	LPCWSTR	strState = L"Skill";
 	wchar_t bufDura[255] = {};
-	wchar_t bufSpd[255] = {};
-	wchar_t bufRad[255] = {};
+	//wchar_t bufSpd[255] = {};
+	//wchar_t bufRad[255] = {};
 
 	swprintf_s(bufDura, L"Dura %.1f", m_fDura);
-	swprintf_s(bufSpd, L"ShieldSpd = %.1f", m_fSpd);
-	swprintf_s(bufRad, L"ShieldRad = %.1f", m_fRad);
+	//swprintf_s(bufSpd, L"ShieldSpd = %.1f", m_fSpd);
+	//swprintf_s(bufRad, L"ShieldRad = %.1f", m_fRad);
 
 	TextOutW(hDC, (int)pos.x + 180, (int)pos.y + 125, strState, (int)wcslen(strState));
 	TextOutW(hDC, (int)pos.x + 180, (int)pos.y + 145, bufDura, (int)wcslen(bufDura));
-	TextOutW(hDC, (int)pos.x + 180, (int)pos.y + 165, bufSpd, (int)wcslen(bufSpd));
-	TextOutW(hDC, (int)pos.x + 180, (int)pos.y + 185, bufRad, (int)wcslen(bufRad));
+	/*TextOutW(hDC, (int)pos.x + 180, (int)pos.y + 165, bufSpd, (int)wcslen(bufSpd));
+	TextOutW(hDC, (int)pos.x + 180, (int)pos.y + 185, bufRad, (int)wcslen(bufRad));*/
 }

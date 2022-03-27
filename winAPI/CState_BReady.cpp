@@ -22,27 +22,28 @@ void CState_BReady::update(UINT& chk)
 
 	m_fDura -= fDT;
 
-	if (m_fDura > 1.25f)
+	if (m_fDura > B_READY_DURA - 0.75f)
 	{	// 방패 감속
 		for (int i = 0; i < vecShd.size(); i++)
 		{
 			vecShd[i]->setfSpeed(vecShd[i]->getSpeed() - (float)B_ACCEL * fDT);
 		}
 	}
-	else if (1.25f >= m_fDura && m_fDura > 0.75f)	// 단계에 대한 변수를 시간으로 대신 함
+	else if (B_READY_DURA - 0.75f >= m_fDura && m_fDura > B_READY_DURA - 1.f)	// 단계에 대한 변수를 시간으로 대신 함
 	{	// 방향 전환
 		for (int i = 0; i < vecShd.size(); i++)
 		{
 			vecShd[i]->toggleRot();
 		}
-
-		m_fDura = 0.75f;
+		getMonster()->PLAY(L"st_Skill");
+		getMonster()->getCollider()->setSize(fPoint(SB_SkSIZEX, SB_SkSIZEY));
+		m_fDura = B_READY_DURA - 1.25f;
 	}
-	else if (0.75f >= m_fDura && m_fDura > 0.f)
+	else if (B_READY_DURA - 1.25f >= m_fDura && m_fDura > 0.f)
 	{	// 방패 가속
 		for (int i = 0; i < vecShd.size(); i++)
 		{
-			vecShd[i]->setfSpeed(vecShd[i]->getSpeed() + (float)B_ACCEL * 2 * fDT);
+			vecShd[i]->setfSpeed(vecShd[i]->getSpeed() + (float)B_ACCEL * fDT);
 		}
 	}
 	else
@@ -75,12 +76,12 @@ void CState_BReady::printInfo(HDC hDC)
 
 	LPCWSTR	strState = L"Ready";
 	wchar_t bufDura[255] = {};
-	wchar_t bufSpd[255] = {};
+	//wchar_t bufSpd[255] = {};
 
 	swprintf_s(bufDura, L"Dura %.1f", m_fDura);
-	swprintf_s(bufSpd, L"ShieldSpd = %.1f", m_fSpd);
+	//swprintf_s(bufSpd, L"ShieldSpd = %.1f", m_fSpd);
 
 	TextOutW(hDC, (int)pos.x + 180, (int)pos.y + 125, strState, (int)wcslen(strState));
 	TextOutW(hDC, (int)pos.x + 180, (int)pos.y + 145, bufDura, (int)wcslen(bufDura));
-	TextOutW(hDC, (int)pos.x + 180, (int)pos.y + 165, bufSpd, (int)wcslen(bufSpd));
+	//TextOutW(hDC, (int)pos.x + 180, (int)pos.y + 165, bufSpd, (int)wcslen(bufSpd));
 }

@@ -2,6 +2,7 @@
 #include "CState_Stun.h"
 #include "CStatus.h"
 #include "CPlayer.h"
+#include "CEffect.h"
 
 CState_Stun::CState_Stun(eSTATE_PLAYER state)
 	: CState_Player(state)
@@ -57,15 +58,25 @@ void CState_Stun::enter()
 	getPlayer()->setCheck(SP_NODMG, true);
 	m_fvDir = getPlayer()->getPlayerInfo().fvKnockBackDir;
 
+	fPoint pos = getPlayer()->getPos();
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 
-	//if (info.fGravity < info.fSpdY)
-	//	info.fGravity = info.fSpdY;
 	info.fNoDmgTimer = 2.0f + (float)P_STUNDURA;
 
 	getPlayer()->setPlayerInfo(info);
 
 	m_fDura = (float)P_STUNDURA;
+
+	CEffect* pEff = new CEffect;
+	pEff->load(L"Effect_stunImpact", L"texture\\effect\\effect_stun_impact.bmp");
+	pEff->setDuration(0.42f);
+
+	pEff->createAnim(L"effect_stunimpact", pEff->getTex(),
+		fPoint(0, 0), fPoint(308, 270), fPoint(308, 0), 0.06f, 7, false);
+
+	pEff->setPos(pos);
+	pEff->PLAY(L"effect_stunimpact");
+	createObj(pEff, eOBJ::EFFECT);
 }
 
 void CState_Stun::exit()

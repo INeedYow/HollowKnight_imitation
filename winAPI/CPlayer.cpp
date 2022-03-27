@@ -10,6 +10,7 @@
 #include "CStatus.h"
 #include "SelectGDI.h"
 #include "CMonster.h"
+#include "CEffect.h"
 
 #pragma region Include_State
 #include "CState_Player.h"
@@ -275,6 +276,19 @@ void CPlayer::collisionKeep(CCollider* pOther)
 		{	// 내가 무적 상태가 아니면서 몬스터가 죽은 상태가 아닌 경우
 			m_tInfo.fvKnockBackDir = (getPos() - pTarget->getPos());
 
+			fPoint pos = getPos();
+
+			CEffect* pEff = new CEffect;
+			pEff->load(L"Effect_hitCrack", L"texture\\effect\\effect_hitcrack.bmp");
+			pEff->setDuration(0.6f);
+
+			pEff->createAnim(L"effect_hitcrack", pEff->getTex(),
+				fPoint(0, 0), fPoint(838, 168), fPoint(838, 0), 0.2f, 3, false);
+
+			pEff->setPos(pos);
+			pEff->PLAY(L"effect_hitcrack");
+			createObj(pEff, eOBJ::EFFECT);
+
 			if (--m_tInfo.uiHP <= 0)
 				changeMyState(m_pStatus, eSTATE_PLAYER::DEATH);
 			else
@@ -412,7 +426,7 @@ void CPlayer::createMissile()
 	float mDir = 1.f;
 
 	CMissile* pMissile = new CMissile;
-	
+
 	if (m_uiCheck & SP_DIR)
 	{
 		mPos.x += getSize().x / 2.f;
@@ -435,6 +449,16 @@ void CPlayer::createMissile()
 	pMissile->setSpeed(1000.f);
 	
 	createObj(pMissile, eOBJ::MISSILE_PLAYER);
+
+	CEffect* pEff = new CEffect;
+	pEff->load(L"Effect_fire", L"texture\\effect\\effect_fireball_pop.bmp");
+	pEff->setDuration(0.4f);
+	pEff->createAnim(L"Effect_fire", pEff->getTex(),
+		fPoint(0, 0), fPoint(242, 184), fPoint(242, 0), 0.08f, 5, false);
+
+	pEff->setPos(mPos);
+	pEff->PLAY(L"Effect_fire");
+	createObj(pEff, eOBJ::EFFECT);
 }
 
 void CPlayer::createRotTester()
