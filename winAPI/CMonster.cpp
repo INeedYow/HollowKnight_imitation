@@ -154,7 +154,8 @@ void CMonster::create(eOBJNAME eName, fPoint pos)
 	case eOBJNAME::MONS_BEETLE:
 	{
 		info.iHP = M_BT_HP;
-		info.fSpd = M_BT_SPD;
+		info.fSpdX = M_BT_SPD;
+		info.fSpdY = 0.f;
 		info.fNoticeRange = M_BT_TRACE_RNG;
 
 		pMon = new CMonster_Melee;
@@ -167,7 +168,7 @@ void CMonster::create(eOBJNAME eName, fPoint pos)
 		pMon->setCheck(SM_TRACE, true);
 		pMon->setCheck(SM_SHOOT, false);
 
-		CAI* pAI = new CAI;
+		pAI = new CAI;
 		pAI->addState(new CState_Stop(eSTATE_MONS::STOP));
 		pAI->addState(new CState_Patrol(eSTATE_MONS::PATROL));
 		pAI->addState(new CState_Trace(eSTATE_MONS::TRACE));
@@ -210,9 +211,9 @@ void CMonster::create(eOBJNAME eName, fPoint pos)
 			fPoint(1649, 586), fPoint(132, 183), fPoint(-132, 0), 0.36f, 1);
 
 		pMon->createAnim(L"BT_Die_R", pMon->getTex(),
-			fPoint(0, 770), fPoint(190, 136), fPoint(190, 0), 0.22f, 9, false);
+			fPoint(0, 770), fPoint(190, 136), fPoint(190, 0), 0.2f, 9, false);
 		pMon->createAnim(L"BT_Die_L", pMon->getTex(),
-			fPoint(1520, 906), fPoint(190, 136), fPoint(-190, 0), 0.22f, 9, false);
+			fPoint(1520, 906), fPoint(190, 136), fPoint(-190, 0), 0.2f, 9, false);
 
 		pMon->PLAY(L"BT_Stop_L");
 		break;
@@ -221,7 +222,8 @@ void CMonster::create(eOBJNAME eName, fPoint pos)
 	case eOBJNAME::MONS_MUSH:
 	{
 		info.iHP = M_MS_HP;
-		info.fSpd = M_MS_SPD;
+		info.fSpdX = M_MS_SPD;
+		info.fSpdY = 0.f;
 
 		pMon = new CMonster_Melee;
 		pMon->setPos(pos);	//
@@ -233,7 +235,7 @@ void CMonster::create(eOBJNAME eName, fPoint pos)
 		pMon->setCheck(SM_TRACE, false);
 		pMon->setCheck(SM_SHOOT, false);
 
-		CAI* pAI = new CAI;
+		pAI = new CAI;
 		pAI->addState(new CState_Stop(eSTATE_MONS::STOP));
 		pAI->addState(new CState_Patrol(eSTATE_MONS::PATROL));
 		pAI->addState(new CState_Die(eSTATE_MONS::DIE));
@@ -260,9 +262,9 @@ void CMonster::create(eOBJNAME eName, fPoint pos)
 			fPoint(623, 107), fPoint(123, 107), fPoint(-123, 0), 0.25f, 2, false);
 
 		pMon->createAnim(L"MS_Die_R", pMon->getTex(),
-			fPoint(0, 219), fPoint(151, 112), fPoint(151, 0), 0.5f, 3, false);
+			fPoint(0, 219), fPoint(151, 112), fPoint(151, 0), 0.35f, 3, false);
 		pMon->createAnim(L"MS_Die_L", pMon->getTex(),
-			fPoint(302, 331), fPoint(151, 112), fPoint(-151, 0), 0.5f, 3, false);
+			fPoint(302, 331), fPoint(151, 112), fPoint(-151, 0), 0.35f, 3, false);
 
 		pMon->PLAY(L"MS_Stop_L");
 		break;
@@ -270,7 +272,11 @@ void CMonster::create(eOBJNAME eName, fPoint pos)
 	case eOBJNAME::MONS_BEE:
 	{
 		info.iHP = M_BE_HP;
-		info.fSpd = M_BE_SPD;
+		info.fSpdX = M_BE_SPD;
+		info.fSpdY = M_BE_SPD;
+		info.fDelay = M_BE_SHOOT_DELAY;
+		info.fDura = M_BE_SHOOT_DURA;
+		info.fAtkRange = M_BE_SHOOT_RNG;
 
 		pMon = new CMonster_Fly;
 		pMon->setPos(pos);	//
@@ -282,7 +288,7 @@ void CMonster::create(eOBJNAME eName, fPoint pos)
 		pMon->setCheck(SM_TRACE, false);
 		pMon->setCheck(SM_SHOOT, true);
 
-		CAI* pAI = new CAI;
+		pAI = new CAI;
 		pAI->addState(new CState_Stop(eSTATE_MONS::STOP));
 		pAI->addState(new CState_Patrol(eSTATE_MONS::PATROL));
 		pAI->addState(new CState_Shoot(eSTATE_MONS::SHOOT));
@@ -310,14 +316,14 @@ void CMonster::create(eOBJNAME eName, fPoint pos)
 			fPoint(1012, 122), fPoint(160, 122), fPoint(-160, 0), 0.25f, 2, false);
 
 		pMon->createAnim(L"BE_Die_R", pMon->getTex(),
-			fPoint(0, 244), fPoint(151, 133), fPoint(151, 0), 0.3f, 6, false);
+			fPoint(0, 244), fPoint(151, 133), fPoint(151, 0), 0.2f, 6, false);
 		pMon->createAnim(L"BE_Die_L", pMon->getTex(),
-			fPoint(755, 377), fPoint(151, 133), fPoint(-151, 0), 0.3f, 6, false);
+			fPoint(755, 377), fPoint(151, 133), fPoint(-151, 0), 0.2f, 6, false);
 
 		pMon->createAnim(L"BE_Shoot_R", pMon->getTex(),
-			fPoint(0, 510), fPoint(154, 117), fPoint(154, 0), 0.2f, 12, false);
+			fPoint(0, 521), fPoint(154, 117), fPoint(154, 0), 0.2f, 12, false);
 		pMon->createAnim(L"BE_Shoot_L", pMon->getTex(),
-			fPoint(1694, 627), fPoint(154, 117), fPoint(-154, 0), 0.2f, 12, false);
+			fPoint(1694, 638), fPoint(154, 117), fPoint(-154, 0), 0.2f, 12, false);
 
 		pMon->PLAY(L"BE_Patrol_L");
 		break;

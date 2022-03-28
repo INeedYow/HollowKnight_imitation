@@ -6,11 +6,16 @@ class CAI;
 struct tMonsInfo
 {
 	int		iHP;
-	float	fSpd;
+	float	fSpdX;
+	float	fSpdY;
 	fVec2	fvDir;
+
 	float	fDist;					// 플레이어와 거리
 	float	fNoticeRange;			// 플레이어를 인지하는 거리
 	float	fAtkRange;				// 공격 사거리
+
+	float	fDelay;
+	float	fDura;
 
 	fVec2	fvKnockBackDir;
 	float	fKnockBackSpd;

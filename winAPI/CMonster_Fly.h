@@ -2,7 +2,6 @@
 #include "CMonster.h"
 class CMonster_Fly :    public CMonster
 {
-	float	m_fSpdY;
 	float	m_fTurnTimer;
 
 public:
@@ -30,4 +29,8 @@ private:
 
 #define M_BE_HP				2
 #define M_BE_SPD			240
-#define M_BE_ATT_RNG		500
+#define M_BE_SHOOT_RNG		550
+#define M_BE_SHOOT_DELAY	1.8f
+#define M_BE_SHOOT_DURA		2.4f
+
+

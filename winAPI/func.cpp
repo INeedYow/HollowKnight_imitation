@@ -77,12 +77,28 @@ eDIR collisionRectToRectWide(CCollider* coll1, CCollider* coll2)
 	//return eDIR::NONE;
 }
 
-bool isTopColl(CCollider* coll1, CCollider* coll2)
-{	// GROUND 타일이랑 충돌 시 상하만 판정
+bool isTopCollOnly(CCollider* coll1, CCollider* coll2)
+{	// GROUND 타일이랑 충돌 시 위쪽 판정
 	fPoint pos1 = coll1->getPos();
 	fPoint pos2 = coll2->getPos();
+	fPoint size2 = coll2->getSize();
 
-	return pos1.y < pos2.y;
+	if (pos1.y < pos2.y && abs(pos1.x - pos2.x) <= size2.x / 2.f)
+		return true;
+
+	return false;
+}
+
+bool isBottomCollOnly(CCollider* coll1, CCollider* coll2)
+{	// 아래쪽
+	fPoint pos1 = coll1->getPos();
+	fPoint pos2 = coll2->getPos();
+	fPoint size2 = coll2->getSize();
+
+	if (pos1.y > pos2.y && abs(pos1.x - pos2.x) <= size2.x / 2.f)
+		return true;
+
+	return false;
 }
 
 bool isLeftColl(CCollider* coll1, CCollider* coll2)

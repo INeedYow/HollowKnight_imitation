@@ -38,8 +38,12 @@ void CState_BMove::update(UINT& chk)
 		changeMonsState(getOwner(), eSTATE_MONS::MOVE);
 	}
 
-	pos.x += info.fvDir.x * info.fSpd * fDT;
-	pos.y += info.fvDir.y * info.fSpd * fDT;
+	pos.x += info.fvDir.x * info.fSpdX * fDT;
+
+	if (chk & SM_FLY)
+	{
+		pos.y += info.fvDir.y * info.fSpdY * fDT;
+	}
 
 	getMonster()->setPos(pos);
 }

@@ -24,7 +24,7 @@ void CState_Die::update(UINT& chk)
 
 void CState_Die::enter()
 {
-	m_fTimer = 2.4f;
+	m_fTimer = 2.f;
 	
 	getMonster()->playAnim(L"Die");
 }

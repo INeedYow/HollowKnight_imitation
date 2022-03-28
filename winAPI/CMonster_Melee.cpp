@@ -12,7 +12,6 @@
 CMonster_Melee::CMonster_Melee()
 {
 	m_iBottomCnt = 0;
-	m_fSpdY = 0.f;
 	m_fTurnTimer = 0.f;
 }
 
@@ -50,6 +49,47 @@ void CMonster_Melee::update()
 	}
 
 	extraUpdate();
+}
+
+void CMonster_Melee::extraUpdate()
+{
+	fPoint pos = getPos();
+	tMonsInfo info = getMonsInfo();
+	if (m_iBottomCnt <= 0)
+	{
+		info.fSpdY -= M_GRAV * fDT;
+
+		if (info.fSpdY < 0.f)
+			setCheck(SM_FALL, true);
+
+		if (info.fSpdY < (float)M_SPDY_MIN)
+			info.fSpdY = (float)M_SPDY_MIN;
+
+		pos.y -= info.fSpdY * fDT;
+	}
+
+	// 방향전환
+	if (isCheck(SM_DIR) && info.fvDir.x < 0.f)
+	{
+		m_fTurnTimer = 0.5f;
+		setCheck(SM_TURN, true);
+
+		playAnim(L"Turn");
+		info.fvDir.x = -1.f;
+		setCheck(SM_DIR, false);
+	}
+	else if (!isCheck(SM_DIR) && info.fvDir.x > 0.f)
+	{
+		m_fTurnTimer = 0.5f;
+		setCheck(SM_TURN, true);
+
+		playAnim(L"Turn");
+		info.fvDir.x = 1.f;
+		setCheck(SM_DIR, true);
+	}
+
+	setPos(pos);
+	setMonsInfo(info);
 }
 
 void CMonster_Melee::render(HDC hDC)
@@ -107,7 +147,7 @@ void CMonster_Melee::collisionEnter(CCollider* pOther)
 
 	case eOBJNAME::GROUND:
 	{
-		if (isTopColl(getCollider(), pOther))
+		if (isTopCollOnly(getCollider(), pOther))
 		{	// 위
 			if (isCheck(SM_FALL))
 			{
@@ -121,7 +161,7 @@ void CMonster_Melee::collisionEnter(CCollider* pOther)
 				m_iBottomCnt++;
 			}
 		}
-		else
+		else if (isBottomCollOnly(getCollider(), pOther))
 		{
 			fPoint pos = getPos();
 
@@ -168,24 +208,25 @@ void CMonster_Melee::collisionKeep(CCollider* pOther)
 	{
 	case eOBJNAME::GROUND:
 	{
-		if (isTopColl(getCollider(), pOther))
+		fPoint pos = getPos();
+		if (isTopCollOnly(getCollider(), pOther))
 		{	// 위
-			fPoint pos = getPos();
-
 			pos.y = pOther->getPos().y - pOther->getSize().y / 2.f
 				- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y + 1;
-
-			setPos(pos);
+		}
+		else if (isBottomCollOnly(getCollider(), pOther))
+		{
+			pos.y = pOther->getPos().y + pOther->getSize().y / 2.f
+				+ getCollider()->getSize().y / 2.f + getCollider()->getOffset().y;
 		}
 		else
 		{
-			fPoint pos = getPos();
-
-			pos.y = pOther->getPos().y + pOther->getSize().y / 2.f
-				+ getCollider()->getSize().y / 2.f + getCollider()->getOffset().y;
-
-			setPos(pos);
+			if (--m_iBottomCnt <= 0)
+			{
+				m_iBottomCnt = 0;
+			}
 		}
+		setPos(pos);
 		break;
 	}
 	case eOBJNAME::WALL:
@@ -197,7 +238,6 @@ void CMonster_Melee::collisionKeep(CCollider* pOther)
 			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f
 				- getCollider()->getSize().x / 2.f - getCollider()->getOffset().x - 1;
 			setPos(pos);
-
 		}
 		else
 		{	// 오른쪽
@@ -206,7 +246,6 @@ void CMonster_Melee::collisionKeep(CCollider* pOther)
 			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f
 				+ getCollider()->getSize().x / 2.f + getCollider()->getOffset().x + 1;
 			setPos(pos);
-
 		}
 		break;
 		}
@@ -218,12 +257,11 @@ void CMonster_Melee::collisionExit(CCollider* pOther)
 	switch (pOther->getOwner()->getName())
 	{
 	case eOBJNAME::GROUND:
-		if (isTopColl(getCollider(), pOther))
+		if (!isTopCollOnly(getCollider(), pOther))
 		{
 			if (--m_iBottomCnt <= 0)
 			{
 				m_iBottomCnt = 0;
-				setCheck(SM_FALL, true);
 			}
 		}
 		break;
@@ -235,46 +273,6 @@ void CMonster_Melee::death()
 	changeMonsState(getAI(), eSTATE_MONS::DIE);
 }
 
-void CMonster_Melee::extraUpdate()
-{
-	fPoint pos = getPos();
-	tMonsInfo info = getMonsInfo();
-	if (m_iBottomCnt <= 0)
-	{
-		m_fSpdY -= M_GRAV * fDT;
-
-		if (m_fSpdY < 0.f)
-			setCheck(SM_FALL, true);
-
-		if (m_fSpdY < (float)M_SPDY_MIN)
-			m_fSpdY = (float)M_SPDY_MIN;
-
-		pos.y -= m_fSpdY * fDT;
-	}
-
-	// 방향전환
-	if (isCheck(SM_DIR) && info.fvDir.x < 0.f)
-	{
-		m_fTurnTimer = 0.5f;
-		setCheck(SM_TURN, true);
-
-		playAnim(L"Turn");
-		info.fvDir.x = -1.f;
-		setCheck(SM_DIR, false);
-	}
-	else if (!isCheck(SM_DIR) && info.fvDir.x > 0.f)
-	{
-		m_fTurnTimer = 0.5f;
-		setCheck(SM_TURN, true);
-
-		playAnim(L"Turn");
-		info.fvDir.x = 1.f;
-		setCheck(SM_DIR, true);
-	}
-
-	setPos(pos);
-	setMonsInfo(info);
-}
 
 void CMonster_Melee::printInfo(HDC hDC)
 {

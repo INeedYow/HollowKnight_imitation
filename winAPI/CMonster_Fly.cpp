@@ -11,7 +11,6 @@
 
 CMonster_Fly::CMonster_Fly()
 {
-	m_fSpdY = 0.f;
 	m_fTurnTimer = 0.f;
 }
 
@@ -28,7 +27,10 @@ void CMonster_Fly::update()
 {
 	fPoint playerPos = gameGetPlayer()->getPos();
 	tMonsInfo info = getMonsInfo();
-	info.fDist = abs(playerPos.x - getPos().x);
+	fPoint pos = getPos();
+
+	info.fDist = (float)sqrt((pos.x - playerPos.x) * (pos.x - playerPos.x) 
+		+ (pos.y - playerPos.y) * (pos.y - playerPos.y));
 	setMonsInfo(info);
 
 	CMonster::update();						// ai, anim update
@@ -48,7 +50,36 @@ void CMonster_Fly::update()
 		}
 	}
 
-	extraUpdate();
+	extraUpdate(); 
+}
+
+void CMonster_Fly::extraUpdate()
+{
+	fPoint pos = getPos();
+	tMonsInfo info = getMonsInfo();
+
+	// 방향전환
+	if (isCheck(SM_DIR) && info.fvDir.x < 0.f)
+	{
+		m_fTurnTimer = 0.5f;
+		setCheck(SM_TURN, true);
+
+		playAnim(L"Turn");
+		info.fvDir.x = -1.f;
+		setCheck(SM_DIR, false);
+	}
+	else if (!isCheck(SM_DIR) && info.fvDir.x > 0.f)
+	{
+		m_fTurnTimer = 0.5f;
+		setCheck(SM_TURN, true);
+
+		playAnim(L"Turn");
+		info.fvDir.x = 1.f;
+		setCheck(SM_DIR, true);
+	}
+
+	setPos(pos);
+	setMonsInfo(info);
 }
 
 void CMonster_Fly::render(HDC hDC)
@@ -102,7 +133,7 @@ void CMonster_Fly::collisionEnter(CCollider* pOther)
 
 	case eOBJNAME::GROUND:
 	{
-		if (isTopColl(getCollider(), pOther))
+		if (isTopCollOnly(getCollider(), pOther))
 		{	// 위
 			fPoint pos = getPos();
 
@@ -112,7 +143,7 @@ void CMonster_Fly::collisionEnter(CCollider* pOther)
 			setPos(pos);
 
 		}
-		else
+		else if (isBottomCollOnly(getCollider(), pOther))
 		{
 			fPoint pos = getPos();
 
@@ -156,7 +187,7 @@ void CMonster_Fly::collisionKeep(CCollider* pOther)
 	{
 	case eOBJNAME::GROUND:
 	{
-		if (isTopColl(getCollider(), pOther))
+		if (isTopCollOnly(getCollider(), pOther))
 		{	// 위
 			fPoint pos = getPos();
 
@@ -166,7 +197,7 @@ void CMonster_Fly::collisionKeep(CCollider* pOther)
 			setPos(pos);
 
 		}
-		else
+		else if (isBottomCollOnly(getCollider(), pOther))
 		{
 			fPoint pos = getPos();
 
@@ -208,34 +239,7 @@ void CMonster_Fly::death()
 	changeMonsState(getAI(), eSTATE_MONS::DIE);
 }
 
-void CMonster_Fly::extraUpdate()
-{
-	fPoint pos = getPos();
-	tMonsInfo info = getMonsInfo();
 
-	// 방향전환
-	if (isCheck(SM_DIR) && info.fvDir.x < 0.f)
-	{
-		m_fTurnTimer = 0.5f;
-		setCheck(SM_TURN, true);
-
-		playAnim(L"Turn");
-		info.fvDir.x = -1.f;
-		setCheck(SM_DIR, false);
-	}
-	else if (!isCheck(SM_DIR) && info.fvDir.x > 0.f)
-	{
-		m_fTurnTimer = 0.5f;
-		setCheck(SM_TURN, true);
-
-		playAnim(L"Turn");
-		info.fvDir.x = 1.f;
-		setCheck(SM_DIR, true);
-	}
-
-	setPos(pos);
-	setMonsInfo(info);
-}
 
 void CMonster_Fly::printInfo(HDC hDC)
 {

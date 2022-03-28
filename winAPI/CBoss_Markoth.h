@@ -22,11 +22,11 @@ class CBoss_Markoth : public CMonster
 	UCHAR		m_ucPhase;					// 1, 2 페이즈
 
 	float		m_fSkillTimer;
-	float		m_fSpawnTimer;				// spear,,인데 타이머로 안 할생각
-	float		m_fTimer;					// 플레이어 미사일 피해주기 갱신용
+	float		m_fSpawnTimer;				// spear 연속 소환 딜레이
+	float		m_fTimer;					// 플레이어 미사일 피해 딜레이
 
-	vector<CShield*>	m_vecShield;
-	vector<CSpear*>		m_vecSpear;	
+	vector<CShield*>	m_vecShield;		//
+	vector<CSpear*>		m_vecSpear;			//
 
 public:
 	CBoss_Markoth();

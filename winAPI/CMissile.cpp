@@ -2,6 +2,7 @@
 #include "CMissile.h"
 #include "CCollider.h"
 #include "CTexture.h"
+#include "CEffect.h"
 
 CMissile* CMissile::clone()
 {
@@ -16,19 +17,12 @@ CMissile::CMissile()
 	m_fSpeed = 0.f;
 	m_fTimer = 0.f;
 
-	// 역시 임시
-	m_pTex = loadTex(L"Missile_player", L"texture\\attack\\missile_player.bmp");
+	m_pTex = nullptr;
 
 	createCollider();
-	getCollider()->setSize(fPoint(30.f, 30.f));
 	getCollider()->setShape(eSHAPE::RECT);
 
 	createAnimator();
-
-	createAnim(L"Missile_player_R", m_pTex,
-		fPoint(0.f, 0.f), fPoint(254.f, 108.f), fPoint(254.f, 0.f), 0.15f, 4, false);
-	createAnim(L"Missile_player_L", m_pTex,
-		fPoint(762.f, 108.f), fPoint(254.f, 108.f), fPoint(-254.f, 0.f), 0.15f, 4, false);
 }
 
 
@@ -108,6 +102,7 @@ fVec2 CMissile::getDir()
 void CMissile::collisionEnter(CCollider* pOther)
 {
 	CObject* pOtherObj = pOther->getOwner();
+	fPoint pos = getPos();
 
 	if (eOBJNAME::MISSILE_PLAYER == getName())
 	{	// 플레이어 미사일인 경우
@@ -132,14 +127,55 @@ void CMissile::collisionEnter(CCollider* pOther)
 		switch (pOther->getOwner()->getName())
 		{
 		case eOBJNAME::PLAYER:
-		case eOBJNAME::TILE:
 		{
-			// TODO 이펙트 생성
 			break;
 		}
+		case eOBJNAME::WALL:
+		{
+			CEffect* pEff = new CEffect;
+			pEff->load(L"Effect_enemyMsl_pop", L"texture\\effect\\enemy_missilesidePop.bmp");
+			pEff->setDuration(0.4f);
 
+			if (isLeftColl(getCollider(), pOther))
+			{
+				pEff->createAnim(L"Effect_enemyMsl_pop", pEff->getTex(),
+					fPoint(0, 87), fPoint(505, 87), fPoint(-101, 0), 0.08f, 5, false);
+			}
+			else
+			{
+				pEff->createAnim(L"Effect_enemyMsl_pop", pEff->getTex(),
+					fPoint(0, 0), fPoint(101, 87), fPoint(101, 0), 0.08f, 5, false);
+			}
+			pEff->setPos(pos);
+			pEff->PLAY(L"Effect_enemyMsl_pop");
+			createObj(pEff, eOBJ::EFFECT);
+			break;
 		}
+		case eOBJNAME::GROUND:
+		{
+			CEffect* pEff = new CEffect;
+			pEff->load(L"Effect_enemyMsl_pop", L"texture\\effect\\enemy_missilePop.bmp");
+			pEff->setDuration(0.42f);
+
+			if (getCollider()->getPos().y < pOther->getPos().y)
+			{
+				pEff->createAnim(L"Effect_enemyMsl_pop", pEff->getTex(),
+					fPoint(0, 0), fPoint(88, 103), fPoint(88, 0), 0.07f, 6, false);
+			}
+			else 
+			{
+				pEff->createAnim(L"Effect_enemyMsl_pop", pEff->getTex(),
+					fPoint(440, 103), fPoint(88, 103), fPoint(-88, 0), 0.07f, 6, false);
+			}
+			pEff->setPos(pos);
+			pEff->PLAY(L"Effect_enemyMsl_pop");
+			createObj(pEff, eOBJ::EFFECT);
+			break;
+		}
+		}
+			// 몬스터 미사일 제거
 	}
+	
 }
 
 void CMissile::collisionKeep(CCollider* pOther)
@@ -162,10 +198,10 @@ void CMissile::collisionKeep(CCollider* pOther)
 		switch (pOther->getOwner()->getName())
 		{
 		case eOBJNAME::PLAYER:
-		case eOBJNAME::TILE:
+		case eOBJNAME::GROUND:
+		case eOBJNAME::WALL:
 		{
 			deleteObj(this);
-			// TODO 이펙트 생성
 			break;
 		}
 

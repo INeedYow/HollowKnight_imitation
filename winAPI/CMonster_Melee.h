@@ -3,7 +3,6 @@
 
 class CMonster_Melee : public CMonster
 {
-	float	m_fSpdY;
 	int		m_iBottomCnt;
 	float	m_fTurnTimer;
 

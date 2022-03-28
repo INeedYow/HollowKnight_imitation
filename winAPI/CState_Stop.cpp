@@ -34,6 +34,12 @@ void CState_Stop::update(UINT& chk)
 		}
 	}
 	else if (chk & SM_SHOOT)
+	{
+		if (info.fDist <= info.fAtkRange)
+		{
+			changeMonsState(getOwner(), eSTATE_MONS::SHOOT);
+		}
+	}
 
 	m_fTimer -= fDT;
 
@@ -46,6 +52,7 @@ void CState_Stop::update(UINT& chk)
 void CState_Stop::enter()
 {
 	m_fTimer = (float)((rand() % 6 + 1) / 2.f);
+	getMonster()->playAnim(L"Stop");
 }
 
 void CState_Stop::exit()

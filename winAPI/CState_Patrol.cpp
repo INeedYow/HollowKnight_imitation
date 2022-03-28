@@ -48,7 +48,12 @@ void CState_Patrol::update(UINT& chk)
 		changeMonsState(getOwner(), eSTATE_MONS::STOP);
 	}
 
-	pos.x += info.fvDir.x * info.fSpd * fDT;
+	pos.x += info.fvDir.x * info.fSpdX * fDT;
+
+	if (chk & SM_FLY)
+	{
+		pos.y -= info.fvDir.y * info.fSpdY * fDT;
+	}
 
 	getMonster()->setMonsInfo(info);
 	getMonster()->setPos(pos);
@@ -64,16 +69,22 @@ void CState_Patrol::enter()
 	if (!info.fvDir.x)
 		info.fvDir.x = -1;
 
-	// TODO
-
-	//if (getMonster()->isCheck(SM_FLY))
-	//{
-	//	switch (rand() % 3)
-	//	{
-	//	case 0:
-
-	//	}
-	//}
+	if (getMonster()->isCheck(SM_FLY))
+	{
+		switch (rand() % 3)
+		{
+		case 0:
+			info.fvDir.y = 1.f;
+			break;
+		case 1:
+			info.fvDir.y = -1.f;
+			break;
+		case 2:
+			info.fvDir.y = 0.f;
+			break;
+		}
+	}
+	info.fvDir.normalize();
 	
 	getMonster()->setMonsInfo(info);
 }

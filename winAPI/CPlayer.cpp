@@ -322,7 +322,7 @@ void CPlayer::collisionKeep(CCollider* pOther)
 
 	case eOBJNAME::GROUND:
 	{
-		if (isTopColl(getCollider(), pOther))
+		if (isTopCollOnly(getCollider(), pOther))
 		{	// 위쪽에서 벽과 충돌
 			fPoint pos = getPos();
 
@@ -330,7 +330,7 @@ void CPlayer::collisionKeep(CCollider* pOther)
 				- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y  + 1;
 			setPos(pos);
 		}
-		else
+		else if (isBottomCollOnly(getCollider(), pOther))
 		{	// 아래쪽
 			fPoint pos = getPos();
 
@@ -349,7 +349,7 @@ void CPlayer::collisionEnter(CCollider* pOther)
 	{	//벽 충돌
 	case eOBJNAME::GROUND:
 	{
-		if (isTopColl(getCollider(), pOther))
+		if (isTopCollOnly(getCollider(), pOther))
 		{	// 위
 			if (m_uiCheck & SP_GODOWN)
 			{	// 떨어지고 있던 경우 착지
@@ -369,7 +369,7 @@ void CPlayer::collisionEnter(CCollider* pOther)
 				m_tInfo.fSpdY = 0.f;
 			}
 		}
-		else
+		else if (isBottomCollOnly(getCollider(), pOther))
 		{	// 아래
 			m_tInfo.fSpdY = 0;
 			fPoint pos = getPos();
@@ -408,8 +408,8 @@ void CPlayer::collisionExit(CCollider* pOther)
 	switch (pOther->getOwner()->getName())
 	{
 	case eOBJNAME::GROUND:
-		if (isTopColl(getCollider(), pOther))
-		{	// 충돌 해제 할 때도 이전 좌표 있으면 되겠네
+		if (!isTopCollOnly(getCollider(), pOther))
+		{	
 			if (--m_tInfo.iBottomCnt <= 0 && m_pStatus->getCurState()->getState() != eSTATE_PLAYER::JUMP)
 			{	// 점프할 때도 exit에서 강제로 fall로 바꿔서 점프 안 됐었음
 				m_tInfo.iBottomCnt = 0;
@@ -426,21 +426,22 @@ void CPlayer::createMissile()
 	float mDir = 1.f;
 
 	CMissile* pMissile = new CMissile;
-
+	pMissile->setTex(L"Missile_player", L"texture\\attack\\missile_player.bmp");
 	if (m_uiCheck & SP_DIR)
 	{
 		mPos.x += getSize().x / 2.f;
 		mDir = 1.f;
-
-		pMissile->PLAY(L"Missile_player_R");
+		pMissile->createAnim(L"Msl_pl", pMissile->getTex(),
+			fPoint(0.f, 0.f), fPoint(254.f, 108.f), fPoint(254.f, 0.f), 0.15f, 4, false);
 	}
 	else
 	{
 		mPos.x -= getSize().x / 2.f;
 		mDir = -1.f;
-
-		pMissile->PLAY(L"Missile_player_L");
+		pMissile->createAnim(L"Msl_pl", pMissile->getTex(),
+			fPoint(762.f, 108.f), fPoint(254.f, 108.f), fPoint(-254.f, 0.f), 0.15f, 4, false);
 	}
+	pMissile->PLAY(L"Msl_pl");
 	pMissile->setPos(fPoint(mPos.x, mPos.y));
 	pMissile->setSize(fPoint(40.f, 30.f));
 	pMissile->getCollider()->setSize(fPoint(100.f, 60.f));

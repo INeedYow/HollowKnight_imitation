@@ -64,7 +64,12 @@ void CState_Trace::update(UINT& chk)
 	}
 	}
 
-	pos.x += info.fvDir.x * info.fSpd * fDT;
+	pos.x += info.fvDir.x * info.fSpdX * fDT;
+
+	if (chk & SM_FLY)
+	{
+		pos.y -= info.fvDir.x * info.fSpdY * fDT;
+	}
 
 	getMonster()->setMonsInfo(info);
 	getMonster()->setPos(pos);

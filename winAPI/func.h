@@ -6,7 +6,8 @@ static UINT g_IDNumbering = 0;
 
 eDIR collisionRectToRect(CCollider* coll1, CCollider* coll2);
 eDIR collisionRectToRectWide(CCollider* coll1, CCollider* coll2);
-bool isTopColl(CCollider* coll1, CCollider* coll2);
+bool isTopCollOnly(CCollider* coll1, CCollider* coll2);
+bool isBottomCollOnly(CCollider* coll1, CCollider* coll2);
 bool isLeftColl(CCollider* coll1, CCollider* coll2);
 
 bool isCollisionRectToRect(const fPoint& pos1, const fPoint& size1, const fPoint& pos2, const fPoint& size2);

@@ -22,7 +22,8 @@ CBoss_Markoth::CBoss_Markoth()
 	
 	tMonsInfo info = getMonsInfo();
 	info.iHP = B_HPMAX;
-	info.fSpd = B_SPD;
+	info.fSpdX = B_SPD;
+	info.fSpdY = B_SPD;
 	setMonsInfo(info);
 	
 	m_ucPhase = 1;
