@@ -24,15 +24,6 @@ void CSoundManager::init()
 	System_Create(&m_pSystem);
 	assert(m_pSystem);
 	m_pSystem->init(32, FMOD_INIT_NORMAL, nullptr);
-
-	// sound ÀúÀå TODO
-	
-
-	//CSoundManager::getInst()->addSound(L"markoth_cast1", L"sound\\boss\\Markoth_cast_01.wav");
-	//CSoundManager::getInst()->addSound(L"markoth_cast2", L"sound\\boss\\Markoth_cast_02.wav");
-	//CSoundManager::getInst()->addSound(L"markoth_cast3", L"sound\\boss\\Markoth_cast_03.wav");
-	//CSoundManager::getInst()->addSound(L"markoth_cast4", L"sound\\boss\\Markoth_cast_04.wav");
-	//CSoundManager::getInst()->addSound(L"markoth_death", L"sound\\boss\\Markoth_Death.wav");
 }
 
 void CSoundManager::update()

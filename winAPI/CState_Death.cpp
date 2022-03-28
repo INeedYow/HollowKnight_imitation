@@ -38,6 +38,9 @@ void CState_Death::enter()
 	getPlayer()->setPlayerInfo(info);
 
 	getPlayer()->playAnim(L"Death");
+
+	CSoundManager::getInst()->addSound(L"hero_death", L"sound\\player\\hero_death_extra_details.wav");
+	CSoundManager::getInst()->play(L"hero_death", 0.2f);
 }
 
 void CState_Death::exit()

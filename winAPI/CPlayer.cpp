@@ -62,8 +62,11 @@ CPlayer::CPlayer()
 	createAnim(L"Idle_R",		m_pTex,	fPoint(0.f, 0.f),			fPoint(60.f, 127.f),		fPoint(60.f, 0.f),			0.25f,	6);
 	createAnim(L"Idle_L",		m_pTex,	fPoint(300.f, 127.f),		fPoint(60.f, 127.f),		fPoint(-60.f, 0.f),			0.25f,	6);
 
-	createAnim(L"Run_R",		m_pTex,	fPoint(360.f, 0.f),			fPoint(82.f, 127.f),		fPoint(82.f, 0.f),			0.2f,	12);
-	createAnim(L"Run_L",		m_pTex,	fPoint(1262.f, 127.f),		fPoint(82.f, 127.f),		fPoint(-82.f, 0.f),			0.2f,	12);
+	createAnim(L"Idle2Run_R",	m_pTex,	fPoint(360.f, 0.f),			fPoint(82.f, 127.f),		fPoint(82.f, 0.f),			0.2f,	4, false);
+	createAnim(L"Idle2Run_L",	m_pTex,	fPoint(1262.f, 127.f),		fPoint(82.f, 127.f),		fPoint(-82.f, 0.f),			0.2f,	4, false);
+
+	createAnim(L"Run_R",		m_pTex,	fPoint(688.f, 0.f),			fPoint(82.f, 127.f),		fPoint(82.f, 0.f),			0.2f,	8);
+	createAnim(L"Run_L",		m_pTex,	fPoint(934.f, 127.f),		fPoint(82.f, 127.f),		fPoint(-82.f, 0.f),			0.2f,	8);
 
 	createAnim(L"Jump_R",		m_pTex,	fPoint(1344.f, 0.f),		fPoint(77.f, 127.f),		fPoint(77.f, 0.f),			0.2f,	6, false);
 	createAnim(L"Jump_L",		m_pTex,	fPoint(1729.f, 127.f),		fPoint(77.f, 127.f),		fPoint(-77.f, 0.f),			0.2f,	6, false);
@@ -268,11 +271,12 @@ void CPlayer::collisionKeep(CCollider* pOther)
 	{
 	case eOBJNAME::MISSILE_MONSTER:
 	case eOBJNAME::MONS_BEETLE:
+	case eOBJNAME::MONS_BEE:
 	case eOBJNAME::MONS_MUSH:
 	case eOBJNAME::SHIELD:
 	case eOBJNAME::BOSS:
 	{
-		if (!(m_uiCheck & SP_NODMG) && !((CMonster*)pOther->getOwner())->isCheck(SM_DEATH))
+		if (!(m_uiCheck & SP_NODMG) && !((CMonster*)pTarget)->isCheck(SM_DEATH))
 		{	// 내가 무적 상태가 아니면서 몬스터가 죽은 상태가 아닌 경우
 			m_tInfo.fvKnockBackDir = (getPos() - pTarget->getPos());
 
@@ -345,7 +349,9 @@ void CPlayer::collisionKeep(CCollider* pOther)
 
 void CPlayer::collisionEnter(CCollider* pOther)
 {
-	switch (pOther->getOwner()->getName())
+	CObject* pTarget = pOther->getOwner();
+
+	switch (pTarget->getName())
 	{	//벽 충돌
 	case eOBJNAME::GROUND:
 	{
@@ -361,7 +367,14 @@ void CPlayer::collisionEnter(CCollider* pOther)
 				setPos(pos);
 
 				if (m_tInfo.fLandTimer > P_LAND_TIMER)
+				{
 					changeMyState(m_pStatus, eSTATE_PLAYER::LAND);
+				}
+				else
+				{
+					CSoundManager::getInst()->addSound(L"hero_land_soft", L"sound\\player\\hero_land_soft.wav");
+					CSoundManager::getInst()->play(L"hero_land_soft", 0.1f);
+				}
 
 				m_uiCheck &= ~(SP_AIR);
 				m_uiCheck &= ~(SP_GODOWN);
@@ -399,7 +412,47 @@ void CPlayer::collisionEnter(CCollider* pOther)
 		}
 		break;
 	}
+	
+	case eOBJNAME::MONS_BEETLE:
+	case eOBJNAME::MONS_MUSH:
+	case eOBJNAME::MONS_BEE:
+	case eOBJNAME::BOSS:
+	{
+		if (((CMonster*)pTarget)->isCheck(SM_DEATH))
+		{	// 몬스터의 경우 죽은 경우 제외
+			break;
+		}
 	}
+	case eOBJNAME::MISSILE_MONSTER:
+	case eOBJNAME::SHIELD:
+	{
+		if (!(m_uiCheck & SP_NODMG))
+		{	// 내가 무적 상태가 아니면
+			m_tInfo.fvKnockBackDir = (getPos() - pTarget->getPos());
+
+			fPoint pos = getPos();
+
+			CEffect* pEff = new CEffect;
+			pEff->load(L"Effect_hitCrack", L"texture\\effect\\effect_hitcrack.bmp");
+			pEff->setDuration(0.6f);
+
+			pEff->createAnim(L"effect_hitcrack", pEff->getTex(),
+				fPoint(0, 0), fPoint(838, 168), fPoint(838, 0), 0.2f, 3, false);
+
+			pEff->setPos(pos);
+			pEff->PLAY(L"effect_hitcrack");
+			createObj(pEff, eOBJ::EFFECT);
+
+			if (--m_tInfo.uiHP <= 0)
+				changeMyState(m_pStatus, eSTATE_PLAYER::DEATH);
+			else
+				changeMyState(m_pStatus, eSTATE_PLAYER::STUN);
+		}
+		break;
+	}
+	}
+
+
 
 }
 
@@ -427,12 +480,19 @@ void CPlayer::createMissile()
 
 	CMissile* pMissile = new CMissile;
 	pMissile->setTex(L"Missile_player", L"texture\\attack\\missile_player.bmp");
+
+	CEffect* pEff = new CEffect;
+	pEff->load(L"effect_player_firepang", L"texture\\effect\\effect_player_firepang.bmp");
+
 	if (m_uiCheck & SP_DIR)
 	{
 		mPos.x += getSize().x / 2.f;
 		mDir = 1.f;
 		pMissile->createAnim(L"Msl_pl", pMissile->getTex(),
 			fPoint(0.f, 0.f), fPoint(254.f, 108.f), fPoint(254.f, 0.f), 0.15f, 4, false);
+
+		pEff->createAnim(L"effect_player_firepang", pEff->getTex(),
+			fPoint(540, 202), fPoint(270, 202), fPoint(-270, 0), 0.13f, 3, false);
 	}
 	else
 	{
@@ -440,6 +500,9 @@ void CPlayer::createMissile()
 		mDir = -1.f;
 		pMissile->createAnim(L"Msl_pl", pMissile->getTex(),
 			fPoint(762.f, 108.f), fPoint(254.f, 108.f), fPoint(-254.f, 0.f), 0.15f, 4, false);
+
+		pEff->createAnim(L"effect_player_firepang", pEff->getTex(),
+			fPoint(0, 0), fPoint(270, 202), fPoint(270, 0), 0.13f, 3, false);
 	}
 	pMissile->PLAY(L"Msl_pl");
 	pMissile->setPos(fPoint(mPos.x, mPos.y));
@@ -447,18 +510,15 @@ void CPlayer::createMissile()
 	pMissile->getCollider()->setSize(fPoint(100.f, 60.f));
 	pMissile->setDir(fVec2(mDir, 0.f));
 	pMissile->setName(eOBJNAME::MISSILE_PLAYER);
-	pMissile->setSpeed(1000.f);
+	pMissile->setSpeed(1300.f);
 	
 	createObj(pMissile, eOBJ::MISSILE_PLAYER);
 
-	CEffect* pEff = new CEffect;
-	pEff->load(L"Effect_fire", L"texture\\effect\\effect_fireball_pop.bmp");
-	pEff->setDuration(0.4f);
-	pEff->createAnim(L"Effect_fire", pEff->getTex(),
-		fPoint(0, 0), fPoint(242, 184), fPoint(242, 0), 0.08f, 5, false);
-
+	
 	pEff->setPos(mPos);
-	pEff->PLAY(L"Effect_fire");
+	pEff->setDuration(0.39f);
+	pEff->PLAY(L"effect_player_firepang");
+
 	createObj(pEff, eOBJ::EFFECT);
 }
 

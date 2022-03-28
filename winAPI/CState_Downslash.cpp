@@ -13,7 +13,6 @@ CState_Downslash::~CState_Downslash()
 {
 }
 
-// TODO 하단 공격 시 점프 -> 현재 난사 가능함, 수정필요.
 void CState_Downslash::update(UINT& chk)
 {
 	fPoint pos = getPlayer()->getPos();

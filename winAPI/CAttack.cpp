@@ -1,6 +1,7 @@
 #include "framework.h"
 #include "CAttack.h"
 #include "CPlayer.h"
+#include "CMonster.h"
 
 CAttack::CAttack()
 {
@@ -114,13 +115,20 @@ void CAttack::collisionEnter(CCollider* pOther)
 		case eOBJNAME::BOSS:
 		case eOBJNAME::MONS_BEETLE:
 		case eOBJNAME::MONS_MUSH:
-		{	// soul È¹µæ·®
+		case eOBJNAME::MONS_BEE:
+		{	
+			if (((CMonster*)pTarget)->isCheck(SM_DEATH)) return;			// Á×Àº »óÅÂÀÎ °æ¿ì Á¦¿Ü
+
+			// soul È¹µæ·®
 			info.fvKnockBackDir = (pOwner->getPos() - pTarget->getPos());
 			info.uiSoul += 20;
 			if (info.uiSoul > 100)
 				info.uiSoul = 100;
 
-			if (m_eDir == eDIR::BOTTOM)
+			CSoundManager::getInst()->addSound(L"enemy_damage", L"sound\\player\\enemy_damage.wav");
+			CSoundManager::getInst()->play(L"enemy_damage", 0.1f);
+
+			if (m_eDir == eDIR::BOTTOM && !((CMonster*)pOther->getOwner())->isCheck(SM_DEATH))
 			{
 				((CPlayer*)pOwner)->setCheck(SP_DWSLASH, true);
 				changeMyState(((CPlayer*)pOwner)->getAI(), eSTATE_PLAYER::JUMP);

@@ -6,6 +6,7 @@
 CState_Run::CState_Run(eSTATE_PLAYER state)
 	: CState_Player(state)
 {
+	m_fTimer = 0.f;
 }
 
 CState_Run::~CState_Run()
@@ -17,17 +18,27 @@ void CState_Run::update(UINT& chk)
 	fPoint pos = getPlayer()->getPos();
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 
+	m_fTimer += fDT;
+
 	if (KEY_HOLD(VK_LEFT))
 	{
 		chk &= ~(SP_DIR);
 		pos.x -= info.fSpdX * fDT;
-		getPlayer()->playAnim(L"Run");
+
+		if (m_fTimer >= 0.8f)
+			getPlayer()->playAnim(L"Run");
+		else
+			getPlayer()->playAnim(L"Idle2Run");
 	}
 	else if (KEY_HOLD(VK_RIGHT))
 	{
 		chk |= SP_DIR;
 		pos.x += info.fSpdX * fDT;
-		getPlayer()->playAnim(L"Run");
+
+		if (m_fTimer >= 0.8f)
+			getPlayer()->playAnim(L"Run");
+		else
+			getPlayer()->playAnim(L"Idle2Run");
 	}
 	else
 	{
@@ -69,13 +80,22 @@ void CState_Run::update(UINT& chk)
 
 void CState_Run::enter()
 {
-	getPlayer()->playAnim(L"Run");
+	m_fTimer = 0.f;
+
+	getPlayer()->playAnim(L"Idle2Run");
 	getPlayer()->setCheck(SP_STOPANIM, true);
+
+	// TODO loop ¾ÈµÊ
+	CSoundManager::getInst()->addSound(L"hero_walk_footsteps_stone", L"sound\\player\\hero_walk_footsteps_stone.wav", false, true);
+	CSoundManager::getInst()->play(L"hero_walk_footsteps_stone", 0.1f);
 }
 
 void CState_Run::exit()
 {
 	getPlayer()->setCheck(SP_STOPANIM, false);
+	CSoundManager::getInst()->stop(L"hero_walk_footsteps_stone");
+
+	m_fTimer = 0.f;
 }
 
 void CState_Run::printInfo(HDC hDC)

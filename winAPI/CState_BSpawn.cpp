@@ -48,9 +48,15 @@ void CState_BSpawn::enter()
 	getMonster()->getCollider()->setSize(fPoint(SB_MdSIZEX, SB_MdSIZEY));
 
 	if (1 == m_ucPhase)
+	{
+		CSoundManager::getInst()->addSound(L"markoth_cast1", L"sound\\boss\\Markoth_cast_01.wav");
 		CSoundManager::getInst()->play(L"markoth_cast1", 0.1f);
+	}
 	else
+	{
+		CSoundManager::getInst()->addSound(L"markoth_cast4", L"sound\\boss\\Markoth_cast_04.wav");
 		CSoundManager::getInst()->play(L"markoth_cast4", 0.1f);
+	}
 }
 
 void CState_BSpawn::exit()

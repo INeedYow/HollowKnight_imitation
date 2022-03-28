@@ -27,7 +27,10 @@ void CState_Jump::update(UINT& chk)
 		info.fSpdY -= info.fGravity * fDT;
 
 		if (info.fSpdY < 0.f)
+		{
 			chk |= SP_GODOWN;
+			changeMyState(getOwner(), eSTATE_PLAYER::FALL);
+		}
 
 		if (info.fSpdY < (float)P_SPDY_MIN)
 			info.fSpdY = (float)P_SPDY_MIN;
@@ -36,12 +39,6 @@ void CState_Jump::update(UINT& chk)
 	if (KEY_OFF('Z') || m_fTimer >= P_JUMPHOLDMAX)
 	{	// Z 떼거나 점프 유지 최대시간 지나면
 		chk &= ~(SP_JUMPHOLD);
-	}
-
-	//if (info.fSpdY < info.fGravity)
-	if (info.fSpdY < 0.f)
-	{
-		changeMyState(getOwner(), eSTATE_PLAYER::FALL);
 	}
 
 	if (KEY_HOLD(VK_LEFT))
@@ -115,6 +112,9 @@ void CState_Jump::enter()
 		info.fSpdY = (float)P_SPDY;
 
 	getPlayer()->setPlayerInfo(info);
+
+	CSoundManager::getInst()->addSound(L"hero_jump", L"sound\\player\\hero_jump.wav");
+	CSoundManager::getInst()->play(L"hero_jump", 0.1f);
 }
 
 void CState_Jump::exit()

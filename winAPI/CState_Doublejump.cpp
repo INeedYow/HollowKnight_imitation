@@ -103,6 +103,9 @@ void CState_Doublejump::enter()
 
 	m_fTimer = 0.f;
 	m_fAccel = 0.f;
+
+	CSoundManager::getInst()->addSound(L"hero_wings", L"sound\\player\\hero_wings.wav");
+	CSoundManager::getInst()->play(L"hero_wings", 0.1f);
 }
 
 void CState_Doublejump::exit()

@@ -29,6 +29,9 @@ void CState_Land::enter()
 {
 	m_fDura = 2.0f;
 	getPlayer()->playAnim(L"Land");
+
+	CSoundManager::getInst()->addSound(L"hero_land_hard", L"sound\\player\\hero_land_hard.wav");
+	CSoundManager::getInst()->play(L"hero_land_hard", 0.1f);
 }
 
 void CState_Land::exit()

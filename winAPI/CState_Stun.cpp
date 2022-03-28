@@ -77,6 +77,9 @@ void CState_Stun::enter()
 	pEff->setPos(pos);
 	pEff->PLAY(L"effect_stunimpact");
 	createObj(pEff, eOBJ::EFFECT);
+
+	CSoundManager::getInst()->addSound(L"hero_damage", L"sound\\player\\hero_damage.wav");
+	CSoundManager::getInst()->play(L"hero_damage", 0.1f);
 }
 
 void CState_Stun::exit()

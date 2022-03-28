@@ -90,10 +90,10 @@ void CState_Dash::enter()
 	pEff->setPos(pos);
 	pEff->PLAY(L"effect_dash");
 	createObj(pEff, eOBJ::EFFECT);
-	/////////////////////////
-	//CEffectManager::getInst()->showEffect(L"EF_dash_R", fPoint(1200.f, 1430.f));
+	
+	CSoundManager::getInst()->addSound(L"hero_shade_dash_1", L"sound\\player\\hero_shade_dash_1.wav");
+	CSoundManager::getInst()->play(L"hero_shade_dash_1", 0.1f);
 
-	//////////////////////////////////////////////
 	m_fDura = 0.35f;
 	m_fSpd = 1350.f;
 	m_fDecel = 0.f;

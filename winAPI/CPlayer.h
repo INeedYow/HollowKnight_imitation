@@ -115,11 +115,12 @@ enum class eSTATE_PLAYER
 };
 
 // # state
+#define P_HPMAX					5
 #define P_SIZEX					62
 #define P_SIZEY					124
 #define P_SPDX					420
 #define P_SPDY					820
-#define P_SPDY_DW				470
+#define P_SPDY_DW				410
 #define P_GRAV					7000
 #define P_SPDY_MIN				-1600
 #define P_LAND_TIMER			0.7				

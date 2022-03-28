@@ -63,6 +63,9 @@ void CScene_Title::enter()
 	pBtnExit->setPos(fPoint(WINSIZEX / 2.f - 82.f, WINSIZEY / 2.f + 220));
 	pBtnExit->setClickedCallBack(quitWindow, 0, 0);
 	addObject(pBtnExit, eOBJ::UI);
+
+	/*CSoundManager::getInst()->addSound(L"bgm_title", L"sound\\bgm\\Title.wav", true);
+	CSoundManager::getInst()->play(L"bgm_title", 0.1f);*/
 }
 
 void CScene_Title::exit()
@@ -70,6 +73,9 @@ void CScene_Title::exit()
 	deleteObjectAll();
 
 	CCollisionManager::getInst()->resetGroup();
+
+	// TODO error
+	//CSoundManager::getInst()->stop(L"bgm_title");
 }
 
 

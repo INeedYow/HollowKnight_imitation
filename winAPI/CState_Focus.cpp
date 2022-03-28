@@ -30,10 +30,9 @@ void CState_Focus::update(UINT& chk)
 	if (m_fTimer > P_FOCUSMAX)
 	{
 		info.uiHP++;
-		if (KEY_HOLD('A'))
-			changeMyState(getOwner(), eSTATE_PLAYER::FOCUS);
-		else
-			changeMyState(getOwner(), eSTATE_PLAYER::IDLE);
+		CSoundManager::getInst()->addSound(L"focus_health_heal", L"sound\\player\\focus_health_heal.wav");
+		CSoundManager::getInst()->play(L"focus_health_heal", 0.1f);
+		changeMyState(getOwner(), eSTATE_PLAYER::IDLE);
 	}
 
 	if (m_fSoul < 0.f)

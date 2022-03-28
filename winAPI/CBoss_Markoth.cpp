@@ -174,6 +174,8 @@ void CBoss_Markoth::render(HDC hDC)
 
 void CBoss_Markoth::collisionEnter(CCollider* pOther)
 {
+	if (isCheck(SM_DEATH)) return;
+
 	tMonsInfo info;
 
 	switch (pOther->getOwner()->getName())
@@ -214,6 +216,8 @@ void CBoss_Markoth::collisionEnter(CCollider* pOther)
 
 void CBoss_Markoth::collisionKeep(CCollider* pOther)
 {
+	if (isCheck(SM_DEATH)) return;
+
 	tMonsInfo info;
 
 	switch (pOther->getOwner()->getName())

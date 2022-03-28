@@ -15,6 +15,8 @@ CState_Idle::~CState_Idle()
 
 void CState_Idle::update(UINT& chk)
 {
+	tPlayerInfo info = getPlayer()->getPlayerInfo();
+
 	if (KEY_HOLD(VK_LEFT))
 	{
 		chk &= ~(SP_DIR);
@@ -49,7 +51,7 @@ void CState_Idle::update(UINT& chk)
 		changeMyState(getOwner(), eSTATE_PLAYER::DASH);
 	}
 
-	if (KEY_HOLD('A'))
+	if (KEY_HOLD('A') && info.uiSoul >= P_FOCUSSOUL && info.uiHP != P_HPMAX)
 	{
 		m_fTimer += fDT;
 
@@ -59,12 +61,9 @@ void CState_Idle::update(UINT& chk)
 		}
 	}
 	
-	else if (KEY_OFF('A'))
+	else if (KEY_OFF('A') && info.uiSoul >= P_FIRESOUL)
 	{
-		if (getPlayer()->getPlayerInfo().uiSoul >= P_FIRESOUL)
-		{
-			changeMyState(getOwner(), eSTATE_PLAYER::FIRE);
-		}
+		changeMyState(getOwner(), eSTATE_PLAYER::FIRE);
 	}
 }
 

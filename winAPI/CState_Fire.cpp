@@ -49,6 +49,9 @@ void CState_Fire::enter()
 
 	getPlayer()->playAnim(L"Fire");
 	getPlayer()->setCheck(SP_STOPANIM, true);
+
+	CSoundManager::getInst()->addSound(L"hero_fire", L"sound\\player\\hero_fireball.wav");
+	CSoundManager::getInst()->play(L"hero_fire", 0.1f);
 }
 
 void CState_Fire::exit()

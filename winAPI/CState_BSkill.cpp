@@ -54,10 +54,6 @@ void CState_BSkill::update(UINT& chk)
 
 		changeMonsState(getOwner(), eSTATE_MONS::IDLE);
 	}
-
-	// 출력용이었는데 보스쪽에서 출력하도록 했음
-	/*m_fSpd = vecShd[vecShd.size() - 1]->getSpeed();
-	m_fRad = vecShd[vecShd.size() - 1]->getRadius();*/
 }
 
 void CState_BSkill::enter()
@@ -65,14 +61,6 @@ void CState_BSkill::enter()
 	m_fDura = (float)B_SKILL_DURA;
 	getMonster()->setCheck(SB_TIMER, false);
 
-	//getMonster()->PLAY(L"st_Skill");
-	//getMonster()->getCollider()->setSize(fPoint(SB_SkSIZEX, SB_SkSIZEY));
-
-	if (rand() % 2)
-		CSoundManager::getInst()->play(L"markoth_cast2", 0.1f);
-	else
-		CSoundManager::getInst()->play(L"markoth_cast3", 0.1f);
-		
 	vector<CSpear*> vecSpr = ((CBoss_Markoth*)getMonster())->getVecSpear();
 	{	// 스킬 쓰는 동안 비활성화
 		for (int i = 0; i < vecSpr.size(); i++)

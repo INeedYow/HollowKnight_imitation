@@ -61,6 +61,17 @@ void CState_BReady::enter()
 	getMonster()->PLAY(L"st_Middle");
 	getMonster()->setCheck(SB_TIMER, false);
 	getMonster()->getCollider()->setSize(fPoint(SB_MdSIZEX, SB_MdSIZEY));
+
+	if (rand() % 2)
+	{
+		CSoundManager::getInst()->addSound(L"markoth_cast2", L"sound\\boss\\Markoth_cast_02.wav");
+		CSoundManager::getInst()->play(L"markoth_cast2", 0.1f);
+	}
+	else
+	{
+		CSoundManager::getInst()->addSound(L"markoth_cast3", L"sound\\boss\\Markoth_cast_03.wav");
+		CSoundManager::getInst()->play(L"markoth_cast3", 0.1f);
+	}
 }
 
 void CState_BReady::exit()
