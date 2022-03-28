@@ -31,7 +31,7 @@ class CBoss_Markoth : public CMonster
 public:
 	CBoss_Markoth();
 	virtual ~CBoss_Markoth();
-
+	virtual void printInfo(HDC hDC);
 	virtual CBoss_Markoth* clone();
 
 	virtual void update();

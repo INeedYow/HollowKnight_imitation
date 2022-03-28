@@ -24,13 +24,21 @@ void CState_Patrol::update(UINT& chk)
 
 	if (chk & SM_TRACE)
 	{
-		if (info.fDist <= info.fTraceRange)
+		if (info.fDist <= info.fNoticeRange)
 		{
 			if (playerPos.y >= pos.y - size.y &&
 				playerPos.y <= pos.y + size.y / 2.f)
 			{
 				changeMonsState(getOwner(), eSTATE_MONS::TRACE);
 			}
+		}
+	}
+
+	if (chk & SM_SHOOT)
+	{
+		if (info.fDist <= info.fAtkRange)
+		{
+			changeMonsState(getOwner(), eSTATE_MONS::SHOOT);
 		}
 	}
 
@@ -48,13 +56,24 @@ void CState_Patrol::update(UINT& chk)
 
 void CState_Patrol::enter()
 {
-	m_fTimer = 3.5f;
+	m_fTimer = (float)((rand() % 6 + 1) / 2.f);
 
 	tMonsInfo info = getMonster()->getMonsInfo();
 
 	info.fvDir.x = (float)(rand() % 2);			// ÁÂ¿ì ·£´ý
 	if (!info.fvDir.x)
 		info.fvDir.x = -1;
+
+	// TODO
+
+	//if (getMonster()->isCheck(SM_FLY))
+	//{
+	//	switch (rand() % 3)
+	//	{
+	//	case 0:
+
+	//	}
+	//}
 	
 	getMonster()->setMonsInfo(info);
 }

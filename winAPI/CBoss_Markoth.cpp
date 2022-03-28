@@ -58,6 +58,10 @@ CBoss_Markoth::~CBoss_Markoth()
 {
 }
 
+void CBoss_Markoth::printInfo(HDC hDC)
+{
+}
+
 CBoss_Markoth* CBoss_Markoth::clone()
 {
 	return nullptr;

@@ -112,7 +112,8 @@ void CScene_Stage03::enter()
 	camSetFocusNow(pPlayer->getPos());
 	camSetTrace(pPlayer);
 	//camSetTrace(pBoss);
-
+	
+	CSoundManager::getInst()->addSound(L"bgm_stg3", L"sound\\bgm\\Boss_Battle.wav", true);
 	CSoundManager::getInst()->play(L"bgm_stg3", 0.1f);
 }
 

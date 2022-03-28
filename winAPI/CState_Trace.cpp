@@ -24,7 +24,7 @@ void CState_Trace::update(UINT& chk)
 
 	if (playerPos.y < pos.y - size.y ||
 		playerPos.y > pos.y + size.y / 2.f||
-		info.fDist > info.fTraceRange)
+		info.fDist > info.fNoticeRange)
 	{
 		m_iStep = 2;
 	}

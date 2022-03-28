@@ -1,31 +1,30 @@
 #include "framework.h"
-#include "CMonster_Melee.h"
-#include "CAttack.h"
+#include "CMonster_Fly.h"
 
 #include "CAI.h"
 #include "CState_Stop.h"
+#include "CState_Shoot.h"
 #include "CState_Patrol.h"
-#include "CState_Trace.h"
 #include "CPlayer.h"
+#include "CAttack.h"
 #include "SelectGDI.h"
 
-CMonster_Melee::CMonster_Melee()
+CMonster_Fly::CMonster_Fly()
 {
-	m_iBottomCnt = 0;
 	m_fSpdY = 0.f;
 	m_fTurnTimer = 0.f;
 }
 
-CMonster_Melee::~CMonster_Melee()
+CMonster_Fly::~CMonster_Fly()
 {
 }
 
-CMonster_Melee* CMonster_Melee::clone()
+CMonster_Fly* CMonster_Fly::clone()
 {
 	return nullptr;
 }
 
-void CMonster_Melee::update()
+void CMonster_Fly::update()
 {
 	fPoint playerPos = gameGetPlayer()->getPos();
 	tMonsInfo info = getMonsInfo();
@@ -38,9 +37,9 @@ void CMonster_Melee::update()
 		return;
 
 	if (isCheck(SM_TURN))					// 방향전환 상태
-	{	
+	{
 		playAnim(L"Turn");
-			
+
 		m_fTurnTimer -= fDT;
 
 		if (m_fTurnTimer < 0.f)
@@ -52,40 +51,36 @@ void CMonster_Melee::update()
 	extraUpdate();
 }
 
-void CMonster_Melee::render(HDC hDC)
+void CMonster_Fly::render(HDC hDC)
 {
 	if (g_bDebug)
 	{
 		printInfo(hDC);
 		getAI()->getCurState()->printInfo(hDC);
 	}
-
 	componentRender(hDC);
 }
 
-void CMonster_Melee::collisionEnter(CCollider* pOther)
+void CMonster_Fly::collisionEnter(CCollider* pOther)
 {
 	CObject* pTarget = pOther->getOwner();
+	tMonsInfo info;
 
 	switch (pTarget->getName())
 	{
 	case eOBJNAME::ATTACK:
-	{	// attck의 오너가 플레이어일 때
-		if (eOBJNAME::PLAYER == ((CAttack*)pTarget)->getOwner()->getName() && !isCheck(SM_DEATH))
-		{
-			tMonsInfo info = getMonsInfo();
-			info.iHP--;
+	{
+		info = getMonsInfo();
 
-			info.fvKnockBackDir.x = 1.f;
-			if (gameGetPlayer()->getPos().x > pOther->getPos().x)
-				info.fvKnockBackDir.x = -1.f;
-			info.fKnockBackSpd = (float)SM_KBSPD_L;
-			info.fKnockBackTimer = (float)SM_KBTIME;
+		info.iHP -= 1;
 
-			setMonsInfo(info);
-		}
-		break;
+		info.fvKnockBackDir = getPos() - gameGetPlayer()->getPos();
+		info.fKnockBackSpd = (float)SM_KBSPD_L;
+		info.fKnockBackTimer = (float)SM_KBTIME;
+
+		setMonsInfo(info);
 	}
+	break;
 
 	case eOBJNAME::MISSILE_PLAYER:
 	{
@@ -109,17 +104,13 @@ void CMonster_Melee::collisionEnter(CCollider* pOther)
 	{
 		if (isTopColl(getCollider(), pOther))
 		{	// 위
-			if (isCheck(SM_FALL))
-			{
-				fPoint pos = getPos();
+			fPoint pos = getPos();
 
-				pos.y = pOther->getPos().y - pOther->getSize().y / 2.f + pOther->getOffset().y
-					- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y + 1;
+			pos.y = pOther->getPos().y - pOther->getSize().y / 2.f + pOther->getOffset().y
+				- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y + 1;
 
-				setPos(pos);
-				setCheck(SM_FALL, false);
-				m_iBottomCnt++;
-			}
+			setPos(pos);
+
 		}
 		else
 		{
@@ -140,7 +131,7 @@ void CMonster_Melee::collisionEnter(CCollider* pOther)
 
 			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f + pOther->getOffset().x
 				- getCollider()->getSize().x / 2.f + getCollider()->getOffset().x - 1;
-			
+
 			setPos(pos);
 		}
 		else
@@ -152,19 +143,16 @@ void CMonster_Melee::collisionEnter(CCollider* pOther)
 
 			setPos(pos);
 		}
-		// 좌우 -> 방향전환
-		tMonsInfo info = getMonsInfo();
-		info.fvDir.x *= -1;
-		setMonsInfo(info);
-
-		break;
 	}
 	}
 }
 
-void CMonster_Melee::collisionKeep(CCollider* pOther)
+void CMonster_Fly::collisionKeep(CCollider* pOther)
 {
-	switch (pOther->getOwner()->getName())
+	CObject* pTarget = pOther->getOwner();
+	tMonsInfo info;
+
+	switch (pTarget->getName())
 	{
 	case eOBJNAME::GROUND:
 	{
@@ -172,16 +160,17 @@ void CMonster_Melee::collisionKeep(CCollider* pOther)
 		{	// 위
 			fPoint pos = getPos();
 
-			pos.y = pOther->getPos().y - pOther->getSize().y / 2.f
+			pos.y = pOther->getPos().y - pOther->getSize().y / 2.f + pOther->getOffset().y
 				- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y + 1;
 
 			setPos(pos);
+
 		}
 		else
 		{
 			fPoint pos = getPos();
 
-			pos.y = pOther->getPos().y + pOther->getSize().y / 2.f
+			pos.y = pOther->getPos().y + pOther->getSize().y / 2.f + pOther->getOffset().y
 				+ getCollider()->getSize().y / 2.f + getCollider()->getOffset().y;
 
 			setPos(pos);
@@ -191,66 +180,38 @@ void CMonster_Melee::collisionKeep(CCollider* pOther)
 	case eOBJNAME::WALL:
 	{
 		if (isLeftColl(getCollider(), pOther))
-		{	// 왼쪽에서 벽과 충돌
+		{	// 좌
 			fPoint pos = getPos();
 
-			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f
-				- getCollider()->getSize().x / 2.f - getCollider()->getOffset().x - 1;
-			setPos(pos);
+			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f + pOther->getOffset().x
+				- getCollider()->getSize().x / 2.f + getCollider()->getOffset().x - 1;
 
+			setPos(pos);
 		}
 		else
-		{	// 오른쪽
+		{	// 우
 			fPoint pos = getPos();
 
-			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f
+			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f + pOther->getOffset().x
 				+ getCollider()->getSize().x / 2.f + getCollider()->getOffset().x + 1;
+
 			setPos(pos);
-
-		}
-		break;
-		}
-	}
-}
-
-void CMonster_Melee::collisionExit(CCollider* pOther)
-{
-	switch (pOther->getOwner()->getName())
-	{
-	case eOBJNAME::GROUND:
-		if (isTopColl(getCollider(), pOther))
-		{
-			if (--m_iBottomCnt <= 0)
-			{
-				m_iBottomCnt = 0;
-				setCheck(SM_FALL, true);
-			}
 		}
 		break;
 	}
+	}
 }
 
-void CMonster_Melee::death()
+
+void CMonster_Fly::death()
 {
 	changeMonsState(getAI(), eSTATE_MONS::DIE);
 }
 
-void CMonster_Melee::extraUpdate()
+void CMonster_Fly::extraUpdate()
 {
 	fPoint pos = getPos();
 	tMonsInfo info = getMonsInfo();
-	if (m_iBottomCnt <= 0)
-	{
-		m_fSpdY -= M_GRAV * fDT;
-
-		if (m_fSpdY < 0.f)
-			setCheck(SM_FALL, true);
-
-		if (m_fSpdY < (float)M_SPDY_MIN)
-			m_fSpdY = (float)M_SPDY_MIN;
-
-		pos.y -= m_fSpdY * fDT;
-	}
 
 	// 방향전환
 	if (isCheck(SM_DIR) && info.fvDir.x < 0.f)
@@ -276,13 +237,14 @@ void CMonster_Melee::extraUpdate()
 	setMonsInfo(info);
 }
 
-void CMonster_Melee::printInfo(HDC hDC)
+void CMonster_Fly::printInfo(HDC hDC)
 {
 	SelectGDI font(hDC, eFONT::COMIC24);
+
 	fPoint pos = getPos();
 	tMonsInfo info = getMonsInfo();
 	fPoint playerPos = gameGetPlayer()->getPos();
-	
+
 	wchar_t bufX[255] = {};
 	wchar_t bufY[255] = {};
 	wchar_t bufHP[255] = {};
@@ -290,7 +252,7 @@ void CMonster_Melee::printInfo(HDC hDC)
 	swprintf_s(bufX, L"x = %.1f", pos.x);
 	swprintf_s(bufY, L"y = %.1f", pos.y);
 	swprintf_s(bufHP, L"HP = %d", info.iHP);
-	
+
 	// bufX,Y 출력보다 아래 위치해야 함
 	pos = rendPos(pos);
 

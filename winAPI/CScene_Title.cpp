@@ -37,6 +37,7 @@ void CScene_Title::enter()
 {
 	// Camera Look ÁöÁ¤
 	camSetFocusNow(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
+	camSetArea(0.f, 0.f, WINSIZEX, WINSIZEY);
 
 	CBackGround* pBG = new CBackGround;
 	pBG->load(L"BG_title", L"texture\\background\\bg_room.bmp");

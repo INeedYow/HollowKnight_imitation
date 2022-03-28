@@ -8,6 +8,7 @@
 #include "CBackGround.h"
 #include "CFrontGround.h"
 #include "CMonster_Melee.h"
+#include "CMonster_Fly.h"
 #include "CAI.h"
 #include "CGround.h"
 #include "CWall.h"
@@ -61,21 +62,14 @@ void CScene_Stage02::enter()
 	addObject(pFg, eOBJ::FRONTGROUND);
 
 	// monster
-	CMonster_Melee* pMon1 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(1550, 1720));
-	addObject(pMon1, eOBJ::MONSTER);
+	CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(800, 1304));
+	CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(1550, 1720));
+	CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(3000, 1310));
 
-	CMonster_Melee* pMon2 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(200, 1634));
-	addObject(pMon2, eOBJ::MONSTER);
+	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(200, 1550));
+	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(3200, 1570));
 
-	CMonster_Melee* pMon3 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(3000, 1310));
-	addObject(pMon3, eOBJ::MONSTER);
-
-	CMonster_Melee* pMon4 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_MUSH, fPoint(3200, 1570));
-	addObject(pMon4, eOBJ::MONSTER);
-
-	CMonster_Melee* pMon5 = (CMonster_Melee*)CMonster::create(eOBJNAME::MONS_MUSH, fPoint(200, 1350));
-	addObject(pMon5, eOBJ::MONSTER);
-
+	CMonster::create(eOBJNAME::MONS_BEE, fPoint(2800, 1300));
 	// UI
 
 	CWarp* pWp1 = new CWarp;
@@ -108,9 +102,9 @@ void CScene_Stage02::enter()
 	CGround::create(1234, 1462, 1256, 1494);
 	CGround::create(1336, 1790, 1996, STG02_SIZEY);
 	CWall::create(1776, 1610, 2832, STG02_SIZEY);
-	CGround::create(1436, 1540, 1796, 1570);
-	CGround::create(1436, 1424, 2380, 1456);
-	CWall::create(1440, 1456, 2384, 1540);
+	CGround::create(1442, 1540, 1796, 1570);
+	CGround::create(1442, 1424, 2380, 1456);
+	CWall::create(1438, 1456, 2384, 1540);
 	CGround::create(2346, 1590, 2828, 1622);
 	CGround::create(2796, 1670, STG02_SIZEX, STG02_SIZEY);
 	CWall::create(3554, 1370, STG02_SIZEX, STG02_SIZEY);

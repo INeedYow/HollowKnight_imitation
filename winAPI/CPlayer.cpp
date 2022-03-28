@@ -303,7 +303,7 @@ void CPlayer::collisionKeep(CCollider* pOther)
 		{	// 왼쪽에서 벽과 충돌
 			fPoint pos = getPos();
 
-			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f + pOther->getOffset().x
+			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f
 				- getCollider()->getSize().x / 2.f - getCollider()->getOffset().x - 1;
 			setPos(pos);
 
@@ -312,7 +312,7 @@ void CPlayer::collisionKeep(CCollider* pOther)
 		{	// 오른쪽
 			fPoint pos = getPos();
 
-			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f + pOther->getOffset().x
+			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f
 				+ getCollider()->getSize().x / 2.f + getCollider()->getOffset().x + 1;
 			setPos(pos);
 
@@ -326,7 +326,7 @@ void CPlayer::collisionKeep(CCollider* pOther)
 		{	// 위쪽에서 벽과 충돌
 			fPoint pos = getPos();
 
-			pos.y = pOther->getPos().y - pOther->getSize().y / 2.f + pOther->getOffset().y
+			pos.y = pOther->getPos().y - pOther->getSize().y / 2.f
 				- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y  + 1;
 			setPos(pos);
 		}
@@ -334,7 +334,7 @@ void CPlayer::collisionKeep(CCollider* pOther)
 		{	// 아래쪽
 			fPoint pos = getPos();
 
-			pos.y = pOther->getPos().y + pOther->getSize().y / 2.f + pOther->getOffset().y
+			pos.y = pOther->getPos().y + pOther->getSize().y / 2.f
 				+ getCollider()->getSize().y / 2.f + getCollider()->getOffset().y;
 			setPos(pos);
 		}

@@ -9,7 +9,7 @@ struct tMonsInfo
 	float	fSpd;
 	fVec2	fvDir;
 	float	fDist;					// 플레이어와 거리
-	float	fTraceRange;			// trace 하는 거리
+	float	fNoticeRange;			// 플레이어를 인지하는 거리
 	float	fAtkRange;				// 공격 사거리
 
 	fVec2	fvKnockBackDir;
@@ -28,7 +28,7 @@ private:
 	CAI*		m_pAI;
 
 public:
-	void printInfo(HDC hDC);
+	virtual void printInfo(HDC hDC) = 0;
 
 public:
 	CMonster();
@@ -56,7 +56,7 @@ public:
 
 	void playAnim(const wstring& keyWord);
 
-	static CMonster* create(eOBJNAME eName, fPoint pos);
+	static void create(eOBJNAME eName, fPoint pos);
 };
 
 //
@@ -66,7 +66,7 @@ enum class eSTATE_MONS
 	PATROL,
 	TRACE,
 	ATTACK,
-
+	SHOOT,
 	DIE,
 
 
@@ -82,16 +82,19 @@ enum class eSTATE_MONS
 };
 
 #define SM_KBTIME				0.2
-#define SM_KBSPD_L				500
-#define SM_KBSPD_M				700
+#define SM_KBSPD_L				600			// 넉백스피드_normal
+#define SM_KBSPD_M				800			// 
 
 //
-#define SM_TRACE				0x0001		// 따라가는 기능이 있는 몬스터인지
-#define SM_FALL					0x0002		// 떨어지는 중
-#define SM_DEATH				0x0004		// setInfo에서 중복 death호출 방지용
+#define SM_TRACE				0x0001		// trace 상태가 있는지
+#define SM_SHOOT				0x0002		// shoot 상태가 있는지
 
-#define SM_DIR					0x0010		
-#define SM_TURN					0x0020		// 방향전환
+#define SM_FALL					0x0010		// 떨어지는 중
+#define SM_DEATH				0x0020		// setInfo에서 중복 death호출 방지용
+
+#define SM_DIR					0x0100		// 1 == right
+#define SM_TURN					0x0200		// 방향전환
+#define SM_FLY					0x0400		// 날기
 
 //
 #define SB_TIMER			0x00010000		// 보스 쿨타임 timer 도는 상태인지

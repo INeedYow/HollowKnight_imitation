@@ -24,7 +24,7 @@ void CState_Stop::update(UINT& chk)
 
 	if (chk & SM_TRACE)
 	{
-		if (info.fDist <= info.fTraceRange)
+		if (info.fDist <= info.fNoticeRange)
 		{
 			if (playerPos.y >= pos.y - size.y &&
 				playerPos.y <= pos.y + size.y / 2.f)
@@ -33,6 +33,7 @@ void CState_Stop::update(UINT& chk)
 			}
 		}
 	}
+	else if (chk & SM_SHOOT)
 
 	m_fTimer -= fDT;
 
@@ -44,7 +45,7 @@ void CState_Stop::update(UINT& chk)
 
 void CState_Stop::enter()
 {
-	m_fTimer = 2.f;
+	m_fTimer = (float)((rand() % 6 + 1) / 2.f);
 }
 
 void CState_Stop::exit()

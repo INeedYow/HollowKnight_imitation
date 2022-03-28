@@ -13,8 +13,6 @@ public:
 
 	virtual CMonster_Melee* clone();
 
-	//static CMonster_Melee* create(eOBJNAME eName, fPoint pos);
-
 	virtual void update();
 	virtual void render(HDC hDC);
 

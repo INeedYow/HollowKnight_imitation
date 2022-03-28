@@ -117,16 +117,18 @@ CSound* CResourceManager::loadSound(const wstring& strKey, const wstring& strRel
 
 CSound* CResourceManager::loadBGM(const wstring& strKey, const wstring& strRelativePath)
 {
-	CSound* pBGM = m_pBGM;
-	if (nullptr != pBGM)
-		return pBGM;
+	CSound* pSound = findSound(strKey);
+	if (nullptr != pSound)
+	{
+		return pSound;
+	}
 
 	// Sound 저장 경로 확인
 	wstring strFilePath = CPathManager::getInst()->getRelativeContentPath();
 	strFilePath += strRelativePath;
 
 	// Sound 생성 후 저장
-	pBGM = new CSound;
+	CSound* pBGM = new CSound;
 	pBGM->load(strFilePath, true);
 	pBGM->setKey(strKey);
 	pBGM->setRelativePath(strRelativePath);

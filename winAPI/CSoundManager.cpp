@@ -26,8 +26,7 @@ void CSoundManager::init()
 	m_pSystem->init(32, FMOD_INIT_NORMAL, nullptr);
 
 	// sound ÀúÀå TODO
-	CSoundManager::getInst()->addSound(L"bgm_stg1", L"sound\\bgm\\Dirtmouth1.wav", true);
-	//CSoundManager::getInst()->addSound(L"bgm_stg3", L"sound\\bgm\\Boss_Battle.wav", true);
+	
 
 	//CSoundManager::getInst()->addSound(L"markoth_cast1", L"sound\\boss\\Markoth_cast_01.wav");
 	//CSoundManager::getInst()->addSound(L"markoth_cast2", L"sound\\boss\\Markoth_cast_02.wav");

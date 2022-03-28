@@ -144,6 +144,7 @@ void CScene_Stage01::enter()
 	camSetFocusNow(pPlayer->getPos());
 	camSetTrace(pPlayer);
 
+	CSoundManager::getInst()->addSound(L"bgm_stg1", L"sound\\bgm\\Dirtmouth1.wav", true);
 	CSoundManager::getInst()->play(L"bgm_stg1", 0.1f);
 }
 
