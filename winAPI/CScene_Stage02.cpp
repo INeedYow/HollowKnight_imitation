@@ -13,6 +13,7 @@
 #include "CGround.h"
 #include "CWall.h"
 #include "CWarp.h"
+#include "CHUD_HP.h"
 
 #define STG02_SIZEX 3840
 #define STG02_SIZEY 2160
@@ -60,6 +61,9 @@ void CScene_Stage02::enter()
 	pFg->load(L"FG_stage2", L"texture\\background\\stage2_front.bmp");
 	pFg->setPos(fPoint(0.f, 0.f));
 	addObject(pFg, eOBJ::FRONTGROUND);
+
+	CHUD_HP* pHP = new CHUD_HP;
+	addObject(pHP, eOBJ::HUD);
 
 	// monster
 	CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(800, 1304));

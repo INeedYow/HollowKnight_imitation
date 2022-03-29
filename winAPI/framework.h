@@ -88,6 +88,8 @@ enum class GROUP_OBJECT
 	TEST,
 
 	FRONTGROUND,
+
+	HUD,
 	UI,
 	SIZE
 };
@@ -121,6 +123,7 @@ enum class OBJECT_NAME
 
 	TEST,
 
+	HUD,
 	UI,
 	SIZE
 };

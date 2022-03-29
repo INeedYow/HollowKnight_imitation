@@ -9,6 +9,7 @@
 #include "CEffect.h"
 #include "CGround.h"
 #include "CWall.h"
+#include "CHUD_HP.h"
 
 #define STG01_SIZEX 3840
 #define STG01_SIZEY 2160
@@ -86,7 +87,6 @@ void CScene_Stage01::enter()
 	//createObj(pSpear, eOBJ::MISSILE_MONSTER);
 	/////////////////////////////////////////////////////////
 
-	
 	CBackGround* pBg = new CBackGround;
 	pBg->load(L"BG_stage1", L"texture\\background\\stage1_back.bmp");
 	pBg->setPos(fPoint(0.f, 0.f));
@@ -96,6 +96,9 @@ void CScene_Stage01::enter()
 	pFg->load(L"FG_stage1", L"texture\\background\\stage1_front.bmp");
 	pFg->setPos(fPoint(0.f, 0.f));
 	addObject(pFg, eOBJ::FRONTGROUND);
+
+	CHUD_HP* pHP = new CHUD_HP;
+	addObject(pHP, eOBJ::HUD);
 
 	// ground, wall
 	CWall::create(-100, 0, 0, STG01_SIZEY);
@@ -115,20 +118,6 @@ void CScene_Stage01::enter()
 
 	g_bDebug = true;
 
-	////////////////
-	/*CEffect* pEff = new CEffect;
-	pEff->setEffName(L"EF_dash_R");
-	pEff->load(L"Effect_dash", L"texture\\effect\\effect_dash.bmp");
-	pEff->setDuration(0.4f);
-	pEff->setFollow(pPlayer);
-	pEff->setOffset(fPoint(100.f, 0.f));
-	pEff->createAnim(L"effect_dash", pEff->getTex(),
-		fPoint(289, 0), fPoint(289, 146), fPoint(289, 0), 0.1f, 4, false);
-	CEffectManager::getInst()->addEffect(pEff);
-	pEff->PLAY(L"effect_dash");
-	addObject(pEff, eOBJ::EFFECT);*/
-
-	////////////////
 
 	// 충돌 체크
 	checkGrp(eOBJ::PLAYER, eOBJ::WALL);

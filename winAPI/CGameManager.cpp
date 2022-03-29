@@ -5,6 +5,7 @@
 CGameManager::CGameManager()
 {
 	m_pPlayer = nullptr;
+	m_tPlayerInformation = {};
 }
 
 CGameManager::~CGameManager()

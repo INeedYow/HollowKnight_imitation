@@ -66,6 +66,9 @@ void CScene_Stage03::enter()
 	pBg->setPos(fPoint(0.f, 0.f));
 	addObject(pBg, eOBJ::BACKGROUND);
 
+	CHUD_HP* pHP = new CHUD_HP;
+	addObject(pHP, eOBJ::HUD);
+
 	/*CFrontGround* pFg = new CFrontGround;
 	pFg->load(L"FG_stage3", L"texture\\background\\stage3_front.bmp");
 	pFg->setPos(fPoint(0.f, 0.f));

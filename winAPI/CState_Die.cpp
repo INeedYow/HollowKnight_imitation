@@ -19,7 +19,7 @@ void CState_Die::update(UINT& chk)
 	m_fTimer -= fDT;
 
 	if (m_fTimer < 0.f)
-		changeMonsState(getOwner(), eSTATE_MONS::STOP);
+		deleteObj(getMonster());
 }
 
 void CState_Die::enter()
@@ -31,7 +31,6 @@ void CState_Die::enter()
 
 void CState_Die::exit()
 {
-	deleteObj(getMonster());
 }
 
 void CState_Die::printInfo(HDC hDC)

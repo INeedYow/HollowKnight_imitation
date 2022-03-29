@@ -147,6 +147,8 @@
   <ItemGroup>
     <ClInclude Include="CAI.h" />
     <ClInclude Include="CGameManager.h" />
+    <ClInclude Include="CHUD.h" />
+    <ClInclude Include="CHUD_HP.h" />
     <ClInclude Include="CMonster_Fly.h" />
     <ClInclude Include="CMonster_Melee.h" />
     <ClInclude Include="CSoundManager.h" />
@@ -237,6 +239,8 @@
   <ItemGroup>
     <ClCompile Include="CAI.cpp" />
     <ClCompile Include="CGameManager.cpp" />
+    <ClCompile Include="CHUD.cpp" />
+    <ClCompile Include="CHUD_HP.cpp" />
     <ClCompile Include="CMonster_Fly.cpp" />
     <ClCompile Include="CMonster_Melee.cpp" />
     <ClCompile Include="CSoundManager.cpp" />

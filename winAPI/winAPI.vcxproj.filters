@@ -244,6 +244,12 @@
     <ClCompile Include="CMonster_Fly.cpp">
       <Filter>Object\Character\Monster</Filter>
     </ClCompile>
+    <ClCompile Include="CHUD.cpp">
+      <Filter>Object\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="CHUD_HP.cpp">
+      <Filter>Object\HUD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCollider.h">
@@ -510,6 +516,12 @@
     <ClInclude Include="CMonster_Fly.h">
       <Filter>Object\Character\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="CHUD.h">
+      <Filter>Object\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="CHUD_HP.h">
+      <Filter>Object\HUD</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -651,6 +663,9 @@
     </Filter>
     <Filter Include="Engine\Manager\Sound">
       <UniqueIdentifier>{fae49cee-a165-4741-bd0f-b5f253aba904}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\HUD">
+      <UniqueIdentifier>{bf67137b-23c8-40d8-b2ca-20d45bf3e069}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
