@@ -31,9 +31,9 @@ private:
 
 // beetle
 #define M_BT_SIZEX			86
-#define M_BT_SIZEY			138
-#define M_BT_SIZEX_			182
-#define M_BT_SIZEY_			96
+#define M_BT_SIZEY			142
+#define M_BT_SIZEX_			180
+#define M_BT_SIZEY_			100
 
 #define M_BT_HP				4
 #define M_BT_SPD			200

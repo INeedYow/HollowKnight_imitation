@@ -40,6 +40,9 @@ void CState_Trace::update(UINT& chk)
 		{
 			m_iStep++;
 			m_fTimer = 0.f;
+
+			if (getMonster()->getName() == eOBJNAME::MONS_BEETLE)
+				getMonster()->getCollider()->setSize(fPoint((float)M_BT_SIZEX_, (float)M_BT_SIZEY_));
 		}
 		break;
 	}
@@ -50,9 +53,6 @@ void CState_Trace::update(UINT& chk)
 		{
 			m_iStep++;
 			m_fTimer = 0.f;
-
-			if (getMonster()->getName() == eOBJNAME::MONS_BEETLE)
-				getMonster()->getCollider()->setSize(fPoint((float)M_BT_SIZEX_, (float)M_BT_SIZEY_));
 		}
 		break;
 	}

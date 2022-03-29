@@ -109,14 +109,19 @@ void CMissile::collisionEnter(CCollider* pOther)
 		switch (pOther->getOwner()->getName())
 		{
 		case eOBJNAME::MONS_BEETLE:
+		case eOBJNAME::MONS_BEE:
+		case eOBJNAME::MONS_MUSH:
 		case eOBJNAME::BOSS:
 		{
-			//TODO
+			CSoundManager::getInst()->addSound(L"hero_thorn_counter", L"sound\\player\\hero_thorn_counter.wav");
+			CSoundManager::getInst()->play(L"hero_thorn_counter", 0.1f);
 			break;
 		}
 		case eOBJNAME::WALL:
-		{	// TODO ÀÌÆåÆ® »ý¼º
-			deleteObj(this);
+		{
+			
+			if (pOther->getSize().x >= 300.f)
+				deleteObj(this);
 			break;
 		}
 

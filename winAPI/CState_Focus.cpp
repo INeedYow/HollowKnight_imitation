@@ -31,7 +31,7 @@ void CState_Focus::update(UINT& chk)
 	{
 		info.uiHP++;
 		CSoundManager::getInst()->addSound(L"focus_health_heal", L"sound\\player\\focus_health_heal.wav");
-		CSoundManager::getInst()->play(L"focus_health_heal", 0.1f);
+		CSoundManager::getInst()->play(L"focus_health_heal", 0.2f);
 		changeMyState(getOwner(), eSTATE_PLAYER::IDLE);
 	}
 
@@ -47,6 +47,9 @@ void CState_Focus::update(UINT& chk)
 
 void CState_Focus::enter()
 {
+	CSoundManager::getInst()->addSound(L"hero_focus_prepare", L"sound\\player\\hero_nail_art_charge_initiate.wav");
+	CSoundManager::getInst()->play(L"hero_focus_prepare", 0.1f);
+
 	m_fSoul = (float)(getPlayer()->getPlayerInfo().uiSoul);
 	getPlayer()->playAnim(L"Focus");
 	getPlayer()->setCheck(SP_STOPANIM, true);

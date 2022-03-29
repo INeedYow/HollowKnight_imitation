@@ -15,7 +15,7 @@
 
 CBoss_Markoth::CBoss_Markoth()
 {
-	setTex(L"BossTex", L"texture\\boss\\boss_markoth.bmp");
+	setTex(L"BossTex", L"texture\\boss\\boss_markoth2.bmp");
 
 	setPos(fPoint(1500.f, 700.f));
 	setSize(fPoint(190.f, 300.f));
@@ -43,6 +43,7 @@ CBoss_Markoth::CBoss_Markoth()
 	createAnim(L"st_Normal",	getTex(), fPoint(0.f, 0.f),		fPoint(280.f, 420.f),	fPoint(280.f, 0.f),		0.25f,	6);
 	createAnim(L"st_Middle",	getTex(), fPoint(0.f, 420.f),	fPoint(300.f, 415.f),	fPoint(300.f, 0.f),		0.2f,	4);
 	createAnim(L"st_Skill",		getTex(), fPoint(0.f, 835.f),	fPoint(448.f, 282.f),	fPoint(448.f, 0.f),		0.2f,	4);
+	createAnim(L"st_Death",		getTex(), fPoint(0.f, 1117.f),	fPoint(448.f, 282.f),	fPoint(448.f, 0.f),		0.1f,	4);
 
 	PLAY(L"st_Normal");
 
@@ -82,12 +83,15 @@ void CBoss_Markoth::update()
 		pos.y = 200.f;
 	setPos(pos);
 
-	if (isCheck(SM_DEATH))
+	if (isCheck(SM_DEATH) && m_ucPhase)
 	{
+		m_ucPhase = 0;
 		changeMonsState(getAI(), eSTATE_MONS::DEATH);
+		return;
 	}
 
-	if (!isCheck(SB_TIMER))	return;		// 타이머 적용되는 상태
+	if (!isCheck(SB_TIMER) || isCheck(SM_DEATH))	// 스킬 쓰는 도중, 죽었을 때는 이후 업데이트 안 하도록
+		return;		
 	
 	m_fSkillTimer -= fDT;
 

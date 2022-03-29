@@ -248,6 +248,17 @@ void CPlayer::checkUpdate()
 	{
 		m_tInfo.fLandTimer = 0.f;
 	}
+
+	if (m_uiCheck & SP_SLASH2)
+	{	// 연속 슬래쉬 타이머
+		m_tInfo.fSlashTimer -= fDT;
+
+		if (m_tInfo.fSlashTimer < 0.f)
+		{
+			m_tInfo.fSlashTimer = 0.f;
+			m_uiCheck &= ~(SP_SLASH2);
+		}
+	}
 }
 
 void CPlayer::render(HDC hDC)
@@ -629,9 +640,10 @@ void CPlayer::firstSlash()
 		mPos.x += PSLASH_OFFSETX;
 		pAttack->setDir(eDIR::RIGHT);
 
-		if (/*m_uiCheck & SP_SLASH2*/false)
+		if (m_uiCheck & SP_SLASH2)
 		{
-		
+			pAttack->createAnim(L"Slash_player", pAttack->getTex(),
+				fPoint(516.f, 0.f), fPoint(151.f, 129.f), fPoint(151.f, 0.f), 0.1f, 2, false);
 		}
 		else
 		{

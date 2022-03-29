@@ -15,15 +15,37 @@ CState_Slash2::~CState_Slash2()
 
 void CState_Slash2::update(UINT& chk)
 {
+	fPoint pos = getPlayer()->getPos();
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 
 	m_fAttackDelay += fDT;
 
 	if (m_fAttackDelay > (float)P_ATTDELAY)
 	{
-		changeMyState(getOwner(), eSTATE_PLAYER::IDLE);
+		if (chk & SP_AIR)
+		{
+			changeMyState(getOwner(), eSTATE_PLAYER::FALL);
+		}
+		else
+		{
+			changeMyState(getOwner(), eSTATE_PLAYER::IDLE);
+		}
 	}
 
+	if (KEY_HOLD(VK_LEFT))
+	{
+		chk &= ~(SP_DIR);
+		pos.x -= info.fSpdX * fDT;
+		getPlayer()->playAnim(L"Run");
+	}
+	else if (KEY_HOLD(VK_RIGHT))
+	{
+		chk |= SP_DIR;
+		pos.x += info.fSpdX * fDT;
+		getPlayer()->playAnim(L"Run");
+	}
+
+	getPlayer()->setPos(pos);
 	getPlayer()->setPlayerInfo(info);
 }
 

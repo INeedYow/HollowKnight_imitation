@@ -34,9 +34,10 @@ void CState_Slash1::update(UINT& chk)
 
 		pos.y -= info.fSpdY * fDT;
 	}
-	else
+
+	if (KEY_ON('X') && chk & SP_SLASH2)
 	{
-		// TODO Slash2
+		changeMyState(getOwner(), eSTATE_PLAYER::SLASH2);
 	}
 	
 	if (KEY_HOLD(VK_LEFT))
@@ -73,6 +74,11 @@ void CState_Slash1::enter()
 	getPlayer()->firstSlash();
 	getPlayer()->playAnim(L"Slash1");
 	getPlayer()->setCheck(SP_STOPANIM, true);
+	getPlayer()->setCheck(SP_SLASH2, true);
+
+	tPlayerInfo info = getPlayer()->getPlayerInfo();
+	info.fSlashTimer = 0.5f;
+	getPlayer()->setPlayerInfo(info);
 }
 
 void CState_Slash1::exit()

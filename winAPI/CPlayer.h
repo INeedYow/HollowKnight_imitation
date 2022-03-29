@@ -18,6 +18,7 @@ struct tPlayerInfo
 
 	float		fLandTimer;
 	float		fNoDmgTimer;
+	float		fSlashTimer;
 
 	fVec2		fvKnockBackDir;
 	float		fKnockBackTimer;
@@ -152,7 +153,8 @@ enum class eSTATE_PLAYER
 
 #define SP_GODOWN				0x0010			// 하강
 #define SP_DWSLASH				0x0020			// 다운슬래쉬
-#define SP_STOPANIM				0x0040
-#define SP_NODMG				0x0080
+#define SP_SLASH2				0x0040			// 연속 슬래쉬 동작
+#define SP_STOPANIM				0x0080
 
-#define SP_DEATH				0x0100
+#define SP_NODMG				0x0100
+#define SP_DEATH				0x0200

@@ -27,6 +27,7 @@ public:
 	void setTex(CTexture* pTex);
 
 	fPoint getOffset();
+	float getDuration();
 	const wstring& getEffName();
 	CTexture* getTex();
 	bool isActive();

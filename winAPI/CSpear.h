@@ -35,7 +35,7 @@ private:
 	fPoint getRandPos();
 };
 
-#define SPR_SIZEX			380
+#define SPR_SIZEX			370
 #define SPR_SIZEY			85
 
 #define SPR_MEMTEX_SIZE		(UINT)(SPR_SIZEX * 1.5f)		// 회전한 텍스쳐 담을 크기여야 함(x, y중 긴것보다 더 길어야)

@@ -14,6 +14,7 @@ class CShield : public CObject
 	float	m_fSpd;
 	float	m_fTheta;
 	bool	m_bRotRight;
+	bool	m_bActive;
 
 public:
 	CShield();
@@ -32,14 +33,15 @@ public:
 	void setRadius(float rad);
 	void setTheta(float theta);
 	void setTex(const wstring& strName, const wstring& strPath);
+	void setActive(bool isOn);
 	void createMemTex(const wstring& texName, UINT sizeX, UINT sizeY);
 
 	bool isRotRight();
-
 	CTexture* getTex();
 	float getSpeed();
 	float getRadius();
 	float getTheta();
+	bool isActive();
 
 	void collisionEnter(CCollider* pOther);
 
@@ -49,6 +51,5 @@ private:
 
 #define SHD_SIZEX			166
 #define SHD_SIZEY			308
-
 
 #define SHD_MEMTEX_SIZE		(UINT)(SHD_SIZEY * 1.5f)

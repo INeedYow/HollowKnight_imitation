@@ -158,6 +158,9 @@ void CScene_Stage02::enter()
 	// cam
 	camSetFocusNow(pPlayer->getPos());
 	camSetTrace(pPlayer);
+
+	CSoundManager::getInst()->addSound(L"bgm_stg2", L"sound\\bgm\\cave_wind_loop.wav", true);
+	CSoundManager::getInst()->play(L"bgm_stg2", 0.5f);
 }
 
 void CScene_Stage02::exit()

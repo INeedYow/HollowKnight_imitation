@@ -71,6 +71,7 @@ enum class GROUP_OBJECT
 	GROUND,
 	WALL,
 	WARP,
+	EFFECT_BACK,
 
 	TILE,
 	IMAGE,

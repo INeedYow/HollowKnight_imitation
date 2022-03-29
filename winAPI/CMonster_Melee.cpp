@@ -292,9 +292,9 @@ void CMonster_Melee::printInfo(HDC hDC)
 	// bufX,Y 출력보다 아래 위치해야 함
 	pos = rendPos(pos);
 
-	TextOutW(hDC, (int)pos.x + 100, (int)pos.y - 250, bufX, (int)wcslen(bufX));
-	TextOutW(hDC, (int)pos.x + 100, (int)pos.y - 225, bufY, (int)wcslen(bufY));
-	TextOutW(hDC, (int)pos.x + 100, (int)pos.y - 200, bufHP, (int)wcslen(bufHP));
+	TextOutW(hDC, (int)pos.x + 100, (int)pos.y - 150, bufX, (int)wcslen(bufX));
+	TextOutW(hDC, (int)pos.x + 100, (int)pos.y - 125, bufY, (int)wcslen(bufY));
+	TextOutW(hDC, (int)pos.x + 100, (int)pos.y - 100, bufHP, (int)wcslen(bufHP));
 
 	if (0.f != info.fNoticeRange)
 	{
@@ -302,7 +302,7 @@ void CMonster_Melee::printInfo(HDC hDC)
 		wchar_t bufTRng[255] = {};
 		swprintf_s(bufTRng, L"Range = %.1f", info.fNoticeRange);
 		swprintf_s(bufDist, L"DistX = %.1f", info.fDist);
-		TextOutW(hDC, (int)pos.x + 100, (int)pos.y - 150, bufTRng, (int)wcslen(bufTRng));
-		TextOutW(hDC, (int)pos.x + 100, (int)pos.y - 175, bufDist, (int)wcslen(bufDist));
+		TextOutW(hDC, (int)pos.x + 100, (int)pos.y - 75, bufDist, (int)wcslen(bufDist));
+		TextOutW(hDC, (int)pos.x + 100, (int)pos.y - 50, bufTRng, (int)wcslen(bufTRng));
 	}
 }

@@ -253,6 +253,9 @@
     <ClCompile Include="CState_BDeath.cpp">
       <Filter>Engine\Component\Status &amp; AI\AI\State_Mons\State_Boss</Filter>
     </ClCompile>
+    <ClCompile Include="CEffect_Move.cpp">
+      <Filter>Object\Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCollider.h">
@@ -527,6 +530,9 @@
     </ClInclude>
     <ClInclude Include="CState_BDeath.h">
       <Filter>Engine\Component\Status &amp; AI\AI\State_Mons\State_Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="CEffect_Move.h">
+      <Filter>Object\Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

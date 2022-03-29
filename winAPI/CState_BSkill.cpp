@@ -45,7 +45,7 @@ void CState_BSkill::update(UINT& chk)
 	if (m_fDura < 0.f)
 	{
 		for (int i = 0; i < vecShd.size(); i++)
-		{	// 속도 원래대로
+		{	// 속도, 범위 원래대로
 			vecShd[i]->setfSpeed((float)B_SHD_SPD);
 			vecShd[i]->setRadius((float)B_SHD_RAD);
 		}

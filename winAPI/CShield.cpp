@@ -17,6 +17,7 @@ CShield::CShield()
 	m_fTheta = 0.f;
 	m_fRadius = 0.f;
 	m_bRotRight = true;
+	m_bActive = true;
 
 	m_pOwner = nullptr;
 
@@ -53,6 +54,8 @@ void CShield::calculateRad()
 
 void CShield::update()
 {
+	if (!m_bActive) return;
+
 	fPoint pos = getPos();
 
 	if (m_bRotRight)
@@ -74,84 +77,9 @@ void CShield::update()
 	getAnimator()->update();
 }
 
-//void CShield::render(HDC hDC)
-//{
-//	SelectGDI font(hDC, eFONT::COMIC24);
-//
-//	fPoint pos = rendPos(getPos());
-//
-//	wchar_t bufTheta[255] = {};
-//	wchar_t bufRad[255] = {};
-//
-//	swprintf_s(bufTheta, L"theta = %.1f", m_fTheta);
-//	swprintf_s(bufRad, L"rad = %.1f", m_fRadius);
-//
-//	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 40, bufTheta, (int)wcslen(bufTheta));
-//	TextOutW(hDC, (int)pos.x - 140, (int)pos.y - 60, bufRad, (int)wcslen(bufRad));
-//
-//	componentRender(hDC);
-//}
-
-#define sizex 166
-#define sizey 308
-#define MEMTEX_SIZE (UINT)(308 * 1.5f)
-
 void CShield::render(HDC hDC)
 {
-	//fPoint pos = rendPos(getPos());
-	//fPoint size = { (float)sizex, (float)sizey };
-
-	//POINT pThreeArr[3];
-
-	//// 좌상, 우상, 좌하 좌표 3개
-	//fPoint arr[3] = {
-	//	fPoint(-size.x / 2.f, -size.y / 2.f),
-	//	fPoint(size.x / 2.f, -size.y / 2.f),
-	//	fPoint(-size.x / 2.f,  size.y / 2.f),
-	//};
-
-	//for (int i = 0; i < 3; i++)
-	//{	// 좌표에 회전행렬로 회전적용
-	//	pThreeArr[i].x = -(LONG)(arr[i].x * cos(m_fTheta) - arr[i].y * sin(m_fTheta));
-	//	pThreeArr[i].y = -(LONG)(arr[i].x * sin(m_fTheta) + arr[i].y * cos(m_fTheta));
-	//}
-
-	//for (int i = 0; i < 3; i++)
-	//{	// memDC 중앙 좌표로 이동
-	//	pThreeArr[i].x += (LONG)(MEMTEX_SIZE / 2);
-	//	pThreeArr[i].y += (LONG)(MEMTEX_SIZE / 2);
-	//}
-
-	//// memDC 마젠타로 채움
-	//SelectGDI brush(m_pMemTex->getDC(), eBRUSH::MAGENTA);
-
-	//Rectangle(m_pMemTex->getDC(),
-	//	-1, -1, MEMTEX_SIZE + 1, MEMTEX_SIZE + 1);
-
-	//// 회전한 좌표로 memDC에 그림
-	//PlgBlt(m_pMemTex->getDC(),
-	//	pThreeArr,
-	//	m_pTex->getDC(),
-	//	0, 0,
-	//	(int)size.x,
-	//	(int)size.y,
-	//	NULL,
-	//	0, 0
-	//);
-
-	//// memDC에 그렸던 것 통쨰로 가져오면 됨
-	//TransparentBlt(hDC,
-	//	(int)(pos.x - MEMTEX_SIZE / 2),
-	//	(int)(pos.y - MEMTEX_SIZE / 2),
-	//	MEMTEX_SIZE,
-	//	MEMTEX_SIZE,
-	//	m_pMemTex->getDC(),
-	//	0,
-	//	0,
-	//	MEMTEX_SIZE,
-	//	MEMTEX_SIZE,
-	//	RGB(255, 0, 255)
-	//);
+	if (!m_bActive) return;
 
 	componentRender(hDC, m_fTheta, true);
 }
@@ -192,6 +120,11 @@ void CShield::setTex(const wstring& strName, const wstring& strPath)
 	m_pTex = loadTex(strName, strPath);
 }
 
+void CShield::setActive(bool isOn)
+{
+	m_bActive = isOn;
+}
+
 void CShield::createMemTex(const wstring& texName, UINT sizeX, UINT sizeY)
 {
 	m_pMemTex = CResourceManager::getInst()->createTexture(texName, sizeX, sizeY);
@@ -220,6 +153,11 @@ float CShield::getRadius()
 float CShield::getTheta()
 {
 	return m_fTheta;
+}
+
+bool CShield::isActive()
+{
+	return m_bActive;
 }
 
 void CShield::collisionEnter(CCollider* pOther)

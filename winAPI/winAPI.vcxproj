@@ -146,6 +146,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CAI.h" />
+    <ClInclude Include="CEffect_Move.h" />
     <ClInclude Include="CGameManager.h" />
     <ClInclude Include="CHUD.h" />
     <ClInclude Include="CHUD_HP.h" />
@@ -239,6 +240,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CAI.cpp" />
+    <ClCompile Include="CEffect_Move.cpp" />
     <ClCompile Include="CGameManager.cpp" />
     <ClCompile Include="CHUD.cpp" />
     <ClCompile Include="CHUD_HP.cpp" />

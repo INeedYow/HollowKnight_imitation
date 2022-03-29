@@ -53,6 +53,11 @@ fPoint CEffect::getOffset()
 	return m_fpOffset;
 }
 
+float CEffect::getDuration()
+{
+	return m_fDura;
+}
+
 const wstring& CEffect::getEffName()
 {
 	return m_strName;
