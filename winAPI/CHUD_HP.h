@@ -5,6 +5,9 @@ class CHUD_HP :  public CHUD
 	const UINT HP_SIZE_X = 48;
 	const UINT HP_SIZE_Y = 87;
 
+	UINT m_uiHP;
+	UINT m_uiHPMax;
+
 public:
 	CHUD_HP();
 	virtual ~CHUD_HP();

@@ -10,6 +10,7 @@
 #include "CBoss_Markoth.h"
 #include "CGround.h"
 #include "CWall.h"
+#include "CHUD_HP.h"
 
 #define STG03_SIZEX 3000
 #define STG03_SIZEY 1689

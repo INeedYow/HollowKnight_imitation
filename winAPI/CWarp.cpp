@@ -2,10 +2,14 @@
 #include "CWarp.h"
 #include "CTexture.h"
 
+void changeScene(DWORD_PTR param1, DWORD_PTR param2);
+
 CWarp::CWarp()
 {
 	m_bActive = false;
 	m_fpImgOffset = {};
+
+	m_eDestScn = eSCENE::TITLE;
 
 	createCollider();
 	getCollider()->setShape(eSHAPE::RECT);
@@ -44,6 +48,11 @@ void CWarp::render(HDC hDC)
 	}
 }
 
+void CWarp::setDestScene(eSCENE eScn)
+{
+	m_eDestScn = eScn;
+}
+
 void CWarp::setImageOffset(fPoint imgOffset)
 {
 	m_fpImgOffset = imgOffset;
@@ -57,7 +66,7 @@ void CWarp::collisionEnter(CCollider* pOther)
 void CWarp::collisionKeep(CCollider* pOther)
 {
 	if (KEY_ON(VK_UP))
-		changeScn(eSCENE::STAGE_01);
+		changeScene((DWORD_PTR)m_eDestScn, 0);
 }
 
 void CWarp::collisionExit(CCollider* pOther)

@@ -10,6 +10,7 @@
 #include "CGround.h"
 #include "CWall.h"
 #include "CHUD_HP.h"
+#include "CHUD_Soul.h"
 
 #define STG01_SIZEX 3840
 #define STG01_SIZEY 2160
@@ -96,6 +97,9 @@ void CScene_Stage01::enter()
 	pFg->load(L"FG_stage1", L"texture\\background\\stage1_front.bmp");
 	pFg->setPos(fPoint(0.f, 0.f));
 	addObject(pFg, eOBJ::FRONTGROUND);
+
+	CHUD_Soul* pSoul = new CHUD_Soul;
+	addObject(pSoul, eOBJ::HUD);
 
 	CHUD_HP* pHP = new CHUD_HP;
 	addObject(pHP, eOBJ::HUD);

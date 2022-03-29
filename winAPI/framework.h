@@ -83,13 +83,13 @@ enum class GROUP_OBJECT
 	PLAYER,
 
 	ATTACK,
-	EFFECT,
 
 	TEST,
+	HUD,
+	EFFECT,
 
 	FRONTGROUND,
 
-	HUD,
 	UI,
 	SIZE
 };

@@ -14,6 +14,7 @@
 #include "CWall.h"
 #include "CWarp.h"
 #include "CHUD_HP.h"
+#include "CHUD_Soul.h"
 
 #define STG02_SIZEX 3840
 #define STG02_SIZEY 2160
@@ -62,6 +63,9 @@ void CScene_Stage02::enter()
 	pFg->setPos(fPoint(0.f, 0.f));
 	addObject(pFg, eOBJ::FRONTGROUND);
 
+	CHUD_Soul* pSoul = new CHUD_Soul;
+	addObject(pSoul, eOBJ::HUD);
+
 	CHUD_HP* pHP = new CHUD_HP;
 	addObject(pHP, eOBJ::HUD);
 
@@ -88,6 +92,7 @@ void CScene_Stage02::enter()
 	// UI
 
 	CWarp* pWp1 = new CWarp;
+	pWp1->setDestScene(eSCENE::STAGE_01);
 	pWp1->load(L"warp_mapChange", L"texture\\image\\text_mapChange.bmp");
 	pWp1->setPos(fPoint(1958.f, 1380));
 	pWp1->getCollider()->setSize(fPoint(80.f, 80.f));
