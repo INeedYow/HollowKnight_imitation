@@ -7,6 +7,7 @@ CState_Idle::CState_Idle(eSTATE_PLAYER state)
 	: CState_Player(state)
 {
 	m_fTimer = 0.f;
+	m_bHoldA = false;
 }
 
 CState_Idle::~CState_Idle()
@@ -51,26 +52,35 @@ void CState_Idle::update(UINT& chk)
 		changeMyState(getOwner(), eSTATE_PLAYER::DASH);
 	}
 
-	if (KEY_HOLD('A') && info.uiSoul >= P_FOCUSSOUL && info.uiHP != P_HPMAX)
+	if (KEY_HOLD('A') )
 	{
 		m_fTimer += fDT;
 
-		if (m_fTimer >= 0.5f)
+		if (m_fTimer >= 0.5f && info.uiSoul >= P_FOCUSSOUL && info.uiHP != P_HPMAX)
 		{
 			changeMyState(getOwner(), eSTATE_PLAYER::FOCUS);
 		}
+
+		
 	}
 	
-	else if (KEY_OFF('A') && info.uiSoul >= P_FIRESOUL)
+	if (KEY_ON('A'))
+	{
+		m_bHoldA = true;
+	}
+
+	if (KEY_OFF('A') && m_bHoldA && info.uiSoul >= P_FIRESOUL)
 	{
 		changeMyState(getOwner(), eSTATE_PLAYER::FIRE);
 	}
+	
 }
 
 void CState_Idle::enter()
 {
 	getPlayer()->playAnim(L"Idle");
 	getPlayer()->setCheck(SP_STOPANIM, true);
+	m_bHoldA = false;
 }
 
 void CState_Idle::exit()

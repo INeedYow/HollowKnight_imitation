@@ -114,7 +114,7 @@ void CMissile::collisionEnter(CCollider* pOther)
 			//TODO
 			break;
 		}
-		case eOBJNAME::TILE:
+		case eOBJNAME::WALL:
 		{	// TODO 이펙트 생성
 			deleteObj(this);
 			break;
@@ -173,7 +173,7 @@ void CMissile::collisionEnter(CCollider* pOther)
 			break;
 		}
 		}
-			// 몬스터 미사일 제거
+		
 	}
 	
 }

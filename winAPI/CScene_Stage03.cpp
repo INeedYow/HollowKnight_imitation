@@ -11,6 +11,7 @@
 #include "CGround.h"
 #include "CWall.h"
 #include "CHUD_HP.h"
+#include "CHUD_Soul.h"
 
 #define STG03_SIZEX 3000
 #define STG03_SIZEY 1689
@@ -67,6 +68,9 @@ void CScene_Stage03::enter()
 	pBg->setPos(fPoint(0.f, 0.f));
 	addObject(pBg, eOBJ::BACKGROUND);
 
+	CHUD_Soul* pSoul = new CHUD_Soul;
+	addObject(pSoul, eOBJ::HUD);
+
 	CHUD_HP* pHP = new CHUD_HP;
 	addObject(pHP, eOBJ::HUD);
 
@@ -111,6 +115,7 @@ void CScene_Stage03::enter()
 
 	checkGrp(eOBJ::ATTACK, eOBJ::BOSS);
 	checkGrp(eOBJ::ATTACK, eOBJ::MONSTER);
+	checkGrp(eOBJ::ATTACK, eOBJ::SHIELD);
 
 	//
 	camSetFocusNow(pPlayer->getPos());

@@ -85,11 +85,11 @@ enum class GROUP_OBJECT
 	ATTACK,
 
 	TEST,
-	HUD,
 	EFFECT,
 
 	FRONTGROUND,
 
+	HUD,
 	UI,
 	SIZE
 };

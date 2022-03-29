@@ -2,6 +2,7 @@
 #include "CAttack.h"
 #include "CPlayer.h"
 #include "CMonster.h"
+#include "CEffect.h"
 
 CAttack::CAttack()
 {
@@ -23,10 +24,8 @@ CAttack::CAttack()
 
 	createAnimator();
 
-	createAnim(L"Slash_player_R", m_pTex,
-		fPoint(516.f, 0.f), fPoint(151.f, 129.f), fPoint(151.f, 0.f), 0.1f, 2, false);
-	createAnim(L"Slash_player_L", m_pTex,
-		fPoint(667.f, 129.f), fPoint(151.f, 129.f), fPoint(-151.f, 0.f), 0.1f, 2, false);
+	
+	
 
 	createAnim(L"UpSlash_player_R", m_pTex,
 		fPoint(0.f, 0.f), fPoint(129.f, 151.f), fPoint(129.f, 0.f), 0.1f, 2, false);
@@ -107,7 +106,7 @@ void CAttack::collisionEnter(CCollider* pOther)
 	CObject* pTarget = pOther->getOwner();
 
 	if (eOBJNAME::PLAYER == pOwner->getName())
-	{
+	{	// ÇÃ·¹ÀÌ¾îÀÇ atk
 		tPlayerInfo info = ((CPlayer*)pOwner)->getPlayerInfo();
 
 		switch (pTarget->getName())
@@ -117,13 +116,18 @@ void CAttack::collisionEnter(CCollider* pOther)
 		case eOBJNAME::MONS_MUSH:
 		case eOBJNAME::MONS_BEE:
 		{	
-			if (((CMonster*)pTarget)->isCheck(SM_DEATH)) return;			// Á×Àº »óÅÂÀÎ °æ¿ì Á¦¿Ü
+			fPoint pos = (getPos() + pOther->getPos()) / 2.f;
 
-			// soul È¹µæ·®
-			info.fvKnockBackDir = (pOwner->getPos() - pTarget->getPos());
-			info.uiSoul += 20;
-			if (info.uiSoul > 100)
-				info.uiSoul = 100;
+			CEffect* pEff = new CEffect;
+			pEff->load(L"nail_hit_effect", L"texture\\effect\\nail_hit_effect.bmp");
+			pEff->setDuration(0.4f);
+
+			pEff->createAnim(L"nail_hit_effect", pEff->getTex(),
+				fPoint(0, 0), fPoint(243, 155), fPoint(243, 0), 0.1f, 4, false);
+
+			pEff->setPos(pos);
+			pEff->PLAY(L"nail_hit_effect");
+			createObj(pEff, eOBJ::EFFECT);
 
 			CSoundManager::getInst()->addSound(L"enemy_damage", L"sound\\player\\enemy_damage.wav");
 			CSoundManager::getInst()->play(L"enemy_damage", 0.1f);
@@ -133,10 +137,46 @@ void CAttack::collisionEnter(CCollider* pOther)
 				((CPlayer*)pOwner)->setCheck(SP_DWSLASH, true);
 				changeMyState(((CPlayer*)pOwner)->getAI(), eSTATE_PLAYER::JUMP);
 			}
+
+			if (((CMonster*)pTarget)->isCheck(SM_DEATH)) break;			// Á×Àº »óÅÂÀÎ °æ¿ì ÀÌÆåÆ®¶û »ç¿îµå¸¸ Ãâ·ÂÇÏ°í ±×¸¸
+
+			info.fvKnockBackDir = (pOwner->getPos() - pTarget->getPos());
+			info.fKnockBackTimer = P_KB_TIMER;
+
+			// soul È¹µæ·®
+			info.uiSoul += 20;
+			if (info.uiSoul > 100)
+				info.uiSoul = 100;
+
+			
+			break;
+		}
+		case eOBJNAME::SHIELD:
+		{
+			fPoint pos = (getPos() + pOther->getPos()) / 2.f;
+
+			info.fvKnockBackDir = (pOwner->getPos() - pTarget->getPos());
+			info.fKnockBackTimer = P_KB_TIMER;
+
+			CEffect* pEff = new CEffect;
+			pEff->load(L"effect_paring", L"texture\\effect\\effect_paring.bmp");
+			pEff->setDuration(0.4f);
+
+			pEff->createAnim(L"effect_paring", pEff->getTex(),
+				fPoint(0, 0), fPoint(373, 278), fPoint(373, 0), 0.13f, 3, false);
+
+			pEff->setPos(pos);
+			pEff->PLAY(L"effect_paring");
+			createObj(pEff, eOBJ::EFFECT);
+
+			CSoundManager::getInst()->addSound(L"hero_parry", L"sound\\player\\hero_parry.wav");
+			CSoundManager::getInst()->play(L"hero_parry", 0.1f);
+
 			break;
 		}
 		}
 		
+
 		((CPlayer*)pOwner)->setPlayerInfo(info);
 	}
 }

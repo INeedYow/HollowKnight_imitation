@@ -55,14 +55,14 @@ void CSpear::update()
 		setSpeed(m_fSpd * 0.1f);
 		m_uiStep++;
 
-		CEffect* pEff = new CEffect;
+		/*CEffect* pEff = new CEffect;
 		pEff->load(L"Effect_dream", L"texture\\effect\\dream_catcher_mini.bmp");
 		pEff->setDuration(1.f);
 		pEff->createAnim(L"effect_dream", pEff->getTex(),
 			fPoint(0, 0), fPoint(61, 61), fPoint(61, 0), 0.05f, 13, false);
 		pEff->setPos(pos);
 		pEff->PLAY(L"effect_dream");
-		createObj(pEff, eOBJ::EFFECT);
+		createObj(pEff, eOBJ::EFFECT);*/
 
 		CSoundManager::getInst()->addSound(L"spear_appear", L"sound\\boss\\spear_appear.wav");
 		CSoundManager::getInst()->play(L"spear_appear", 0.1f);

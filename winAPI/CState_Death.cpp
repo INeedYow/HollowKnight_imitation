@@ -32,6 +32,7 @@ void CState_Death::enter()
 	m_fDura = 2.4f;
 	getPlayer()->setCheck(SP_STOPANIM, true);
 	getPlayer()->setCheck(SP_NODMG, true);
+	getPlayer()->setCheck(SP_DEATH, true);
 
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	info.fNoDmgTimer = 1.5f + m_fDura;
@@ -47,8 +48,9 @@ void CState_Death::exit()
 {
 	m_fDura = 0.f;
 	getPlayer()->setCheck(SP_STOPANIM, false);
+	getPlayer()->setCheck(SP_DEATH, false);
 
-	// 임시
+	// 일단 계속 부활하도록 했음
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	info.uiHP = 5;
 	info.uiSoul = 100;

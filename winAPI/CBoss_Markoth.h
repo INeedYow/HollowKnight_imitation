@@ -63,13 +63,13 @@ private:
 #define B_SHD_RAD			285				// 회전 크기 반지름
 
 // spear
-#define B_SPR_SPD_1P		960			// 1 페이즈 spear 속도
-#define B_SPR_SPD_2P		1140			// 2
+#define B_SPR_SPD_1P		1020			// 1 페이즈 spear 속도
+#define B_SPR_SPD_2P		1200			// 2
 #define B_SPR_COOL			1.3f
 
 // boss
-#define B_HPMAX				20
-#define B_SPD				200
+#define B_HPMAX				30
+#define B_SPD				225
 #define B_READY_DURA		3.25f
 #define B_ACCEL				(2.f /** B_SHD_SPD / B_READY_DURA*/)
 #define B_DMG_DELAY			0.33			// 플레이어 미사일로 부터 피해 입는 주기

@@ -11,12 +11,13 @@
 #include "CState_BSpawn.h"
 #include "CState_BReady.h"
 #include "CState_BSkill.h"
+#include "CState_BDeath.h"
 
 CBoss_Markoth::CBoss_Markoth()
 {
 	setTex(L"BossTex", L"texture\\boss\\boss_markoth.bmp");
 
-	setPos(fPoint(0.f, 0.f));
+	setPos(fPoint(1500.f, 700.f));
 	setSize(fPoint(190.f, 300.f));
 	setName(eOBJNAME::BOSS);
 	
@@ -32,6 +33,7 @@ CBoss_Markoth::CBoss_Markoth()
 	m_fSpawnTimer = 0.f;
 
 	setCheck(SB_TIMER, true);
+	setCheck(SM_FLY, true);
 
 	createCollider();
 	getCollider()->setSize(fPoint(SB_MdSIZEX, SB_MdSIZEY));
@@ -50,16 +52,13 @@ CBoss_Markoth::CBoss_Markoth()
 	pAI->addState(new CState_BSpawn(eSTATE_MONS::SPAWN));
 	pAI->addState(new CState_BReady(eSTATE_MONS::READY));
 	pAI->addState(new CState_BSkill(eSTATE_MONS::SKILL));
+	pAI->addState(new CState_BDeath(eSTATE_MONS::DEATH));
 
 	pAI->setCurState(eSTATE_MONS::SPAWN);
 	setAI(pAI);
 }
 
 CBoss_Markoth::~CBoss_Markoth()
-{
-}
-
-void CBoss_Markoth::printInfo(HDC hDC)
 {
 }
 
@@ -82,6 +81,11 @@ void CBoss_Markoth::update()
 	else if (pos.y < 200.f)
 		pos.y = 200.f;
 	setPos(pos);
+
+	if (isCheck(SM_DEATH))
+	{
+		changeMonsState(getAI(), eSTATE_MONS::DEATH);
+	}
 
 	if (!isCheck(SB_TIMER))	return;		// 타이머 적용되는 상태
 	
@@ -133,43 +137,47 @@ void CBoss_Markoth::render(HDC hDC)
 	if (g_bDebug)
 	{
 		getAI()->getCurState()->printInfo(hDC);
-
-		SelectGDI font(hDC, eFONT::COMIC24);
-
-		fPoint pos = getPos();
-		fPoint camPos = getCamPos();
-
-		wchar_t bufX[255] = {};
-		wchar_t bufY[255] = {};
-		wchar_t bufHP[255] = {};
-		wchar_t bufCool[255] = {};
-		wchar_t bufCool2[255] = {};
-		wchar_t buffPhase[255] = {};
-		wchar_t bufSHDSpd[255] = {};
-		wchar_t bufSHDRad[255] = {};
-
-		swprintf_s(buffPhase, L"Phase = %d", (int)m_ucPhase);
-		swprintf_s(bufHP, L"HP = %d", getMonsInfo().iHP);
-		swprintf_s(bufX, L"x = %.1f", pos.x);
-		swprintf_s(bufY, L"y = %.1f", pos.y);
-		swprintf_s(bufCool, L"cd1 = %.1f", m_fSpawnTimer);
-		swprintf_s(bufCool2, L"cd2 = %.1f", m_fSkillTimer);
-		swprintf_s(bufSHDSpd, L"ShieldSpd = %.2f", m_vecShield[0]->getSpeed());
-		swprintf_s(bufSHDRad, L"ShieldRad = %.2f", m_vecShield[m_vecShield.size() - 1]->getRadius());
-
-		pos = rendPos(pos);
-
-		TextOutW(hDC, (int)pos.x - 200, (int)pos.y + 175, buffPhase, (int)wcslen(buffPhase));
-		TextOutW(hDC, (int)pos.x - 200, (int)pos.y + 200, bufHP, (int)wcslen(bufHP));
-		TextOutW(hDC, (int)pos.x - 100, (int)pos.y + 175, bufX, (int)wcslen(bufX));
-		TextOutW(hDC, (int)pos.x - 000, (int)pos.y + 175, bufY, (int)wcslen(bufY));
-		TextOutW(hDC, (int)pos.x - 100, (int)pos.y + 200, bufCool, (int)wcslen(bufCool));
-		TextOutW(hDC, (int)pos.x - 000, (int)pos.y + 200, bufCool2, (int)wcslen(bufCool2));
-		TextOutW(hDC, (int)pos.x + 180, (int)pos.y + 165, bufSHDSpd, (int)wcslen(bufSHDSpd));
-		TextOutW(hDC, (int)pos.x + 180, (int)pos.y + 185, bufSHDRad, (int)wcslen(bufSHDRad));
+		printInfo(hDC);
 	}
 
 	componentRender(hDC);
+}
+
+void CBoss_Markoth::printInfo(HDC hDC)
+{
+	SelectGDI font(hDC, eFONT::COMIC24);
+
+	fPoint pos = getPos();
+	fPoint camPos = getCamPos();
+
+	wchar_t bufX[255] = {};
+	wchar_t bufY[255] = {};
+	wchar_t bufHP[255] = {};
+	wchar_t bufCool[255] = {};
+	wchar_t bufCool2[255] = {};
+	wchar_t buffPhase[255] = {};
+	wchar_t bufSHDSpd[255] = {};
+	wchar_t bufSHDRad[255] = {};
+
+	swprintf_s(buffPhase, L"Phase = %d", (int)m_ucPhase);
+	swprintf_s(bufHP, L"HP = %d", getMonsInfo().iHP);
+	swprintf_s(bufX, L"x = %.1f", pos.x);
+	swprintf_s(bufY, L"y = %.1f", pos.y);
+	swprintf_s(bufCool, L"cd1 = %.1f", m_fSpawnTimer);
+	swprintf_s(bufCool2, L"cd2 = %.1f", m_fSkillTimer);
+	swprintf_s(bufSHDSpd, L"ShieldSpd = %.2f", m_vecShield[0]->getSpeed());
+	swprintf_s(bufSHDRad, L"ShieldRad = %.2f", m_vecShield[m_vecShield.size() - 1]->getRadius());
+
+	pos = rendPos(pos);
+
+	TextOutW(hDC, (int)pos.x - 200, (int)pos.y + 175, buffPhase, (int)wcslen(buffPhase));
+	TextOutW(hDC, (int)pos.x - 200, (int)pos.y + 200, bufHP, (int)wcslen(bufHP));
+	TextOutW(hDC, (int)pos.x - 100, (int)pos.y + 175, bufX, (int)wcslen(bufX));
+	TextOutW(hDC, (int)pos.x - 000, (int)pos.y + 175, bufY, (int)wcslen(bufY));
+	TextOutW(hDC, (int)pos.x - 100, (int)pos.y + 200, bufCool, (int)wcslen(bufCool));
+	TextOutW(hDC, (int)pos.x - 000, (int)pos.y + 200, bufCool2, (int)wcslen(bufCool2));
+	TextOutW(hDC, (int)pos.x + 180, (int)pos.y + 165, bufSHDSpd, (int)wcslen(bufSHDSpd));
+	TextOutW(hDC, (int)pos.x + 180, (int)pos.y + 185, bufSHDRad, (int)wcslen(bufSHDRad));
 }
 
 void CBoss_Markoth::collisionEnter(CCollider* pOther)

@@ -4,6 +4,7 @@
 class CState_Idle : public CState_Player
 {
 	float	m_fTimer;
+	bool	m_bHoldA;
 
 public:
 	CState_Idle(eSTATE_PLAYER state);	// CState에서 생성자 재정의 해서

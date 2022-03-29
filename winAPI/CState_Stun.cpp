@@ -34,21 +34,6 @@ void CState_Stun::update(UINT& chk)
 			changeMyState(getOwner(), eSTATE_PLAYER::IDLE);
 		}
 	}
-
-	m_fvDir = m_fvDir.normalize();
-
-	pos.x += m_fvDir.x * m_fSpd * fDT;
-
-	if (chk & SP_AIR)
-	{
-		pos.y += m_fvDir.y * m_fSpd * fDT;
-
-		if (info.fSpdY < 0.f)
-			chk |= SP_GODOWN;
-	}
-
-	getPlayer()->setPos(pos);
-	getPlayer()->setPlayerInfo(info);
 }
 
 void CState_Stun::enter()
@@ -56,7 +41,7 @@ void CState_Stun::enter()
 	getPlayer()->playAnim(L"Stun");
 	getPlayer()->setCheck(SP_STOPANIM, true);
 	getPlayer()->setCheck(SP_NODMG, true);
-	m_fvDir = getPlayer()->getPlayerInfo().fvKnockBackDir;
+
 
 	fPoint pos = getPlayer()->getPos();
 	tPlayerInfo info = getPlayer()->getPlayerInfo();

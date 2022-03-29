@@ -3,7 +3,6 @@
 
 class CTexture;
 class CStatus;
-class CEffector;
 enum class eSTATE_PLAYER;
 
 struct tPlayerInfo
@@ -21,6 +20,8 @@ struct tPlayerInfo
 	float		fNoDmgTimer;
 
 	fVec2		fvKnockBackDir;
+	float		fKnockBackTimer;
+	float		fKnockBackSpd;
 };
 
 struct tPlayerPrevInfo
@@ -38,14 +39,11 @@ class CPlayer : public CObject
 
 	CStatus*	m_pStatus;
 	CTexture*	m_pTex;
-	CEffector*	m_pEffector;		// 미구현 // 방법 고민 중
 
 private:
-	void createRotTester();
 	void printInfo(HDC hDC);
 	void checkUpdate();
 	void updatePrevInfo(tPlayerPrevInfo prevInfo);		// gameMgr가 갱신해주도록(collMgr처리 이후에)
-	//void addDirAndPlay(const wstring& keyWord);
 
 public:
 	CPlayer();
@@ -123,16 +121,18 @@ enum class eSTATE_PLAYER
 #define P_SPDY_DW				410
 #define P_GRAV					7000
 #define P_SPDY_MIN				-1600
-#define P_LAND_TIMER			0.7				
+#define P_LAND_TIMER			0.7f				
+#define P_KB_TIMER				0.2f
+#define P_KB_SPD				100
 
-#define P_JUMPHOLDMAX			0.35
+#define P_JUMPHOLDMAX			0.35f
 #define P_FIRESOUL				30
 #define P_FOCUSSOUL				33
-#define P_FOCUSMAX				1.2
-#define P_FIREDELAY				0.4
-#define P_ATTDELAY				0.2
-#define P_STUNDURA				0.4
-#define P_DURA_INVIN			1.5
+#define P_FOCUSMAX				1.2f
+#define P_FIREDELAY				0.4f
+#define P_ATTDELAY				0.2f
+#define P_STUNDURA				0.4f
+#define P_DURA_INVIN			1.5f
 
 //
 #define PSLASH_WIDTH			180
@@ -151,6 +151,8 @@ enum class eSTATE_PLAYER
 #define SP_DBJUMP				0x0008			// 더블점프 사용했는지
 
 #define SP_GODOWN				0x0010			// 하강
-#define SP_DWSLASH				0x0020			// 
+#define SP_DWSLASH				0x0020			// 다운슬래쉬
 #define SP_STOPANIM				0x0040
 #define SP_NODMG				0x0080
+
+#define SP_DEATH				0x0100

@@ -41,6 +41,19 @@ tAniFrm& CAnimation::getFrame(UINT frmIndex)
 	return m_vecFrm[frmIndex];
 }
 
+void CAnimation::setFrmOffset(UINT frmIdx, fPoint offset)
+{
+	m_vecFrm[frmIdx].fpOffset = offset;
+}
+
+void CAnimation::setAllOffset(fPoint offset)
+{
+	for (int i = 0; i < m_vecFrm.size(); i++)
+	{
+		m_vecFrm[i].fpOffset = offset;
+	}
+}
+
 void CAnimation::setRepeat(bool isRepeat)
 {
 	m_bRepeat = isRepeat;

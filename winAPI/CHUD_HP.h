@@ -17,6 +17,6 @@ public:
 };
 
 
-#define UI_HP_POSX		100
-#define UI_HP_POSY		60
+#define UI_HP_POSX		200
+#define UI_HP_POSY		35
 

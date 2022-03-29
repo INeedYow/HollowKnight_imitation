@@ -38,6 +38,9 @@ public:
 	void setFrame(UINT frmIndex);
 	tAniFrm& getFrame(UINT frmIndex);
 
+	void setFrmOffset(UINT frmIdx, fPoint offset);
+	void setAllOffset(fPoint offset);
+
 	void setRepeat(bool isRepeat);
 
 	void update();
@@ -47,4 +50,4 @@ public:
 		fPoint step, float dura, UINT frmCnt, bool isRepeat = true);
 };
 
-#define STD_CAL		0.1f
+#define STD_CAL		0.12f

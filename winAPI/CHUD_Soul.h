@@ -7,8 +7,11 @@ class CHUD_Soul : public CHUD
 {
 	const UINT SOUL_MAX = 100;
 		
-	CTexture*	m_pSoulTex;
+	UINT		m_uiSoul;
+	UINT		m_uiEmpty;
+
 	fPoint		m_fpOffset;
+	CTexture*	m_pSoulTex;
 
 public:
 	CHUD_Soul();
@@ -21,5 +24,5 @@ public:
 #define UI_SOUL_POSX		50
 #define UI_SOUL_POSY		30
 
-#define UI_SOUL_OFFX		40.f
-#define UI_SOUL_OFFY		48.f
+#define UI_SOUL_OFFX		36.f
+#define UI_SOUL_OFFY		36.f

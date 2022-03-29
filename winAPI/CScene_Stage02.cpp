@@ -70,7 +70,6 @@ void CScene_Stage02::enter()
 	addObject(pHP, eOBJ::HUD);
 
 	// monster
-	CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(800, 1304));
 	CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(1550, 1720));
 	CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(3000, 1310));
 
@@ -79,15 +78,6 @@ void CScene_Stage02::enter()
 
 	CMonster::create(eOBJNAME::MONS_BEE, fPoint(2800, 1310));
 	CMonster::create(eOBJNAME::MONS_BEE, fPoint(2900, 1320));
-	CMonster::create(eOBJNAME::MONS_BEE, fPoint(3000, 1330));
-	CMonster::create(eOBJNAME::MONS_BEE, fPoint(3100, 1340));
-	CMonster::create(eOBJNAME::MONS_BEE, fPoint(3200, 1350));
-	CMonster::create(eOBJNAME::MONS_BEE, fPoint(3300, 1350));
-	CMonster::create(eOBJNAME::MONS_BEE, fPoint(3400, 1350));
-	CMonster::create(eOBJNAME::MONS_BEE, fPoint(3500, 1350));
-	CMonster::create(eOBJNAME::MONS_BEE, fPoint(3600, 1350));
-	CMonster::create(eOBJNAME::MONS_BEE, fPoint(400, 1200));
-	CMonster::create(eOBJNAME::MONS_BEE, fPoint(500, 1250));
 	CMonster::create(eOBJNAME::MONS_BEE, fPoint(600, 1300));
 	// UI
 

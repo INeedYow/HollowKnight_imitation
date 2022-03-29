@@ -94,6 +94,9 @@ void CState_Fall::enter()
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	info.iBottomCnt = 0;
 	getPlayer()->setPlayerInfo(info);
+
+	CSoundManager::getInst()->addSound(L"hero_falling", L"sound\\player\\hero_falling.wav");
+	CSoundManager::getInst()->play(L"hero_falling", 0.1f);
 }
 
 void CState_Fall::exit()
@@ -105,6 +108,8 @@ void CState_Fall::exit()
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	info.fSpdY = 0.f;
 	getPlayer()->setPlayerInfo(info);
+
+	CSoundManager::getInst()->stop(L"hero_falling");
 }
 
 void CState_Fall::printInfo(HDC hDC)

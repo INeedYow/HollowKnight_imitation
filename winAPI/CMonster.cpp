@@ -36,7 +36,6 @@ CMonster::~CMonster()
 		delete m_pAI;
 }
 
-// TODO 방향전환할 때 죽으면 turn anim 재생됨
 void CMonster::update()
 {
 	if (nullptr != m_pAI)
@@ -212,8 +211,13 @@ void CMonster::create(eOBJNAME eName, fPoint pos)
 
 		pMon->createAnim(L"BT_Die_R", pMon->getTex(),
 			fPoint(0, 770), fPoint(190, 136), fPoint(190, 0), 0.2f, 9, false);
+
+		pMon->getAnimator()->findAnimation(L"BT_Die_R")->setAllOffset(fPoint(0.f, 30.f));
+
 		pMon->createAnim(L"BT_Die_L", pMon->getTex(),
 			fPoint(1520, 906), fPoint(190, 136), fPoint(-190, 0), 0.2f, 9, false);
+
+		pMon->getAnimator()->findAnimation(L"BT_Die_L")->setAllOffset(fPoint(0.f, 30.f));
 
 		pMon->PLAY(L"BT_Stop_L");
 		break;

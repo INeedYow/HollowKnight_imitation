@@ -11,8 +11,6 @@ CState_BSkill::CState_BSkill(eSTATE_MONS state)
 	:CState_Mons(state)
 {
 	m_fDura = 0.f;
-	//m_fRad = 0.f;
-	//m_fSpd = 0.f;
 }
 
 CState_BSkill::~CState_BSkill()

@@ -97,9 +97,6 @@
     <ClCompile Include="CMonster.cpp">
       <Filter>Object\Character\Monster</Filter>
     </ClCompile>
-    <ClCompile Include="CTest.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
     <ClCompile Include="CMissile.cpp">
       <Filter>Object\CAttack</Filter>
     </ClCompile>
@@ -253,6 +250,9 @@
     <ClCompile Include="CHUD_Soul.cpp">
       <Filter>Object\HUD</Filter>
     </ClCompile>
+    <ClCompile Include="CState_BDeath.cpp">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons\State_Boss</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCollider.h">
@@ -371,9 +371,6 @@
     </ClInclude>
     <ClInclude Include="CMonster.h">
       <Filter>Object\Character\Monster</Filter>
-    </ClInclude>
-    <ClInclude Include="CTest.h">
-      <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="CMissile.h">
       <Filter>Object\CAttack</Filter>
@@ -527,6 +524,9 @@
     </ClInclude>
     <ClInclude Include="CHUD_Soul.h">
       <Filter>Object\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_BDeath.h">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons\State_Boss</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

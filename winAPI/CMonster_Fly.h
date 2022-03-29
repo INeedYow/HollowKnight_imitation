@@ -24,8 +24,8 @@ private:
 };
 
 // bee
-#define M_BE_SIZEX			120
-#define M_BE_SIZEY			80
+#define M_BE_SIZEX			100
+#define M_BE_SIZEY			60
 
 #define M_BE_HP				2
 #define M_BE_SPD			240

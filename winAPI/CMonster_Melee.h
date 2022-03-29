@@ -30,10 +30,10 @@ private:
 #define M_SPDY_MIN			-700
 
 // beetle
-#define M_BT_SIZEX			88
-#define M_BT_SIZEY			140
-#define M_BT_SIZEX_			186
-#define M_BT_SIZEY_			100
+#define M_BT_SIZEX			86
+#define M_BT_SIZEY			138
+#define M_BT_SIZEX_			182
+#define M_BT_SIZEY_			96
 
 #define M_BT_HP				4
 #define M_BT_SPD			200

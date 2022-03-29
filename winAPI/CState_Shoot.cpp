@@ -52,9 +52,9 @@ void CState_Shoot::update(UINT& chk)
 				pos.y -= 10.f;
 				pMsl->setPos(pos);
 				pMsl->setName(eOBJNAME::MISSILE_MONSTER);
-				pMsl->setSize(fPoint(40.f, 40.f));
+				pMsl->setSize(fPoint(42.f, 42.f));
 				pMsl->setDir(fVec2(playerPos - pos));
-				pMsl->getCollider()->setSize(fPoint(40.f, 40.f));
+				pMsl->getCollider()->setSize(fPoint(38.f, 38.f));
 				pMsl->getCollider()->setShape(eSHAPE::CIRCLE);
 				pMsl->setSpeed(300.f);
 

@@ -8,8 +8,8 @@
 #include "CMissile.h"
 #include "CAttack.h"
 #include "CStatus.h"
-#include "SelectGDI.h"
 #include "CMonster.h"
+#include "SelectGDI.h"
 #include "CEffect.h"
 
 #pragma region Include_State
@@ -32,8 +32,6 @@
 #include "CState_Land.h"
 #pragma endregion
 
-// test
-#include "CTest.h"
 
 CPlayer::CPlayer()
 {
@@ -45,6 +43,7 @@ CPlayer::CPlayer()
 	m_tInfo.uiHP = 5;
 	m_tInfo.fSpdX = (float)P_SPDX;
 	m_tInfo.fGravity = (float)P_GRAV;
+	m_tInfo.fKnockBackSpd = P_KB_SPD;
 
 	m_tPrevInfo = {};
 	m_pStatus = nullptr;
@@ -193,26 +192,62 @@ void CPlayer::playAnim(const wstring& keyWord)
 
 void CPlayer::update()
 {
-	if (KEY_ON('P')) g_bDebug = !g_bDebug;
-
-	if (g_bDebug && KEY_ON('O')) 
-		setPos(mousePos());
-
-	////////////////////////////
-	// 회전테스트
-	// T Y U I 
-	// G H J
-	//if (KEY_ON('Q'))
-	//{
-	//	createRotTester();
-	//}
+	if (KEY_ON('P')) g_bDebug = !g_bDebug;			// 디버그 모드
 
 	if (nullptr != m_pStatus)
 		m_pStatus->update(m_uiCheck);
+
 	if (nullptr != getAnimator())
 		getAnimator()->update();
 
-	checkUpdate();	
+
+	if (m_tInfo.fKnockBackTimer > 0.f && !(m_uiCheck & SP_DEATH))
+	{	// 넉백 관련
+		fPoint pos = getPos();
+
+		m_tInfo.fKnockBackTimer -= fDT;
+
+		if (m_tInfo.fKnockBackTimer < 0.f)
+		{
+			m_tInfo.fKnockBackTimer = 0.f;
+		}
+
+		m_tInfo.fvKnockBackDir.normalize();
+
+		pos.x += m_tInfo.fvKnockBackDir.x * m_tInfo.fKnockBackSpd * fDT;
+
+		//if (m_uiCheck & SP_AIR || m_tInfo.fvKnockBackDir.y <= 0.f)
+		//{	// 공중에 있거나 y 방향이 위로인 경우에만 // 땅으로 꺼지는 상황 방지
+		pos.y += m_tInfo.fvKnockBackDir.y * m_tInfo.fKnockBackSpd * fDT;
+		//}
+		setPos(pos);
+	}
+
+
+	checkUpdate();
+}
+
+void CPlayer::checkUpdate()
+{
+	if (m_uiCheck & SP_NODMG)
+	{
+		m_tInfo.fNoDmgTimer -= fDT;
+
+		if (m_tInfo.fNoDmgTimer <= 0.f)
+		{
+			m_tInfo.fNoDmgTimer = 0.f;
+			m_uiCheck &= ~(SP_NODMG);
+		}
+	}
+
+	if (m_tInfo.fSpdY == P_SPDY_MIN)
+	{	// 최대 속력으로 낙하 중이면 landTimer 증가
+		m_tInfo.fLandTimer += fDT;
+	}
+	else
+	{
+		m_tInfo.fLandTimer = 0.f;
+	}
 }
 
 void CPlayer::render(HDC hDC)
@@ -279,6 +314,7 @@ void CPlayer::collisionKeep(CCollider* pOther)
 		if (!(m_uiCheck & SP_NODMG) && !((CMonster*)pTarget)->isCheck(SM_DEATH))
 		{	// 내가 무적 상태가 아니면서 몬스터가 죽은 상태가 아닌 경우
 			m_tInfo.fvKnockBackDir = (getPos() - pTarget->getPos());
+			m_tInfo.fKnockBackTimer = 0.2f;
 
 			fPoint pos = getPos();
 
@@ -333,6 +369,16 @@ void CPlayer::collisionKeep(CCollider* pOther)
 			pos.y = pOther->getPos().y - pOther->getSize().y / 2.f
 				- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y  + 1;
 			setPos(pos);
+
+			tPlayerInfo info = getPlayerInfo();
+			if (info.iBottomCnt <= 0)
+			{
+				info.iBottomCnt = 1;
+				setPlayerInfo(info);
+				m_uiCheck &= ~(SP_AIR);
+				m_uiCheck &= ~(SP_GODOWN);
+				m_tInfo.fSpdY = 0.f;
+			}
 		}
 		else if (isBottomCollOnly(getCollider(), pOther))
 		{	// 아래쪽
@@ -342,6 +388,7 @@ void CPlayer::collisionKeep(CCollider* pOther)
 				+ getCollider()->getSize().y / 2.f + getCollider()->getOffset().y;
 			setPos(pos);
 		}
+
 		break;
 	}
 	}
@@ -429,6 +476,7 @@ void CPlayer::collisionEnter(CCollider* pOther)
 		if (!(m_uiCheck & SP_NODMG))
 		{	// 내가 무적 상태가 아니면
 			m_tInfo.fvKnockBackDir = (getPos() - pTarget->getPos());
+			m_tInfo.fKnockBackTimer = 0.2f;
 
 			fPoint pos = getPos();
 
@@ -522,33 +570,6 @@ void CPlayer::createMissile()
 	createObj(pEff, eOBJ::EFFECT);
 }
 
-void CPlayer::createRotTester()
-{	
-	fPoint mPos = getPos();
-
-	CTest* pTest = new CTest;
-
-	if (m_uiCheck & SP_DIR)
-	{
-		pTest->setDir(fPoint(1.f, 0.f));
-		mPos.x = -100.f;
-		pTest->setRot(true);
-	}
-	else
-	{
-		pTest->setDir(fPoint(-1.f, 0.f));
-		mPos.x = 100.f;
-		pTest->setRot(false);
-	}
-	pTest->setOwner(this);
-	//pTest->setPos(fPoint(mPos.x, mPos.y));
-	pTest->setOffset(fPoint(mPos.x, 0.f));
-	pTest->setName(eOBJNAME::TEST);
-
-	createObj(pTest, eOBJ::TEST);
-}
-///////////////////////////////////////////////
-
 void CPlayer::printInfo(HDC hDC)
 {
 	m_pStatus->getCurState()->printInfo(hDC);
@@ -586,29 +607,6 @@ void CPlayer::printInfo(HDC hDC)
 	}
 }
 
-void CPlayer::checkUpdate()
-{
-	if (m_uiCheck & SP_NODMG)
-	{
-		m_tInfo.fNoDmgTimer -= fDT;
-
-		if (m_tInfo.fNoDmgTimer <= 0.f)
-		{
-			m_tInfo.fNoDmgTimer = 0.f;
-			m_uiCheck &= ~(SP_NODMG);
-		}
-	}
-
-	if (m_tInfo.fSpdY == P_SPDY_MIN)
-	{	// 최대 속력으로 낙하 중이면 landTimer 증가
-		m_tInfo.fLandTimer += fDT;
-	}
-	else
-	{
-		m_tInfo.fLandTimer = 0.f;
-	}
-}
-
 void CPlayer::updatePrevInfo(tPlayerPrevInfo prevInfo)
 {
 	m_tPrevInfo = prevInfo;
@@ -621,25 +619,44 @@ void CPlayer::firstSlash()
 
 	CAttack* pAttack = new CAttack;
 	pAttack->setName(eOBJNAME::ATTACK);
-	pAttack->setSize(fPoint(PSLASH_WIDTH, PSLASH_HEIGHT));
+	//pAttack->setSize(fPoint(PSLASH_WIDTH, PSLASH_HEIGHT));
 	pAttack->getCollider()->setSize(fPoint(PSLASH_WIDTH, PSLASH_HEIGHT));
 	pAttack->setOwner(this);
 
+	
 	if (m_uiCheck & SP_DIR)
 	{
 		mPos.x += PSLASH_OFFSETX;
 		pAttack->setDir(eDIR::RIGHT);
+
+		if (/*m_uiCheck & SP_SLASH2*/false)
+		{
 		
-		pAttack->PLAY(L"Slash_player_R");
+		}
+		else
+		{
+			pAttack->createAnim(L"Slash_player", pAttack->getTex(),
+				fPoint(516.f, 0.f), fPoint(151.f, 129.f), fPoint(151.f, 0.f), 0.1f, 2, false);
+		}
+		
 	}
 	else
 	{
 		mPos.x -= PSLASH_OFFSETX;
 		pAttack->setDir(eDIR::LEFT);
-		
-		pAttack->PLAY(L"Slash_player_L");
-	}
 
+		if (false)
+		{
+
+		}
+		else
+		{
+			pAttack->createAnim(L"Slash_player", pAttack->getTex(),
+				fPoint(667.f, 129.f), fPoint(151.f, 129.f), fPoint(-151.f, 0.f), 0.1f, 2, false);
+		}
+	}
+	
+	pAttack->PLAY(L"Slash_player");
 	pAttack->setPos(fPoint(mPos.x, mPos.y));
 	pAttack->setDura(0.25f);
 	
