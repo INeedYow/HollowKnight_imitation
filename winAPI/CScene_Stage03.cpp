@@ -13,8 +13,9 @@
 #include "CHUD_HP.h"
 #include "CHUD_Soul.h"
 
-#define STG03_SIZEX 3000
-#define STG03_SIZEY 1689
+#define STG03_SIZEX				3000
+#define STG03_SIZEY				1689
+#define STG03_FRONT_SIZEY		470
 
 CScene_Stage03::CScene_Stage03()
 {
@@ -37,13 +38,12 @@ void CScene_Stage03::update()
 		if (m_bBGM)
 		{
 			CSoundManager::getInst()->play(L"bgm_stg3", 0.1f);
-			m_bBGM = !m_bBGM;
 		}
 		else
 		{
 			CSoundManager::getInst()->stop(L"bgm_stg3");
-			m_bBGM = !m_bBGM;
 		}
+		m_bBGM = !m_bBGM;
 	}
 }
 
@@ -64,9 +64,14 @@ void CScene_Stage03::enter()
 	addObject(pBoss, eOBJ::BOSS);
 
 	CBackGround* pBg = new CBackGround;
-	pBg->load(L"BG_stage3", L"texture\\background\\stage3_test.bmp");
+	pBg->load(L"BG_stage3", L"texture\\background\\stage3_back3.bmp");
 	pBg->setPos(fPoint(0.f, 0.f));
 	addObject(pBg, eOBJ::BACKGROUND);
+
+	CFrontGround* pFg = new CFrontGround;
+	pFg->load(L"FG_stage3", L"texture\\background\\stage3_front_part470.bmp");
+	pFg->setPos(fPoint(0.f, STG03_SIZEY - STG03_FRONT_SIZEY));
+	addObject(pFg, eOBJ::FRONTGROUND);
 
 	CHUD_Soul* pSoul = new CHUD_Soul;
 	addObject(pSoul, eOBJ::HUD);
@@ -74,22 +79,27 @@ void CScene_Stage03::enter()
 	CHUD_HP* pHP = new CHUD_HP;
 	addObject(pHP, eOBJ::HUD);
 
-	/*CFrontGround* pFg = new CFrontGround;
-	pFg->load(L"FG_stage3", L"texture\\background\\stage3_front.bmp");
-	pFg->setPos(fPoint(0.f, 0.f));
-	addObject(pFg, eOBJ::FRONTGROUND);*/
-
 	// ground, wall
 	CWall::create(0, 0, 268, STG03_SIZEY);
 	CWall::create(2654, 0, STG03_SIZEX, STG03_SIZEY);
 
 	CGround::create(0, 1492, STG03_SIZEX, STG03_SIZEY);
 
-	CGround::create(1076, 1120, 1240, 1170);
-	CWall::create(1080, 1135, 1244, 1155);
-
-	CGround::create(1544, 864, 1764, 928);
-	CWall::create(1540, 884, 1768, 908);
+	// ¿ÞÂÊ ¾Æ·¡
+	CGround::create(864, 1040, 1036, 1100);
+	CWall::create(860, 1055, 1040, 1085);
+	// Áß¾Ó ¾Æ·¡
+	CGround::create(1350, 1200, 1530, 1250);
+	CWall::create(1346, 1215, 1534, 1235);
+	// ¿ÞÂÊ À§
+	CGround::create(1080, 656, 1180, 708);
+	CWall::create(1076, 671, 1184, 693);
+	// Áß¾Ó À§
+	CGround::create(1578, 814, 1750, 866);
+	CWall::create(1574, 829, 1754, 851);
+	// ¿À¸¥ÂÊ ¾Æ·¡
+	CGround::create(1942, 1082, 2036, 1132);
+	CWall::create(1938, 1097, 2040, 1117);
 
 	checkGrp(eOBJ::PLAYER, eOBJ::WALL);
 	checkGrp(eOBJ::PLAYER, eOBJ::GROUND);

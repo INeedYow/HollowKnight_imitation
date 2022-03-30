@@ -2,6 +2,7 @@
 #include "CScene.h"
 class CScene_Stage02 : public CScene
 {
+	bool	m_bBGM;
 
 public:
 	CScene_Stage02();

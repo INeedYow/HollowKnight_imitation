@@ -23,17 +23,10 @@ void CBackGround::render(HDC hDC)
 {
 	if (nullptr == m_pTex) return;
 
-	fPoint pos = getPos();
-	fPoint size = getSize();
-
-	fPoint renderPos = rendPos(pos);
 	fPoint camPos = getCamPos();
 
-	//renderPos = pos + (renderPos - pos) / 5;
-
 	BitBlt(hDC,
-		(int)(0),
-		(int)(0),
+		0, 0,
 		(int)(WINSIZEX),
 		(int)(WINSIZEY),
 		m_pTex->getDC(),

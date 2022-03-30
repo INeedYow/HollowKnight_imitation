@@ -36,7 +36,7 @@ void CState_BDeath::update(UINT& chk)
 			CEffect_Move* pEff = new CEffect_Move;
 			pEff->load(L"dream_big", L"texture\\boss\\dream_big.bmp");
 			pEff->setDuration(3.f);
-			pEff->setDegree(m_iDegree);
+			pEff->setDegree((float)m_iDegree);
 			pEff->setSpeed(m_fSpd);
 			pEff->setDecel(m_fDecel);
 
@@ -49,7 +49,7 @@ void CState_BDeath::update(UINT& chk)
 			pEff->PLAY(L"dream_big");
 			createObj(pEff, eOBJ::EFFECT_BACK);
 
-			m_iDegree	= (float)(rand() % 360);
+			m_iDegree	= (int)(rand() % 360);
 			m_fSpd		= (float)(rand() % 1800 + 900);
 			m_fDecel	= (float)(rand() % 900 + 450);
 		}
@@ -58,7 +58,7 @@ void CState_BDeath::update(UINT& chk)
 			CEffect_Move* pEff = new CEffect_Move;
 			pEff->load(L"dream_mini", L"texture\\boss\\dream_mini.bmp");
 			pEff->setDuration(3.f);
-			pEff->setDegree(m_iDegree);
+			pEff->setDegree((float)m_iDegree);
 			pEff->setSpeed(m_fSpd);
 			pEff->setDecel(m_fDecel);
 
@@ -71,7 +71,7 @@ void CState_BDeath::update(UINT& chk)
 			pEff->PLAY(L"dream_mini");
 			createObj(pEff, eOBJ::EFFECT_BACK);
 
-			m_iDegree	= (float)(rand() % 360);
+			m_iDegree	= (int)(rand() % 360);
 			m_fSpd		= (float)(rand() % 1800 + 900);
 			m_fDecel	= (float)(rand() % 900 + 450);
 		}
@@ -102,7 +102,7 @@ void CState_BDeath::enter()
 	getMonster()->PLAY(L"st_Death");
 	m_fDura = 4.5f;
 	m_fTimer = 0.f;
-	m_iDegree = 0.f;
+	m_iDegree = 0;
 	m_fSpd = 0.f;
 
 	CSoundManager::getInst()->addSound(L"Markoth_Death", L"sound\\boss\\Markoth_Death.wav");

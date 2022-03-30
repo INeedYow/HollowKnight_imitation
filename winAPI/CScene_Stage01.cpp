@@ -43,13 +43,12 @@ void CScene_Stage01::update()
 		if (m_bBGM)
 		{
 			CSoundManager::getInst()->play(L"bgm_stg1", 0.1f);
-			m_bBGM = !m_bBGM;
 		}
 		else
 		{
 			CSoundManager::getInst()->stop(L"bgm_stg1");
-			m_bBGM = !m_bBGM;
 		}
+		m_bBGM = !m_bBGM;
 	}
 }
 

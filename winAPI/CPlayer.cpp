@@ -18,8 +18,7 @@
 #include "CState_Run.h"
 #include "CState_Jump.h"
 #include "CState_Fall.h"
-#include "CState_Slash1.h"
-#include "CState_Slash2.h"
+#include "CState_Slash.h"
 #include "CState_Upslash.h"
 #include "CState_Downslash.h"
 #include "CState_Fire.h"
@@ -64,6 +63,9 @@ CPlayer::CPlayer()
 	createAnim(L"Idle2Run_R",	m_pTex,	fPoint(360.f, 0.f),			fPoint(82.f, 127.f),		fPoint(82.f, 0.f),			0.2f,	4, false);
 	createAnim(L"Idle2Run_L",	m_pTex,	fPoint(1262.f, 127.f),		fPoint(82.f, 127.f),		fPoint(-82.f, 0.f),			0.2f,	4, false);
 
+	getAnimator()->findAnimation(L"Idle2Run_R")->setAllOffset(fPoint(0.f, 6.f));
+	getAnimator()->findAnimation(L"Idle2Run_L")->setAllOffset(fPoint(0.f, 6.f));
+
 	createAnim(L"Run_R",		m_pTex,	fPoint(688.f, 0.f),			fPoint(82.f, 127.f),		fPoint(82.f, 0.f),			0.2f,	8);
 	createAnim(L"Run_L",		m_pTex,	fPoint(934.f, 127.f),		fPoint(82.f, 127.f),		fPoint(-82.f, 0.f),			0.2f,	8);
 
@@ -76,6 +78,9 @@ CPlayer::CPlayer()
 	createAnim(L"Land_R",		m_pTex,	fPoint(2328.f, 0.f),		fPoint(76.f, 127.f),		fPoint(76.f, 0.f),			0.8f,	1, false);
 	createAnim(L"Land_L",		m_pTex,	fPoint(2480.f, 127.f),		fPoint(76.f, 127.f),		fPoint(-76.f, 0.f),			0.8f,	1, false);
 
+	getAnimator()->findAnimation(L"Land_R")->setAllOffset(fPoint(0.f, 8.f));
+	getAnimator()->findAnimation(L"Land_L")->setAllOffset(fPoint(0.f, 8.f));
+
 	createAnim(L"Land2Idle_R",	m_pTex,	fPoint(2404.f, 0.f),		fPoint(76.f, 127.f),		fPoint(76.f, 0.f),			0.2f,	2, false);
 	createAnim(L"Land2Idle_L",	m_pTex,	fPoint(2404.f, 127.f),		fPoint(76.f, 127.f),		fPoint(-76.f, 0.f),			0.2f,	2, false);
 
@@ -84,9 +89,6 @@ CPlayer::CPlayer()
 
 	createAnim(L"Slash1_R",		m_pTex,	fPoint(0.f, 254.f),			fPoint(82.f, 127.f),		fPoint(82.f, 0.f),			0.06f,	5, false);
 	createAnim(L"Slash1_L",		m_pTex,	fPoint(328.f, 381.f),		fPoint(82.f, 127.f),		fPoint(-82.f, 0.f),			0.06f,	5, false);
-
-	createAnim(L"Slash2_R",		m_pTex,	fPoint(410.f, 254.f),		fPoint(118.f, 127.f),		fPoint(118.f, 0.f),			0.06f,	5, false);
-	createAnim(L"Slash2_L",		m_pTex,	fPoint(882.f, 381.f),		fPoint(118.f, 127.f),		fPoint(-118.f, 0.f),		0.06f,	5, false);
 
 	createAnim(L"UpSlash_R",	m_pTex,	fPoint(1000.f, 254.f),		fPoint(95.f, 127.f),		fPoint(95.f, 0.f),			0.2f,	5, false);
 	createAnim(L"UpSlash_L",	m_pTex,	fPoint(1380.f, 381.f),		fPoint(95.f, 127.f),		fPoint(-95.f, 0.f),			0.2f,	5, false);
@@ -154,8 +156,7 @@ CPlayer* CPlayer::createNormal(fPoint pos)
 	pStatus->addState(new CState_Dash(eSTATE_PLAYER::DASH));
 	pStatus->addState(new CState_Dash2Idle(eSTATE_PLAYER::DASH2IDLE));
 
-	pStatus->addState(new CState_Slash1(eSTATE_PLAYER::SLASH1));
-	pStatus->addState(new CState_Slash2(eSTATE_PLAYER::SLASH2));
+	pStatus->addState(new CState_Slash(eSTATE_PLAYER::SLASH1));
 	pStatus->addState(new CState_Upslash(eSTATE_PLAYER::UPSLASH));
 	pStatus->addState(new CState_Downslash(eSTATE_PLAYER::DOWNSLASH));
 
@@ -247,17 +248,6 @@ void CPlayer::checkUpdate()
 	else
 	{
 		m_tInfo.fLandTimer = 0.f;
-	}
-
-	if (m_uiCheck & SP_SLASH2)
-	{	// 연속 슬래쉬 타이머
-		m_tInfo.fSlashTimer -= fDT;
-
-		if (m_tInfo.fSlashTimer < 0.f)
-		{
-			m_tInfo.fSlashTimer = 0.f;
-			m_uiCheck &= ~(SP_SLASH2);
-		}
 	}
 }
 
@@ -436,6 +426,7 @@ void CPlayer::collisionEnter(CCollider* pOther)
 
 				m_uiCheck &= ~(SP_AIR);
 				m_uiCheck &= ~(SP_GODOWN);
+				m_uiCheck &= ~(SP_DASH);
 				m_tInfo.iBottomCnt++;
 				m_tInfo.fSpdY = 0.f;
 			}
@@ -623,60 +614,37 @@ void CPlayer::updatePrevInfo(tPlayerPrevInfo prevInfo)
 	m_tPrevInfo = prevInfo;
 }
 
-// Slash들 합쳐도 될듯
-void CPlayer::firstSlash()
+void CPlayer::slash()
 {
 	fPoint mPos = getPos();
 
 	CAttack* pAttack = new CAttack;
+	pAttack->setTex(L"Player_Slash1", L"texture\\attack\\attack_slash.bmp");
 	pAttack->setName(eOBJNAME::ATTACK);
-	//pAttack->setSize(fPoint(PSLASH_WIDTH, PSLASH_HEIGHT));
 	pAttack->getCollider()->setSize(fPoint(PSLASH_WIDTH, PSLASH_HEIGHT));
 	pAttack->setOwner(this);
 
-	
 	if (m_uiCheck & SP_DIR)
 	{
 		mPos.x += PSLASH_OFFSETX;
 		pAttack->setDir(eDIR::RIGHT);
+		pAttack->createAnim(L"Player_Slash1", pAttack->getTex(),
+			fPoint(0.f, 0.f), fPoint(151.f, 129.f), fPoint(151.f, 0.f), 0.1f, 2, false);
 
-		if (m_uiCheck & SP_SLASH2)
-		{
-			pAttack->createAnim(L"Slash_player", pAttack->getTex(),
-				fPoint(516.f, 0.f), fPoint(151.f, 129.f), fPoint(151.f, 0.f), 0.1f, 2, false);
-		}
-		else
-		{
-			pAttack->createAnim(L"Slash_player", pAttack->getTex(),
-				fPoint(516.f, 0.f), fPoint(151.f, 129.f), fPoint(151.f, 0.f), 0.1f, 2, false);
-		}
-		
 	}
 	else
 	{
 		mPos.x -= PSLASH_OFFSETX;
 		pAttack->setDir(eDIR::LEFT);
-
-		if (false)
-		{
-
-		}
-		else
-		{
-			pAttack->createAnim(L"Slash_player", pAttack->getTex(),
-				fPoint(667.f, 129.f), fPoint(151.f, 129.f), fPoint(-151.f, 0.f), 0.1f, 2, false);
-		}
+		pAttack->createAnim(L"Player_Slash1", pAttack->getTex(),
+			fPoint(151.f, 129.f), fPoint(151.f, 129.f), fPoint(-151.f, 0.f), 0.1f, 2, false);
 	}
 	
-	pAttack->PLAY(L"Slash_player");
+	pAttack->PLAY(L"Player_Slash1");
 	pAttack->setPos(fPoint(mPos.x, mPos.y));
-	pAttack->setDura(0.25f);
+	pAttack->setDura(0.2f);
 	
 	createObj(pAttack, eOBJ::ATTACK);
-}
-
-void CPlayer::secondSlash()
-{
 }
 
 void CPlayer::upSlash()
@@ -684,6 +652,7 @@ void CPlayer::upSlash()
 	fPoint mPos = getPos();
 
 	CAttack* pAttack = new CAttack;
+	pAttack->setTex(L"Player_UpSlash", L"texture\\attack\\attack_upslash.bmp");
 	pAttack->setName(eOBJNAME::ATTACK);
 	pAttack->setSize(fPoint(PSLASH_HEIGHT, PSLASH_WIDTH));
 	pAttack->getCollider()->setSize(fPoint(PSLASH_HEIGHT, PSLASH_WIDTH));
@@ -691,18 +660,20 @@ void CPlayer::upSlash()
 
 	if (m_uiCheck & SP_DIR)
 	{
-		pAttack->PLAY(L"UpSlash_player_R");
+		pAttack->createAnim(L"Player_UpSlash", pAttack->getTex(),
+			fPoint(0.f, 0.f), fPoint(129.f, 151.f), fPoint(129.f, 0.f), 0.1f, 2, false);
 	}
 	else
 	{
-		pAttack->PLAY(L"UpSlash_player_L");
+		pAttack->createAnim(L"Player_UpSlash", pAttack->getTex(),
+			fPoint(129.f, 151.f), fPoint(129.f, 151.f), fPoint(-129.f, 0.f), 0.1f, 2, false);
 	}
-
-	mPos.y -= PSLASH_OFFSETY;
+	pAttack->PLAY(L"Player_UpSlash");
 	pAttack->setDir(eDIR::TOP);
 
+	mPos.y -= PSLASH_OFFSETY;
 	pAttack->setPos(fPoint(mPos.x, mPos.y));
-	pAttack->setDura(0.25f);
+	pAttack->setDura(0.2f);
 
 	createObj(pAttack, eOBJ::ATTACK);
 }
@@ -712,6 +683,7 @@ void CPlayer::downSlash()
 	fPoint mPos = getPos();
 
 	CAttack* pAttack = new CAttack;
+	pAttack->setTex(L"Player_DownSlash", L"texture\\attack\\attack_downslash.bmp");
 	pAttack->setName(eOBJNAME::ATTACK);
 	pAttack->setSize(fPoint(PSLASH_HEIGHT, PSLASH_WIDTH));
 	pAttack->getCollider()->setSize(fPoint(PSLASH_HEIGHT, PSLASH_WIDTH));
@@ -719,18 +691,21 @@ void CPlayer::downSlash()
 
 	if (m_uiCheck & SP_DIR)
 	{
-		pAttack->PLAY(L"DownSlash_player_R");
+		pAttack->createAnim(L"Player_DownSlash", pAttack->getTex(),
+			fPoint(0.f, 0.f), fPoint(129.f, 151.f), fPoint(129.f, 0.f), 0.1f, 2, false);
 	}
 	else
 	{
-		pAttack->PLAY(L"DownSlash_player_L");
+		pAttack->createAnim(L"Player_DownSlash", pAttack->getTex(),
+			fPoint(129.f, 151.f), fPoint(129.f, 151.f), fPoint(-129.f, 0.f), 0.1f, 2, false);
 	}
 
-	mPos.y += PSLASH_OFFSETY;
+	pAttack->PLAY(L"Player_DownSlash");
 	pAttack->setDir(eDIR::BOTTOM);
 
+	mPos.y += PSLASH_OFFSETY;
 	pAttack->setPos(fPoint(mPos.x, mPos.y));
-	pAttack->setDura(0.5f);
+	pAttack->setDura(0.2f);
 
 	createObj(pAttack, eOBJ::ATTACK);
 }

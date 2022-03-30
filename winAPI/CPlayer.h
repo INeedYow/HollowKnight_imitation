@@ -71,8 +71,7 @@ public:
 
 	void createMissile();
 	
-	void firstSlash();
-	void secondSlash();
+	void slash();
 	void upSlash();
 	void downSlash();
 
@@ -100,7 +99,6 @@ enum class eSTATE_PLAYER
 	DEATH,
 
 	// TODO
-	SLASH2,
 
 	HANG,
 	HANG2JUMP,
@@ -148,12 +146,12 @@ enum class eSTATE_PLAYER
 // state의 종류 받아오기보다 비트연산으로 구분하는 게 좋은 듯)
 #define SP_DIR					0x0001			// 좌, 우 방향
 #define SP_AIR					0x0002			// 공중에 뜸
-#define SP_JUMPHOLD				0x0004			// 점프 키 누르고 있는 상황
-#define SP_DBJUMP				0x0008			// 더블점프 사용했는지
+#define SP_GODOWN				0x0004			// 하강
+#define SP_JUMPHOLD				0x0008			// 점프 키 누르고 있는 상황
 
-#define SP_GODOWN				0x0010			// 하강
+#define SP_DBJUMP				0x0010			// 더블점프 사용했는지
 #define SP_DWSLASH				0x0020			// 다운슬래쉬
-#define SP_SLASH2				0x0040			// 연속 슬래쉬 동작
+#define SP_DASH					0x0040			// 대쉬
 #define SP_STOPANIM				0x0080
 
 #define SP_NODMG				0x0100

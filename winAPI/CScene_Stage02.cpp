@@ -21,6 +21,7 @@
 
 CScene_Stage02::CScene_Stage02()
 {
+	m_bBGM = true;
 }
 
 CScene_Stage02::~CScene_Stage02()
@@ -39,8 +40,21 @@ void CScene_Stage02::update()
 	if (KEY_ON('N'))
 		changeScn(eSCENE::STAGE_03);
 
-	if (gameGetPlayer()->getPos().x >= STG02_SIZEX - 40)
+	if (gameGetPlayer()->getPos().x >= STG02_SIZEX - 30)
 		changeScn(eSCENE::STAGE_03);
+
+	if (KEY_ON('M'))
+	{
+		if (m_bBGM)
+		{
+			CSoundManager::getInst()->play(L"bgm_stg2", 0.1f);
+		}
+		else
+		{
+			CSoundManager::getInst()->stop(L"bgm_stg2");
+		}
+		m_bBGM = !m_bBGM;
+	}
 }
 
 void CScene_Stage02::enter()

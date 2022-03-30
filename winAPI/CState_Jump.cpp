@@ -70,7 +70,7 @@ void CState_Jump::update(UINT& chk)
 		}
 	}
 
-	else if (KEY_ON('C'))
+	else if (KEY_ON('C') && !(chk & SP_DASH))
 	{
 		changeMyState(getOwner(), eSTATE_PLAYER::DASH);
 	}

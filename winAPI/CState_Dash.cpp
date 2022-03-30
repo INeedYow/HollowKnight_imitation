@@ -60,6 +60,7 @@ void CState_Dash::enter()
 {
 	getPlayer()->playAnim(L"Dash");
 	getPlayer()->setCheck(SP_STOPANIM, true);
+	getPlayer()->setCheck(SP_DASH, true);
 	getPlayer()->setCheck(SP_NODMG, true);
 
 	tPlayerInfo info = getPlayer()->getPlayerInfo();

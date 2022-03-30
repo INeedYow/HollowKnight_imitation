@@ -51,7 +51,7 @@ void CState_Fall::update(UINT& chk)
 		}
 	}
 
-	else if (KEY_ON('C'))
+	else if (KEY_ON('C') && !(chk & SP_DASH))
 	{
 		changeMyState(getOwner(), eSTATE_PLAYER::DASH);
 	}
@@ -61,12 +61,9 @@ void CState_Fall::update(UINT& chk)
 		changeMyState(getOwner(), eSTATE_PLAYER::DOUBLEJUMP);
 	}
 
-	else if (KEY_ON('A'))
+	else if (KEY_ON('A') && info.uiSoul >= P_FIRESOUL)
 	{
-		if (info.uiSoul >= P_FIRESOUL)
-		{
-			changeMyState(getOwner(), eSTATE_PLAYER::FIRE);
-		}
+		changeMyState(getOwner(), eSTATE_PLAYER::FIRE);
 	}
 
 	info.fSpdY -= info.fGravity * fDT;

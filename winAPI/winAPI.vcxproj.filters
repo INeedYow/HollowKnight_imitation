@@ -130,7 +130,7 @@
     <ClCompile Include="CState_Run.cpp">
       <Filter>Engine\Component\Status &amp; AI\Status\CState_Player</Filter>
     </ClCompile>
-    <ClCompile Include="CState_Slash1.cpp">
+    <ClCompile Include="CState_Slash.cpp">
       <Filter>Engine\Component\Status &amp; AI\Status\CState_Player</Filter>
     </ClCompile>
     <ClCompile Include="CState_Upslash.cpp">
@@ -140,9 +140,6 @@
       <Filter>Engine\Component\Status &amp; AI\Status\CState_Player</Filter>
     </ClCompile>
     <ClCompile Include="CState_Focus.cpp">
-      <Filter>Engine\Component\Status &amp; AI\Status\CState_Player</Filter>
-    </ClCompile>
-    <ClCompile Include="CState_Slash2.cpp">
       <Filter>Engine\Component\Status &amp; AI\Status\CState_Player</Filter>
     </ClCompile>
     <ClCompile Include="CState_Stun.cpp">
@@ -393,7 +390,7 @@
     <ClInclude Include="CState_Player.h">
       <Filter>Engine\Component\Status &amp; AI\Status</Filter>
     </ClInclude>
-    <ClInclude Include="CState_Slash1.h">
+    <ClInclude Include="CState_Slash.h">
       <Filter>Engine\Component\Status &amp; AI\Status\CState_Player</Filter>
     </ClInclude>
     <ClInclude Include="CState_Downslash.h">
@@ -418,9 +415,6 @@
       <Filter>Engine\Component\Status &amp; AI\Status\CState_Player</Filter>
     </ClInclude>
     <ClInclude Include="CState_Focus.h">
-      <Filter>Engine\Component\Status &amp; AI\Status\CState_Player</Filter>
-    </ClInclude>
-    <ClInclude Include="CState_Slash2.h">
       <Filter>Engine\Component\Status &amp; AI\Status\CState_Player</Filter>
     </ClInclude>
     <ClInclude Include="CState_Stun.h">
@@ -687,7 +681,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
   </ItemGroup>
 </Project>

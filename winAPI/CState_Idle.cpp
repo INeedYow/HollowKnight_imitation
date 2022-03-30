@@ -41,10 +41,6 @@ void CState_Idle::update(UINT& chk)
 		{
 			changeMyState(getOwner(), eSTATE_PLAYER::UPSLASH);
 		}
-		else if (chk & SP_SLASH2)
-		{
-			changeMyState(getOwner(), eSTATE_PLAYER::SLASH2);
-		}
 		else 
 		{
 			changeMyState(getOwner(), eSTATE_PLAYER::SLASH1);

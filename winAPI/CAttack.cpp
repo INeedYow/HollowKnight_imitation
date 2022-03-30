@@ -13,31 +13,14 @@ CAttack::CAttack()
 	m_pOwner = nullptr;
 	m_eDir = eDIR::NONE;
 	m_fDura = 0.1f;
-	//m_uiDmg = 1;
 
-	// юс╫ц TODO
-	m_pTex = loadTex(L"Attack_Player", L"texture\\attack\\slash.bmp");
+	m_pTex = nullptr;
 
 	createCollider();
 	getCollider()->setSize(fPoint(30.f, 30.f));
 	getCollider()->setShape(eSHAPE::RECT);
 
 	createAnimator();
-
-	
-	
-
-	createAnim(L"UpSlash_player_R", m_pTex,
-		fPoint(0.f, 0.f), fPoint(129.f, 151.f), fPoint(129.f, 0.f), 0.1f, 2, false);
-	createAnim(L"UpSlash_player_L", m_pTex,
-		fPoint(129.f, 151.f), fPoint(129.f, 151.f), fPoint(-129.f, 0.f), 0.1f, 2, false);
-
-	createAnim(L"DownSlash_player_R", m_pTex,
-		fPoint(258.f, 0.f), fPoint(129.f, 151.f), fPoint(129.f, 0.f), 0.1f, 2, false);
-	createAnim(L"DownSlash_player_L", m_pTex,
-		fPoint(387.f, 151.f), fPoint(129.f, 151.f), fPoint(-129.f, 0.f), 0.1f, 2, false);
-
-	PLAY(L"Slash_player_R");
 }
 
 CAttack::~CAttack()
