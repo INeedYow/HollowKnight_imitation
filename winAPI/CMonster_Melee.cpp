@@ -209,10 +209,13 @@ void CMonster_Melee::collisionKeep(CCollider* pOther)
 	case eOBJNAME::GROUND:
 	{
 		fPoint pos = getPos();
+		fPoint size = getCollider()->getSize();
+		fPoint oPos = pOther->getPos();
+		fPoint oSize = pOther->getSize();
 		if (isTopCollOnly(getCollider(), pOther))
 		{	// À§
-			pos.y = pOther->getPos().y - pOther->getSize().y / 2.f
-				- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y + 1;
+			pos.y = oPos.y - oSize.y / 2.f
+				- size.y / 2.f - getCollider()->getOffset().y + 1;
 		}
 		else if (isBottomCollOnly(getCollider(), pOther))
 		{
@@ -226,6 +229,12 @@ void CMonster_Melee::collisionKeep(CCollider* pOther)
 				m_iBottomCnt = 0;
 			}
 		}
+
+		/*if (pos.x - size.x / 2.f < oPos.x - oSize.x / 2.f)
+			pos.x = oPos.x - oSize.x / 2.f + size.x / 2.f;
+		else if (pos.x + size.x / 2.f > oPos.x - oSize.x / 2.f)
+			pos.x = oPos.x - oSize.x / 2.f - size.x / 2.f;*/
+
 		setPos(pos);
 		break;
 	}

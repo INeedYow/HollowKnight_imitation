@@ -12,6 +12,8 @@
 #include "CHUD_HP.h"
 #include "CHUD_Soul.h"
 
+#include "CTest.h"
+
 #define STG01_SIZEX 3840
 #define STG01_SIZEY 2160
 
@@ -72,20 +74,10 @@ void CScene_Stage01::enter()
 		CGameManager::getInst()->loadPlayerInfo(pPlayer);		
 	}
 
-	//test
-	/////////////////////////////////////////////////////////
-	//CSpear* pSpear = new CSpear;
-	//pSpear->setPos(fPoint(1200.f, 1200.f));
-	//pSpear->setName(eOBJNAME::MISSILE_MONSTER);
-	//pSpear->setMaxSpd(1.f);
-	//pSpear->getCollider()->setSize(fPoint(60.f, 60.f));
-	//pSpear->setTex(L"Spear_Boss", L"texture\\boss\\boss_spearBig.bmp");
-	//pSpear->createAnim(L"Spear_normal", pSpear->getTex(),
-	//	fPoint(0.f, 0.f), fPoint(400.f, 91.f), fPoint(0.f, 0.f), 1.f, 1, false);
-	//pSpear->getAnimator()->play(L"Spear_normal");
 
-	//createObj(pSpear, eOBJ::MISSILE_MONSTER);
-	/////////////////////////////////////////////////////////
+	CTest* pTest = new CTest;
+	pTest->setPos(fPoint(1350.f, 1470.f));
+	addObject(pTest, eOBJ::TEST);
 
 	CBackGround* pBg = new CBackGround;
 	pBg->load(L"BG_stage1", L"texture\\background\\stage1_back.bmp");
@@ -125,6 +117,7 @@ void CScene_Stage01::enter()
 	// 충돌 체크
 	checkGrp(eOBJ::PLAYER, eOBJ::WALL);
 	checkGrp(eOBJ::PLAYER, eOBJ::GROUND);
+	checkGrp(eOBJ::PLAYER, eOBJ::TEST);
 
 	checkGrp(eOBJ::ATTACK, eOBJ::WALL);
 	checkGrp(eOBJ::ATTACK, eOBJ::GROUND);
@@ -142,8 +135,6 @@ void CScene_Stage01::enter()
 
 void CScene_Stage01::exit()
 {
-	//CGameManager::getInst()->savePlayerInfo();
-
 	deleteObjectAll();
 	resetGrp();
 

@@ -220,6 +220,7 @@
     <ClInclude Include="CState_Slash.h" />
     <ClInclude Include="CState_Stun.h" />
     <ClInclude Include="CState_Upslash.h" />
+    <ClInclude Include="CTest.h" />
     <ClInclude Include="CTexture.h" />
     <ClInclude Include="CTile.h" />
     <ClInclude Include="CTimeManager.h" />
@@ -313,6 +314,7 @@
     <ClCompile Include="CState_Slash.cpp" />
     <ClCompile Include="CState_Stun.cpp" />
     <ClCompile Include="CState_Upslash.cpp" />
+    <ClCompile Include="CTest.cpp" />
     <ClCompile Include="CTexture.cpp" />
     <ClCompile Include="CTile.cpp" />
     <ClCompile Include="CTimeManager.cpp" />

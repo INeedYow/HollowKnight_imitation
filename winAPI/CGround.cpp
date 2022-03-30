@@ -29,6 +29,7 @@ void CGround::create(float left, float top, float right, float bottom)
 {	// ÁÂÇ¥°ªÀ¸·Î ¶¥ »ý¼º
 	CGround* pNewGrd = new CGround;
 	pNewGrd->setPos(fPoint((left + right) / 2.f, (top + bottom) / 2.f));
+	pNewGrd->setSize(fPoint(right - left, bottom - top));
 	pNewGrd->getCollider()->setSize(fPoint(right - left, bottom - top));
 
 	createObj(pNewGrd, eOBJ::GROUND);

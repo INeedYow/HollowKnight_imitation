@@ -71,13 +71,11 @@ void CState_Slash::enter()
 	getPlayer()->setCheck(SP_STOPANIM, true);
 
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
-	info.fSlashTimer = 0.5f;
 	getPlayer()->setPlayerInfo(info);
 }
 
 void CState_Slash::exit()
 {
-	m_fAttackDelay = 0.f;
 	getPlayer()->setCheck(SP_STOPANIM, false);
 }
 

@@ -134,6 +134,27 @@ void CAttack::collisionEnter(CCollider* pOther)
 			
 			break;
 		}
+
+		case eOBJNAME::GROUND:
+		case eOBJNAME::WALL:
+		{
+			fPoint pos = (getPos() + pOther->getPos()) / 2.f;
+
+			CEffect* pEff = new CEffect;
+			pEff->load(L"nail_hit_effect", L"texture\\effect\\nail_hit_effect.bmp");
+			pEff->setDuration(0.4f);
+
+			pEff->createAnim(L"nail_hit_effect", pEff->getTex(),
+				fPoint(0, 0), fPoint(243, 155), fPoint(243, 0), 0.1f, 4, false);
+
+			pEff->setPos(pos);
+			pEff->PLAY(L"nail_hit_effect");
+			createObj(pEff, eOBJ::EFFECT);
+
+			CSoundManager::getInst()->addSound(L"enemy_damage", L"sound\\player\\enemy_damage.wav");
+			CSoundManager::getInst()->play(L"enemy_damage", 0.1f);
+		}
+
 		case eOBJNAME::SHIELD:
 		{
 			fPoint pos = (getPos() + pOther->getPos()) / 2.f;

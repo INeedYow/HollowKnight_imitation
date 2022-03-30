@@ -14,6 +14,7 @@ CCollider::CCollider()
 	m_fpOffset = {};
 	m_uiCollCnt = 0;
 	m_eShape = eSHAPE::POINT;
+	m_fRad = 0.f;
 
 	m_uiID = s_uiID++;
 }
@@ -27,6 +28,7 @@ CCollider::CCollider(const CCollider& other)
 	m_fpOffset = other.m_fpOffset;
 	m_uiCollCnt = other.m_uiCollCnt;
 	m_eShape = other.m_eShape;
+	m_fRad = other.m_fRad;
 
 	m_uiID = s_uiID++;
 }
@@ -53,6 +55,16 @@ void CCollider::setOffset(fPoint offset)
 void CCollider::setShape(eSHAPE shape)
 {
 	m_eShape = shape;
+}
+
+void CCollider::setRad(float rad)
+{
+	m_fRad = rad;
+}
+
+float CCollider::getRad()
+{
+	return m_fRad;
 }
 
 fPoint CCollider::getPos()
@@ -154,6 +166,13 @@ void CCollider::render(HDC hDC, float theta, bool rotReverse)
 		
 		for (int i = 0; i < 4; i++)
 		{	// point [1]->[2]->[3]->[4]->[1] 선 그리기
+			if (i == 0)
+			{
+				SelectGDI pen(hDC, ePEN::BLUE);
+				MoveToEx(hDC, pPointArr[i].x, pPointArr[i].y, NULL);
+				LineTo(hDC, pPointArr[(i + 1) % 4].x, pPointArr[(i + 1) % 4].y);
+				continue;
+			}
 			MoveToEx(hDC, pPointArr[i].x, pPointArr[i].y, NULL);
 			LineTo(hDC, pPointArr[(i + 1) % 4].x, pPointArr[(i + 1) % 4].y);
 		}

@@ -15,6 +15,7 @@ class CCollider
 	UINT			m_uiCollCnt;		// 충돌 카운트
 
 	eSHAPE			m_eShape;			// 히트박스 모양 (원,사각형,점)
+	float			m_fRad;				// 회전각도(라디안)
 
 	UINT			m_uiID;				// 고유 키값(아이디) // 충돌여부 고유 키값으로 저장하고 찾기 위함
 
@@ -27,7 +28,9 @@ public:
 	void setSize(fPoint size);
 	void setOffset(fPoint offset);
 	void setShape(eSHAPE shape);
+	void setRad(float rad);
 
+	float		getRad();
 	fPoint		getPos();
 	fPoint		getSize();
 	fPoint		getOffset();

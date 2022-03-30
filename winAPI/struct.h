@@ -81,7 +81,12 @@ struct fPoint
 		return fPoint(x / num, y / num);
 	}
 
-	fPoint& normalize()
+	fPoint operator*(float other)
+	{
+		return fPoint(x * other, y * other);
+	}
+
+	fPoint normalize()
 	{	// sqrt : Á¦°ö±Ù ÇÔ¼ö
 		float length = (float)sqrt((double)x * x + (double)y * y);
 
@@ -96,7 +101,7 @@ struct fPoint
 			y = y / length;
 		}
 
-		return *this;
+		return fPoint(x, y);
 	}
 
 	float length()

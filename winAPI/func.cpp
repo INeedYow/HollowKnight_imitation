@@ -169,48 +169,171 @@ bool isCollisionCircleToCircle(const fPoint& cp1, int cr1, const fPoint& cp2, in
 	return (distance <= cr1 + cr2);
 }
 
-//bool isCollisionObliqueRect(const fPoint& cp1, int cr1, float theta1, const fPoint& cp2, int cr2, float theta2)
-//{	//						// 사각형1 중심좌표, size 1/2, 회전각			// 사각형2 
-//	
-//	fPoint lt1 = ((cp1.x - cr1), (cp1.y - cr1));
-//	
-//	
-//	
-//	
-//	
-//	// lt, rt, lb, rb
-//	fPoint arr1[4] = {
-//		fPoint( -cr1, -cr2),
-//		fPoint(cr1, -cr1),
-//		fPoint(-cr1,  cr1),
-//		fPoint(-cr1,  cr1),
-//	};
-//
-//	for (int i = 0; i < 4; i++)
-//	{
-//		arr1[i].x = -(LONG)(arr1[i].x * cos(theta1) - arr1[i].y * sin(theta1));
-//		arr1[i].y = -(LONG)(arr1[i].x * sin(theta1) + arr1[i].y * cos(theta1));
-//	}
-//
-//	for (int i = 0; i < 4; i++)
-//	{
-//		arr1[i].x += (LONG)cp1.x;
-//		arr1[i].y += (LONG)cp1.y;
-//	}
-//
-//	// obj1의 우측방향 벡터
-//	fVec2 uVec = arr1[1] - arr1[0];
-//	uVec = uVec.normalize();
-//
-//	// obj1의 중심에서 한 꼭지점까지의 벡터
-//	fVec2 vec1 = arr1[1] - cp1;
-//	fVec2 iVec1 = sqrt((arr1[1].x - cp1.x) * (arr1[1].x - cp1.x) + arr1)
-//}
-
-
+bool isCollisionObliqueRect(fPoint leftTop1, fPoint centerPos1, fPoint size1, float rad1, fPoint leftTop2, fPoint centerPos2, fPoint size2, float rad2)
+{								//	좌상단 좌표,	중심좌표,		사이즈,	회전각도
+	return false;
+}
 
 
 wstring addStrIDNumber(const wstring& str)
 {
 	return str + to_wstring(g_IDNumbering++);
+}
+
+
+float dotVector(fVec2 vec1, fVec2 vec2)
+{
+	return abs(vec1.x * vec2.x + vec1.y * vec2.y);
+}
+
+
+enum pt { lt, rt, lb };
+// fpArr[0] : 좌상좌표, [1] : 우상좌표, [2] : 우하 좌표
+bool isOBB(fPoint* fpArr1, fPoint pos1, fPoint sz1, float rad1, fPoint* fpArr2, fPoint pos2, fPoint sz2, float rad2)
+{	
+	// obj1 의 오른쪽, 위쪽 벡터
+	fVec2 rVec1 = ((fpArr1[rt] - fpArr1[lt]) / 2.f).normalize();
+	fVec2 uVec1 = ((fpArr1[lt] - fpArr1[lb]) / 2.f).normalize();
+
+	// obj2 의 오른쪽, 위쪽 벡터
+	fVec2 rVec2 = ((fpArr2[rt] - fpArr2[lt]) / 2.f).normalize();
+	fVec2 uVec2 = ((fpArr2[lt] - fpArr2[lb]) / 2.f).normalize();
+
+	// 거리벡터
+	fVec2 distVec = pos2 - pos1;
+
+	fVec2 unitVec, projA, projB, projC;
+	float sum = 0.f;
+	float dist = 0.f;
+
+		// # cycle 1-1
+	// 
+	projA = fpArr1[lt] - pos1;
+	projB = uVec2 * dotVector(fpArr2[lt] - pos2, uVec2);
+	projC = rVec2 * dotVector(fpArr2[lt] - pos2, rVec2);
+	
+	// 단위벡터
+	unitVec = rVec1;
+	
+	// 단위벡터에 정사영 길이 합 vs 길이
+	sum = dotVector(projA, unitVec) 
+		+ dotVector(projB, unitVec) 
+		+ dotVector(projC, unitVec);
+	dist = dotVector(distVec, unitVec);
+
+	if (sum < dist)
+		return false;
+
+		// # cycle 1-2
+	unitVec = uVec1;
+
+	sum = dotVector(projA, unitVec)
+		+ dotVector(projB, unitVec)
+		+ dotVector(projC, unitVec);
+	dist = dotVector(distVec, unitVec);
+
+	if (sum < dist)
+		return false;
+
+		// # cycle 2-1
+	projA = uVec1 * dotVector(fpArr1[lt] - pos1, uVec1);
+	projB = rVec1 * dotVector(fpArr1[lt] - pos1, rVec1);
+	projC = fpArr2[lt] - pos2;
+
+	unitVec = rVec2;
+	
+	sum = dotVector(projA, unitVec)
+		+ dotVector(projB, unitVec)
+		+ dotVector(projC, unitVec);
+	dist = dotVector(distVec, unitVec);
+
+
+	if (sum < dist)
+		return false;
+
+		// # cycle 2-2
+	unitVec = uVec2;
+
+	sum = dotVector(projA, unitVec)
+		+ dotVector(projB, unitVec)
+		+ dotVector(projC, unitVec);
+	dist = dotVector(distVec, unitVec);
+
+	if (sum < dist)
+		return false;
+
+	wchar_t szBuffer4[255] = {};
+	swprintf_s(szBuffer4, L"sum %.1f // dist %.1f", sum, dist);
+	SetWindowText(hWnd, szBuffer4);
+
+	return true;
+}
+
+
+//struct VECTOR { //define vector
+//	float x, y;
+//};
+//
+
+
+fVec2 addVector(fVec2 a, fVec2 b) { //vector plus
+	fVec2 ret;
+	ret.x = a.x + b.x;
+	ret.y = a.y + b.y;
+	return ret;
+}
+
+double absDotVector(fVec2 a, fVec2 b) { //vector inner
+	return abs(a.x * b.x + a.y * b.y);
+}
+
+double Deg2Rad(double deg) { //deg -> rad
+	return deg / 180 * 3.141592;
+}
+
+fVec2 getDistanceVector(SHAPE a, SHAPE b) { //distance vector
+	fVec2 ret;
+	ret.x = (a.left + a.width / 2) - (b.left + b.width / 2);
+	ret.y = (a.top + a.height / 2) - (b.top + b.height / 2);
+	return ret;
+}
+
+fVec2 getHeightVector(SHAPE a) { //height vector
+	fVec2 ret;
+	ret.x = a.height * cos(Deg2Rad(a.rot - 90)) / 2;
+	ret.y = a.height * sin(Deg2Rad(a.rot - 90)) / 2;
+	return ret;
+}
+
+fVec2 getWidthVector(SHAPE a) { //width vector
+	fVec2 ret;
+	ret.x = a.width * cos(Deg2Rad(a.rot)) / 2;
+	ret.y = a.width * sin(Deg2Rad(a.rot)) / 2;
+	return ret;
+}
+
+fVec2 getUnitVector(fVec2 a) { //unit vector
+	fVec2 ret;
+	double size;
+	size = sqrt(pow(a.x, 2) + pow(a.y, 2));
+	ret.x = a.x / size;
+	ret.y = a.y / size;
+	return ret;
+}
+
+bool OBB(SHAPE a, SHAPE b) { //final check
+	fVec2 dist = getDistanceVector(a, b);
+	fVec2 vec[4] = { getHeightVector(a), getHeightVector(b), getWidthVector(a), getWidthVector(b) };
+	fVec2 unit;
+	for (int i = 0; i < 4; i++) {
+		double sum = 0;
+		unit = getUnitVector(vec[i]);
+		for (int j = 0; j < 4; j++) {
+			sum += absDotVector(vec[j], unit);
+		}
+		if (absDotVector(dist, unit) > sum) {
+			return false;
+		}
+	}
+	return true;
 }

@@ -2,6 +2,7 @@
 #include "CCollisionManager.h"
 #include "CScene.h"
 #include "CPlayer.h"
+#include "func.h"
 
 CCollisionManager::CCollisionManager()
 {
@@ -90,6 +91,7 @@ void CCollisionManager::collisionGroupUpdate(eOBJ obj1, eOBJ obj2)
 	}
 }
 
+
 bool CCollisionManager::isCollision(CCollider* pColl1, eSHAPE shape1, CCollider* pColl2, eSHAPE shape2)
 {
 	fPoint pos1 = pColl1->getPos();
@@ -130,8 +132,76 @@ bool CCollisionManager::isCollision(CCollider* pColl1, eSHAPE shape1, CCollider*
 		}
 		break;
 		case eSHAPE::RECT:
-		{
-			return ISCOLLRR(pos1, size1, pos2, size2);
+		{	// obliq로 구분하지 말고 rect인데 getRad()가 둘다 0인 경우 일반 충돌함수, 아닌 경우 obb충돌함수 호출하는 식으로
+			float rad1 = pColl1->getRad();
+			float rad2 = pColl2->getRad();
+			fPoint ofs1 = pColl1->getOffset();
+			fPoint ofs2 = pColl2->getOffset();
+
+			if (0.f == rad1 && 0.f == rad2)
+				return ISCOLLRR(pos1, size1, pos2, size2);
+			//else
+			//{	// 좌상, 우상, 좌하 좌표(원점기준)
+			//	fPoint fpArr1[3] = {
+			//		fPoint(size1.x / -2.f,	size1.y / -2.f),
+			//		fPoint(size1.x / 2.f,	size1.y / -2.f),
+			//		fPoint(size1.x / -2.f,	size1.y / 2.f)
+			//	};
+			//	fPoint fpArr2[3] = {
+			//		fPoint(size2.x / -2.f,	size2.y / -2.f),
+			//		fPoint(size2.x / 2.f,	size2.y / -2.f),
+			//		fPoint(size2.x / -2.f,	size2.y / 2.f)
+			//	};
+
+			//	if (0.f != rad1)
+			//	{	// obj1 회전
+			//		for (int i = 0; i < 3; i++)
+			//		{	// 좌표에 회전행렬로 회전적용
+			//			fpArr1[i].x = (float)(fpArr1[i].x * cos(rad1) - fpArr1[i].y * sin(rad1));
+			//			fpArr1[i].y = (float)(fpArr1[i].x * sin(rad1) + fpArr1[i].y * cos(rad1));
+			//		}
+			//	}
+			//	if (0.f != rad2)
+			//	{	// obj2 회전
+			//		for (int i = 0; i < 3; i++)
+			//		{	// 좌표에 회전행렬로 회전적용
+			//			fpArr2[i].x = (float)(fpArr2[i].x * cos(rad2) - fpArr2[i].y * sin(rad2));
+			//			fpArr2[i].y = (float)(fpArr2[i].x * sin(rad2) + fpArr2[i].y * cos(rad2));
+			//		}
+			//	}
+
+			//	for (int i = 0; i < 3; i++)
+			//	{	// 원점에서 원래위치로
+			//		fpArr1[i] += pos1 + ofs1;
+			//	}
+			//	for (int i = 0; i < 3; i++)
+			//	{
+			//		fpArr2[i] += pos2 + ofs2;
+			//	}
+
+			//	return isOBB(fpArr1, pos1, size1, rad1, fpArr2, pos2, size2, rad2);
+			//}
+			else
+			{	// 좌상, 우상, 좌하 좌표(원점기준)
+
+				SHAPE a = {
+					pos1.y - size1.y / 2.f,
+					pos1.x - size1.x / 2.f,
+					size1.y,
+					size1.x,
+					rad1
+				};
+
+				SHAPE b = {
+					pos2.y - size2.y / 2.f,
+					pos2.x - size2.x / 2.f,
+					size2.y,
+					size2.x,
+					rad2
+				};
+
+				return OBB(a,b);
+			}
 		}
 		case eSHAPE::POINT:
 		{
@@ -159,18 +229,6 @@ bool CCollisionManager::isCollision(CCollider* pColl1, eSHAPE shape1, CCollider*
 			return (pos1 == pos2);
 		}
 		}
-		
-	case eSHAPE::OBLIQUE:
-	{
-		switch (shape2)
-		{
-		case eSHAPE::RECT:
-		case eSHAPE::OBLIQUE:
-		{
-			// TODO theta 받아 오는 법 (CObject에 getTheta()를 할 수도 없고)
-		}
-		}
-	}
 
 	}
 	return false;

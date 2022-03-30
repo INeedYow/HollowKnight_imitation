@@ -2,6 +2,10 @@
 
 class CCollider;
 
+struct SHAPE { //define shape
+	float top, left, height, width, rot;
+};
+
 static UINT g_IDNumbering = 0;
 
 eDIR collisionRectToRect(CCollider* coll1, CCollider* coll2);
@@ -20,3 +24,5 @@ bool isCollisionCircleToCircle(const fPoint& cp1, int cr1, const fPoint& cp2, in
 
 // createMemTex ID 생성용 (중복 이름 에러 방지)
 wstring addStrIDNumber(const wstring& str);
+
+bool OBB(SHAPE a, SHAPE b);

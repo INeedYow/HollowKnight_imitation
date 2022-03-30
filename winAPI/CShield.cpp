@@ -74,6 +74,7 @@ void CShield::update()
 
 	setPos(pos);
 	
+	getCollider()->setRad(m_fTheta);
 	getAnimator()->update();
 }
 

@@ -56,9 +56,9 @@ void CCore::render()
 	CCameraManager::getInst()->render(m_pMemTex->getDC());
 
 	// FPS 출력하기
-	wchar_t szBuffer[255] = {};
-	swprintf_s(szBuffer, L"[Flatform Imitation] FPS : %d", CTimeManager::getInst()->getFPS());
-	SetWindowText(hWnd, szBuffer);
+	/*wchar_t szBuffer[255] = {};
+	swprintf_s(szBuffer, L"FPS : %d", CTimeManager::getInst()->getFPS());
+	SetWindowText(hWnd, szBuffer);*/
 
 	BitBlt(m_hDC, 0, 0, WINSIZEX, WINSIZEY, m_pMemTex->getDC(), 0, 0, SRCCOPY);
 }

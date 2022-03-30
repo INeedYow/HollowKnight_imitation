@@ -2,20 +2,21 @@
 #include "CScene_Stage03.h"
 
 #include "CPlayer.h"
-#include "CTile.h"
 #include "CMissile.h"
 #include "CUI.h"
 #include "CBackGround.h"
 #include "CFrontGround.h"
-#include "CBoss_Markoth.h"
+#include "CMonster_Melee.h"
+#include "CMonster_Fly.h"
+#include "CAI.h"
 #include "CGround.h"
 #include "CWall.h"
+#include "CWarp.h"
 #include "CHUD_HP.h"
 #include "CHUD_Soul.h"
 
-#define STG03_SIZEX				3000
-#define STG03_SIZEY				1689
-#define STG03_FRONT_SIZEY		470
+#define STG03_SIZEX		3725
+#define STG03_SIZEY		1700
 
 CScene_Stage03::CScene_Stage03()
 {
@@ -32,6 +33,12 @@ void CScene_Stage03::update()
 
 	if (KEY_ON(VK_ESCAPE))
 		changeScn(eSCENE::TITLE);
+
+	if (gameGetPlayer()->getPos().x < 30.f)
+		changeScn(eSCENE::STAGE_02);
+
+	if (gameGetPlayer()->getPos().x > STG03_SIZEX - 30.f)
+		changeScn(eSCENE::STAGE_04);
 
 	if (KEY_ON('M'))
 	{
@@ -57,20 +64,14 @@ void CScene_Stage03::enter()
 	CGameManager::getInst()->registPlayer(pPlayer);
 	CGameManager::getInst()->loadPlayerInfo(pPlayer);
 
-	CBoss_Markoth* pBoss = new CBoss_Markoth;
-	pBoss->setPos(fPoint(2270.f, 1040.f));
-	pBoss->getCollider()->setSize(fPoint(200.f, 310.f));
-	pBoss->getCollider()->setOffset(fPoint(0.f, 20.f));
-	addObject(pBoss, eOBJ::BOSS);
-
 	CBackGround* pBg = new CBackGround;
-	pBg->load(L"BG_stage3", L"texture\\background\\stage3_back3.bmp");
+	pBg->load(L"BG_stage3", L"texture\\background\\stage3_back.bmp");
 	pBg->setPos(fPoint(0.f, 0.f));
 	addObject(pBg, eOBJ::BACKGROUND);
 
 	CFrontGround* pFg = new CFrontGround;
-	pFg->load(L"FG_stage3", L"texture\\background\\stage3_front_part470.bmp");
-	pFg->setPos(fPoint(0.f, STG03_SIZEY - STG03_FRONT_SIZEY));
+	pFg->load(L"FG_stage3", L"texture\\background\\stage3_front.bmp");
+	pFg->setPos(fPoint(0.f, STG03_SIZEY));
 	addObject(pFg, eOBJ::FRONTGROUND);
 
 	CHUD_Soul* pSoul = new CHUD_Soul;
@@ -79,27 +80,58 @@ void CScene_Stage03::enter()
 	CHUD_HP* pHP = new CHUD_HP;
 	addObject(pHP, eOBJ::HUD);
 
+	// monster
+	CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(2330, 1350));
+
+	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(1170, 702));
+	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(2770, 700));
+
+	CMonster::create(eOBJNAME::MONS_BEE, fPoint(800, 700));
+	CMonster::create(eOBJNAME::MONS_BEE, fPoint(1900, 900));
+	CMonster::create(eOBJNAME::MONS_BEE, fPoint(2450, 650));
+
+
 	// ground, wall
-	CWall::create(0, 0, 268, STG03_SIZEY);
-	CWall::create(2654, 0, STG03_SIZEX, STG03_SIZEY);
+	CWall::create(-100, 0, 0, STG03_SIZEY);
+	CWall::create(STG03_SIZEX, 0, STG03_SIZEX + 100, STG03_SIZEY);
 
-	CGround::create(0, 1492, STG03_SIZEX, STG03_SIZEY);
+	// 아래
+	CGround::create(0, 1326, 220, STG03_SIZEY);
+	CWall::create(0, 1346, 224, STG03_SIZEY);
 
-	// 왼쪽 아래
-	CGround::create(864, 1040, 1036, 1100);
-	CWall::create(860, 1055, 1040, 1085);
-	// 중앙 아래
-	CGround::create(1350, 1200, 1530, 1250);
-	CWall::create(1346, 1215, 1534, 1235);
-	// 왼쪽 위
-	CGround::create(1080, 656, 1180, 708);
-	CWall::create(1076, 671, 1184, 693);
-	// 중앙 위
-	CGround::create(1578, 814, 1750, 866);
-	CWall::create(1574, 829, 1754, 851);
-	// 오른쪽 아래
-	CGround::create(1942, 1082, 2036, 1132);
-	CWall::create(1938, 1097, 2040, 1117);
+	CGround::create(210, 1484, 814, STG03_SIZEY);
+	CGround::create(810, 1270, 1248, STG03_SIZEY);
+	CWall::create(806, 1300, 1252, STG03_SIZEY);
+
+	CGround::create(1240, 1434, STG03_SIZEX, STG03_SIZEY);
+	CGround::create(3264, 1268, STG03_SIZEX, STG03_SIZEY);
+	CWall::create(3260, 1298, STG03_SIZEX, STG03_SIZEY);
+
+	// 위
+	CGround::create(0, 747, 647, 777);
+	CWall::create(621, 0, 651, 767);
+	CGround::create(0, 0, STG03_SIZEX, 350);
+	CGround::create(1728, 0, 2150, 550);
+	CWall::create(1722, 0,2156, 530);
+	CWall::create(3000, 0, 3148, 882);
+	CWall::create(2624, 800, 2654, 904);
+	CGround::create(2630, 780, 3080, 946);
+	CGround::create(3100, 770, STG03_SIZEX, 800);
+	CGround::create(3594, 1000, STG03_SIZEX, 1032);
+	CWall::create(3590, 700, STG03_SIZEX, 1000);
+
+	// 공중
+	CGround::create(917, 788, 1406, 890);
+	CWall::create(913, 808, 1410, 870);
+
+	CGround::create(1510, 930, 1616, 1042);
+	CWall::create(1506, 950, 1620, 1022);
+
+	CGround::create(1686, 1156, 1896, 1212);
+	CWall::create(1682, 1168, 1900, 1200);
+
+	CGround::create(2022, 990, 2130, 1102);
+	CWall::create(2018, 1010, 2134, 1082);
 
 	checkGrp(eOBJ::PLAYER, eOBJ::WALL);
 	checkGrp(eOBJ::PLAYER, eOBJ::GROUND);
@@ -108,14 +140,10 @@ void CScene_Stage03::enter()
 
 	checkGrp(eOBJ::PLAYER, eOBJ::MONSTER);
 	checkGrp(eOBJ::PLAYER, eOBJ::MISSILE_MONSTER);
-	checkGrp(eOBJ::PLAYER, eOBJ::SHIELD);
-	checkGrp(eOBJ::PLAYER, eOBJ::BOSS);
-
 	checkGrp(eOBJ::MONSTER, eOBJ::WALL);
 	checkGrp(eOBJ::MONSTER, eOBJ::GROUND);
 
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::MONSTER);
-	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::BOSS);
 
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::WALL);
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::GROUND);
@@ -123,23 +151,18 @@ void CScene_Stage03::enter()
 	checkGrp(eOBJ::MISSILE_MONSTER, eOBJ::WALL);
 	checkGrp(eOBJ::MISSILE_MONSTER, eOBJ::GROUND);
 
-	checkGrp(eOBJ::ATTACK, eOBJ::BOSS);
 	checkGrp(eOBJ::ATTACK, eOBJ::MONSTER);
-	checkGrp(eOBJ::ATTACK, eOBJ::SHIELD);
 
 	//
 	camSetFocusNow(pPlayer->getPos());
 	camSetTrace(pPlayer);
-	//camSetTrace(pBoss);
-	
-	CSoundManager::getInst()->addSound(L"bgm_stg3", L"sound\\bgm\\Boss_Battle.wav", true);
+
+	CSoundManager::getInst()->addSound(L"bgm_stg3", L"sound\\bgm\\Crossroads_Bass.wav", true);
 	CSoundManager::getInst()->play(L"bgm_stg3", 0.1f);
 }
 
 void CScene_Stage03::exit()
 {
-	//CGameManager::getInst()->savePlayerInfo();
-
 	deleteObjectAll();
 	resetGrp();
 

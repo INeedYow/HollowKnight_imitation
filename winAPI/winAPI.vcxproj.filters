@@ -253,6 +253,7 @@
     <ClCompile Include="CEffect_Move.cpp">
       <Filter>Object\Effect</Filter>
     </ClCompile>
+    <ClCompile Include="CTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCollider.h">
@@ -528,6 +529,7 @@
     <ClInclude Include="CEffect_Move.h">
       <Filter>Object\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="CTest.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">

@@ -18,7 +18,6 @@ struct tPlayerInfo
 
 	float		fLandTimer;
 	float		fNoDmgTimer;
-	float		fSlashTimer;
 
 	fVec2		fvKnockBackDir;
 	float		fKnockBackTimer;

@@ -50,7 +50,6 @@ void CSpear::update()
 		distY = destPos.y - pos.y;
 		m_fTheta = (float)atan2(distY, distX);
 		
-		//timer = m_fSpd == B_SPR_SPD_1P ? 0.65f : 0.5f;
 		timer = 0.65f;
 		setSpeed(m_fSpd * 0.1f);
 		m_uiStep++;
@@ -82,7 +81,6 @@ void CSpear::update()
 
 		if (timer < 0.f)
 		{
-			//timer = m_fSpd == B_SPR_SPD_1P ? 0.65f : 0.5f;
 			timer = 0.65f;
 			setSpeed(0.f);
 			m_uiStep++;
@@ -134,7 +132,7 @@ void CSpear::update()
 	default:
 	{
 		if (m_bActive)
-		{
+		{	// 재활성화
 			pos = getRandPos();
 			m_uiStep = 0;
 		}
@@ -147,6 +145,7 @@ void CSpear::update()
 	pos.y += getSpeed() * getDir().y * fDT;
 	setTimer(timer);
 	setPos(pos);
+	getCollider()->setRad(m_fTheta);
 }
 
 

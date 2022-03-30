@@ -85,11 +85,11 @@ enum class GROUP_OBJECT
 
 	ATTACK,
 
-	TEST,
 	EFFECT,
 
 	FRONTGROUND,
 
+	TEST,
 	HUD,
 	UI,
 	SIZE
@@ -179,7 +179,6 @@ enum class COLL_SHAPE
 	CIRCLE,
 	RECT,
 	POINT,
-	OBLIQUE,
 
 	END
 };

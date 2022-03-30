@@ -2,7 +2,6 @@
 #include "CScene_Stage02.h"
 
 #include "CPlayer.h"
-#include "CTile.h"
 #include "CMissile.h"
 #include "CUI.h"
 #include "CBackGround.h"
@@ -89,11 +88,7 @@ void CScene_Stage02::enter()
 
 	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(200, 1550));
 	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(3200, 1570));
-
-	CMonster::create(eOBJNAME::MONS_BEE, fPoint(2800, 1310));
-	CMonster::create(eOBJNAME::MONS_BEE, fPoint(2900, 1320));
-	CMonster::create(eOBJNAME::MONS_BEE, fPoint(600, 1300));
-	// UI
+	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(860, 1300));
 
 	CWarp* pWp1 = new CWarp;
 	pWp1->setDestScene(eSCENE::STAGE_01);

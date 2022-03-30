@@ -10,12 +10,18 @@
 #include "CBoss_Markoth.h"
 #include "CGround.h"
 #include "CWall.h"
+#include "CHUD_HP.h"
+#include "CHUD_Soul.h"
 
-#define STG04_SIZEX		3000
-#define STG04_SIZEY		1689
+
+#define STG04_SIZEX				3000
+#define STG04_SIZEY				1689
+#define STG04_FRONT_SIZEY		470
+
 
 CScene_Stage04::CScene_Stage04()
 {
+	m_bBGM = true;
 }
 
 CScene_Stage04::~CScene_Stage04()
@@ -24,88 +30,115 @@ CScene_Stage04::~CScene_Stage04()
 
 void CScene_Stage04::update()
 {
-	// TODO
+	CScene::update();
+
+	if (KEY_ON(VK_ESCAPE))
+		changeScn(eSCENE::TITLE);
+
+	if (KEY_ON('M'))
+	{
+		if (m_bBGM)
+		{
+			CSoundManager::getInst()->play(L"bgm_stg4", 0.1f);
+		}
+		else
+		{
+			CSoundManager::getInst()->stop(L"bgm_stg4");
+		}
+		m_bBGM = !m_bBGM;
+	}
 }
 
 void CScene_Stage04::enter()
 {
-	camFadeOut(0.5f);
-	camFadeIn(0.6f);
+	camFadeIn(0.5f);
+	camSetArea(0.f, 0.f, STG04_SIZEX, STG04_SIZEY);
 
-	// Player Ãß°¡
-	CPlayer* pPlayer = CPlayer::createNormal(fPoint(20.f, 1610.f));
+	CPlayer* pPlayer = CPlayer::createNormal(fPoint(260.f, 1340.f));
 	addObject(pPlayer, eOBJ::PLAYER);
 	CGameManager::getInst()->registPlayer(pPlayer);
+	CGameManager::getInst()->loadPlayerInfo(pPlayer);
 
 	CBoss_Markoth* pBoss = new CBoss_Markoth;
-	pBoss->setPos(fPoint(1270.f, 1270.f));
+	pBoss->setPos(fPoint(2270.f, 1040.f));
 	pBoss->getCollider()->setSize(fPoint(200.f, 310.f));
 	pBoss->getCollider()->setOffset(fPoint(0.f, 20.f));
 	addObject(pBoss, eOBJ::BOSS);
 
-	CBackGround* pBGBack = new CBackGround;
-	pBGBack->load(L"BG_stage1B", L"texture\\background\\bossroom_sample.bmp");
-	pBGBack->setPos(fPoint(0.f, 0.f));
-	pBGBack->setSize(fPoint(3000.f, 1689.f));
-	addObject(pBGBack, eOBJ::BACKGROUND);
+	CBackGround* pBg = new CBackGround;
+	pBg->load(L"BG_stage4", L"texture\\background\\stage4_back.bmp");
+	pBg->setPos(fPoint(0.f, 0.f));
+	addObject(pBg, eOBJ::BACKGROUND);
 
-	//CFrontGround* pBGFront = new CFrontGround;
-	//pBGFront->load(L"BG_stage1F", L"texture\\background\\bossStage_back.bmp");
-	//pBGFront->setPos(fPoint(0.f, 0.f));
-	//pBGFront->setSize(fPoint(3000.f, 1689.f));
-	//addObject(pBGFront, eOBJ::FRONTGROUND);
+	CFrontGround* pFg = new CFrontGround;
+	pFg->load(L"FG_stage4", L"texture\\background\\stage4_frontpart.bmp");
+	pFg->setPos(fPoint(0.f, STG04_SIZEY - STG04_FRONT_SIZEY));
+	addObject(pFg, eOBJ::FRONTGROUND);
 
-	CGround* pGrd1 = new CGround;
-	pGrd1->setPos(fPoint(1800.f, 1889.f));
-	pGrd1->getCollider()->setSize(fPoint(4000.f, 400.f));
-	addObject(pGrd1, eOBJ::GROUND);
+	CHUD_Soul* pSoul = new CHUD_Soul;
+	addObject(pSoul, eOBJ::HUD);
 
-	CGround* pGrd2 = new CGround;
-	pGrd2->setPos(fPoint(700.f, 1280.f));
-	pGrd2->getCollider()->setSize(fPoint(150.f, 160.f));
-	addObject(pGrd2, eOBJ::GROUND);
+	CHUD_HP* pHP = new CHUD_HP;
+	addObject(pHP, eOBJ::HUD);
 
-	CGround* pGrd3 = new CGround;
-	pGrd3->setPos(fPoint(300.f, 1480.f));
-	pGrd3->getCollider()->setSize(fPoint(170.f, 160.f));
-	addObject(pGrd3, eOBJ::GROUND);
+	// ground, wall
+	CWall::create(0, 0, 268, STG04_SIZEY);
+	CWall::create(2654, 0, STG04_SIZEX, STG04_SIZEY);
 
-	CGround* pGrd4 = new CGround;
-	pGrd4->setPos(fPoint(1000.f, 1440.f));
-	pGrd4->getCollider()->setSize(fPoint(200.f, 160.f));
-	addObject(pGrd4, eOBJ::GROUND);
+	CGround::create(0, 1492, STG04_SIZEX, STG04_SIZEY);
 
-	CGround* pGrd5 = new CGround;
-	pGrd5->setPos(fPoint(1630.f, 1420.f));
-	pGrd5->getCollider()->setSize(fPoint(240.f, 160.f));
-	addObject(pGrd5, eOBJ::GROUND);
+	// ¿ÞÂÊ ¾Æ·¡
+	CGround::create(864, 1040, 1036, 1100);
+	CWall::create(860, 1055, 1040, 1085);
+	// Áß¾Ó ¾Æ·¡
+	CGround::create(1350, 1200, 1530, 1250);
+	CWall::create(1346, 1215, 1534, 1235);
+	// ¿ÞÂÊ À§
+	CGround::create(1080, 656, 1180, 708);
+	CWall::create(1076, 671, 1184, 693);
+	// Áß¾Ó À§
+	CGround::create(1578, 814, 1750, 866);
+	CWall::create(1574, 829, 1754, 851);
+	// ¿À¸¥ÂÊ ¾Æ·¡
+	CGround::create(1942, 1082, 2036, 1132);
+	CWall::create(1938, 1097, 2040, 1117);
 
-	g_bDebug = true;
+	checkGrp(eOBJ::PLAYER, eOBJ::WALL);
+	checkGrp(eOBJ::PLAYER, eOBJ::GROUND);
+	checkGrp(eOBJ::MONSTER, eOBJ::GROUND);
+	checkGrp(eOBJ::MONSTER, eOBJ::WALL);
 
 	checkGrp(eOBJ::PLAYER, eOBJ::MONSTER);
-	checkGrp(eOBJ::PLAYER, eOBJ::BOSS);
 	checkGrp(eOBJ::PLAYER, eOBJ::MISSILE_MONSTER);
 	checkGrp(eOBJ::PLAYER, eOBJ::SHIELD);
-	checkGrp(eOBJ::PLAYER, eOBJ::TILE);
-	checkGrp(eOBJ::PLAYER, eOBJ::GROUND);
+	checkGrp(eOBJ::PLAYER, eOBJ::BOSS);
 
-	checkGrp(eOBJ::MONSTER, eOBJ::TILE);
+	checkGrp(eOBJ::MONSTER, eOBJ::WALL);
 	checkGrp(eOBJ::MONSTER, eOBJ::GROUND);
 
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::MONSTER);
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::BOSS);
 
-	checkGrp(eOBJ::ATTACK, eOBJ::BOSS);
+	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::WALL);
+	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::GROUND);
 
+	checkGrp(eOBJ::MISSILE_MONSTER, eOBJ::WALL);
+	checkGrp(eOBJ::MISSILE_MONSTER, eOBJ::GROUND);
+
+	checkGrp(eOBJ::ATTACK, eOBJ::BOSS);
+	checkGrp(eOBJ::ATTACK, eOBJ::MONSTER);
+	checkGrp(eOBJ::ATTACK, eOBJ::SHIELD);
+
+	//
 	camSetFocusNow(pPlayer->getPos());
 	camSetTrace(pPlayer);
 
-	camSetArea(0.f, 0.f, STG04_SIZEX, STG04_SIZEY);
+	CSoundManager::getInst()->addSound(L"bgm_stg4", L"sound\\bgm\\Boss_Battle.wav", true);
+	CSoundManager::getInst()->play(L"bgm_stg4", 0.1f);
 }
 
 void CScene_Stage04::exit()
 {
-	//CGameManager::getInst()->savePlayerInfo();
 
 	deleteObjectAll();
 	resetGrp();
@@ -113,4 +146,6 @@ void CScene_Stage04::exit()
 	camFadeOut(0.5f);
 	camSetIsArea(false);
 	camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
+
+	CSoundManager::getInst()->stop(L"bgm_stg4");
 }
