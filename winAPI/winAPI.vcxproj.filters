@@ -232,7 +232,7 @@
     <ClCompile Include="CSoundManager.cpp">
       <Filter>Engine\Manager\Sound</Filter>
     </ClCompile>
-    <ClCompile Include="CWarp.cpp">
+    <ClCompile Include="CTriggerBox.cpp">
       <Filter>Object\Image</Filter>
     </ClCompile>
     <ClCompile Include="CMonster_Fly.cpp">
@@ -254,6 +254,9 @@
       <Filter>Object\Effect</Filter>
     </ClCompile>
     <ClCompile Include="CTest.cpp" />
+    <ClCompile Include="CWarp.cpp">
+      <Filter>Object\Image</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCollider.h">
@@ -508,7 +511,7 @@
     <ClInclude Include="CSoundManager.h">
       <Filter>Engine\Manager\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="CWarp.h">
+    <ClInclude Include="CTriggerBox.h">
       <Filter>Object\Image</Filter>
     </ClInclude>
     <ClInclude Include="CMonster_Fly.h">
@@ -530,6 +533,9 @@
       <Filter>Object\Effect</Filter>
     </ClInclude>
     <ClInclude Include="CTest.h" />
+    <ClInclude Include="CWarp.h">
+      <Filter>Object\Image</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">

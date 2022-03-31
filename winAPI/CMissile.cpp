@@ -154,6 +154,10 @@ void CMissile::collisionEnter(CCollider* pOther)
 			pEff->setPos(pos);
 			pEff->PLAY(L"Effect_enemyMsl_pop");
 			createObj(pEff, eOBJ::EFFECT);
+
+			CSoundManager::getInst()->addSound(L"orb_break", L"sound\\monster\\orb_break.wav");
+			CSoundManager::getInst()->play(L"orb_break", 0.1f);
+
 			break;
 		}
 		case eOBJNAME::GROUND:
@@ -175,6 +179,10 @@ void CMissile::collisionEnter(CCollider* pOther)
 			pEff->setPos(pos);
 			pEff->PLAY(L"Effect_enemyMsl_pop");
 			createObj(pEff, eOBJ::EFFECT);
+
+			CSoundManager::getInst()->addSound(L"orb_break", L"sound\\monster\\orb_break.wav");
+			CSoundManager::getInst()->play(L"orb_break", 0.1f);
+
 			break;
 		}
 		}

@@ -49,7 +49,7 @@ CPlayer::CPlayer()
 	m_uiCheck = 0;
 
 	createCollider();
-	getCollider()->setSize(fPoint(50.f, 108.f));
+	getCollider()->setSize(fPoint(48.f, 108.f));
 	getCollider()->setOffset(fPoint(0.f, 10.f));
 	getCollider()->setShape(eSHAPE::RECT);
 
@@ -248,6 +248,14 @@ void CPlayer::checkUpdate()
 	else
 	{
 		m_tInfo.fLandTimer = 0.f;
+	}
+
+	if (m_tInfo.fAtkDelay > 0.f)
+	{
+		m_tInfo.fAtkDelay -= fDT;
+
+		if (m_tInfo.fAtkDelay < 0.f)
+			m_tInfo.fAtkDelay = 0.f;
 	}
 }
 

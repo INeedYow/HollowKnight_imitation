@@ -182,26 +182,26 @@ bool CCollisionManager::isCollision(CCollider* pColl1, eSHAPE shape1, CCollider*
 			//	return isOBB(fpArr1, pos1, size1, rad1, fpArr2, pos2, size2, rad2);
 			//}
 			else
-			{	// ÁÂ»ó, ¿ì»ó, ÁÂÇÏ ÁÂÇ¥(¿øÁ¡±âÁØ)
-
-				SHAPE a = {
+			{
+				SHAPE shape1 = {
 					pos1.y - size1.y / 2.f,
 					pos1.x - size1.x / 2.f,
 					size1.y,
 					size1.x,
-					rad1
+					rad1 * 180 / PI
 				};
 
-				SHAPE b = {
+				SHAPE shape2 = {
 					pos2.y - size2.y / 2.f,
 					pos2.x - size2.x / 2.f,
 					size2.y,
 					size2.x,
-					rad2
+					rad2 * 180 / PI
 				};
 
-				return OBB(a,b);
+				return OBB(shape1, shape2);
 			}
+
 		}
 		case eSHAPE::POINT:
 		{

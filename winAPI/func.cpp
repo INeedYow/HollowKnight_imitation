@@ -5,7 +5,6 @@ class CCollider;
 
 
 
-// TODO 충돌 방향 검사 함수들 개편 현재 판정이 너무 이상함
 
 eDIR collRect2Rect(CCollider* coll1, CCollider* coll2)
 {
@@ -187,94 +186,191 @@ float dotVector(fVec2 vec1, fVec2 vec2)
 }
 
 
-enum pt { lt, rt, lb };
-// fpArr[0] : 좌상좌표, [1] : 우상좌표, [2] : 우하 좌표
-bool isOBB(fPoint* fpArr1, fPoint pos1, fPoint sz1, float rad1, fPoint* fpArr2, fPoint pos2, fPoint sz2, float rad2)
-{	
-	// obj1 의 오른쪽, 위쪽 벡터
-	fVec2 rVec1 = ((fpArr1[rt] - fpArr1[lt]) / 2.f).normalize();
-	fVec2 uVec1 = ((fpArr1[lt] - fpArr1[lb]) / 2.f).normalize();
-
-	// obj2 의 오른쪽, 위쪽 벡터
-	fVec2 rVec2 = ((fpArr2[rt] - fpArr2[lt]) / 2.f).normalize();
-	fVec2 uVec2 = ((fpArr2[lt] - fpArr2[lb]) / 2.f).normalize();
-
-	// 거리벡터
-	fVec2 distVec = pos2 - pos1;
-
-	fVec2 unitVec, projA, projB, projC;
-	float sum = 0.f;
-	float dist = 0.f;
-
-		// # cycle 1-1
-	// 
-	projA = fpArr1[lt] - pos1;
-	projB = uVec2 * dotVector(fpArr2[lt] - pos2, uVec2);
-	projC = rVec2 * dotVector(fpArr2[lt] - pos2, rVec2);
-	
-	// 단위벡터
-	unitVec = rVec1;
-	
-	// 단위벡터에 정사영 길이 합 vs 길이
-	sum = dotVector(projA, unitVec) 
-		+ dotVector(projB, unitVec) 
-		+ dotVector(projC, unitVec);
-	dist = dotVector(distVec, unitVec);
-
-	if (sum < dist)
-		return false;
-
-		// # cycle 1-2
-	unitVec = uVec1;
-
-	sum = dotVector(projA, unitVec)
-		+ dotVector(projB, unitVec)
-		+ dotVector(projC, unitVec);
-	dist = dotVector(distVec, unitVec);
-
-	if (sum < dist)
-		return false;
-
-		// # cycle 2-1
-	projA = uVec1 * dotVector(fpArr1[lt] - pos1, uVec1);
-	projB = rVec1 * dotVector(fpArr1[lt] - pos1, rVec1);
-	projC = fpArr2[lt] - pos2;
-
-	unitVec = rVec2;
-	
-	sum = dotVector(projA, unitVec)
-		+ dotVector(projB, unitVec)
-		+ dotVector(projC, unitVec);
-	dist = dotVector(distVec, unitVec);
-
-
-	if (sum < dist)
-		return false;
-
-		// # cycle 2-2
-	unitVec = uVec2;
-
-	sum = dotVector(projA, unitVec)
-		+ dotVector(projB, unitVec)
-		+ dotVector(projC, unitVec);
-	dist = dotVector(distVec, unitVec);
-
-	if (sum < dist)
-		return false;
-
-	wchar_t szBuffer4[255] = {};
-	swprintf_s(szBuffer4, L"sum %.1f // dist %.1f", sum, dist);
-	SetWindowText(hWnd, szBuffer4);
-
-	return true;
-}
-
-
-//struct VECTOR { //define vector
-//	float x, y;
-//};
+//enum pt { lt, rt, lb };
+//// fpArr[0] : 좌상좌표, [1] : 우상좌표, [2] : 우하 좌표
+//bool isOBB(fPoint* fpArr1, fPoint pos1, fPoint sz1, float rad1, 
+//	fPoint* fpArr2, fPoint pos2, fPoint sz2, float rad2)
+//{	
+//	// obj1 의 오른쪽, 위쪽 벡터
+//	fVec2 rVec1 = ((fpArr1[rt] - fpArr1[lt]) / 2.f).normalize();
+//	fVec2 uVec1 = ((fpArr1[lt] - fpArr1[lb]) / 2.f).normalize();
 //
+//	// obj2 의 오른쪽, 위쪽 벡터
+//	fVec2 rVec2 = ((fpArr2[rt] - fpArr2[lt]) / 2.f).normalize();
+//	fVec2 uVec2 = ((fpArr2[lt] - fpArr2[lb]) / 2.f).normalize();
+//
+//	// 거리벡터
+//	fVec2 distVec = pos2 - pos1;
+//
+//	fVec2 unitVec, projA, projB, projC;
+//	float sum = 0.f;
+//	float dist = 0.f;
+//
+//		// # cycle 1-1
+//	// 
+//	projA = fpArr1[lt] - pos1;
+//	projB = uVec2 * dotVector(fpArr2[lt] - pos2, uVec2);
+//	projC = rVec2 * dotVector(fpArr2[lt] - pos2, rVec2);
+//	
+//	// 단위벡터
+//	unitVec = rVec1;
+//	
+//	// 단위벡터에 정사영 길이 합 vs 길이
+//	sum = dotVector(projA, unitVec) 
+//		+ dotVector(projB, unitVec) 
+//		+ dotVector(projC, unitVec);
+//	dist = dotVector(distVec, unitVec);
+//
+//	if (sum < dist)
+//		return false;
+//
+//		// # cycle 1-2
+//	unitVec = uVec1;
+//
+//	sum = dotVector(projA, unitVec)
+//		+ dotVector(projB, unitVec)
+//		+ dotVector(projC, unitVec);
+//	dist = dotVector(distVec, unitVec);
+//
+//	if (sum < dist)
+//		return false;
+//
+//		// # cycle 2-1
+//	projA = uVec1 * dotVector(fpArr1[lt] - pos1, uVec1);
+//	projB = rVec1 * dotVector(fpArr1[lt] - pos1, rVec1);
+//	projC = fpArr2[lt] - pos2;
+//
+//	unitVec = rVec2;
+//	
+//	sum = dotVector(projA, unitVec)
+//		+ dotVector(projB, unitVec)
+//		+ dotVector(projC, unitVec);
+//	dist = dotVector(distVec, unitVec);
+//
+//
+//	if (sum < dist)
+//		return false;
+//
+//		// # cycle 2-2
+//	unitVec = uVec2;
+//
+//	sum = dotVector(projA, unitVec)
+//		+ dotVector(projB, unitVec)
+//		+ dotVector(projC, unitVec);
+//	dist = dotVector(distVec, unitVec);
+//
+//	if (sum < dist)
+//		return false;
+//
+//	return true;
+//}
 
+
+//enum pt { lt, rt, lb };
+//// fpArr[0] : 좌상좌표, [1] : 우상좌표, [2] : 우하 좌표
+//bool isOBB(fPoint* fpArr1, fPoint pos1, fPoint sz1, float rad1,
+//	fPoint* fpArr2, fPoint pos2, fPoint sz2, float rad2)
+//{
+//	// obj1 의 오른쪽, 위쪽 벡터
+//	fVec2 rVec1 = ((fpArr1[rt] - fpArr1[lt]) / 2.f);
+//	fVec2 uVec1 = ((fpArr1[lt] - fpArr1[lb]) / 2.f);
+//
+//	// obj2 의 오른쪽, 위쪽 벡터
+//	fVec2 rVec2 = ((fpArr2[rt] - fpArr2[lt]) / 2.f);
+//	fVec2 uVec2 = ((fpArr2[lt] - fpArr2[lb]) / 2.f);
+//
+//	// 거리벡터
+//	fVec2 distVec = pos2 - pos1;
+//
+//	fVec2 unitVec, projA, projB, projC;
+//	float sum = 0.f;
+//	float dist = 0.f;
+//	
+//	UINT cnt = 0;
+//
+//	// # cycle 1-1
+//	unitVec = rVec1.normalize();
+//
+//	dist = dotVector(distVec, unitVec);
+//
+//	sum = dotVector(rVec1, unitVec) + dotVector((rVec2 + uVec2), unitVec);	// rVec2 + uVec2는 어디 잡느냐따라 다름
+//	if (dist > sum) cnt++;
+//
+//	sum = dotVector(rVec1, unitVec) + dotVector((rVec2 + uVec2 * -1.f), unitVec);
+//	if (dist > sum) cnt++;
+//
+//	sum = dotVector(rVec1, unitVec) + dotVector((rVec2 * -1.f + uVec2 ), unitVec);
+//	if (dist > sum) cnt++;
+//
+//	sum = dotVector(rVec1, unitVec) + dotVector((rVec2 * -1.f + uVec2 * -1.f), unitVec);
+//	if (dist > sum) cnt++;
+//
+//	if (cnt == 4) return false;
+//	else cnt = 0;
+//
+//	// # cycle 1-2
+//	unitVec = uVec1.normalize();
+//
+//	dist = dotVector(distVec, unitVec);
+//	
+//	sum = dotVector(uVec1, unitVec) + dotVector((rVec2 + uVec2), unitVec);
+//	if (dist > sum) return false;
+//
+//	sum = dotVector(rVec1, unitVec) + dotVector((rVec2 + uVec2 * -1.f), unitVec);
+//	if (dist > sum) cnt++;
+//
+//	sum = dotVector(rVec1, unitVec) + dotVector((rVec2 * -1.f + uVec2), unitVec);
+//	if (dist > sum) cnt++;
+//
+//	sum = dotVector(rVec1, unitVec) + dotVector((rVec2 * -1.f + uVec2 * -1.f), unitVec);
+//	if (dist > sum) cnt++;
+//
+//	if (cnt == 4) return false;
+//	else cnt = 0;
+//
+//	// # cycle 2-1
+//	unitVec = rVec2.normalize();
+//
+//	dist = dotVector(distVec, unitVec);
+//
+//	sum = dotVector(rVec2, unitVec) + dotVector((rVec1 + uVec1), unitVec);
+//	if (dist > sum) return false;
+//
+//	sum = dotVector(rVec2, unitVec) + dotVector((rVec1 + uVec1 * -1.f), unitVec);
+//	if (dist > sum) cnt++;
+//
+//	sum = dotVector(rVec2, unitVec) + dotVector((rVec1 * -1.f + uVec1), unitVec);
+//	if (dist > sum) cnt++;
+//
+//	sum = dotVector(rVec2, unitVec) + dotVector((rVec1 * -1.f + uVec1 * -1.f), unitVec);
+//	if (dist > sum) cnt++;
+//
+//	if (cnt == 4) return false;
+//	else cnt = 0;
+//
+//	// # cycle 2-2
+//	unitVec = uVec2.normalize();
+//
+//	dist = dotVector(distVec, unitVec);
+//
+//	sum = dotVector(uVec2, unitVec) + dotVector((rVec1 + uVec1), unitVec);
+//	if (dist > sum) return false;
+//
+//	sum = dotVector(rVec2, unitVec) + dotVector((rVec1 + uVec1 * -1.f), unitVec);
+//	if (dist > sum) cnt++;
+//
+//	sum = dotVector(rVec2, unitVec) + dotVector((rVec1 * -1.f + uVec1), unitVec);
+//	if (dist > sum) cnt++;
+//
+//	sum = dotVector(rVec2, unitVec) + dotVector((rVec1 * -1.f + uVec1 * -1.f), unitVec);
+//	if (dist > sum) cnt++;
+//
+//	if (cnt == 4) return false;
+//	else cnt = 0;
+//
+//	return true;
+//
+//}
 
 fVec2 addVector(fVec2 a, fVec2 b) { //vector plus
 	fVec2 ret;
@@ -283,12 +379,12 @@ fVec2 addVector(fVec2 a, fVec2 b) { //vector plus
 	return ret;
 }
 
-double absDotVector(fVec2 a, fVec2 b) { //vector inner
+float absDotVector(fVec2 a, fVec2 b) { // dot product 각 성분들의 곱의 합
 	return abs(a.x * b.x + a.y * b.y);
 }
 
-double Deg2Rad(double deg) { //deg -> rad
-	return deg / 180 * 3.141592;
+float Deg2Rad(float deg) { //deg -> rad
+	return deg / 180 * 3.141592f;
 }
 
 fVec2 getDistanceVector(SHAPE a, SHAPE b) { //distance vector
@@ -300,33 +396,33 @@ fVec2 getDistanceVector(SHAPE a, SHAPE b) { //distance vector
 
 fVec2 getHeightVector(SHAPE a) { //height vector
 	fVec2 ret;
-	ret.x = a.height * cos(Deg2Rad(a.rot - 90)) / 2;
-	ret.y = a.height * sin(Deg2Rad(a.rot - 90)) / 2;
+	ret.x = (float)(a.height * cos(Deg2Rad(a.rot - 90)) / 2.f);
+	ret.y = (float)(a.height * sin(Deg2Rad(a.rot - 90)) / 2.f);
 	return ret;
 }
 
 fVec2 getWidthVector(SHAPE a) { //width vector
 	fVec2 ret;
-	ret.x = a.width * cos(Deg2Rad(a.rot)) / 2;
-	ret.y = a.width * sin(Deg2Rad(a.rot)) / 2;
+	ret.x = (float)(a.width * cos(Deg2Rad(a.rot)) / 2.f);
+	ret.y = (float)(a.width * sin(Deg2Rad(a.rot)) / 2.f);
 	return ret;
 }
 
-fVec2 getUnitVector(fVec2 a) { //unit vector
+fVec2 getUnitVector(fVec2 a) { // 단위벡터 (각 사각형 당 평행한 벡터 두 개씩 단위벡터에 투영)
 	fVec2 ret;
-	double size;
-	size = sqrt(pow(a.x, 2) + pow(a.y, 2));
+	float size;
+	size = (float)sqrt(pow(a.x, 2) + pow(a.y, 2));
 	ret.x = a.x / size;
 	ret.y = a.y / size;
 	return ret;
 }
 
-bool OBB(SHAPE a, SHAPE b) { //final check
+bool OBB(SHAPE a, SHAPE b) { // 각 회전된 축에 투영한 길이로 판별
 	fVec2 dist = getDistanceVector(a, b);
 	fVec2 vec[4] = { getHeightVector(a), getHeightVector(b), getWidthVector(a), getWidthVector(b) };
 	fVec2 unit;
 	for (int i = 0; i < 4; i++) {
-		double sum = 0;
+		float sum = 0;
 		unit = getUnitVector(vec[i]);
 		for (int j = 0; j < 4; j++) {
 			sum += absDotVector(vec[j], unit);

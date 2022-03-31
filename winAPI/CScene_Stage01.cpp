@@ -11,6 +11,7 @@
 #include "CWall.h"
 #include "CHUD_HP.h"
 #include "CHUD_Soul.h"
+#include "CTriggerBox.h"
 
 #include "CTest.h"
 
@@ -34,10 +35,6 @@ void CScene_Stage01::update()
 		changeScn(eSCENE::TITLE);
 
 	if (KEY_ON('N'))
-		changeScn(eSCENE::STAGE_02);
-
-	// 씬 전환
-	if (gameGetPlayer()->getPos().y >= STG01_SIZEY - 40)
 		changeScn(eSCENE::STAGE_02);
 
 	if (KEY_ON('M'))
@@ -64,17 +61,9 @@ void CScene_Stage01::enter()
 	CPlayer* pPlayer = CPlayer::createNormal(fPoint(1200.f, 1430.f));
 	addObject(pPlayer, eOBJ::PLAYER);
 
-	if (CGameManager::getInst()->getPlayer() == nullptr)		
-	{	// 처음 nullptr일 땐 생성하고 등록만
-		CGameManager::getInst()->registPlayer(pPlayer);
-	}
-	else
-	{	// 저장해둔 정보 입력
-		CGameManager::getInst()->registPlayer(pPlayer);
-		CGameManager::getInst()->loadPlayerInfo(pPlayer);		
-	}
-
-
+	CGameManager::getInst()->registPlayer(pPlayer);
+	CGameManager::getInst()->loadPlayerInfo(pPlayer);		
+	
 	CTest* pTest = new CTest;
 	pTest->setPos(fPoint(1350.f, 1470.f));
 	addObject(pTest, eOBJ::TEST);
@@ -94,6 +83,12 @@ void CScene_Stage01::enter()
 
 	CHUD_HP* pHP = new CHUD_HP;
 	addObject(pHP, eOBJ::HUD);
+
+	CTriggerBox* pTrg = new CTriggerBox;
+	pTrg->setPos(fPoint(3580, STG01_SIZEY - 200.f));
+	pTrg->getCollider()->setSize(fPoint(400.f, 100.f));
+	pTrg->setCallBack(changeSceneWithPos,(DWORD_PTR)eSCENE::STAGE_02, 1963.f, 10.f);
+	addObject(pTrg, eOBJ::TRIGGERBOX);
 
 	// ground, wall
 	CWall::create(-100, 0, 0, STG01_SIZEY);
@@ -118,6 +113,7 @@ void CScene_Stage01::enter()
 	checkGrp(eOBJ::PLAYER, eOBJ::WALL);
 	checkGrp(eOBJ::PLAYER, eOBJ::GROUND);
 	checkGrp(eOBJ::PLAYER, eOBJ::TEST);
+	checkGrp(eOBJ::PLAYER, eOBJ::TRIGGERBOX);
 
 	checkGrp(eOBJ::ATTACK, eOBJ::WALL);
 	checkGrp(eOBJ::ATTACK, eOBJ::GROUND);

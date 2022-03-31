@@ -35,7 +35,7 @@ void CState_Idle::update(UINT& chk)
 		changeMyState(getOwner(), eSTATE_PLAYER::JUMP);
 	}
 	
-	else if (KEY_ON('X'))
+	else if (KEY_ON('X') && info.fAtkDelay <= 0.f)
 	{
 		if (KEY_HOLD(VK_UP))
 		{

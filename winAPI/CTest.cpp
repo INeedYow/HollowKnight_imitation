@@ -31,11 +31,11 @@ void CTest::update()
 		if (KEY_ON('R'))
 			m_fRad += 0.1f;
 		if (KEY_ON('T'))
-			m_fRad += 0.1f;
+			m_fRad -= 0.1f;
 		if (KEY_HOLD('F'))
 			m_fRad += 0.4f * fDT;
 		if (KEY_HOLD('G'))
-			m_fRad += 0.4f * fDT;
+			m_fRad -= 0.4f * fDT;
 	}
 
 	getCollider()->setRad(m_fRad);

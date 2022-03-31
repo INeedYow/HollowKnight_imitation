@@ -57,6 +57,10 @@ void CState_Upslash::enter()
 	getPlayer()->upSlash();
 	getPlayer()->playAnim(L"UpSlash");
 	getPlayer()->setCheck(SP_STOPANIM, true);
+
+	tPlayerInfo info = getPlayer()->getPlayerInfo();
+	info.fAtkDelay = P_ATKDELAY;
+	getPlayer()->setPlayerInfo(info);
 }
 
 void CState_Upslash::exit()

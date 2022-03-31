@@ -11,7 +11,7 @@ enum class eSTATE_BOSS
 	MOVE,
 	SPAWN,				// 방패 소환
 	READY,				// skill 준비 (방패 감속, 방향전환 후 가속)
-	SKILL,				// 방패 빠르고 크게 회전
+	SKILL,				// 방패 크게 회전
 	DEATH,
 
 	END
@@ -54,21 +54,21 @@ private:
 };
 
 // skill
-#define B_SKILL_DURA		6.f
+#define B_SKILL_DURA		6.f			// 스킬 지속시간
 #define B_SKILL_COOL		17
-#define B_SKILL_RAD			260
+#define B_SKILL_RAD			255			// 방패 범위 증가, 감소정도
 
 // shield
 #define B_SHD_SPD			3.f			// 방패 속도 (radian)
-#define B_SHD_RAD			285				// 회전 크기 반지름
+#define B_SHD_RAD			280				// 회전 크기 반지름
 
 // spear
-#define B_SPR_SPD_1P		1020			// 1 페이즈 spear 속도
-#define B_SPR_SPD_2P		1200			// 2
+#define B_SPR_SPD_1P		960			// 1 페이즈 spear 속도
+#define B_SPR_SPD_2P		1140			// 2
 #define B_SPR_COOL			1.3f
 
 // boss
-#define B_HPMAX				30
+#define B_HPMAX				24
 #define B_SPD				225
 #define B_READY_DURA		3.25f
 #define B_ACCEL				(2.f /** B_SHD_SPD / B_READY_DURA*/)

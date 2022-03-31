@@ -40,3 +40,5 @@ public:
 	void createTile(UINT xSize, UINT ySize);
 	void loadTile(const wstring& strPath);
 };
+
+void changeSceneWithPos(DWORD_PTR param1, DWORD_PTR param2, DWORD_PTR param3);

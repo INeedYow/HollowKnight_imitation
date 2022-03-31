@@ -54,9 +54,7 @@ extern bool			g_bDebug;
 #define COLLRR				collisionRectToRect
 #define COLLRRW				collisionRectToRectWide
 
-#define COLLGRD				collDirVersusGround			// player 멤버함수
-
-#define PI					3.141592
+#define PI					3.141592f
 
 #define dir_left			false
 #define dir_right			true
@@ -70,8 +68,10 @@ enum class GROUP_OBJECT
 	BACKGROUND,
 	GROUND,
 	WALL,
-	WARP,
+	TRIGGERBOX,
 	EFFECT_BACK,
+
+	WARP,
 
 	TILE,
 	IMAGE,
@@ -101,6 +101,7 @@ enum class OBJECT_NAME
 	DEFAULT,
 	BACKGROUND,
 	FRONTGROUND,
+	TRIGGERBOX,
 
 	TILE,
 	GROUND,

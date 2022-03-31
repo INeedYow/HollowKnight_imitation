@@ -83,14 +83,7 @@ void CBoss_Markoth::update()
 		pos.y = 200.f;
 	setPos(pos);
 
-	if (isCheck(SM_DEATH) && m_ucPhase)
-	{
-		m_ucPhase = 0;
-		changeMonsState(getAI(), eSTATE_MONS::DEATH);
-		return;
-	}
-
-	if (!isCheck(SB_TIMER) || isCheck(SM_DEATH))	// 스킬 쓰는 도중, 죽었을 때는 이후 업데이트 안 하도록
+	if (!isCheck(SB_TIMER))					// 특정 상황에서 이후 업데이트 안 하도록
 		return;		
 	
 	m_fSkillTimer -= fDT;
@@ -191,7 +184,7 @@ void CBoss_Markoth::collisionEnter(CCollider* pOther)
 	tMonsInfo info;
 
 	switch (pOther->getOwner()->getName())
-	{	// att도 player, monster 구분해야 
+	{	//
 	case eOBJNAME::MISSILE_PLAYER:
 		if (!isCheck(SM_DEATH))
 		{
@@ -242,10 +235,10 @@ void CBoss_Markoth::collisionKeep(CCollider* pOther)
 		{
 			info = getMonsInfo();
 
-			info.iHP -= 1;	// 다단히트 시 1 감소
+			info.iHP -= 1;	// 다단히트
 
 			info.fvKnockBackDir.x = 1.f;
-			if (((CMissile*)pOther->getOwner())->getDir().x < 0.f)		// 미사일 방향에 따른 넉백방향
+			if (((CMissile*)pOther->getOwner())->getDir().x < 0.f)		
 				info.fvKnockBackDir.x = -1.f;
 			info.fvKnockBackDir.y = 0.f;
 			info.fKnockBackSpd = (float)SM_KBSPD_M;
@@ -260,26 +253,6 @@ void CBoss_Markoth::collisionKeep(CCollider* pOther)
 	}
 }
 
-// 테스트 중 원본 보관
-//void CBoss_Markoth::createShield(float theta)
-//{
-//	CShield* pShield = new CShield();
-//	pShield->setOwner(this);
-//	pShield->setRadius((float)B_SHD_RAD);
-//	pShield->setfSpeed((float)B_SHD_SPD);
-//	pShield->setTex(L"Shield_Boss", L"texture\\boss\\boss_shield.bmp");
-//	pShield->createAnim(L"Shield_rot", pShield->getTex(), 
-//		fPoint(0.f, 0.f), fPoint(166.f, 308.f), fPoint(166.f, 0.f), 0.1f, 3);
-//	pShield->getAnimator()->play(L"Shield_rot");
-//	pShield->setTheta((float)(theta + m_vecShield.size() * PI));			// 반대 방향에서 생성..
-//
-//	createObj(pShield, eOBJ::SHIELD);
-//
-//	m_vecShield.push_back(pShield);
-//}
-
-// 테스트 용
-// MemTex 이름이 같으면 에러
 void CBoss_Markoth::createShield(float theta, bool rightRot)
 {
 	CShield* pShield = new CShield();
@@ -361,5 +334,5 @@ void CBoss_Markoth::spawnShield()
 
 void CBoss_Markoth::death()
 {
-	// TODO
+	changeMonsState(getAI(), eSTATE_MONS::DEATH);
 }

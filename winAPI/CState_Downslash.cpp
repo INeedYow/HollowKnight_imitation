@@ -53,12 +53,15 @@ void CState_Downslash::enter()
 	
 	getPlayer()->setCheck(SP_STOPANIM, true);
 	m_fAttackDelay = 0.f;
+
+	tPlayerInfo info = getPlayer()->getPlayerInfo();
+	info.fAtkDelay = P_ATKDELAY;
+	getPlayer()->setPlayerInfo(info);
 }
 
 void CState_Downslash::exit()
 {
 	getPlayer()->setCheck(SP_STOPANIM, false);
-	m_fAttackDelay = 0.f;
 }
 
 void CState_Downslash::printInfo(HDC hDC)

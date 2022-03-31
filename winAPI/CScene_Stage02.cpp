@@ -11,12 +11,16 @@
 #include "CAI.h"
 #include "CGround.h"
 #include "CWall.h"
-#include "CWarp.h"
+#include "CTriggerBox.h"
 #include "CHUD_HP.h"
 #include "CHUD_Soul.h"
+#include "CImage.h"
+#include "CWarp.h"
 
 #define STG02_SIZEX 3840
 #define STG02_SIZEY 2160
+
+//void goBackHome();
 
 CScene_Stage02::CScene_Stage02()
 {
@@ -34,7 +38,7 @@ void CScene_Stage02::update()
 	fPoint camPos = getCamPos();
 
 	if (KEY_ON(VK_ESCAPE))
-			changeScn(eSCENE::TITLE);
+		changeScn(eSCENE::TITLE);
 
 	if (KEY_ON('N'))
 		changeScn(eSCENE::STAGE_03);
@@ -88,16 +92,21 @@ void CScene_Stage02::enter()
 
 	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(200, 1550));
 	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(3200, 1570));
-	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(860, 1300));
+	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(3400, 1500));
 
 	CWarp* pWp1 = new CWarp;
 	pWp1->setDestScene(eSCENE::STAGE_01);
 	pWp1->load(L"warp_mapChange", L"texture\\image\\text_mapChange.bmp");
 	pWp1->setPos(fPoint(1958.f, 1380));
 	pWp1->getCollider()->setSize(fPoint(80.f, 80.f));
-	pWp1->setImageOffset(fPoint(0.f, - 200.f));
+	pWp1->setImageOffset(fPoint(0.f, -180.f));
 	addObject(pWp1, eOBJ::WARP);
 
+	//CTriggerBox* pTb = new CTriggerBox;
+	//pTb->setPos(fPoint(1958.f, 1380));
+	//pTb->setCallBack(changeSceneWithPos, (DWORD_PTR)eSCENE::STAGE_02, 1963.f, 10.f);
+	//pTb->getCollider()->setSize(fPoint(80.f, 80.f));
+	//addObject(pTb, eOBJ::TRIGGERBOX);
 
 	// ground, wall
 	CWall::create(-100, 0, 0, STG02_SIZEY);
@@ -148,6 +157,7 @@ void CScene_Stage02::enter()
 	checkGrp(eOBJ::MONSTER, eOBJ::GROUND);
 	checkGrp(eOBJ::MONSTER, eOBJ::WALL);
 
+	checkGrp(eOBJ::PLAYER, eOBJ::TRIGGERBOX);
 	checkGrp(eOBJ::PLAYER, eOBJ::WARP);
 	checkGrp(eOBJ::PLAYER, eOBJ::MONSTER);
 	checkGrp(eOBJ::PLAYER, eOBJ::MISSILE_MONSTER);
@@ -174,8 +184,6 @@ void CScene_Stage02::enter()
 
 void CScene_Stage02::exit()
 {
-	//CGameManager::getInst()->savePlayerInfo();
-
 	deleteObjectAll();
 	resetGrp();
 
@@ -183,3 +191,10 @@ void CScene_Stage02::exit()
 	camSetIsArea(false);
 	camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
 }
+
+//void goBackHome()
+//{
+//	//CImage* pImg = new CImage;
+//	//pImg->load(L"goHomeTex", L"texture\\image\\text_mapChange.bmp");
+//	//pImg->setPos();
+//}

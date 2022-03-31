@@ -18,6 +18,7 @@ struct tPlayerInfo
 
 	float		fLandTimer;
 	float		fNoDmgTimer;
+	float		fAtkDelay;
 
 	fVec2		fvKnockBackDir;
 	float		fKnockBackTimer;
@@ -112,7 +113,7 @@ enum class eSTATE_PLAYER
 
 // # state
 #define P_HPMAX					5
-#define P_SIZEX					62
+#define P_SIZEX					58
 #define P_SIZEY					124
 #define P_SPDX					420
 #define P_SPDY					820
@@ -122,6 +123,7 @@ enum class eSTATE_PLAYER
 #define P_LAND_TIMER			0.7f				
 #define P_KB_TIMER				0.2f
 #define P_KB_SPD				100
+#define P_ATKDELAY				0.2f
 
 #define P_JUMPHOLDMAX			0.35f
 #define P_FIRESOUL				30

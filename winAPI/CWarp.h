@@ -1,7 +1,7 @@
 #pragma once
 #include "CImage.h"
 
-typedef void(*BTN_FUNC) (DWORD_PTR, DWORD_PTR);
+//typedef void(*BTN_FUNC) (DWORD_PTR, DWORD_PTR);
 
 class CWarp : public CImage
 {
@@ -25,4 +25,3 @@ public:
 	virtual void collisionExit(CCollider* pOther);
 
 };
-

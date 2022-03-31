@@ -27,6 +27,8 @@ void CState_Die::enter()
 	m_fTimer = 2.f;
 	
 	getMonster()->playAnim(L"Die");
+	CSoundManager::getInst()->addSound(L"death_sound", L"sound\\monster\\flllllllll.wav");
+	CSoundManager::getInst()->play(L"death_sound", 0.1f);
 }
 
 void CState_Die::exit()

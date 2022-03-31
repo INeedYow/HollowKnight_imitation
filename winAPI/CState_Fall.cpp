@@ -35,7 +35,7 @@ void CState_Fall::update(UINT& chk)
 		getPlayer()->playAnim(L"Fall");
 	}
 
-	if (KEY_ON('X'))
+	if (KEY_ON('X' && info.fAtkDelay <= 0.f))
 	{
 		if (KEY_HOLD(VK_UP))
 		{
@@ -99,8 +99,6 @@ void CState_Fall::enter()
 void CState_Fall::exit()
 {
 	getPlayer()->setCheck(SP_STOPANIM, false);
-
-	//getPlayer()->setCheck(SP_GODOWN, false);		// 슬래쉬처럼 공중 동작할 때에도 낙하하고 있는 경우 있음
 
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 	info.fSpdY = 0.f;

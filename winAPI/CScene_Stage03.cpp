@@ -11,7 +11,7 @@
 #include "CAI.h"
 #include "CGround.h"
 #include "CWall.h"
-#include "CWarp.h"
+#include "CTriggerBox.h"
 #include "CHUD_HP.h"
 #include "CHUD_Soul.h"
 
@@ -83,12 +83,13 @@ void CScene_Stage03::enter()
 	// monster
 	CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(2330, 1350));
 
-	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(1170, 702));
+	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(750, 1410));
 	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(2770, 700));
 
-	CMonster::create(eOBJNAME::MONS_BEE, fPoint(800, 700));
+	CMonster::create(eOBJNAME::MONS_BEE, fPoint(1100, 600));
 	CMonster::create(eOBJNAME::MONS_BEE, fPoint(1900, 900));
 	CMonster::create(eOBJNAME::MONS_BEE, fPoint(2450, 650));
+	CMonster::create(eOBJNAME::MONS_BEE, fPoint(3200, 1000));
 
 
 	// ground, wall

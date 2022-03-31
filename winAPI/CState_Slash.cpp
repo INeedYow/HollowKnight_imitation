@@ -71,6 +71,7 @@ void CState_Slash::enter()
 	getPlayer()->setCheck(SP_STOPANIM, true);
 
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
+	info.fAtkDelay = P_ATKDELAY;
 	getPlayer()->setPlayerInfo(info);
 }
 

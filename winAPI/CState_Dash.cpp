@@ -16,7 +16,6 @@ CState_Dash::~CState_Dash()
 {
 }
 
-// TODO dash 연속사용 제어?
 void CState_Dash::update(UINT& chk)
 {
 	fPoint pos = getPlayer()->getPos();

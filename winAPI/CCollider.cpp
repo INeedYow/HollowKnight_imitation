@@ -166,13 +166,13 @@ void CCollider::render(HDC hDC, float theta, bool rotReverse)
 		
 		for (int i = 0; i < 4; i++)
 		{	// point [1]->[2]->[3]->[4]->[1] 선 그리기
-			if (i == 0)
-			{
-				SelectGDI pen(hDC, ePEN::BLUE);
-				MoveToEx(hDC, pPointArr[i].x, pPointArr[i].y, NULL);
-				LineTo(hDC, pPointArr[(i + 1) % 4].x, pPointArr[(i + 1) % 4].y);
-				continue;
-			}
+			//if (i == 0)
+			//{	// 디버깅용
+			//	SelectGDI pen(hDC, ePEN::BLUE);
+			//	MoveToEx(hDC, pPointArr[i].x, pPointArr[i].y, NULL);
+			//	LineTo(hDC, pPointArr[(i + 1) % 4].x, pPointArr[(i + 1) % 4].y);
+			//	continue;
+			//}
 			MoveToEx(hDC, pPointArr[i].x, pPointArr[i].y, NULL);
 			LineTo(hDC, pPointArr[(i + 1) % 4].x, pPointArr[(i + 1) % 4].y);
 		}

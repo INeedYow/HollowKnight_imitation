@@ -17,7 +17,7 @@ void CState_Death::update(UINT& chk)
 {
 	m_fDura -= fDT;
 
-	// TODO
+
 	if (m_fDura < 0.f)
 	{
 		if (chk & SP_AIR)
