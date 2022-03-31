@@ -54,7 +54,7 @@ void CScene_Stage01::update()
 void CScene_Stage01::enter()
 {
 	// 카메라
-	camFadeIn(0.5f);
+	//camFadeIn(0.5f);
 	camSetArea(0.f, 0.f, STG01_SIZEX, STG01_SIZEY);
 
 	// Player 추가
@@ -135,6 +135,8 @@ void CScene_Stage01::exit()
 	resetGrp();
 
 	camFadeOut(0.5f);
+	camFadeIn(0.5f);
+
 	camSetIsArea(false);
 	camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
 

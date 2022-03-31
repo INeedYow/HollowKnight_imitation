@@ -40,6 +40,9 @@ void CScene_Stage03::update()
 	if (gameGetPlayer()->getPos().x > STG03_SIZEX - 30.f)
 		changeScn(eSCENE::STAGE_04);
 
+	if (KEY_ON('N'))
+		changeScn(eSCENE::STAGE_04);
+
 	if (KEY_ON('M'))
 	{
 		if (m_bBGM)
@@ -56,7 +59,7 @@ void CScene_Stage03::update()
 
 void CScene_Stage03::enter()
 {
-	camFadeIn(0.5f);
+	//camFadeIn(0.5f);
 	camSetArea(0.f, 0.f, STG03_SIZEX, STG03_SIZEY);
 
 	CPlayer* pPlayer = CPlayer::createNormal(fPoint(260.f, 1340.f));
@@ -167,6 +170,7 @@ void CScene_Stage03::exit()
 	deleteObjectAll();
 	resetGrp();
 
+	camFadeIn(0.5f);
 	camFadeOut(0.5f);
 	camSetIsArea(false);
 	camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));

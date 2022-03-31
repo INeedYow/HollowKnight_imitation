@@ -7,8 +7,8 @@ enum class CAM_EFFECT
 {
 	FADE_IN,
 	FADE_OUT,
-	SWING,
 	// TODO
+	SWING,
 
 	NONE
 };

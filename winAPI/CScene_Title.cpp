@@ -75,6 +75,9 @@ void CScene_Title::exit()
 
 	CCollisionManager::getInst()->resetGroup();
 
+	camFadeOut(0.5f);
+	camFadeIn(0.5f);
+
 	// TODO error
 	//CSoundManager::getInst()->stop(L"bgm_title");
 }

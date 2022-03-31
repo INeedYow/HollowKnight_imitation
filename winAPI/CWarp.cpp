@@ -66,7 +66,9 @@ void CWarp::collisionEnter(CCollider* pOther)
 void CWarp::collisionKeep(CCollider* pOther)
 {
 	if (KEY_ON(VK_UP))
+	{
 		changeScene((DWORD_PTR)m_eDestScn, 0);
+	}
 }
 
 void CWarp::collisionExit(CCollider* pOther)

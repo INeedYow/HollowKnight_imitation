@@ -62,7 +62,7 @@ void CScene_Stage02::update()
 
 void CScene_Stage02::enter()
 {
-	camFadeIn(0.5f); 
+	//camFadeIn(0.5f); 
 	camSetArea(0.f, 0.f, STG02_SIZEX, STG02_SIZEY);
 
 	CPlayer* pPlayer = CPlayer::createNormal(fPoint(1963, 0.f));
@@ -179,7 +179,7 @@ void CScene_Stage02::enter()
 	camSetTrace(pPlayer);
 
 	CSoundManager::getInst()->addSound(L"bgm_stg2", L"sound\\bgm\\cave_wind_loop.wav", true);
-	CSoundManager::getInst()->play(L"bgm_stg2", 0.5f);
+	CSoundManager::getInst()->play(L"bgm_stg2", 0.1f);
 }
 
 void CScene_Stage02::exit()
@@ -188,6 +188,8 @@ void CScene_Stage02::exit()
 	resetGrp();
 
 	camFadeOut(0.5f);
+	camFadeIn(0.5f);
+
 	camSetIsArea(false);
 	camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
 }

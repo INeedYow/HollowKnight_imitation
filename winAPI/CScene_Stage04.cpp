@@ -51,7 +51,7 @@ void CScene_Stage04::update()
 
 void CScene_Stage04::enter()
 {
-	camFadeIn(0.5f);
+	//camFadeIn(0.5f);
 	camSetArea(0.f, 0.f, STG04_SIZEX, STG04_SIZEY);
 
 	CPlayer* pPlayer = CPlayer::createNormal(fPoint(260.f, 1340.f));
@@ -144,6 +144,8 @@ void CScene_Stage04::exit()
 	resetGrp();
 
 	camFadeOut(0.5f);
+	camFadeIn(0.5f);
+
 	camSetIsArea(false);
 	camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
 

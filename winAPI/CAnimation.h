@@ -50,4 +50,4 @@ public:
 		fPoint step, float dura, UINT frmCnt, bool isRepeat = true);
 };
 
-#define STD_CAL		0.11f
+#define STD_CAL		0.15f
