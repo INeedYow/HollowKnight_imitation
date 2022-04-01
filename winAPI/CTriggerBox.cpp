@@ -31,7 +31,6 @@ void CTriggerBox::render(HDC hDC)
 		componentRender(hDC);
 }
 
-
 void CTriggerBox::collisionEnter(CCollider* pOther)
 {	// 플레이어랑만 충돌하게
 	

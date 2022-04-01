@@ -94,9 +94,10 @@ void changeScene(DWORD_PTR param1, DWORD_PTR param2)
 void changeSceneWithPos(DWORD_PTR param1, DWORD_PTR param2, DWORD_PTR param3)
 {	// 변경할 씬
 	changeScene((DWORD_PTR)param1, 0);
-	// 씬 전환시 플레이어 위치 x,y값 입력받아서 게임매니저에 저장
-	CGameManager::getInst()->savePos(fPoint((float)param2,(float)param3));
-	
+
+	// 씬 전환시 플레이어 시작 위치 게임매니저에 저장
+	fPoint pos = (*(fPoint*)param2);
+	CGameManager::getInst()->savePos(pos);
 }
 
 void quitWindow(DWORD_PTR param1, DWORD_PTR param2)

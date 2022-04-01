@@ -54,7 +54,7 @@ void CState_Jump::update(UINT& chk)
 		getPlayer()->playAnim(L"Jump");
 	}
 
-	if (KEY_ON('X') && info.fAtkDelay <= 0.f)
+	if (KEY_ON('X') /*&& info.fAtkDelay <= 0.f*/)
 	{
 		if (KEY_HOLD(VK_UP))
 		{

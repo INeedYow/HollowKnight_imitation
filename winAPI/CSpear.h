@@ -13,7 +13,7 @@ class CSpear : public CMissile
 
 	bool	m_bActive;
 
-	CTexture* m_pMemTex;
+	CTexture* m_pMemTex;	// plgblt으로 그릴 텍스쳐(회전)
 
 public:
 	CSpear();

@@ -91,9 +91,6 @@
     <ClCompile Include="CFrontGround.cpp">
       <Filter>Object\BackGround</Filter>
     </ClCompile>
-    <ClCompile Include="CImage.cpp">
-      <Filter>Object\Image</Filter>
-    </ClCompile>
     <ClCompile Include="CMonster.cpp">
       <Filter>Object\Character\Monster</Filter>
     </ClCompile>
@@ -232,9 +229,6 @@
     <ClCompile Include="CSoundManager.cpp">
       <Filter>Engine\Manager\Sound</Filter>
     </ClCompile>
-    <ClCompile Include="CTriggerBox.cpp">
-      <Filter>Object\Image</Filter>
-    </ClCompile>
     <ClCompile Include="CMonster_Fly.cpp">
       <Filter>Object\Character\Monster</Filter>
     </ClCompile>
@@ -254,8 +248,14 @@
       <Filter>Object\Effect</Filter>
     </ClCompile>
     <ClCompile Include="CTest.cpp" />
-    <ClCompile Include="CWarp.cpp">
+    <ClCompile Include="CImage.cpp">
       <Filter>Object\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="CTriggerBox_Image.cpp">
+      <Filter>Object\TriggerBox</Filter>
+    </ClCompile>
+    <ClCompile Include="CTriggerBox.cpp">
+      <Filter>Object\TriggerBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -369,9 +369,6 @@
     </ClInclude>
     <ClInclude Include="CFrontGround.h">
       <Filter>Object\BackGround</Filter>
-    </ClInclude>
-    <ClInclude Include="CImage.h">
-      <Filter>Object\Image</Filter>
     </ClInclude>
     <ClInclude Include="CMonster.h">
       <Filter>Object\Character\Monster</Filter>
@@ -511,9 +508,6 @@
     <ClInclude Include="CSoundManager.h">
       <Filter>Engine\Manager\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="CTriggerBox.h">
-      <Filter>Object\Image</Filter>
-    </ClInclude>
     <ClInclude Include="CMonster_Fly.h">
       <Filter>Object\Character\Monster</Filter>
     </ClInclude>
@@ -533,8 +527,14 @@
       <Filter>Object\Effect</Filter>
     </ClInclude>
     <ClInclude Include="CTest.h" />
-    <ClInclude Include="CWarp.h">
+    <ClInclude Include="CImage.h">
       <Filter>Object\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="CTriggerBox_Image.h">
+      <Filter>Object\TriggerBox</Filter>
+    </ClInclude>
+    <ClInclude Include="CTriggerBox.h">
+      <Filter>Object\TriggerBox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -680,6 +680,9 @@
     </Filter>
     <Filter Include="Object\HUD">
       <UniqueIdentifier>{bf67137b-23c8-40d8-b2ca-20d45bf3e069}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\TriggerBox">
+      <UniqueIdentifier>{c8d85952-a0aa-4d10-9599-5c571f50a1e0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

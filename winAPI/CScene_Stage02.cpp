@@ -12,10 +12,10 @@
 #include "CGround.h"
 #include "CWall.h"
 #include "CTriggerBox.h"
+#include "CTriggerBox_Image.h"
 #include "CHUD_HP.h"
 #include "CHUD_Soul.h"
 #include "CImage.h"
-#include "CWarp.h"
 
 #define STG02_SIZEX 3840
 #define STG02_SIZEY 2160
@@ -94,19 +94,25 @@ void CScene_Stage02::enter()
 	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(3200, 1570));
 	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(3400, 1500));
 
-	CWarp* pWp1 = new CWarp;
-	pWp1->setDestScene(eSCENE::STAGE_01);
-	pWp1->load(L"warp_mapChange", L"texture\\image\\text_mapChange.bmp");
-	pWp1->setPos(fPoint(1958.f, 1380));
-	pWp1->getCollider()->setSize(fPoint(80.f, 80.f));
-	pWp1->setImageOffset(fPoint(0.f, -180.f));
-	addObject(pWp1, eOBJ::WARP);
+	//CWarp* pWp1 = new CWarp;
+	//pWp1->setDestScene(eSCENE::STAGE_01);
+	//pWp1->load(L"warp_mapChange", L"texture\\image\\text_mapChange.bmp");
+	//pWp1->setPos(fPoint(1958.f, 1380));
+	//pWp1->getCollider()->setSize(fPoint(80.f, 80.f));
+	//pWp1->setImageOffset(fPoint(0.f, -180.f));
+	//addObject(pWp1, eOBJ::WARP);
 
-	//CTriggerBox* pTb = new CTriggerBox;
-	//pTb->setPos(fPoint(1958.f, 1380));
-	//pTb->setCallBack(changeSceneWithPos, (DWORD_PTR)eSCENE::STAGE_02, 1963.f, 10.f);
-	//pTb->getCollider()->setSize(fPoint(80.f, 80.f));
-	//addObject(pTb, eOBJ::TRIGGERBOX);
+	fPoint enterPos = fPoint(1964.f, 10.f);
+
+	CTriggerBox_Image* pTb = new CTriggerBox_Image;
+	pTb->setPos(fPoint(1958.f, 1380));
+	pTb->setCallBack(changeSceneWithPos, (DWORD_PTR)eSCENE::STAGE_02, (DWORD_PTR)&enterPos, 0);
+	pTb->getCollider()->setSize(fPoint(80.f, 80.f));
+	pTb->setTex(L"TextImg_map2to1", L"texture\\image\\text_mapChange.bmp");
+	pTb->createAnimator();
+	pTb->getAnimator()->createAnimation(L"map2to1", pTb->getTex(),
+		fPoint(0,0), fPoint(120, 96), fPoint(120, 0), 0.7f, 1, false);
+	addObject(pTb, eOBJ::TRIGGERBOX);
 
 	// ground, wall
 	CWall::create(-100, 0, 0, STG02_SIZEY);
