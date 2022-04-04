@@ -54,7 +54,7 @@ void CState_Jump::update(UINT& chk)
 		getPlayer()->playAnim(L"Jump");
 	}
 
-	if (KEY_ON('X') /*&& info.fAtkDelay <= 0.f*/)
+	if (KEY_ON('X') && info.fAtkDelay <= 0.f)
 	{
 		if (KEY_HOLD(VK_UP))
 		{
@@ -107,7 +107,7 @@ void CState_Jump::enter()
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
 
 	if (getPlayer()->isCheck(SP_DWSLASH))
-		info.fSpdY = (float)P_SPDY_DW;
+		info.fSpdY = (float)P_SPDY_DW;	//
 	else
 		info.fSpdY = (float)P_SPDY;
 

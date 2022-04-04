@@ -7,9 +7,7 @@ void changeScene(DWORD_PTR param1, DWORD_PTR param2);
 CTriggerBox_Image::CTriggerBox_Image()
 {
 	m_bActive = false;
-	m_fpImgOffset = {};
 	m_pTex = nullptr;
-	m_strAnimName = L"";
 
 	createCollider();
 	getCollider()->setShape(eSHAPE::RECT);
@@ -21,26 +19,29 @@ CTriggerBox_Image::~CTriggerBox_Image()
 
 void CTriggerBox_Image::update()
 {
+	if (m_bActive)
+	{
+		getAnimator()->update();
+	}
 }
 
 void CTriggerBox_Image::render(HDC hDC)
 {
-	if (m_bActive)
+	if (g_bDebug)
 	{
-		componentRender(hDC);
-		PLAY(m_strAnimName);
+		getCollider()->render(hDC);
 	}
-}
 
-void CTriggerBox_Image::setImageOffset(fPoint imgOffset)
-{
-	m_fpImgOffset = imgOffset;
+	if (m_bActive && nullptr != getAnimator())
+	{
+		//PLAY(m_strAnimName);
+		getAnimator()->render(hDC);
+	}
 }
 
 void CTriggerBox_Image::setTex(const wstring& strName, const wstring& strPath)
 {
 	m_pTex = loadTex(strName, strPath);
-	m_strAnimName = strName;
 }
 
 CTexture* CTriggerBox_Image::getTex()
@@ -52,7 +53,6 @@ void CTriggerBox_Image::collisionEnter(CCollider* pOther)
 {	// 어차피 플레이어랑만 충돌하게 할거니까 불필요한 getName등 생략
 	m_bActive = true;
 }
-
 
 void CTriggerBox_Image::collisionExit(CCollider* pOther)
 {

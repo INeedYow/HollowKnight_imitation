@@ -16,11 +16,13 @@
 #include "CHUD_HP.h"
 #include "CHUD_Soul.h"
 #include "CImage.h"
+#include "CAnimator.h"
+#include "CAnimation.h"
 
 #define STG02_SIZEX 3840
 #define STG02_SIZEY 2160
 
-//void goBackHome();
+void waitForKeyInput(DWORD_PTR param1, DWORD_PTR param2, DWORD_PTR param3);
 
 CScene_Stage02::CScene_Stage02()
 {
@@ -102,17 +104,38 @@ void CScene_Stage02::enter()
 	//pWp1->setImageOffset(fPoint(0.f, -180.f));
 	//addObject(pWp1, eOBJ::WARP);
 
-	fPoint enterPos = fPoint(1964.f, 10.f);
+	// TODO
+	// 이전 맵과 다음 맵의 플레이어 진입 위치를 다르게 하려고 gameMgr에 진입점을 저장하게 하려고
+	// 처음에 fPoint enterPos = fPoint(100.f, 100.f); 처럼 지역변수로 하니까 함수포인터 인자로 포인터를 줘야해서
+	// &enterPos로 주니까 원본이 쓰레기값이 돼서인지 제대로 작동하지 않고 0, 0으로 이동하는 문제가 있어서
+	// 어차피 주소로 넘겨주니까 동적할당을 해서 주소값을 주는 걸로 해보려고 했더니 해제하는 거 고민하다가
+	// 게임 매니저가 해당 위치에 플레이어 셋해주고 해당 주소값 delete해주려 했더니 맵 진입점이 동시에 둘 이상인 경우 모두 해제가 안 되니까
+	// 진입점 좌표 주소들을 vector배열로 갖고 있다가 모두 해제해주는 식으로 해야하나 했다가
+	// 미리 다 만들어두지 말고 해당 씬 전환 호출 시 해당 좌표 할당하고 gameMgr는 사용한 것만 지우는 식으로 해결하려 했는데 또 안 되네
+	// 아 enter 함수 끝나면 사라지니까 바로 쓰레기값 되는구나
+		// pos들을 scn자체에서 관리하게 하거나 데이터 영역에 두거나 ㅇ누램ㄴ오랜ㅁㅇ래ㅑㅇㄴㄹㅇㄴ
+	// 누가 이기나 보자 시작 좌표 달리하는 게 이렇게 어려울 일이었나 내가 어렵게 하고 있는 건가
+
+	fPoint stg1enterPos = fPoint(3400.f, 1600.f);
+	fPoint stg3enterPos = fPoint(100.f, 1250.f);
 
 	CTriggerBox_Image* pTb = new CTriggerBox_Image;
 	pTb->setPos(fPoint(1958.f, 1380));
-	pTb->setCallBack(changeSceneWithPos, (DWORD_PTR)eSCENE::STAGE_02, (DWORD_PTR)&enterPos, 0);
+	pTb->setCallBack(waitForKeyInput, (DWORD_PTR)eSCENE::STAGE_01, (DWORD_PTR)&stg1enterPos, 0);
 	pTb->getCollider()->setSize(fPoint(80.f, 80.f));
 	pTb->setTex(L"TextImg_map2to1", L"texture\\image\\text_mapChange.bmp");
 	pTb->createAnimator();
 	pTb->getAnimator()->createAnimation(L"map2to1", pTb->getTex(),
 		fPoint(0,0), fPoint(120, 96), fPoint(120, 0), 0.7f, 1, false);
+	pTb->getAnimator()->findAnimation(L"map2to1")->setAllOffset(fPoint(0.f, - 170.f));
+	pTb->PLAY(L"map2to1");
 	addObject(pTb, eOBJ::TRIGGERBOX);
+
+	CTriggerBox* pTb2 = new CTriggerBox;
+	pTb2->setPos(fPoint(STG02_SIZEX, 1233));
+	pTb2->setCallBack(changeSceneWithPos, (DWORD_PTR)eSCENE::STAGE_03, (DWORD_PTR)&stg3enterPos, 0);
+	pTb2->getCollider()->setSize(fPoint(80.f, 200.f));
+	addObject(pTb2, eOBJ::TRIGGERBOX);
 
 	// ground, wall
 	CWall::create(-100, 0, 0, STG02_SIZEY);
@@ -144,14 +167,14 @@ void CScene_Stage02::enter()
 	CWall::create(3554, 1370, STG02_SIZEX, STG02_SIZEY);
 	CGround::create(3558, 1336, STG02_SIZEX, 1370);
 
-	CGround::create(2556, 1424, 2666, 1460);
-	CWall::create(2560, 1440, 2670, 1445);
+	CGround::create(2560, 1424, 2666, 1460);
+	CWall::create(2556, 1440, 2670, 1445);
 
-	CGround::create(2880, 1386, 3060, 1430);
-	CWall::create(2884, 1400, 3064, 1420);
+	CGround::create(2884, 1386, 3060, 1430);
+	CWall::create(2880, 1400, 3064, 1420);
 
-	CGround::create(3248, 1372, 3360, 1406);
-	CWall::create(3252, 1382, 3364, 1396);
+	CGround::create(3252, 1372, 3360, 1406);
+	CWall::create(3248, 1382, 3364, 1396);
 
 	CWall::create(2060, 0, 2300, 1150);
 	CGround::create(2064, 1150, 2296, 1180);
@@ -198,11 +221,15 @@ void CScene_Stage02::exit()
 
 	camSetIsArea(false);
 	camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
+
+	//delete pStg1enterPos;
+	//delete pStg3enterPos;
 }
 
-//void goBackHome()
-//{
-//	//CImage* pImg = new CImage;
-//	//pImg->load(L"goHomeTex", L"texture\\image\\text_mapChange.bmp");
-//	//pImg->setPos();
-//}
+void waitForKeyInput(DWORD_PTR param1, DWORD_PTR param2, DWORD_PTR param3)
+{
+	if (KEY_ON(VK_UP))
+	{
+		changeSceneWithPos(param1, param2, param3);
+	}
+}

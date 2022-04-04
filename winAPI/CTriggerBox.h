@@ -22,4 +22,3 @@ public:
 
 	void setCallBack(BTN_FUNC pFunc, DWORD_PTR param1, DWORD_PTR param2, DWORD_PTR param3);
 };
-

@@ -123,7 +123,7 @@ enum class eSTATE_PLAYER
 #define P_LAND_TIMER			0.7f				
 #define P_KB_TIMER				0.2f
 #define P_KB_SPD				100
-#define P_ATKDELAY				0.2f
+#define P_ATKDELAY				0.4f
 
 #define P_JUMPHOLDMAX			0.35f
 #define P_FIRESOUL				30

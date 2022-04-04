@@ -35,7 +35,7 @@ void CState_Fall::update(UINT& chk)
 		getPlayer()->playAnim(L"Fall");
 	}
 
-	if (KEY_ON('X' /*&& info.fAtkDelay <= 0.f)*/))
+	if (KEY_ON('X') && info.fAtkDelay <= 0.f)
 	{
 		if (KEY_HOLD(VK_UP))
 		{

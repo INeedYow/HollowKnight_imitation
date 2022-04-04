@@ -58,11 +58,6 @@ void CAttack::setDura(float dura)
 	m_fDura = dura;
 }
 
-//void CAttack::setDmg(UINT dmg)
-//{
-//	m_uiDmg = dmg;
-//}
-
 void CAttack::setOwner(CObject* pOwner)
 {
 	m_pOwner = pOwner;
@@ -131,7 +126,6 @@ void CAttack::collisionEnter(CCollider* pOther)
 			if (info.uiSoul > 100)
 				info.uiSoul = 100;
 
-			
 			break;
 		}
 
@@ -167,7 +161,43 @@ void CAttack::collisionEnter(CCollider* pOther)
 
 			break;
 		}
+
+		case eOBJNAME::TEST:
+		{
+			fPoint pos = (getPos() + pOther->getPos()) / 2.f;
+
+			CEffect* pEff = new CEffect;
+			pEff->load(L"nail_hit_effect", L"texture\\effect\\nail_hit_effect.bmp");
+			pEff->setDuration(0.4f);
+
+			pEff->createAnim(L"nail_hit_effect", pEff->getTex(),
+				fPoint(0, 0), fPoint(243, 155), fPoint(243, 0), 0.1f, 4, false);
+
+			pEff->setPos(pos);
+			pEff->PLAY(L"nail_hit_effect");
+			createObj(pEff, eOBJ::EFFECT);
+
+			CSoundManager::getInst()->addSound(L"enemy_damage", L"sound\\player\\enemy_damage.wav");
+			CSoundManager::getInst()->play(L"enemy_damage", 0.1f);
+
+			if (m_eDir == eDIR::BOTTOM)
+			{
+				((CPlayer*)pOwner)->setCheck(SP_DWSLASH, true);
+				changeMyState(((CPlayer*)pOwner)->getAI(), eSTATE_PLAYER::JUMP);
+			}
+
+			info.fvKnockBackDir = (pOwner->getPos() - pTarget->getPos());
+			info.fKnockBackTimer = P_KB_TIMER;
+
+			// soul ȹ�淮
+			info.uiSoul += 20;
+			if (info.uiSoul > 100)
+				info.uiSoul = 100;
+
+			break;
 		}
+		}
+		
 		
 
 		((CPlayer*)pOwner)->setPlayerInfo(info);

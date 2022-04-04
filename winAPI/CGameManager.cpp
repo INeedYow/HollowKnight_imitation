@@ -11,7 +11,7 @@ CGameManager::CGameManager()
 	m_tPlayerInformation.fGravity = (float)P_GRAV;
 	m_tPlayerInformation.fKnockBackSpd = P_KB_SPD;
 
-	m_fpSavePos = { -1.f, -1.f };
+	m_pStartPos = new fPoint(1200.f, 1430.f);
 }
 
 CGameManager::~CGameManager()
@@ -26,11 +26,12 @@ void CGameManager::updatePrevInfo()
 	m_pPlayer->updatePrevInfo(prevInfo);
 }
 
+fPoint prevPos = {};
+
 void CGameManager::update()
 {
 	if (nullptr != m_pPlayer)
 		updatePrevInfo();
-
 }
 
 void CGameManager::registPlayer(CPlayer* pPlayer)
@@ -52,23 +53,25 @@ void CGameManager::savePlayerInfo()
 void CGameManager::loadPlayerInfo(CPlayer* pNewPlayer)
 {
 	if (m_pPlayer == nullptr) return;
+	
 	pNewPlayer->setPlayerInfo(m_tPlayerInformation);
 
-	if (m_fpSavePos != fPoint(-1.f, -1.f))
-	{	// 씬 이동간 플레이어 시작위치가 바뀌어야 하는 경우 지정해주는 식으로 사용하려고
-		m_pPlayer->setPos(m_fpSavePos);
-		m_fpSavePos = fPoint(-1.f, -1.f);		// 1회성
+	if (nullptr != m_pStartPos)
+	{
+		m_pPlayer->setPos(*m_pStartPos);
+		delete m_pStartPos;
+		m_pStartPos = nullptr;
 	}
 }
 
-void CGameManager::savePos(fPoint pos)
+void CGameManager::setStartPos(fPoint* pPt)
 {
-	m_fpSavePos = pos;
+	m_pStartPos = pPt;
 }
 
-fPoint CGameManager::loadPos()
+fPoint CGameManager::getStartPos()
 {
-	return m_fpSavePos;
+	return *m_pStartPos;
 }
 
 CPlayer* CGameManager::getPlayer()

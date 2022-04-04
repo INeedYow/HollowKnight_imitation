@@ -7,10 +7,8 @@ class CTexture;
 class CTriggerBox_Image : public CTriggerBox
 {
 	bool	m_bActive;
-	fPoint	m_fpImgOffset;
 
 	CTexture*	m_pTex;
-	wstring		m_strAnimName;
 
 public:
 	CTriggerBox_Image();
@@ -19,7 +17,6 @@ public:
 	virtual void update();
 	virtual void render(HDC hDC);
 
-	void setImageOffset(fPoint imgOffset);
 	void setTex(const wstring& strName, const wstring& strPath);
 
 	CTexture* getTex();

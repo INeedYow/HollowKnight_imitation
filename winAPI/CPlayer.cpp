@@ -49,7 +49,7 @@ CPlayer::CPlayer()
 	m_uiCheck = 0;
 
 	createCollider();
-	getCollider()->setSize(fPoint(48.f, 108.f));
+	getCollider()->setSize(fPoint(44.f, 106.f));
 	getCollider()->setOffset(fPoint(0.f, 10.f));
 	getCollider()->setShape(eSHAPE::RECT);
 
@@ -348,24 +348,21 @@ void CPlayer::collisionKeep(CCollider* pOther)
 
 	case eOBJNAME::WALL:
 	{
-		if (isLeftColl(getCollider(), pOther))
-		{	// 왼쪽에서 벽과 충돌
-			fPoint pos = getPos();
-
-			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f
-				- getCollider()->getSize().x / 2.f - getCollider()->getOffset().x - 1;
+		fPoint pos = getPos();
+		if (pos.x < pOther->getPos().x && m_tPrevInfo.fpPrevPos.x < pos.x)
+		{	// 왼쪽에서 오른쪽으로 이동하고 있는 경우
+			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f + pOther->getOffset().x
+				- getCollider()->getSize().x / 2.f + getCollider()->getOffset().x - 1;
 			setPos(pos);
-
 		}
-		else
-		{	// 오른쪽
-			fPoint pos = getPos();
 
-			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f
-				+ getCollider()->getSize().x / 2.f + getCollider()->getOffset().x + 1;
+		else if (pos.x > pOther->getPos().x && m_tPrevInfo.fpPrevPos.x > pos.x)
+		{	// 오른쪽에서 왼쪽으로 이동하고 있는 경우
+			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f + pOther->getOffset().x
+				+ getCollider()->getSize().x / 2.f - getCollider()->getOffset().x + 1;
 			setPos(pos);
-
 		}
+
 		break;
 	}
 
@@ -430,6 +427,7 @@ void CPlayer::collisionEnter(CCollider* pOther)
 				{
 					CSoundManager::getInst()->addSound(L"hero_land_soft", L"sound\\player\\hero_land_soft.wav");
 					CSoundManager::getInst()->play(L"hero_land_soft", 0.1f);
+					changeMyState(m_pStatus, eSTATE_PLAYER::IDLE);
 				}
 
 				m_uiCheck &= ~(SP_AIR);
@@ -453,20 +451,21 @@ void CPlayer::collisionEnter(CCollider* pOther)
 	}
 	case eOBJNAME::WALL:
 	{
-		if (isLeftColl(getCollider(), pOther))
-		{	// 좌
-			fPoint pos = getPos();
+		fPoint pos = getPos();
+		if (pos.x < pOther->getPos().x && m_tPrevInfo.fpPrevPos.x < pos.x)
+		{	// 왼쪽에서 오른쪽으로 이동하고 있는 경우
 			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f + pOther->getOffset().x
 				- getCollider()->getSize().x / 2.f + getCollider()->getOffset().x - 1;
 			setPos(pos);
 		}
-		else
-		{	// 우
-			fPoint pos = getPos();
+	
+		else if (pos.x > pOther->getPos().x && m_tPrevInfo.fpPrevPos.x > pos.x)
+		{	// 오른쪽에서 왼쪽으로 이동하고 있는 경우
 			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f + pOther->getOffset().x
 				+ getCollider()->getSize().x / 2.f - getCollider()->getOffset().x + 1;
 			setPos(pos);
 		}
+		
 		break;
 	}
 	
@@ -510,8 +509,6 @@ void CPlayer::collisionEnter(CCollider* pOther)
 	}
 	}
 
-
-
 }
 
 void CPlayer::collisionExit(CCollider* pOther)
@@ -524,7 +521,10 @@ void CPlayer::collisionExit(CCollider* pOther)
 			if (--m_tInfo.iBottomCnt <= 0 && m_pStatus->getCurState()->getState() != eSTATE_PLAYER::JUMP)
 			{	// 점프할 때도 exit에서 강제로 fall로 바꿔서 점프 안 됐었음
 				m_tInfo.iBottomCnt = 0;
-				changeMyState(m_pStatus, eSTATE_PLAYER::FALL);
+				m_uiCheck |= SP_AIR;
+
+				if (m_pStatus->getCurState()->getState() != eSTATE_PLAYER::DASH)
+					changeMyState(m_pStatus, eSTATE_PLAYER::FALL);
 			}
 		}
 		break;
