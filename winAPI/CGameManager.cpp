@@ -11,7 +11,7 @@ CGameManager::CGameManager()
 	m_tPlayerInformation.fGravity = (float)P_GRAV;
 	m_tPlayerInformation.fKnockBackSpd = P_KB_SPD;
 
-	m_pStartPos = new fPoint(1200.f, 1430.f);
+	m_pEnterPos = nullptr;
 }
 
 CGameManager::~CGameManager()
@@ -56,22 +56,21 @@ void CGameManager::loadPlayerInfo(CPlayer* pNewPlayer)
 	
 	pNewPlayer->setPlayerInfo(m_tPlayerInformation);
 
-	if (nullptr != m_pStartPos)
-	{
-		m_pPlayer->setPos(*m_pStartPos);
-		delete m_pStartPos;
-		m_pStartPos = nullptr;
+	if (nullptr != m_pEnterPos)
+	{	// 시작위치 저장된 곳으로 해주고 delete
+		pNewPlayer->setPos(*m_pEnterPos);	
+		delete m_pEnterPos;
 	}
 }
 
-void CGameManager::setStartPos(fPoint* pPt)
+void CGameManager::setEnterPos(fPoint* pos)
 {
-	m_pStartPos = pPt;
+	m_pEnterPos = pos;
 }
 
-fPoint CGameManager::getStartPos()
+fPoint* CGameManager::getEnterPos()
 {
-	return *m_pStartPos;
+	return m_pEnterPos;
 }
 
 CPlayer* CGameManager::getPlayer()

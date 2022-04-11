@@ -84,12 +84,11 @@ void CScene_Stage01::enter()
 	CHUD_HP* pHP = new CHUD_HP;
 	addObject(pHP, eOBJ::HUD);
 
-	fPoint enterPos = fPoint(1963.f, 10.f);
-
+	// trigger box
 	CTriggerBox* pTrg = new CTriggerBox;
 	pTrg->setPos(fPoint(3580, STG01_SIZEY - 200.f));
 	pTrg->getCollider()->setSize(fPoint(400.f, 100.f));
-	pTrg->setCallBack(changeSceneWithPos,(DWORD_PTR)eSCENE::STAGE_02, (DWORD_PTR)&enterPos, 0);
+	pTrg->setCallBack(changeSceneWithPos,(DWORD_PTR)eSCENE::STAGE_02, 1963, 10);
 	addObject(pTrg, eOBJ::TRIGGERBOX);
 
 	// ground, wall

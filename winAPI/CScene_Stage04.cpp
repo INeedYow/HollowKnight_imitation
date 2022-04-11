@@ -12,7 +12,8 @@
 #include "CWall.h"
 #include "CHUD_HP.h"
 #include "CHUD_Soul.h"
-
+#include "CTriggerBox.h"
+#include "CTriggerBox_Image.h"
 
 #define STG04_SIZEX				3000
 #define STG04_SIZEY				1689
@@ -81,12 +82,19 @@ void CScene_Stage04::enter()
 	CHUD_HP* pHP = new CHUD_HP;
 	addObject(pHP, eOBJ::HUD);
 
+	CTriggerBox* pTb1 = new CTriggerBox;
+	pTb1->setPos(fPoint(0, 1342));
+	pTb1->setCallBack(changeSceneWithPos, (DWORD_PTR)eSCENE::STAGE_03, 3625, 1200);
+	pTb1->getCollider()->setSize(fPoint(80.f, 300.f));
+	addObject(pTb1, eOBJ::TRIGGERBOX);
+
 	// ground, wall
-	CWall::create(0, 0, 268, STG04_SIZEY);
+	CWall::create(0, 0, 268, 1192);
 	CWall::create(2654, 0, STG04_SIZEX, STG04_SIZEY);
 
 	CGround::create(0, 1492, STG04_SIZEX, STG04_SIZEY);
 
+	// floating floor
 	// ¿ÞÂÊ ¾Æ·¡
 	CGround::create(864, 1040, 1036, 1100);
 	CWall::create(860, 1055, 1040, 1085);
@@ -105,28 +113,18 @@ void CScene_Stage04::enter()
 
 	checkGrp(eOBJ::PLAYER, eOBJ::WALL);
 	checkGrp(eOBJ::PLAYER, eOBJ::GROUND);
-	checkGrp(eOBJ::MONSTER, eOBJ::GROUND);
-	checkGrp(eOBJ::MONSTER, eOBJ::WALL);
+	checkGrp(eOBJ::PLAYER, eOBJ::TRIGGERBOX);
 
-	checkGrp(eOBJ::PLAYER, eOBJ::MONSTER);
 	checkGrp(eOBJ::PLAYER, eOBJ::MISSILE_MONSTER);
 	checkGrp(eOBJ::PLAYER, eOBJ::SHIELD);
 	checkGrp(eOBJ::PLAYER, eOBJ::BOSS);
 
-	checkGrp(eOBJ::MONSTER, eOBJ::WALL);
-	checkGrp(eOBJ::MONSTER, eOBJ::GROUND);
-
-	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::MONSTER);
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::BOSS);
 
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::WALL);
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::GROUND);
 
-	checkGrp(eOBJ::MISSILE_MONSTER, eOBJ::WALL);
-	checkGrp(eOBJ::MISSILE_MONSTER, eOBJ::GROUND);
-
 	checkGrp(eOBJ::ATTACK, eOBJ::BOSS);
-	checkGrp(eOBJ::ATTACK, eOBJ::MONSTER);
 	checkGrp(eOBJ::ATTACK, eOBJ::SHIELD);
 
 	//

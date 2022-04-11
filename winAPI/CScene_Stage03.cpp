@@ -34,12 +34,6 @@ void CScene_Stage03::update()
 	if (KEY_ON(VK_ESCAPE))
 		changeScn(eSCENE::TITLE);
 
-	if (gameGetPlayer()->getPos().x < 30.f)
-		changeScn(eSCENE::STAGE_02);
-
-	if (gameGetPlayer()->getPos().x > STG03_SIZEX - 30.f)
-		changeScn(eSCENE::STAGE_04);
-
 	if (KEY_ON('N'))
 		changeScn(eSCENE::STAGE_04);
 
@@ -82,6 +76,18 @@ void CScene_Stage03::enter()
 
 	CHUD_HP* pHP = new CHUD_HP;
 	addObject(pHP, eOBJ::HUD);
+
+	CTriggerBox* pTb1 = new CTriggerBox;
+	pTb1->setPos(fPoint(0, 1060));
+	pTb1->setCallBack(changeSceneWithPos, (DWORD_PTR)eSCENE::STAGE_02, 3740, 1260);
+	pTb1->getCollider()->setSize(fPoint(80.f, 500.f));
+	addObject(pTb1, eOBJ::TRIGGERBOX);
+
+	CTriggerBox* pTb2 = new CTriggerBox;
+	pTb2->setPos(fPoint(STG03_SIZEX, 1150));
+	pTb2->setCallBack(changeSceneWithPos, (DWORD_PTR)eSCENE::STAGE_04, 100, 1420);
+	pTb2->getCollider()->setSize(fPoint(80.f, 200.f));
+	addObject(pTb2, eOBJ::TRIGGERBOX);
 
 	// monster
 	CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(2330, 1350));
@@ -139,6 +145,7 @@ void CScene_Stage03::enter()
 
 	checkGrp(eOBJ::PLAYER, eOBJ::WALL);
 	checkGrp(eOBJ::PLAYER, eOBJ::GROUND);
+	checkGrp(eOBJ::PLAYER, eOBJ::TRIGGERBOX);
 	checkGrp(eOBJ::MONSTER, eOBJ::GROUND);
 	checkGrp(eOBJ::MONSTER, eOBJ::WALL);
 

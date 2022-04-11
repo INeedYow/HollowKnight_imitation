@@ -53,10 +53,13 @@ void CScene_Title::enter()
 	pImg->setName(eOBJNAME::IMAGE);
 	addObject(pImg, eOBJ::IMAGE);
 
+	fPoint* pEnterPos = new fPoint(1200.f, 1430.f);
+
 	CButtonUI_Image* pBtnStart = new CButtonUI_Image;
 	pBtnStart->load(L"Btn_Start", L"texture\\image\\button_start.bmp");
 	pBtnStart->setPos(fPoint(WINSIZEX / 2.f - 74.f, WINSIZEY / 2.f + 140));
 	pBtnStart->setClickedCallBack(changeScene, (DWORD_PTR)eSCENE::STAGE_01, 0);
+	CGameManager::getInst()->setEnterPos(pEnterPos);
 	addObject(pBtnStart, eOBJ::UI);
 
 	CButtonUI_Image* pBtnExit = new CButtonUI_Image;
@@ -92,14 +95,13 @@ void changeScene(DWORD_PTR param1, DWORD_PTR param2)
 }
 
 void changeSceneWithPos(DWORD_PTR param1, DWORD_PTR param2, DWORD_PTR param3)
-{	// 변경할 씬
+{	// param1 : 변경할 씬
 	changeScene((DWORD_PTR)param1, 0);
 
-	// 씬 전환 이벤트 발생 당시에 할당해서 사용하고 gameMgr가 해제하는 식
-	fPoint pos = *(fPoint*)param2;
-	fPoint* pEnterPos = new fPoint(pos);
-	// 씬 전환시 플레이어 시작 위치 게임매니저에 저장
-	CGameManager::getInst()->setStartPos(pEnterPos);
+	// param2 : x좌표
+	// param3 : y좌표
+	fPoint* pEnterPos = new fPoint((float)param2, (float)param3);
+	CGameManager::getInst()->setEnterPos(pEnterPos);
 }
 
 void quitWindow(DWORD_PTR param1, DWORD_PTR param2)

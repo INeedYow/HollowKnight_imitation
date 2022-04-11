@@ -266,111 +266,84 @@ float dotVector(fVec2 vec1, fVec2 vec2)
 //}
 
 
-//enum pt { lt, rt, lb };
-//// fpArr[0] : 좌상좌표, [1] : 우상좌표, [2] : 우하 좌표
-//bool isOBB(fPoint* fpArr1, fPoint pos1, fPoint sz1, float rad1,
-//	fPoint* fpArr2, fPoint pos2, fPoint sz2, float rad2)
-//{
-//	// obj1 의 오른쪽, 위쪽 벡터
-//	fVec2 rVec1 = ((fpArr1[rt] - fpArr1[lt]) / 2.f);
-//	fVec2 uVec1 = ((fpArr1[lt] - fpArr1[lb]) / 2.f);
-//
-//	// obj2 의 오른쪽, 위쪽 벡터
-//	fVec2 rVec2 = ((fpArr2[rt] - fpArr2[lt]) / 2.f);
-//	fVec2 uVec2 = ((fpArr2[lt] - fpArr2[lb]) / 2.f);
-//
-//	// 거리벡터
-//	fVec2 distVec = pos2 - pos1;
-//
-//	fVec2 unitVec, projA, projB, projC;
-//	float sum = 0.f;
-//	float dist = 0.f;
-//	
-//	UINT cnt = 0;
-//
-//	// # cycle 1-1
-//	unitVec = rVec1.normalize();
-//
-//	dist = dotVector(distVec, unitVec);
-//
-//	sum = dotVector(rVec1, unitVec) + dotVector((rVec2 + uVec2), unitVec);	// rVec2 + uVec2는 어디 잡느냐따라 다름
-//	if (dist > sum) cnt++;
-//
-//	sum = dotVector(rVec1, unitVec) + dotVector((rVec2 + uVec2 * -1.f), unitVec);
-//	if (dist > sum) cnt++;
-//
-//	sum = dotVector(rVec1, unitVec) + dotVector((rVec2 * -1.f + uVec2 ), unitVec);
-//	if (dist > sum) cnt++;
-//
-//	sum = dotVector(rVec1, unitVec) + dotVector((rVec2 * -1.f + uVec2 * -1.f), unitVec);
-//	if (dist > sum) cnt++;
-//
-//	if (cnt == 4) return false;
-//	else cnt = 0;
-//
-//	// # cycle 1-2
-//	unitVec = uVec1.normalize();
-//
-//	dist = dotVector(distVec, unitVec);
-//	
-//	sum = dotVector(uVec1, unitVec) + dotVector((rVec2 + uVec2), unitVec);
-//	if (dist > sum) return false;
-//
-//	sum = dotVector(rVec1, unitVec) + dotVector((rVec2 + uVec2 * -1.f), unitVec);
-//	if (dist > sum) cnt++;
-//
-//	sum = dotVector(rVec1, unitVec) + dotVector((rVec2 * -1.f + uVec2), unitVec);
-//	if (dist > sum) cnt++;
-//
-//	sum = dotVector(rVec1, unitVec) + dotVector((rVec2 * -1.f + uVec2 * -1.f), unitVec);
-//	if (dist > sum) cnt++;
-//
-//	if (cnt == 4) return false;
-//	else cnt = 0;
-//
-//	// # cycle 2-1
-//	unitVec = rVec2.normalize();
-//
-//	dist = dotVector(distVec, unitVec);
-//
-//	sum = dotVector(rVec2, unitVec) + dotVector((rVec1 + uVec1), unitVec);
-//	if (dist > sum) return false;
-//
-//	sum = dotVector(rVec2, unitVec) + dotVector((rVec1 + uVec1 * -1.f), unitVec);
-//	if (dist > sum) cnt++;
-//
-//	sum = dotVector(rVec2, unitVec) + dotVector((rVec1 * -1.f + uVec1), unitVec);
-//	if (dist > sum) cnt++;
-//
-//	sum = dotVector(rVec2, unitVec) + dotVector((rVec1 * -1.f + uVec1 * -1.f), unitVec);
-//	if (dist > sum) cnt++;
-//
-//	if (cnt == 4) return false;
-//	else cnt = 0;
-//
-//	// # cycle 2-2
-//	unitVec = uVec2.normalize();
-//
-//	dist = dotVector(distVec, unitVec);
-//
-//	sum = dotVector(uVec2, unitVec) + dotVector((rVec1 + uVec1), unitVec);
-//	if (dist > sum) return false;
-//
-//	sum = dotVector(rVec2, unitVec) + dotVector((rVec1 + uVec1 * -1.f), unitVec);
-//	if (dist > sum) cnt++;
-//
-//	sum = dotVector(rVec2, unitVec) + dotVector((rVec1 * -1.f + uVec1), unitVec);
-//	if (dist > sum) cnt++;
-//
-//	sum = dotVector(rVec2, unitVec) + dotVector((rVec1 * -1.f + uVec1 * -1.f), unitVec);
-//	if (dist > sum) cnt++;
-//
-//	if (cnt == 4) return false;
-//	else cnt = 0;
-//
-//	return true;
-//
-//}
+enum pt { lt, rt, lb };
+// fpArr[0] : 좌상좌표, [1] : 우상좌표, [2] : 우하 좌표
+bool isOBB(fPoint* fpArr1, fPoint pos1, fPoint sz1, float rad1,
+	fPoint* fpArr2, fPoint pos2, fPoint sz2, float rad2)
+{
+	// obj1 의 오른쪽, 위쪽 벡터
+	fVec2 rVec1 = ((fpArr1[rt] - fpArr1[lt]) / 2.f);
+	fVec2 uVec1 = ((fpArr1[lt] - fpArr1[lb]) / 2.f);
+
+	// obj2 의 오른쪽, 위쪽 벡터
+	fVec2 rVec2 = ((fpArr2[rt] - fpArr2[lt]) / 2.f);
+	fVec2 uVec2 = ((fpArr2[lt] - fpArr2[lb]) / 2.f);
+
+	// 거리벡터
+	fVec2 distVec = pos2 - pos1;
+
+	fVec2 unitVec, projA, projB, projC;
+	float sum = 0.f;
+	float dist = 0.f;
+	float max = 0.f;
+
+	UINT cnt = 0;
+
+	// # cycle 1-1
+	unitVec = rVec1.normalize();
+
+	dist = dotVector(distVec, unitVec);
+
+	max = max(
+		max(dotVector((rVec2 + uVec2), unitVec), dotVector((rVec2 + uVec2 * -1.f), unitVec)),
+		max(dotVector((rVec2 * -1.f + uVec2), unitVec), dotVector((rVec2 * -1.f + uVec2 * -1.f), unitVec)));
+
+	sum = dotVector(rVec1, unitVec) + max;	// rVec2 + uVec2는 어디 잡느냐따라 다름
+
+	if (sum < dist) return false;
+
+	// # cycle 1-2
+	unitVec = uVec1.normalize();
+
+	dist = dotVector(distVec, unitVec);
+	
+	max = max(
+		max(dotVector((rVec2 + uVec2), unitVec), dotVector((rVec2 + uVec2 * -1.f), unitVec)),
+		max(dotVector((rVec2 * -1.f + uVec2), unitVec), dotVector((rVec2 * -1.f + uVec2 * -1.f), unitVec)));
+
+	sum = dotVector(uVec1, unitVec) + max;
+
+	if (sum < dist) return false;
+
+	// # cycle 2-1
+	unitVec = rVec2.normalize();
+
+	dist = dotVector(distVec, unitVec);
+
+	max = max(
+		max(dotVector((rVec2 + uVec2), unitVec), dotVector((rVec2 + uVec2 * -1.f), unitVec)),
+		max(dotVector((rVec2 * -1.f + uVec2), unitVec), dotVector((rVec2 * -1.f + uVec2 * -1.f), unitVec)));
+
+	sum = dotVector(rVec2, unitVec) + max;
+
+	if (sum < dist) return false;
+
+	// # cycle 2-2
+	unitVec = uVec2.normalize();
+
+	dist = dotVector(distVec, unitVec);
+
+	max = max(
+		max(dotVector((rVec2 + uVec2), unitVec), dotVector((rVec2 + uVec2 * -1.f), unitVec)),
+		max(dotVector((rVec2 * -1.f + uVec2), unitVec), dotVector((rVec2 * -1.f + uVec2 * -1.f), unitVec)));
+
+	sum = dotVector(uVec2, unitVec) + max;
+
+	if (sum < dist) return false;
+
+	return true;
+
+}
 
 fVec2 addVector(fVec2 a, fVec2 b) { //vector plus
 	fVec2 ret;
