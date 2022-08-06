@@ -5,6 +5,14 @@ class CCollider;
 
 
 
+bool isTopExit(CCollider* coll1, CCollider* coll2)
+{	// 이미 충돌인 상태에서
+	fPoint pos1 = coll1->getPos();
+	fPoint pos2 = coll2->getPos();
+	fPoint size2 = coll2->getOwner()->getSize();
+
+	return (pos1.y <= pos2.y - size2.y * 0.5f);
+}
 
 eDIR collRect2Rect(CCollider* coll1, CCollider* coll2)
 {

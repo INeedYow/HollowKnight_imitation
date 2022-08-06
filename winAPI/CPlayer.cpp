@@ -87,8 +87,8 @@ CPlayer::CPlayer()
 	createAnim(L"Stun_R",		m_pTex,	fPoint(2556.f, 2.f),		fPoint(94.f, 126.f),		fPoint(94.f, 0.f),			0.3f,	1, false);
 	createAnim(L"Stun_L",		m_pTex,	fPoint(2556.f, 129.f),		fPoint(94.f, 126.f),		fPoint(94.f, 0.f),			0.3f,	1, false);
 
-	createAnim(L"Slash1_R",		m_pTex,	fPoint(0.f, 254.f),			fPoint(82.f, 127.f),		fPoint(82.f, 0.f),			0.06f,	5, false);
-	createAnim(L"Slash1_L",		m_pTex,	fPoint(328.f, 381.f),		fPoint(82.f, 127.f),		fPoint(-82.f, 0.f),			0.06f,	5, false);
+	createAnim(L"Slash1_R",		m_pTex,	fPoint(0.f, 254.f),			fPoint(82.f, 127.f),		fPoint(82.f, 0.f),			0.08f,	5, false);
+	createAnim(L"Slash1_L",		m_pTex,	fPoint(328.f, 381.f),		fPoint(82.f, 127.f),		fPoint(-82.f, 0.f),			0.08f,	5, false);
 
 	createAnim(L"UpSlash_R",	m_pTex,	fPoint(1000.f, 254.f),		fPoint(95.f, 127.f),		fPoint(95.f, 0.f),			0.2f,	5, false);
 	createAnim(L"UpSlash_L",	m_pTex,	fPoint(1380.f, 381.f),		fPoint(95.f, 127.f),		fPoint(-95.f, 0.f),			0.2f,	5, false);
@@ -516,14 +516,18 @@ void CPlayer::collisionExit(CCollider* pOther)
 	switch (pOther->getOwner()->getName())
 	{
 	case eOBJNAME::GROUND:
-		if (!isTopCollOnly(getCollider(), pOther))
+		if (isTopExit(getCollider(), pOther))
 		{	
-			if (--m_tInfo.iBottomCnt <= 0 && m_pStatus->getCurState()->getState() != eSTATE_PLAYER::JUMP)
+			//if (--m_tInfo.iBottomCnt <= 0 && m_pStatus->getCurState()->getState() != eSTATE_PLAYER::JUMP)
+
+			m_tInfo.iBottomCnt--;
+
+			if (m_tInfo.iBottomCnt <= 0)
 			{	// 점프할 때도 exit에서 강제로 fall로 바꿔서 점프 안 됐었음
 				m_tInfo.iBottomCnt = 0;
 				m_uiCheck |= SP_AIR;
 
-				if (m_pStatus->getCurState()->getState() != eSTATE_PLAYER::DASH)
+				if (m_tInfo.fSpdY <= 0.f && m_pStatus->getCurState()->getState() != eSTATE_PLAYER::DASH)
 					changeMyState(m_pStatus, eSTATE_PLAYER::FALL);
 			}
 		}

@@ -48,6 +48,7 @@ void CGameManager::savePlayerInfo()
 {
 	if (m_pPlayer == nullptr) return;
 	m_tPlayerInformation = m_pPlayer->getPlayerInfo();
+	m_tPlayerInformation.iBottomCnt = 0;				// 맵 이동시 이전 BottomCnt는 가져갈 필요 없음 
 }
 
 void CGameManager::loadPlayerInfo(CPlayer* pNewPlayer)
@@ -66,11 +67,6 @@ void CGameManager::loadPlayerInfo(CPlayer* pNewPlayer)
 void CGameManager::setEnterPos(fPoint* pos)
 {
 	m_pEnterPos = pos;
-}
-
-fPoint* CGameManager::getEnterPos()
-{
-	return m_pEnterPos;
 }
 
 CPlayer* CGameManager::getPlayer()

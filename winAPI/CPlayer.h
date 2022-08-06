@@ -78,6 +78,8 @@ public:
 	virtual void collisionKeep(CCollider* pOther);
 	virtual void collisionEnter(CCollider* pOther);
 	virtual void collisionExit(CCollider* pOther);
+
+	
 };
 
 enum class eSTATE_PLAYER
@@ -125,7 +127,7 @@ enum class eSTATE_PLAYER
 #define P_KB_SPD				100
 #define P_ATKDELAY				0.4f
 
-#define P_JUMPHOLDMAX			0.35f
+#define P_JUMPHOLDMAX			0.25f
 #define P_FIRESOUL				30
 #define P_FOCUSSOUL				33
 #define P_FOCUSMAX				1.2f

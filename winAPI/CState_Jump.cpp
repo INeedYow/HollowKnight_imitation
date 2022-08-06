@@ -105,6 +105,7 @@ void CState_Jump::enter()
 
 	// 점프속도
 	tPlayerInfo info = getPlayer()->getPlayerInfo();
+	//info.iBottomCnt = 0;
 
 	if (getPlayer()->isCheck(SP_DWSLASH))
 		info.fSpdY = (float)P_SPDY_DW;	//

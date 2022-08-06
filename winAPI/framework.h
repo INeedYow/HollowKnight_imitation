@@ -56,8 +56,8 @@ extern bool			g_bDebug;
 
 #define PI					3.141592f
 
-#define dir_left			false
-#define dir_right			true
+//#define dir_left			false
+//#define dir_right			true
 
 
  // enum class 열거형

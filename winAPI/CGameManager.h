@@ -28,7 +28,6 @@ public:
 	void loadPlayerInfo(CPlayer* pNewPlayer);	// 씬 넘어가서 enter에서 플레이어 생성하며 복사
 
 	void setEnterPos(fPoint* pos);
-	fPoint* getEnterPos();
 
 	CPlayer* getPlayer();
 };

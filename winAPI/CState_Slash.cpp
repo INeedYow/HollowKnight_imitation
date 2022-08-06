@@ -78,6 +78,7 @@ void CState_Slash::enter()
 void CState_Slash::exit()
 {
 	getPlayer()->setCheck(SP_STOPANIM, false);
+	m_fAttackDelay = 0.f;
 }
 
 void CState_Slash::printInfo(HDC hDC)
@@ -87,7 +88,7 @@ void CState_Slash::printInfo(HDC hDC)
 	fPoint pos = getPlayer()->getPos();
 	pos = rendPos(pos);
 
-	LPCWSTR	strInfo = L"Slash1";
+	LPCWSTR	strInfo = L"Slash";
 	wchar_t bufDelay[255] = {};
 
 	swprintf_s(bufDelay, L"Delay = %.1f", m_fAttackDelay);

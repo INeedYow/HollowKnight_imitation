@@ -8,6 +8,7 @@ struct SHAPE { //define shape
 
 static UINT g_IDNumbering = 0;
 
+bool isTopExit(CCollider* coll1, CCollider* coll2);
 eDIR collisionRectToRect(CCollider* coll1, CCollider* coll2);
 eDIR collisionRectToRectWide(CCollider* coll1, CCollider* coll2);
 bool isTopCollOnly(CCollider* coll1, CCollider* coll2);

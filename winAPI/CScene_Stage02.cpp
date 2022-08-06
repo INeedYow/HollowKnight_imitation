@@ -64,7 +64,7 @@ void CScene_Stage02::update()
 
 void CScene_Stage02::enter()
 {
-	//camFadeIn(0.5f); 
+	camFadeIn(0.5f); 
 	camSetArea(0.f, 0.f, STG02_SIZEX, STG02_SIZEY);
 
 	CPlayer* pPlayer = CPlayer::createNormal(fPoint(1963, 0.f));
@@ -90,11 +90,10 @@ void CScene_Stage02::enter()
 
 	// monster
 	CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(1550, 1720));
-	CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(3000, 1310));
+	CMonster::create(eOBJNAME::MONS_BEETLE, fPoint(3000, 1550));
 
 	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(200, 1550));
 	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(3200, 1570));
-	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(3400, 1500));
 
 	//CWarp* pWp1 = new CWarp;
 	//pWp1->setDestScene(eSCENE::STAGE_01);
@@ -205,9 +204,6 @@ void CScene_Stage02::exit()
 {
 	deleteObjectAll();
 	resetGrp();
-
-	camFadeOut(0.5f);
-	camFadeIn(0.5f);
 
 	camSetIsArea(false);
 	camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));

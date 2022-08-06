@@ -54,9 +54,9 @@ void CScene_Stage01::update()
 void CScene_Stage01::enter()
 {
 	// 카메라
-	//camFadeIn(0.5f);
+	camFadeIn(0.5f);
 	camSetArea(0.f, 0.f, STG01_SIZEX, STG01_SIZEY);
-
+	
 	// Player 추가
 	CPlayer* pPlayer = CPlayer::createNormal(fPoint(1200.f, 1430.f));
 	addObject(pPlayer, eOBJ::PLAYER);
@@ -64,9 +64,9 @@ void CScene_Stage01::enter()
 	CGameManager::getInst()->registPlayer(pPlayer);
 	CGameManager::getInst()->loadPlayerInfo(pPlayer);		
 	
-	CTest* pTest = new CTest;
+	/*CTest* pTest = new CTest;
 	pTest->setPos(fPoint(1350.f, 1470.f));
-	addObject(pTest, eOBJ::TEST);
+	addObject(pTest, eOBJ::TEST);*/
 
 	CBackGround* pBg = new CBackGround;
 	pBg->load(L"BG_stage1", L"texture\\background\\stage1_back.bmp");
@@ -107,18 +107,16 @@ void CScene_Stage01::enter()
 	CGround::create(3670, 1674, STG01_SIZEX, 1706);
 	CWall::create(3670, 1706, STG01_SIZEX, STG01_SIZEY);
 
-	g_bDebug = true;
-
 
 	// 충돌 체크
 	checkGrp(eOBJ::PLAYER, eOBJ::WALL);
 	checkGrp(eOBJ::PLAYER, eOBJ::GROUND);
-	checkGrp(eOBJ::PLAYER, eOBJ::TEST);
+	//checkGrp(eOBJ::PLAYER, eOBJ::TEST);
 	checkGrp(eOBJ::PLAYER, eOBJ::TRIGGERBOX);
 
 	checkGrp(eOBJ::ATTACK, eOBJ::WALL);
 	checkGrp(eOBJ::ATTACK, eOBJ::GROUND);
-	checkGrp(eOBJ::ATTACK, eOBJ::TEST);
+	//checkGrp(eOBJ::ATTACK, eOBJ::TEST);
 
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::WALL);
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::GROUND);
@@ -135,9 +133,6 @@ void CScene_Stage01::exit()
 {
 	deleteObjectAll();
 	resetGrp();
-
-	camFadeOut(0.5f);
-	camFadeIn(0.5f);
 
 	camSetIsArea(false);
 	camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
