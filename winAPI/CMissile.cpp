@@ -138,21 +138,21 @@ void CMissile::collisionEnter(CCollider* pOther)
 		case eOBJNAME::WALL:
 		{
 			CEffect* pEff = new CEffect;
-			pEff->load(L"Effect_enemyMsl_pop", L"texture\\effect\\enemy_missilesidePop.bmp");
+			pEff->load(L"Effect_enemyMsl_sidepop", L"texture\\effect\\enemy_missilesidePop.bmp");
 			pEff->setDuration(0.4f);
 
 			if (isLeftColl(getCollider(), pOther))
 			{
-				pEff->createAnim(L"Effect_enemyMsl_pop", pEff->getTex(),
+				pEff->createAnim(L"Effect_enemyMsl_sidepop", pEff->getTex(),
 					fPoint(0, 87), fPoint(505, 87), fPoint(-101, 0), 0.08f, 5, false);
 			}
 			else
 			{
-				pEff->createAnim(L"Effect_enemyMsl_pop", pEff->getTex(),
+				pEff->createAnim(L"Effect_enemyMsl_sidepop", pEff->getTex(),
 					fPoint(0, 0), fPoint(101, 87), fPoint(101, 0), 0.08f, 5, false);
 			}
 			pEff->setPos(pos);
-			pEff->PLAY(L"Effect_enemyMsl_pop");
+			pEff->PLAY(L"Effect_enemyMsl_sidepop");
 			createObj(pEff, eOBJ::EFFECT);
 
 			CSoundManager::getInst()->addSound(L"orb_break", L"sound\\monster\\orb_break.wav");

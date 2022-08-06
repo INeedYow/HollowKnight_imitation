@@ -22,8 +22,8 @@ void CState_Trace::update(UINT& chk)
 	fPoint size = getMonster()->getSize();
 	tMonsInfo info = getMonster()->getMonsInfo();
 
-	if (playerPos.y < pos.y - size.y ||
-		playerPos.y > pos.y + size.y / 2.f||
+	if (playerPos.y < pos.y - size.y * 0.6f &&
+		playerPos.y > pos.y + size.y * 0.6f ||
 		info.fDist > info.fNoticeRange)
 	{
 		m_iStep = 2;
@@ -41,8 +41,7 @@ void CState_Trace::update(UINT& chk)
 			m_iStep++;
 			m_fTimer = 0.f;
 
-			if (getMonster()->getName() == eOBJNAME::MONS_BEETLE)
-				getMonster()->getCollider()->setSize(fPoint((float)M_BT_SIZEX_, (float)M_BT_SIZEY_));
+			getMonster()->getCollider()->setSize(fPoint((float)M_BT_SIZEX_, (float)M_BT_SIZEY_));
 		}
 		break;
 	}
@@ -58,10 +57,11 @@ void CState_Trace::update(UINT& chk)
 	}
 	case 2:
 	{
+		
 		getMonster()->playAnim(L"TraceExit");
 		if (m_fTimer > 0.5f)
 		{
-			changeMonsState(getOwner(), eSTATE_MONS::STOP);
+			changeMonsState(getOwner(), eSTATE_MONS::STAND);
 		}
 		break;
 	}
@@ -84,10 +84,11 @@ void CState_Trace::enter()
 	m_iStep = 0;
 
 	tMonsInfo info = getMonster()->getMonsInfo();
-	
 	info.fvDir.x = -1;
 	if (gameGetPlayer()->getPos().x > getMonster()->getPos().x)
 		info.fvDir.x = 1;
+
+	info.fSpdX *= 1.5f;
 
 	getMonster()->setMonsInfo(info);
 }
@@ -97,8 +98,11 @@ void CState_Trace::exit()
 	m_fTimer = 0.f;
 	m_iStep = 0;
 
-	if (getMonster()->getName() == eOBJNAME::MONS_BEETLE)
-		getMonster()->getCollider()->setSize(fPoint((float)M_BT_SIZEX, (float)M_BT_SIZEY));
+	tMonsInfo info = getMonster()->getMonsInfo();
+	info.fSpdX = (float)M_BT_SPD;
+	getMonster()->setMonsInfo(info);
+		
+	getMonster()->getCollider()->setSize(fPoint((float)M_BT_SIZEX, (float)M_BT_SIZEY));
 }
 
 void CState_Trace::printInfo(HDC hDC)

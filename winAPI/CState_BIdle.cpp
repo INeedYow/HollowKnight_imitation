@@ -20,7 +20,7 @@ void CState_BIdle::update(UINT& chk)
 
 	if (m_fDura < 0.f)
 	{
-		changeMonsState(getOwner(), eSTATE_MONS::MOVE);
+		changeMonsState(getOwner(), eSTATE_MONS::B_MOVE);
 	}
 }
 

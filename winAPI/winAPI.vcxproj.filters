@@ -187,9 +187,6 @@
     <ClCompile Include="CMonster_Melee.cpp">
       <Filter>Object\Character\Monster</Filter>
     </ClCompile>
-    <ClCompile Include="CState_Stop.cpp">
-      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons</Filter>
-    </ClCompile>
     <ClCompile Include="CState_Shoot.cpp">
       <Filter>Engine\Component\Status &amp; AI\AI\State_Mons</Filter>
     </ClCompile>
@@ -214,7 +211,7 @@
     <ClCompile Include="CState_BSpawn.cpp">
       <Filter>Engine\Component\Status &amp; AI\AI\State_Mons\State_Boss</Filter>
     </ClCompile>
-    <ClCompile Include="CState_BReady.cpp">
+    <ClCompile Include="CState_BSkillInit.cpp">
       <Filter>Engine\Component\Status &amp; AI\AI\State_Mons\State_Boss</Filter>
     </ClCompile>
     <ClCompile Include="CState_BSkill.cpp">
@@ -256,6 +253,18 @@
     </ClCompile>
     <ClCompile Include="CTriggerBox.cpp">
       <Filter>Object\TriggerBox</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_Stand.cpp">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_Move.cpp">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_Fly_Idle.cpp">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons</Filter>
+    </ClCompile>
+    <ClCompile Include="CState_Fly_Move.cpp">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -466,9 +475,6 @@
     <ClInclude Include="CMonster_Melee.h">
       <Filter>Object\Character\Monster</Filter>
     </ClInclude>
-    <ClInclude Include="CState_Stop.h">
-      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons</Filter>
-    </ClInclude>
     <ClInclude Include="CState_Shoot.h">
       <Filter>Engine\Component\Status &amp; AI\AI\State_Mons</Filter>
     </ClInclude>
@@ -496,7 +502,7 @@
     <ClInclude Include="CState_BSkill.h">
       <Filter>Engine\Component\Status &amp; AI\AI\State_Mons\State_Boss</Filter>
     </ClInclude>
-    <ClInclude Include="CState_BReady.h">
+    <ClInclude Include="CState_BSkillInit.h">
       <Filter>Engine\Component\Status &amp; AI\AI\State_Mons\State_Boss</Filter>
     </ClInclude>
     <ClInclude Include="CState_Land.h">
@@ -535,6 +541,18 @@
     </ClInclude>
     <ClInclude Include="CTriggerBox.h">
       <Filter>Object\TriggerBox</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_Stand.h">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_Move.h">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_Fly_Idle.h">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons</Filter>
+    </ClInclude>
+    <ClInclude Include="CState_Fly_Move.h">
+      <Filter>Engine\Component\Status &amp; AI\AI\State_Mons</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

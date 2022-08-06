@@ -19,38 +19,37 @@ CState_BSkill::~CState_BSkill()
 
 void CState_BSkill::update(UINT& chk)
 {
-	vector<CShield*> vecShd = ((CBoss_Markoth*)getMonster())->getVecShield();
 
 	m_fDura -= fDT;
 
-	if (m_fDura >= (float)B_SKILL_DURA / 2.f)
+	if (m_fDura >= (float)B_SKILL_DURA * 0.5f)
 	{	// 방패 2개 이상일 때 1개는 주위에서 돌게
-		int i = vecShd.size() >= 2 ? 1 : 0;
+		int i = m_vecShields.size() >= 2 ? 1 : 0;
 
-		for (; i < vecShd.size(); i++)
+		for (; i < m_vecShields.size(); i++)
 		{	// 범위 증가
-			vecShd[i]->setRadius(vecShd[i]->getRadius() + B_SKILL_RAD * fDT);
+			m_vecShields[i]->setRadius(m_vecShields[i]->getRadius() + B_SKILL_RAD * fDT);
 		}
 	}
 	else
 	{
-		int i = vecShd.size() >= 2 ? 1 : 0;
+		int i = m_vecShields.size() >= 2 ? 1 : 0;
 
-		for (; i < vecShd.size(); i++)
+		for (; i < m_vecShields.size(); i++)
 		{	// 범위 감소
-			vecShd[i]->setRadius(vecShd[i]->getRadius() - B_SKILL_RAD * fDT);
+			m_vecShields[i]->setRadius(m_vecShields[i]->getRadius() - B_SKILL_RAD * fDT);
 		}
 	}
 
 	if (m_fDura < 0.f)
 	{
-		for (int i = 0; i < vecShd.size(); i++)
+		for (int i = 0; i < m_vecShields.size(); i++)
 		{	// 속도, 범위 원래대로
-			vecShd[i]->setfSpeed((float)B_SHD_SPD);
-			vecShd[i]->setRadius((float)B_SHD_RAD);
+			m_vecShields[i]->setfSpeed((float)B_SHD_SPD);
+			m_vecShields[i]->setRadius((float)B_SHD_RAD);
 		}
 
-		changeMonsState(getOwner(), eSTATE_MONS::IDLE);
+		changeMonsState(getOwner(), eSTATE_MONS::B_IDLE);
 	}
 }
 
@@ -66,6 +65,8 @@ void CState_BSkill::enter()
 			vecSpr[i]->setActive(false);
 		}
 	}
+
+	m_vecShields = ((CBoss_Markoth*)getMonster())->getVecShield();
 }
 
 void CState_BSkill::exit()

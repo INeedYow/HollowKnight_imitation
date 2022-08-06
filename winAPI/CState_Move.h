@@ -1,13 +1,11 @@
 #pragma once
 #include "CState_Mons.h"
-class CState_Trace : public CState_Mons
+class CState_Move : public CState_Mons
 {
-	float	m_fTimer;
-	int		m_iStep;
 
 public:
-	CState_Trace(eSTATE_MONS state);
-	~CState_Trace();
+	CState_Move(eSTATE_MONS state);
+	~CState_Move();
 
 	virtual void update(UINT& chk);
 	virtual void enter();

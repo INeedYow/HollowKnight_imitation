@@ -64,24 +64,32 @@ public:
 	static void create(eOBJNAME eName, fPoint pos);
 };
 
-//
 enum class eSTATE_MONS
 {
-	STOP,
+	// Mush
+	MOVE,
+
+	// BEETLE
+	STAND,
 	PATROL,
 	TRACE,
-	ATTACK,
+
+	// BEE
+	FLY_IDLE,
+	FLY_MOVE,
 	SHOOT,
+
+	// Common
 	DIE,
 
 
-	// boss
-	IDLE,
-	MOVE,
-	SPAWN,
-	READY,
-	SKILL,
-	DEATH,
+	// Boss
+	B_IDLE,
+	B_MOVE,
+	B_SPAWN,
+	B_SKILL_INIT,
+	B_SKILL,
+	B_DEATH,
 
 	END
 };

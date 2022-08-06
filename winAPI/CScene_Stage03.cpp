@@ -94,10 +94,10 @@ void CScene_Stage03::enter()
 
 	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(750, 1410));
 	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(2770, 700));
+	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(2400, 1390));
 
 	CMonster::create(eOBJNAME::MONS_BEE, fPoint(1100, 600));
 	CMonster::create(eOBJNAME::MONS_BEE, fPoint(1900, 900));
-	CMonster::create(eOBJNAME::MONS_BEE, fPoint(2450, 650));
 	CMonster::create(eOBJNAME::MONS_BEE, fPoint(3200, 1000));
 
 

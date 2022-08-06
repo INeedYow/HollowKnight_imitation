@@ -9,7 +9,7 @@
 #include "CState_BIdle.h"
 #include "CState_BMove.h"
 #include "CState_BSpawn.h"
-#include "CState_BReady.h"
+#include "CState_BSkillInit.h"
 #include "CState_BSkill.h"
 #include "CState_BDeath.h"
 
@@ -48,14 +48,14 @@ CBoss_Markoth::CBoss_Markoth()
 	PLAY(L"st_Normal");
 
 	CAI* pAI = new CAI;
-	pAI->addState(new CState_BMove(eSTATE_MONS::MOVE));
-	pAI->addState(new CState_BIdle(eSTATE_MONS::IDLE));
-	pAI->addState(new CState_BSpawn(eSTATE_MONS::SPAWN));
-	pAI->addState(new CState_BReady(eSTATE_MONS::READY));
-	pAI->addState(new CState_BSkill(eSTATE_MONS::SKILL));
-	pAI->addState(new CState_BDeath(eSTATE_MONS::DEATH));
+	pAI->addState(new CState_BMove(eSTATE_MONS::B_MOVE));
+	pAI->addState(new CState_BIdle(eSTATE_MONS::B_IDLE));
+	pAI->addState(new CState_BSpawn(eSTATE_MONS::B_SPAWN));
+	pAI->addState(new CState_BSkillInit(eSTATE_MONS::B_SKILL_INIT));
+	pAI->addState(new CState_BSkill(eSTATE_MONS::B_SKILL));
+	pAI->addState(new CState_BDeath(eSTATE_MONS::B_DEATH));
 
-	pAI->setCurState(eSTATE_MONS::SPAWN);
+	pAI->setCurState(eSTATE_MONS::B_SPAWN);
 	setAI(pAI);
 }
 
@@ -91,7 +91,7 @@ void CBoss_Markoth::update()
 	if (getMonsInfo().iHP <= B_HPMAX / 2 && m_ucPhase == 1)
 	{	// 2 페이즈
 		m_ucPhase++;
-		changeMonsState(getAI(), eSTATE_MONS::SPAWN);
+		changeMonsState(getAI(), eSTATE_MONS::B_SPAWN);
 
 		for (int i = 0; i < m_vecSpear.size(); i++)
 		{	// spear 속도 증가
@@ -125,7 +125,7 @@ void CBoss_Markoth::update()
 	{	// 스킬
 		m_fSkillTimer = 0.f;
 		m_fSpawnTimer = 0.f;
-		changeMonsState(getAI(), eSTATE_MONS::READY);
+		changeMonsState(getAI(), eSTATE_MONS::B_SKILL_INIT);
 	}
 }
 
@@ -334,5 +334,5 @@ void CBoss_Markoth::spawnShield()
 
 void CBoss_Markoth::death()
 {
-	changeMonsState(getAI(), eSTATE_MONS::DEATH);
+	changeMonsState(getAI(), eSTATE_MONS::B_DEATH);
 }

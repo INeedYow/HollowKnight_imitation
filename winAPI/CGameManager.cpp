@@ -26,7 +26,7 @@ void CGameManager::updatePrevInfo()
 	m_pPlayer->updatePrevInfo(prevInfo);
 }
 
-fPoint prevPos = {};
+//fPoint prevPos = {};
 
 void CGameManager::update()
 {
@@ -62,6 +62,12 @@ void CGameManager::loadPlayerInfo(CPlayer* pNewPlayer)
 		pNewPlayer->setPos(*m_pEnterPos);	
 		delete m_pEnterPos;
 	}
+}
+
+void CGameManager::resetPlayerInfo()
+{
+	m_tPlayerInformation.uiHP = 5;
+	m_tPlayerInformation.uiSoul = 0;
 }
 
 void CGameManager::setEnterPos(fPoint* pos)

@@ -31,45 +31,39 @@ void CState_Shoot::update(UINT& chk)
 
 		if (m_fDelay < 0.f)
 		{
-			switch (getMonster()->getName())
-			{
-			case eOBJNAME::MONS_BEE:
-			{
-				CMissile* pMsl = new CMissile;
-				pMsl->setTex(L"Missile_bee", L"texture\\attack\\missile_bee.bmp");
-				pMsl->createAnim(L"Missile_bee", pMsl->getTex(),
-					fPoint(0.f, 0.f), fPoint(60, 54), fPoint(60, 0.f), 0.25f, 3);
-				pMsl->PLAY(L"Missile_bee");
+			CMissile* pMsl = new CMissile;
+			pMsl->setTex(L"Missile_bee", L"texture\\attack\\missile_bee.bmp");
+			pMsl->createAnim(L"Missile_bee", pMsl->getTex(),
+				fPoint(0.f, 0.f), fPoint(60, 54), fPoint(60, 0.f), 0.25f, 3);
+			pMsl->PLAY(L"Missile_bee");
 
-				if (chk & SM_DIR)
-				{
-					pos.x += 20.f;
-				}
-				else
-				{
-					pos.x -= 20.f;
-				}
-				pos.y -= 10.f;
-				pMsl->setPos(pos);
-				pMsl->setName(eOBJNAME::MISSILE_MONSTER);
-				pMsl->setSize(fPoint(42.f, 42.f));
-				pMsl->setDir(fVec2(playerPos - pos));
-				pMsl->getCollider()->setSize(fPoint(38.f, 38.f));
-				pMsl->getCollider()->setShape(eSHAPE::CIRCLE);
-				pMsl->setSpeed(300.f);
+			if (chk & SM_DIR)
+			{
+				pos.x += 20.f;
+			}
+			else
+			{
+				pos.x -= 20.f;
+			}
+			pos.y -= 10.f;
 
-				createObj(pMsl, eOBJ::MISSILE_MONSTER);
-				break;
-			}
-			}
-		m_fDelay = 0.f;
+			pMsl->setPos(pos);
+			pMsl->setName(eOBJNAME::MISSILE_MONSTER);
+			pMsl->setSize(fPoint(42.f, 42.f));
+			pMsl->setDir(fVec2(playerPos - pos));
+			pMsl->getCollider()->setSize(fPoint(38.f, 38.f));
+			pMsl->getCollider()->setShape(eSHAPE::CIRCLE);
+			pMsl->setSpeed(300.f);
+
+			createObj(pMsl, eOBJ::MISSILE_MONSTER);
+			m_fDelay = 0.f;
 		}
 	}
-
+	
 	m_fDura -= fDT;
 	if (m_fDura <= 0.f || info.fDist > M_BE_SHOOT_RNG)
 	{
-		changeMonsState(getOwner(), eSTATE_MONS::STOP);
+		changeMonsState(getOwner(), eSTATE_MONS::FLY_IDLE);
 	}
 
 	getMonster()->setMonsInfo(info);
@@ -77,11 +71,9 @@ void CState_Shoot::update(UINT& chk)
 
 void CState_Shoot::enter()
 {
-	fPoint pos = getMonster()->getPos();
-	fPoint playerPos = gameGetPlayer()->getPos();
 	tMonsInfo info = getMonster()->getMonsInfo();
 
-	if (pos.x < playerPos.x)
+	if (getMonster()->getPos().x < gameGetPlayer()->getPos().x)
 	{
 		info.fvDir.x = 1.f;
 	}
@@ -91,8 +83,6 @@ void CState_Shoot::enter()
 	}
 
 	getMonster()->setMonsInfo(info);
-
-	getMonster()->playAnim(L"Shoot");
 
 	m_fDura = info.fDura;
 	m_fDelay = info.fDelay;

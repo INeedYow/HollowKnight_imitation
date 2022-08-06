@@ -94,19 +94,8 @@ void CScene_Stage02::enter()
 
 	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(200, 1550));
 	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(3200, 1570));
+	CMonster::create(eOBJNAME::MONS_MUSH, fPoint(800, 1220));
 
-	//CWarp* pWp1 = new CWarp;
-	//pWp1->setDestScene(eSCENE::STAGE_01);
-	//pWp1->load(L"warp_mapChange", L"texture\\image\\text_mapChange.bmp");
-	//pWp1->setPos(fPoint(1958.f, 1380));
-	//pWp1->getCollider()->setSize(fPoint(80.f, 80.f));
-	//pWp1->setImageOffset(fPoint(0.f, -180.f));
-	//addObject(pWp1, eOBJ::WARP);
-
-	// TODO 트리거 박스 충돌 + 함수포인터로 씬 전환시 맵 시작 좌표 다르게
-
-	//fPoint* stg1enterPos = new fPoint(3400.f, 1600.f);
-	//fPoint* stg3enterPos = new fPoint(100.f, 1250.f);
 
 	CTriggerBox_Image* pTb1 = new CTriggerBox_Image;
 	pTb1->setPos(fPoint(1958.f, 1380));

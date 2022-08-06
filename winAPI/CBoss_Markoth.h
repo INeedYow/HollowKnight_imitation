@@ -10,7 +10,7 @@ enum class eSTATE_BOSS
 	IDLE,
 	MOVE,
 	SPAWN,				// 방패 소환
-	READY,				// skill 준비 (방패 감속, 방향전환 후 가속)
+	SKILL_INIT,			// 방패 감속 -> 방향전환 후 가속
 	SKILL,				// 방패 크게 회전
 	DEATH,
 

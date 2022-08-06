@@ -6,10 +6,14 @@
 #include "CAI.h"
 #include "CMonster_Melee.h"
 #include "CMonster_Fly.h"
-#include "CState_Stop.h"
-#include "CState_Shoot.h"
+
+#include "CState_Move.h"
+#include "CState_Stand.h"
 #include "CState_Patrol.h"
 #include "CState_Trace.h"
+#include "CState_Fly_Idle.h"
+#include "CState_Fly_Move.h"
+#include "CState_Shoot.h"
 #include "CState_Die.h"
 
 #include "CAnimation.h"
@@ -162,26 +166,26 @@ void CMonster::create(eOBJNAME eName, fPoint pos)
 		pMon->setName(eOBJNAME::MONS_BEETLE);	//
 		pMon->setSize(fPoint((float)M_BT_SIZEX, (float)M_BT_SIZEY));
 		pMon->getCollider()->setSize(fPoint((float)M_BT_SIZEX, (float)M_BT_SIZEY));
-		pMon->getCollider()->setOffset(fPoint(0.f, 10.f));
+		pMon->getCollider()->setOffset(fPoint(0.f, 20.f));
 		pMon->setMonsInfo(info);
 		pMon->setCheck(SM_TRACE, true);
 		pMon->setCheck(SM_SHOOT, false);
 
 		pAI = new CAI;
-		pAI->addState(new CState_Stop(eSTATE_MONS::STOP));
+		pAI->addState(new CState_Stand(eSTATE_MONS::STAND));
 		pAI->addState(new CState_Patrol(eSTATE_MONS::PATROL));
 		pAI->addState(new CState_Trace(eSTATE_MONS::TRACE));
 		pAI->addState(new CState_Die(eSTATE_MONS::DIE));
 
-		pAI->setCurState(eSTATE_MONS::STOP);
+		pAI->setCurState(eSTATE_MONS::STAND);
 		pMon->setAI(pAI);
 
 		pMon->createAnimator();
 		pMon->setTex(L"Mons_BeetleTex", L"texture\\monster\\mons_beetle\\mons_beetle.bmp");
 
-		pMon->createAnim(L"BT_Stop_R", pMon->getTex(),
+		pMon->createAnim(L"BT_Stand_R", pMon->getTex(),
 			fPoint(0, 0), fPoint(118, 192), fPoint(118, 0), 0.2f, 6);
-		pMon->createAnim(L"BT_Stop_L", pMon->getTex(),
+		pMon->createAnim(L"BT_Stand_L", pMon->getTex(),
 			fPoint(590, 192), fPoint(118, 192), fPoint(-118, 0), 0.2f, 6);
 
 		pMon->createAnim(L"BT_Patrol_R", pMon->getTex(),
@@ -228,36 +232,36 @@ void CMonster::create(eOBJNAME eName, fPoint pos)
 		info.iHP = M_MS_HP;
 		info.fSpdX = M_MS_SPD;
 		info.fSpdY = 0.f;
+		info.fvDir.x = 1.f;
 
 		pMon = new CMonster_Melee;
 		pMon->setPos(pos);	//
 		pMon->setName(eOBJNAME::MONS_MUSH);	//
 		pMon->setSize(fPoint((float)M_MS_SIZEX, (float)M_MS_SIZEY));
 		pMon->getCollider()->setSize(fPoint((float)M_MS_SIZEX, (float)M_MS_SIZEY));
-		pMon->getCollider()->setOffset(fPoint(0.f, 10.f));
+		pMon->getCollider()->setOffset(fPoint(0.f, 0.f));
 		pMon->setMonsInfo(info);
 		pMon->setCheck(SM_TRACE, false);
 		pMon->setCheck(SM_SHOOT, false);
 
 		pAI = new CAI;
-		pAI->addState(new CState_Stop(eSTATE_MONS::STOP));
-		pAI->addState(new CState_Patrol(eSTATE_MONS::PATROL));
+		pAI->addState(new CState_Move(eSTATE_MONS::MOVE));
 		pAI->addState(new CState_Die(eSTATE_MONS::DIE));
 
-		pAI->setCurState(eSTATE_MONS::STOP);
+		pAI->setCurState(eSTATE_MONS::MOVE);
 		pMon->setAI(pAI);
 
 		pMon->createAnimator();
 		pMon->setTex(L"Mons_MushTex", L"texture\\monster\\mons_mush\\mons_mush.bmp");
 
-		pMon->createAnim(L"MS_Stop_R", pMon->getTex(),
+		/*pMon->createAnim(L"MS_Stop_R", pMon->getTex(),
 			fPoint(125, 0), fPoint(125, 112), fPoint(125, 0), 0.5f, 1);
 		pMon->createAnim(L"MS_Stop_L", pMon->getTex(),
-			fPoint(250, 112), fPoint(125, 112), fPoint(-125, 0), 0.5f, 1);
+			fPoint(250, 112), fPoint(125, 112), fPoint(-125, 0), 0.5f, 1);*/
 
-		pMon->createAnim(L"MS_Patrol_R", pMon->getTex(),
+		pMon->createAnim(L"MS_Move_R", pMon->getTex(),
 			fPoint(0, 0), fPoint(125, 112), fPoint(125, 0), 0.25f, 4);
-		pMon->createAnim(L"MS_Patrol_L", pMon->getTex(),
+		pMon->createAnim(L"MS_Move_L", pMon->getTex(),
 			fPoint(375, 112), fPoint(125, 112), fPoint(-125, 0), 0.25f, 4);
 
 		pMon->createAnim(L"MS_Turn_R", pMon->getTex(),
@@ -287,32 +291,32 @@ void CMonster::create(eOBJNAME eName, fPoint pos)
 		pMon->setName(eOBJNAME::MONS_BEE);	//
 		pMon->setSize(fPoint((float)M_BE_SIZEX, (float)M_BE_SIZEY));
 		pMon->getCollider()->setSize(fPoint((float)M_BE_SIZEX, (float)M_BE_SIZEY));
-		pMon->getCollider()->setOffset(fPoint(0.f, 4.f));
+		pMon->getCollider()->setOffset(fPoint(0.f, 6.f));
 		pMon->setMonsInfo(info);
 		pMon->setCheck(SM_TRACE, false);
 		pMon->setCheck(SM_SHOOT, true);
 
 		pAI = new CAI;
-		pAI->addState(new CState_Stop(eSTATE_MONS::STOP));
-		pAI->addState(new CState_Patrol(eSTATE_MONS::PATROL));
+		pAI->addState(new CState_Fly_Idle(eSTATE_MONS::FLY_IDLE));
+		pAI->addState(new CState_Fly_Move(eSTATE_MONS::FLY_MOVE));
 		pAI->addState(new CState_Shoot(eSTATE_MONS::SHOOT));
 		pAI->addState(new CState_Die(eSTATE_MONS::DIE));
 
-		pAI->setCurState(eSTATE_MONS::STOP);
+		pAI->setCurState(eSTATE_MONS::FLY_IDLE);
 		pMon->setAI(pAI);
 
 		pMon->createAnimator();
 		pMon->setTex(L"Mons_BeeTex", L"texture\\monster\\mons_bee\\mons_bee.bmp");
 
-		pMon->createAnim(L"BE_Stop_R", pMon->getTex(),
+		pMon->createAnim(L"BE_Fly_R", pMon->getTex(),
 			fPoint(0, 0), fPoint(142, 122), fPoint(142, 0), 0.2f, 6);
-		pMon->createAnim(L"BE_Stop_L", pMon->getTex(),
+		pMon->createAnim(L"BE_Fly_L", pMon->getTex(),
 			fPoint(710, 122), fPoint(142, 122), fPoint(-142, 0), 0.2f, 6);
 
-		pMon->createAnim(L"BE_Patrol_R", pMon->getTex(),
-			fPoint(0, 0), fPoint(142, 122), fPoint(142, 0), 0.2f, 6);
-		pMon->createAnim(L"BE_Patrol_L", pMon->getTex(),
-			fPoint(710, 122), fPoint(142, 122), fPoint(-142, 0), 0.2f, 6);
+		//pMon->createAnim(L"BE_Patrol_R", pMon->getTex(),
+		//	fPoint(0, 0), fPoint(142, 122), fPoint(142, 0), 0.2f, 6);
+		//pMon->createAnim(L"BE_Patrol_L", pMon->getTex(),
+		//	fPoint(710, 122), fPoint(142, 122), fPoint(-142, 0), 0.2f, 6);
 
 		pMon->createAnim(L"BE_Turn_R", pMon->getTex(),
 			fPoint(852, 0), fPoint(160, 122), fPoint(160, 0), 0.25f, 2, false);

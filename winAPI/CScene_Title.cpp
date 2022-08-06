@@ -68,8 +68,7 @@ void CScene_Title::enter()
 	pBtnExit->setClickedCallBack(quitWindow, 0, 0);
 	addObject(pBtnExit, eOBJ::UI);
 
-	//CSoundManager::getInst()->addSound(L"bgm_title", L"sound\\bgm\\Title.wav", true);
-	//CSoundManager::getInst()->play(L"bgm_title", 0.1f);
+	CGameManager::getInst()->resetPlayerInfo();
 }
 
 void CScene_Title::exit()

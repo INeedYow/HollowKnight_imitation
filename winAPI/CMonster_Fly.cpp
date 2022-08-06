@@ -2,9 +2,7 @@
 #include "CMonster_Fly.h"
 
 #include "CAI.h"
-#include "CState_Stop.h"
-#include "CState_Shoot.h"
-#include "CState_Patrol.h"
+#include "CState_Mons.h"
 #include "CPlayer.h"
 #include "CAttack.h"
 #include "SelectGDI.h"

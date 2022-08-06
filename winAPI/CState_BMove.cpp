@@ -30,12 +30,12 @@ void CState_BMove::update(UINT& chk)
 	m_fDura -= fDT;
 	if (m_fDura < 0.f)
 	{
-		changeMonsState(getOwner(), eSTATE_MONS::IDLE);
+		changeMonsState(getOwner(), eSTATE_MONS::B_IDLE);
 	}
 	if (abs(m_ipDest.x - (int)pos.x) < 5 && 
 		abs(m_ipDest.y - (int)pos.y) < 5 )
 	{
-		changeMonsState(getOwner(), eSTATE_MONS::MOVE);
+		changeMonsState(getOwner(), eSTATE_MONS::B_MOVE);
 	}
 
 	pos.x += info.fvDir.x * info.fSpdX * fDT;

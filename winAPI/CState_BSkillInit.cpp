@@ -1,22 +1,22 @@
 #include "framework.h"
-#include "CState_BReady.h"
+#include "CState_BSkillInit.h"
 #include "CMonster.h"
 #include "CShield.h"
 #include "CBoss_Markoth.h"
 #include "SelectGDI.h"
 
-CState_BReady::CState_BReady(eSTATE_MONS state)
+CState_BSkillInit::CState_BSkillInit(eSTATE_MONS state)
 	:CState_Mons(state)
 {
 	m_fDura = 0.f;
 	m_fSpd = 0.f;
 }
 
-CState_BReady::~CState_BReady()
+CState_BSkillInit::~CState_BSkillInit()
 {
 }
 
-void CState_BReady::update(UINT& chk)
+void CState_BSkillInit::update(UINT& chk)
 {
 	vector<CShield*> vecShd = ((CBoss_Markoth*)getMonster())->getVecShield();
 
@@ -48,13 +48,13 @@ void CState_BReady::update(UINT& chk)
 	}
 	else
 	{	// 스킬 시작
-		changeMonsState(getOwner(), eSTATE_MONS::SKILL);
+		changeMonsState(getOwner(), eSTATE_MONS::B_SKILL);
 	}
 
 	m_fSpd = vecShd[vecShd.size() - 1]->getSpeed();
 }
 
-void CState_BReady::enter()
+void CState_BSkillInit::enter()
 {
 	m_fDura = B_READY_DURA;
 	m_fSpd = 0.f;
@@ -74,25 +74,22 @@ void CState_BReady::enter()
 	}
 }
 
-void CState_BReady::exit()
+void CState_BSkillInit::exit()
 {
 }
 
-void CState_BReady::printInfo(HDC hDC)
+void CState_BSkillInit::printInfo(HDC hDC)
 {
 	SelectGDI font(hDC, eFONT::COMIC24);
 
 	fPoint pos = getMonster()->getPos();
 	pos = rendPos(pos);
 
-	LPCWSTR	strState = L"Ready";
+	LPCWSTR	strState = L"SkillInit";
 	wchar_t bufDura[255] = {};
-	//wchar_t bufSpd[255] = {};
 
 	swprintf_s(bufDura, L"Dura %.1f", m_fDura);
-	//swprintf_s(bufSpd, L"ShieldSpd = %.1f", m_fSpd);
 
 	TextOutW(hDC, (int)pos.x + 180, (int)pos.y + 125, strState, (int)wcslen(strState));
 	TextOutW(hDC, (int)pos.x + 180, (int)pos.y + 145, bufDura, (int)wcslen(bufDura));
-	//TextOutW(hDC, (int)pos.x + 180, (int)pos.y + 165, bufSpd, (int)wcslen(bufSpd));
 }

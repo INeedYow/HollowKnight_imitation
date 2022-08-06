@@ -1,13 +1,12 @@
 #pragma once
 #include "CState_Mons.h"
-class CState_BReady : public CState_Mons
+class CState_Fly_Idle :public CState_Mons
 {
-	float	m_fDura;
-	float	m_fSpd;
+	float	m_fTimer;
 
 public:
-	CState_BReady(eSTATE_MONS state);
-	~CState_BReady();
+	CState_Fly_Idle(eSTATE_MONS state);
+	~CState_Fly_Idle();
 
 	virtual void update(UINT& chk);
 	virtual void enter();

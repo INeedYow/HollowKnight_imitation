@@ -3,9 +3,7 @@
 #include "CAttack.h"
 
 #include "CAI.h"
-#include "CState_Stop.h"
-#include "CState_Patrol.h"
-#include "CState_Trace.h"
+#include "CState_Mons.h"
 #include "CPlayer.h"
 #include "SelectGDI.h"
 
@@ -212,10 +210,24 @@ void CMonster_Melee::collisionKeep(CCollider* pOther)
 		fPoint size = getCollider()->getSize();
 		fPoint oPos = pOther->getPos();
 		fPoint oSize = pOther->getSize();
+
 		if (isTopCollOnly(getCollider(), pOther))
 		{	// 위
 			pos.y = oPos.y - oSize.y / 2.f
 				- size.y / 2.f - getCollider()->getOffset().y + 1;
+
+			if (pos.x - size.x * 0.5f < oPos.x - oSize.x * 0.5f)
+			{	// 땅 왼쪽 끝에서 방향전환
+				tMonsInfo info = getMonsInfo();
+				info.fvDir.x = 1;
+				setMonsInfo(info);
+			}
+			else if (pos.x + size.x * 0.5f > oPos.x + oSize.x * 0.5f)
+			{
+				tMonsInfo info = getMonsInfo();
+				info.fvDir.x = -1;
+				setMonsInfo(info);
+			}
 		}
 		else if (isBottomCollOnly(getCollider(), pOther))
 		{
@@ -229,11 +241,6 @@ void CMonster_Melee::collisionKeep(CCollider* pOther)
 				m_iBottomCnt = 0;
 			}
 		}
-
-		/*if (pos.x - size.x / 2.f < oPos.x - oSize.x / 2.f)
-			pos.x = oPos.x - oSize.x / 2.f + size.x / 2.f;
-		else if (pos.x + size.x / 2.f > oPos.x - oSize.x / 2.f)
-			pos.x = oPos.x - oSize.x / 2.f - size.x / 2.f;*/
 
 		setPos(pos);
 		break;

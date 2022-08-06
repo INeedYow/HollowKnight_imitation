@@ -35,7 +35,7 @@ void CState_BSpawn::update(UINT& chk)
 
 	if (m_fDura < 0.f)
 	{
-		changeMonsState(getOwner(), eSTATE_MONS::IDLE);
+		changeMonsState(getOwner(), eSTATE_MONS::B_IDLE);
 		getMonster()->getCollider()->setSize(fPoint(SB_NmSIZEX, SB_NmSIZEY));
 	}
 }

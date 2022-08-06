@@ -26,6 +26,7 @@ public:
 
 	void savePlayerInfo();						// 씬 넘어가기 전에 exit에서 플레이어 인포 저장
 	void loadPlayerInfo(CPlayer* pNewPlayer);	// 씬 넘어가서 enter에서 플레이어 생성하며 복사
+	void resetPlayerInfo();
 
 	void setEnterPos(fPoint* pos);
 

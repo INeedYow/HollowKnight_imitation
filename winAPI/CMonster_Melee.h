@@ -44,4 +44,4 @@ private:
 #define M_MS_SIZEY			100
 
 #define M_MS_HP				3
-#define M_MS_SPD			250
+#define M_MS_SPD			260
