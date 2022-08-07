@@ -135,8 +135,8 @@ void CMonster_Fly::collisionEnter(CCollider* pOther)
 		{	// ю╖
 			fPoint pos = getPos();
 
-			pos.y = pOther->getPos().y - pOther->getSize().y / 2.f + pOther->getOffset().y
-				- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y + 1;
+			pos.y = pOther->getPos().y - pOther->getSize().y * 0.5f + pOther->getOffset().y
+				- getCollider()->getSize().y * 0.5f - getCollider()->getOffset().y + 1;
 
 			setPos(pos);
 
@@ -145,8 +145,8 @@ void CMonster_Fly::collisionEnter(CCollider* pOther)
 		{
 			fPoint pos = getPos();
 
-			pos.y = pOther->getPos().y + pOther->getSize().y / 2.f + pOther->getOffset().y
-				+ getCollider()->getSize().y / 2.f + getCollider()->getOffset().y;
+			pos.y = pOther->getPos().y + pOther->getSize().y * 0.5f + pOther->getOffset().y
+				+ getCollider()->getSize().y * 0.5f + getCollider()->getOffset().y;
 
 			setPos(pos);
 		}
@@ -158,8 +158,8 @@ void CMonster_Fly::collisionEnter(CCollider* pOther)
 		{	// аб
 			fPoint pos = getPos();
 
-			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f + pOther->getOffset().x
-				- getCollider()->getSize().x / 2.f + getCollider()->getOffset().x - 1;
+			pos.x = pOther->getPos().x - pOther->getSize().x * 0.5f + pOther->getOffset().x
+				- getCollider()->getSize().x * 0.5f + getCollider()->getOffset().x - 1;
 
 			setPos(pos);
 		}
@@ -167,8 +167,8 @@ void CMonster_Fly::collisionEnter(CCollider* pOther)
 		{	// ©Л
 			fPoint pos = getPos();
 
-			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f + pOther->getOffset().x
-				+ getCollider()->getSize().x / 2.f + getCollider()->getOffset().x + 1;
+			pos.x = pOther->getPos().x + pOther->getSize().x * 0.5f + pOther->getOffset().x
+				+ getCollider()->getSize().x * 0.5f + getCollider()->getOffset().x + 1;
 
 			setPos(pos);
 		}
@@ -189,8 +189,8 @@ void CMonster_Fly::collisionKeep(CCollider* pOther)
 		{	// ю╖
 			fPoint pos = getPos();
 
-			pos.y = pOther->getPos().y - pOther->getSize().y / 2.f + pOther->getOffset().y
-				- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y + 1;
+			pos.y = pOther->getPos().y - pOther->getSize().y * 0.5f + pOther->getOffset().y
+				- getCollider()->getSize().y * 0.5f - getCollider()->getOffset().y + 1;
 
 			setPos(pos);
 
@@ -199,8 +199,8 @@ void CMonster_Fly::collisionKeep(CCollider* pOther)
 		{
 			fPoint pos = getPos();
 
-			pos.y = pOther->getPos().y + pOther->getSize().y / 2.f + pOther->getOffset().y
-				+ getCollider()->getSize().y / 2.f + getCollider()->getOffset().y;
+			pos.y = pOther->getPos().y + pOther->getSize().y * 0.5f + pOther->getOffset().y
+				+ getCollider()->getSize().y * 0.5f + getCollider()->getOffset().y;
 
 			setPos(pos);
 		}
@@ -212,8 +212,8 @@ void CMonster_Fly::collisionKeep(CCollider* pOther)
 		{	// аб
 			fPoint pos = getPos();
 
-			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f + pOther->getOffset().x
-				- getCollider()->getSize().x / 2.f + getCollider()->getOffset().x - 1;
+			pos.x = pOther->getPos().x - pOther->getSize().x * 0.5f + pOther->getOffset().x
+				- getCollider()->getSize().x * 0.5f + getCollider()->getOffset().x - 1;
 
 			setPos(pos);
 		}
@@ -221,8 +221,8 @@ void CMonster_Fly::collisionKeep(CCollider* pOther)
 		{	// ©Л
 			fPoint pos = getPos();
 
-			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f + pOther->getOffset().x
-				+ getCollider()->getSize().x / 2.f + getCollider()->getOffset().x + 1;
+			pos.x = pOther->getPos().x + pOther->getSize().x * 0.5f + pOther->getOffset().x
+				+ getCollider()->getSize().x * 0.5f + getCollider()->getOffset().x + 1;
 
 			setPos(pos);
 		}

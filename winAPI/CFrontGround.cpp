@@ -31,8 +31,8 @@ void CFrontGround::render(HDC hDC)
 		(int)WINSIZEX,
 		(int)WINSIZEY,
 		m_pTex->getDC(),
-		(int)(camPos.x - WINSIZEX / 2.f),
-		(int)(camPos.y - WINSIZEY / 2.f),
+		(int)(camPos.x - WINSIZEX * 0.5f),
+		(int)(camPos.y - WINSIZEY * 0.5f),
 		(int)WINSIZEX,
 		(int)WINSIZEY,
 		RGB(255,0,255));

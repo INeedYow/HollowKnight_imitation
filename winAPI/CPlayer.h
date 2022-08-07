@@ -140,8 +140,8 @@ enum class eSTATE_PLAYER
 #define PSLASH_WIDTH			180
 #define PSLASH_HEIGHT			120
 
-#define PSLASH_OFFSETX			(P_SIZEX / 2 + PSLASH_WIDTH / 2)
-#define PSLASH_OFFSETY			(P_SIZEY / 2 + PSLASH_HEIGHT / 2)
+#define PSLASH_OFFSETX			(P_SIZEX * 0.5f + PSLASH_WIDTH * 0.5f)
+#define PSLASH_OFFSETY			(P_SIZEY * 0.5f + PSLASH_HEIGHT * 0.5f)
 
 // 플레이어 상태 추가정보 
 // (동시에 적용될 수 있는 개념은 비트로, 

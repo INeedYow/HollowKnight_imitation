@@ -88,7 +88,7 @@ void CBoss_Markoth::update()
 	
 	m_fSkillTimer -= fDT;
 
-	if (getMonsInfo().iHP <= B_HPMAX / 2 && m_ucPhase == 1)
+	if (getMonsInfo().iHP <= B_HPMAX * 0.5 && m_ucPhase == 1)
 	{	// 2 ÆäÀÌÁî
 		m_ucPhase++;
 		changeMonsState(getAI(), eSTATE_MONS::B_SPAWN);

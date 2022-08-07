@@ -29,9 +29,9 @@ void CState_BDeath::update(UINT& chk)
 	m_fDura -= fDT;
 	m_fTimer += fDT;
 
-	if (m_fTimer >= 0.2f && m_fDura > 1.f)
+	if (m_fTimer >= 0.15f && m_fDura > 1.f)
 	{
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < 1; i++)
 		{
 			CEffect_Move* pEff = new CEffect_Move;
 			pEff->load(L"dream_big", L"texture\\boss\\dream_big.bmp");
@@ -53,7 +53,7 @@ void CState_BDeath::update(UINT& chk)
 			m_fSpd		= (float)(rand() % 1800 + 900);
 			m_fDecel	= (float)(rand() % 900 + 450);
 		}
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < 1; i++)
 		{
 			CEffect_Move* pEff = new CEffect_Move;
 			pEff->load(L"dream_large", L"texture\\boss\\dream_large.bmp");
@@ -75,7 +75,7 @@ void CState_BDeath::update(UINT& chk)
 			m_fSpd = (float)(rand() % 1800 + 900);
 			m_fDecel = (float)(rand() % 900 + 450);
 		}
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < 2; i++)
 		{
 			CEffect_Move* pEff = new CEffect_Move;
 			pEff->load(L"dream_mini", L"texture\\boss\\dream_mini.bmp");

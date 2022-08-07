@@ -21,21 +21,21 @@ eDIR collRect2Rect(CCollider* coll1, CCollider* coll2)
 	fPoint size1 = coll1->getOwner()->getSize();
 	fPoint size2 = coll2->getOwner()->getSize();
 
-	float distY = (size2.y + size1.y) / 2.f;
-	float distX = (size2.x + size1.x) / 2.f;
+	float distY = (size2.y + size1.y) * 0.5f;
+	float distX = (size2.x + size1.x) * 0.5f;
 
 	if (pos2.y - distY < pos1.y && pos1.y < pos2.y + distY)
 	{
-		if (pos1.x < pos2.x - size2.x / 2.f)
+		if (pos1.x < pos2.x - size2.x * 0.5f)
 			return eDIR::LEFT;
-		if (pos1.x > pos2.x + size2.x / 2.f)
+		if (pos1.x > pos2.x + size2.x * 0.5f)
 			return eDIR::RIGHT;
 	}
 	else if (pos2.x - distX < pos1.x && pos1.x < pos2.x + distX)
 	{
-		if (pos1.y < pos2.y - size2.y / 2.f)
+		if (pos1.y < pos2.y - size2.y * 0.5f)
 			return eDIR::TOP;
-		if (pos1.y > pos2.y + size2.y / 2.f)
+		if (pos1.y > pos2.y + size2.y * 0.5f)
 			return eDIR::BOTTOM;
 	}
 	return eDIR::NONE;
@@ -49,15 +49,15 @@ eDIR collisionRectToRect(CCollider* coll1, CCollider* coll2)
 	fPoint pos2 = coll2->getPos();
 	fPoint size2 = coll2->getOwner()->getSize();
 
-	if (pos2.y - size2.y / 2 <= pos1.y && pos1.y <= pos2.y + size2.y / 2)
+	if (pos2.y - size2.y * 0.5f <= pos1.y && pos1.y <= pos2.y + size2.y * 0.5f)
 	{
-		if (pos1.x <= pos2.x + size2.x / 2) return eDIR::LEFT;
-		if (pos1.x >= pos2.x - size2.x / 2) return eDIR::RIGHT;
+		if (pos1.x <= pos2.x + size2.x * 0.5f) return eDIR::LEFT;
+		if (pos1.x >= pos2.x - size2.x * 0.5f) return eDIR::RIGHT;
 	}
 	else
 	{
-		if (pos1.y <= pos2.y + size2.y / 2) return eDIR::TOP;
-		if (pos1.y >= pos2.y - size2.y / 2) return eDIR::BOTTOM;
+		if (pos1.y <= pos2.y + size2.y * 0.5f) return eDIR::TOP;
+		if (pos1.y >= pos2.y - size2.y * 0.5f) return eDIR::BOTTOM;
 	}
 	return eDIR::NONE;
 }
@@ -70,8 +70,8 @@ eDIR collisionRectToRectWide(CCollider* coll1, CCollider* coll2)
 	fPoint size1 = coll1->getOwner()->getSize();
 	fPoint size2 = coll2->getOwner()->getSize();
 
-	if (pos2.y - (size2.y + size1.y) / 2.f + 2 < pos1.y && 
-		pos1.y < pos2.y + (size2.y + size1.y) / 2.f - 2)
+	if (pos2.y - (size2.y + size1.y) * 0.5f + 2 < pos1.y &&
+		pos1.y < pos2.y + (size2.y + size1.y) * 0.5f - 2)
 	{
 		if (pos1.x < pos2.x) return eDIR::LEFT;
 		else return eDIR::RIGHT;
@@ -90,7 +90,7 @@ bool isTopCollOnly(CCollider* coll1, CCollider* coll2)
 	fPoint pos2 = coll2->getPos();
 	fPoint size2 = coll2->getSize();
 
-	if (pos1.y < pos2.y && abs(pos1.x - pos2.x) <= size2.x / 2.f)
+	if (pos1.y < pos2.y && abs(pos1.x - pos2.x) <= size2.x * 0.5f)
 		return true;
 
 	return false;
@@ -102,7 +102,7 @@ bool isBottomCollOnly(CCollider* coll1, CCollider* coll2)
 	fPoint pos2 = coll2->getPos();
 	fPoint size2 = coll2->getSize();
 
-	if (pos1.y > pos2.y && abs(pos1.x - pos2.x) <= size2.x / 2.f)
+	if (pos1.y > pos2.y && abs(pos1.x - pos2.x) <= size2.x * 0.5f)
 		return true;
 
 	return false;
@@ -118,8 +118,8 @@ bool isLeftColl(CCollider* coll1, CCollider* coll2)
 
 bool isCollisionRectToRect(const fPoint& pos1, const fPoint& size1, const fPoint& pos2, const fPoint& size2)
 {	// == ISCOLLRR					// 사각형1 좌표, 사이즈				// 사각형2 좌표, 사이즈
-	return ((abs(pos1.x - pos2.x) < (size1.x + size2.x) / 2.f) &&
-		(abs(pos1.y - pos2.y) < (size1.y + size2.y) / 2.f));
+	return ((abs(pos1.x - pos2.x) < (size1.x + size2.x) * 0.5f) &&
+		(abs(pos1.y - pos2.y) < (size1.y + size2.y) * 0.5f));
 }
 
 bool isCollisionPointToRect(const fPoint& point, const RECT& rt)
@@ -280,12 +280,12 @@ bool isOBB(fPoint* fpArr1, fPoint pos1, fPoint sz1, float rad1,
 	fPoint* fpArr2, fPoint pos2, fPoint sz2, float rad2)
 {
 	// obj1 의 오른쪽, 위쪽 벡터
-	fVec2 rVec1 = ((fpArr1[rt] - fpArr1[lt]) / 2.f);
-	fVec2 uVec1 = ((fpArr1[lt] - fpArr1[lb]) / 2.f);
+	fVec2 rVec1 = ((fpArr1[rt] - fpArr1[lt]) * 0.5f);
+	fVec2 uVec1 = ((fpArr1[lt] - fpArr1[lb]) * 0.5f);
 
 	// obj2 의 오른쪽, 위쪽 벡터
-	fVec2 rVec2 = ((fpArr2[rt] - fpArr2[lt]) / 2.f);
-	fVec2 uVec2 = ((fpArr2[lt] - fpArr2[lb]) / 2.f);
+	fVec2 rVec2 = ((fpArr2[rt] - fpArr2[lt]) * 0.5f);
+	fVec2 uVec2 = ((fpArr2[lt] - fpArr2[lb]) * 0.5f);
 
 	// 거리벡터
 	fVec2 distVec = pos2 - pos1;
@@ -370,22 +370,22 @@ float Deg2Rad(float deg) { //deg -> rad
 
 fVec2 getDistanceVector(SHAPE a, SHAPE b) { //distance vector
 	fVec2 ret;
-	ret.x = (a.left + a.width / 2) - (b.left + b.width / 2);
-	ret.y = (a.top + a.height / 2) - (b.top + b.height / 2);
+	ret.x = (a.left + a.width * 0.5f) - (b.left + b.width * 0.5f);
+	ret.y = (a.top + a.height * 0.5f) - (b.top + b.height * 0.5f);
 	return ret;
 }
 
 fVec2 getHeightVector(SHAPE a) { //height vector
 	fVec2 ret;
-	ret.x = (float)(a.height * cos(Deg2Rad(a.rot - 90)) / 2.f);
-	ret.y = (float)(a.height * sin(Deg2Rad(a.rot - 90)) / 2.f);
+	ret.x = (float)(a.height * cos(Deg2Rad(a.rot - 90)) * 0.5f);
+	ret.y = (float)(a.height * sin(Deg2Rad(a.rot - 90)) * 0.5f);
 	return ret;
 }
 
 fVec2 getWidthVector(SHAPE a) { //width vector
 	fVec2 ret;
-	ret.x = (float)(a.width * cos(Deg2Rad(a.rot)) / 2.f);
-	ret.y = (float)(a.width * sin(Deg2Rad(a.rot)) / 2.f);
+	ret.x = (float)(a.width * cos(Deg2Rad(a.rot)) * 0.5f);
+	ret.y = (float)(a.width * sin(Deg2Rad(a.rot)) * 0.5f);
 	return ret;
 }
 

@@ -42,9 +42,6 @@ void CScene_Stage02::update()
 	if (KEY_ON(VK_ESCAPE))
 		changeScn(eSCENE::TITLE);
 
-	if (KEY_ON('N'))
-		changeScn(eSCENE::STAGE_03);
-
 	if (gameGetPlayer()->getPos().x >= STG02_SIZEX - 30)
 		changeScn(eSCENE::STAGE_03);
 
@@ -195,7 +192,7 @@ void CScene_Stage02::exit()
 	resetGrp();
 
 	camSetIsArea(false);
-	camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
+	camSetFocus(fPoint(WINSIZEX * 0.5f, WINSIZEY * 0.5f));
 }
 
 void waitForKeyInput(DWORD_PTR param1, DWORD_PTR param2, DWORD_PTR param3)

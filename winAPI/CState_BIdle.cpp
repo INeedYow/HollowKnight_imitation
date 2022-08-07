@@ -26,7 +26,7 @@ void CState_BIdle::update(UINT& chk)
 
 void CState_BIdle::enter()
 {
-	m_fDura = (float)(rand() % 3  + 4)/ 2.f;
+	m_fDura = (float)(rand() % 3  + 4) * 0.5f;
 	getMonster()->PLAY(L"st_Normal");
 	getMonster()->getCollider()->setSize(fPoint(SB_NmSIZEX, SB_NmSIZEY));
 }

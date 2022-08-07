@@ -96,7 +96,7 @@ void CScene::renderTile(HDC hDC)
 	const vector<CObject*>& vecTile = getGroupObject(eOBJ::TILE);
 
 	fPoint fptCamLook = CCameraManager::getInst()->getFocus();
-	fPoint fptLeftTop = fptCamLook - fPoint(WINSIZEX, WINSIZEY) / 2.f;
+	fPoint fptLeftTop = fptCamLook - fPoint(WINSIZEX, WINSIZEY) * 0.5f;
 
 	int iLTCol = (int)fptLeftTop.x / CTile::SIZE_TILE;
 	int iLTRow = (int)fptLeftTop.y / CTile::SIZE_TILE;

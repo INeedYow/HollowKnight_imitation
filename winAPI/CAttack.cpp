@@ -94,7 +94,7 @@ void CAttack::collisionEnter(CCollider* pOther)
 		case eOBJNAME::MONS_MUSH:
 		case eOBJNAME::MONS_BEE:
 		{	
-			fPoint pos = (getPos() + pOther->getPos()) / 2.f;
+			fPoint pos = (getPos() + pOther->getPos()) * 0.5f;
 
 			CEffect* pEff = new CEffect;
 			pEff->load(L"nail_hit_effect", L"texture\\effect\\nail_hit_effect.bmp");
@@ -140,7 +140,7 @@ void CAttack::collisionEnter(CCollider* pOther)
 		
 		case eOBJNAME::SHIELD:
 		{
-			fPoint pos = (getPos() + pOther->getPos()) / 2.f;
+			fPoint pos = (getPos() + pOther->getPos()) * 0.5f;
 
 			info.fvKnockBackDir = (pOwner->getPos() - pTarget->getPos());
 			info.fKnockBackTimer = P_KB_TIMER;
@@ -164,7 +164,7 @@ void CAttack::collisionEnter(CCollider* pOther)
 
 		case eOBJNAME::TEST:
 		{
-			fPoint pos = (getPos() + pOther->getPos()) / 2.f;
+			fPoint pos = (getPos() + pOther->getPos()) * 0.5f;
 
 			CEffect* pEff = new CEffect;
 			pEff->load(L"nail_hit_effect", L"texture\\effect\\nail_hit_effect.bmp");

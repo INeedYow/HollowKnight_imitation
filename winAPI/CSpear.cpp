@@ -119,8 +119,8 @@ void CSpear::update()
 	case 4:
 	{	// 카메라 범위 나가면 비활성화
 		fPoint randPos = rendPos(pos);
-		if (randPos.x < (float)(SPR_SIZEX / -2.f) || randPos.x > (float)(WINSIZEX + SPR_SIZEX / 2.f) ||
-			randPos.y < (float)(SPR_SIZEY / -2.f) || randPos.y > (float)(WINSIZEX + SPR_SIZEY / 2.f))
+		if (randPos.x < (float)(SPR_SIZEX * -0.5f) || randPos.x > (float)(WINSIZEX + SPR_SIZEX * 0.5f) ||
+			randPos.y < (float)(SPR_SIZEY * -0.5f) || randPos.y > (float)(WINSIZEX + SPR_SIZEY * 0.5f))
 		{
 			m_uiStep++;
 			m_bActive = false;
@@ -193,26 +193,26 @@ fPoint CSpear::getRandPos()
 	random = rand() % 2;					// x 좌표 설정
 	if (random)
 	{	// left
-		max = (int)(pos.x - WINSIZEX / 4.f);
-		min = (int)(pos.x - WINSIZEX / 2.f);
+		max = (int)(pos.x - WINSIZEX * 0.25f);
+		min = (int)(pos.x - WINSIZEX * 0.5f);
 	}
 	else
 	{	// right
-		max = (int)(pos.x + WINSIZEX / 2.f);
-		min = (int)(pos.x + WINSIZEX / 4.f);
+		max = (int)(pos.x + WINSIZEX * 0.5f);
+		min = (int)(pos.x + WINSIZEX * 0.25f);
 	}
 	pos.x = (float)(rand() % (max - min + 1) + min);
 
 	random = rand() % 2;					// y 좌표 설정
 	if (random)
 	{	// left
-		max = (int)(pos.y - WINSIZEY / 4.f);
-		min = (int)(pos.y - WINSIZEY / 2.f);
+		max = (int)(pos.y - WINSIZEY * 0.25f);
+		min = (int)(pos.y - WINSIZEY * 0.5f);
 	}
 	else
 	{	// right
-		max = (int)(pos.y + WINSIZEY / 2.f);
-		min = (int)(pos.y + WINSIZEY / 4.f);
+		max = (int)(pos.y + WINSIZEY * 0.5f);
+		min = (int)(pos.y + WINSIZEY * 0.25f);
 	}
 	pos.y = (float)(rand() % (max - min + 1) + min);
 

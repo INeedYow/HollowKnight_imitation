@@ -28,7 +28,7 @@ void CWall::render(HDC hDC)
 void CWall::create(float left, float top, float right, float bottom)
 {
 	CWall* pNewWall = new CWall;
-	pNewWall->setPos(fPoint((left + right) / 2.f, (top + bottom) / 2.f));
+	pNewWall->setPos(fPoint((left + right) * 0.5f, (top + bottom) * 0.5f));
 	pNewWall->getCollider()->setSize(fPoint(right - left, bottom - top));
 
 	createObj(pNewWall, eOBJ::WALL);

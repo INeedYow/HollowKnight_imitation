@@ -118,17 +118,17 @@ void CCollider::render(HDC hDC, float theta, bool rotReverse)
 		{
 		case eSHAPE::CIRCLE:
 			Ellipse(hDC,
-				(int)(pos.x - m_fpSize.x / 2.f),
-				(int)(pos.y - m_fpSize.y / 2.f),
-				(int)(pos.x + m_fpSize.x / 2.f),
-				(int)(pos.y + m_fpSize.y / 2.f));
+				(int)(pos.x - m_fpSize.x * 0.5f),
+				(int)(pos.y - m_fpSize.y * 0.5f),
+				(int)(pos.x + m_fpSize.x * 0.5f),
+				(int)(pos.y + m_fpSize.y * 0.5f));
 			break;
 		case eSHAPE::RECT:
 			Rectangle(hDC,
-				(int)(pos.x - m_fpSize.x / 2.f),
-				(int)(pos.y - m_fpSize.y / 2.f),
-				(int)(pos.x + m_fpSize.x / 2.f),
-				(int)(pos.y + m_fpSize.y / 2.f));
+				(int)(pos.x - m_fpSize.x * 0.5f),
+				(int)(pos.y - m_fpSize.y * 0.5f),
+				(int)(pos.x + m_fpSize.x * 0.5f),
+				(int)(pos.y + m_fpSize.y * 0.5f));
 			break;
 		}
 	}
@@ -140,10 +140,10 @@ void CCollider::render(HDC hDC, float theta, bool rotReverse)
 
 		// 좌상, 우상, 우하, 좌하 좌표 (LineTo로 이어 그리기 위해 순서 변형)
 		fPoint arr[4] = {
-			fPoint(-m_fpSize.x / 2.f, -m_fpSize.y / 2.f),
-			fPoint(m_fpSize.x / 2.f, -m_fpSize.y / 2.f),
-			fPoint(m_fpSize.x / 2.f,  m_fpSize.y / 2.f),
-			fPoint(-m_fpSize.x / 2.f,  m_fpSize.y / 2.f)
+			fPoint(-m_fpSize.x * 0.5f, -m_fpSize.y * 0.5f),
+			fPoint( m_fpSize.x * 0.5f, -m_fpSize.y * 0.5f),
+			fPoint( m_fpSize.x * 0.5f,  m_fpSize.y * 0.5f),
+			fPoint(-m_fpSize.x * 0.5f,  m_fpSize.y * 0.5f)
 		};
 
 		for (int i = 0; i < 4; i++)
@@ -153,8 +153,8 @@ void CCollider::render(HDC hDC, float theta, bool rotReverse)
 
 			if (rotReverse)
 			{	// 반대로 회전 시 부호 변경
-				pPointArr[i].x *= -1;
-				pPointArr[i].y *= -1;
+				pPointArr[i].x = -pPointArr[i].x;
+				pPointArr[i].y = -pPointArr[i].y;
 			}
 		}
 

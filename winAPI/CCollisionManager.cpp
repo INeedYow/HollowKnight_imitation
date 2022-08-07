@@ -106,17 +106,17 @@ bool CCollisionManager::isCollision(CCollider* pColl1, eSHAPE shape1, CCollider*
 		{
 		case eSHAPE::CIRCLE:
 		{
-			return ISCOLLCC(pos1, (int)(size1.x / 2), pos2, (int)(size2.x / 2));
+			return ISCOLLCC(pos1, (int)(size1.x * 0.5f), pos2, (int)(size2.x * 0.5f));
 		}
 		case eSHAPE::RECT:
 		{
-			RECT rt = { (int)(pos2.x - size2.x / 2), (int)(pos2.y - size2.y / 2),
-						(int)(pos2.x + size2.x / 2), (int)(pos2.y + size2.y / 2) };
-			return ISCOLLCR(pos1, (int)(size1.x / 2), rt);
+			RECT rt = { (int)(pos2.x - size2.x * 0.5f), (int)(pos2.y - size2.y * 0.5f),
+						(int)(pos2.x + size2.x * 0.5f), (int)(pos2.y + size2.y * 0.5f) };
+			return ISCOLLCR(pos1, (int)(size1.x * 0.5f), rt);
 		}
 		case eSHAPE::POINT:
 		{
-			return ISCOLLPC(pos2, pos1, (int)(size1.x / 2));
+			return ISCOLLPC(pos2, pos1, (int)(size1.x * 0.5f));
 		}
 		}
 		break;
@@ -126,9 +126,9 @@ bool CCollisionManager::isCollision(CCollider* pColl1, eSHAPE shape1, CCollider*
 		{
 		case eSHAPE::CIRCLE:
 		{
-			RECT rt = { (int)(pos1.x - size1.x / 2), (int)(pos1.y - size1.y / 2),
-						(int)(pos1.x + size1.x / 2), (int)(pos1.y + size1.y / 2) };
-			return ISCOLLCR(pos2, (int)(size2.x / 2), rt);
+			RECT rt = { (int)(pos1.x - size1.x * 0.5f), (int)(pos1.y - size1.y * 0.5f),
+						(int)(pos1.x + size1.x * 0.5f), (int)(pos1.y + size1.y * 0.5f) };
+			return ISCOLLCR(pos2, (int)(size2.x * 0.5f), rt);
 		}
 		break;
 		case eSHAPE::RECT:
@@ -184,16 +184,16 @@ bool CCollisionManager::isCollision(CCollider* pColl1, eSHAPE shape1, CCollider*
 			else
 			{
 				SHAPE shape1 = {
-					pos1.y - size1.y / 2.f,
-					pos1.x - size1.x / 2.f,
+					pos1.y - size1.y * 0.5f,
+					pos1.x - size1.x * 0.5f,
 					size1.y,
 					size1.x,
 					rad1 * 180 / PI
 				};
 
 				SHAPE shape2 = {
-					pos2.y - size2.y / 2.f,
-					pos2.x - size2.x / 2.f,
+					pos2.y - size2.y * 0.5f,
+					pos2.x - size2.x * 0.5f,
 					size2.y,
 					size2.x,
 					rad2 * 180 / PI
@@ -205,8 +205,8 @@ bool CCollisionManager::isCollision(CCollider* pColl1, eSHAPE shape1, CCollider*
 		}
 		case eSHAPE::POINT:
 		{
-			RECT rt = { (int)(pos1.x - size1.x / 2), (int)(pos1.y - size1.y / 2),
-						(int)(pos1.x + size1.x / 2), (int)(pos1.y + size1.y / 2) };
+			RECT rt = { (int)(pos1.x - size1.x * 0.5f), (int)(pos1.y - size1.y * 0.5f),
+						(int)(pos1.x + size1.x * 0.5f), (int)(pos1.y + size1.y * 0.5f) };
 			return ISCOLLPR(pos2, rt);
 		}
 		}
@@ -216,12 +216,12 @@ bool CCollisionManager::isCollision(CCollider* pColl1, eSHAPE shape1, CCollider*
 		{
 		case eSHAPE::CIRCLE:
 		{
-			return ISCOLLPC(pos1, pos2, (int)(size2.x / 2));
+			return ISCOLLPC(pos1, pos2, (int)(size2.x * 0.5f));
 		}
 		case eSHAPE::RECT:
 		{
-			RECT rt = { (int)(pos2.x - size2.x / 2), (int)(pos2.y - size2.y / 2),
-						(int)(pos2.x + size2.x / 2), (int)(pos2.y + size2.y / 2) };
+			RECT rt = { (int)(pos2.x - size2.x * 0.5f), (int)(pos2.y - size2.y * 0.5f),
+						(int)(pos2.x + size2.x * 0.5f), (int)(pos2.y + size2.y * 0.5f) };
 			return ISCOLLPR(pos1, rt);
 		}
 		case eSHAPE::POINT:

@@ -50,7 +50,7 @@ void CState_BMove::update(UINT& chk)
 
 void CState_BMove::enter()
 {
-	m_fDura = (rand() % 4 + 4) / 2.f;
+	m_fDura = (rand() % 4 + 4) * 0.5f;
 
 	// 이동 좌표 랜덤 (플레이어와 보스 좌표로 그려지는 사각형 +알파 중 랜덤설정)
 		// 거리가 가까워지면 멀어질 확률이 올라가고 멀어지면 가까워질 확률 올라가게

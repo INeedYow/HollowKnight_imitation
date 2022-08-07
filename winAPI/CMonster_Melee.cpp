@@ -151,8 +151,8 @@ void CMonster_Melee::collisionEnter(CCollider* pOther)
 			{
 				fPoint pos = getPos();
 
-				pos.y = pOther->getPos().y - pOther->getSize().y / 2.f + pOther->getOffset().y
-					- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y + 1;
+				pos.y = pOther->getPos().y - pOther->getSize().y * 0.5f + pOther->getOffset().y
+					- getCollider()->getSize().y * 0.5f - getCollider()->getOffset().y + 1;
 
 				setPos(pos);
 				setCheck(SM_FALL, false);
@@ -163,8 +163,8 @@ void CMonster_Melee::collisionEnter(CCollider* pOther)
 		{
 			fPoint pos = getPos();
 
-			pos.y = pOther->getPos().y + pOther->getSize().y / 2.f + pOther->getOffset().y
-				+ getCollider()->getSize().y / 2.f + getCollider()->getOffset().y;
+			pos.y = pOther->getPos().y + pOther->getSize().y * 0.5f + pOther->getOffset().y
+				+ getCollider()->getSize().y * 0.5f + getCollider()->getOffset().y;
 
 			setPos(pos);
 		}
@@ -176,8 +176,8 @@ void CMonster_Melee::collisionEnter(CCollider* pOther)
 		{	// 좌
 			fPoint pos = getPos();
 
-			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f + pOther->getOffset().x
-				- getCollider()->getSize().x / 2.f + getCollider()->getOffset().x - 1;
+			pos.x = pOther->getPos().x - pOther->getSize().x * 0.5f + pOther->getOffset().x
+				- getCollider()->getSize().x * 0.5f + getCollider()->getOffset().x - 1;
 			
 			setPos(pos);
 		}
@@ -185,8 +185,8 @@ void CMonster_Melee::collisionEnter(CCollider* pOther)
 		{	// 우
 			fPoint pos = getPos();
 
-			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f + pOther->getOffset().x
-				+ getCollider()->getSize().x / 2.f + getCollider()->getOffset().x + 1;
+			pos.x = pOther->getPos().x + pOther->getSize().x * 0.5f + pOther->getOffset().x
+				+ getCollider()->getSize().x * 0.5f + getCollider()->getOffset().x + 1;
 
 			setPos(pos);
 		}
@@ -213,8 +213,8 @@ void CMonster_Melee::collisionKeep(CCollider* pOther)
 
 		if (isTopCollOnly(getCollider(), pOther))
 		{	// 위
-			pos.y = oPos.y - oSize.y / 2.f
-				- size.y / 2.f - getCollider()->getOffset().y + 1;
+			pos.y = oPos.y - oSize.y * 0.5f
+				- size.y * 0.5f - getCollider()->getOffset().y + 1;
 
 			if (pos.x - size.x * 0.5f < oPos.x - oSize.x * 0.5f)
 			{	// 땅 왼쪽 끝에서 방향전환
@@ -231,8 +231,8 @@ void CMonster_Melee::collisionKeep(CCollider* pOther)
 		}
 		else if (isBottomCollOnly(getCollider(), pOther))
 		{
-			pos.y = pOther->getPos().y + pOther->getSize().y / 2.f
-				+ getCollider()->getSize().y / 2.f + getCollider()->getOffset().y;
+			pos.y = pOther->getPos().y + pOther->getSize().y * 0.5f
+				+ getCollider()->getSize().y * 0.5f + getCollider()->getOffset().y;
 		}
 		else
 		{
@@ -251,16 +251,16 @@ void CMonster_Melee::collisionKeep(CCollider* pOther)
 		{	// 왼쪽에서 벽과 충돌
 			fPoint pos = getPos();
 
-			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f
-				- getCollider()->getSize().x / 2.f - getCollider()->getOffset().x - 1;
+			pos.x = pOther->getPos().x - pOther->getSize().x * 0.5f
+				- getCollider()->getSize().x * 0.5f - getCollider()->getOffset().x - 1;
 			setPos(pos);
 		}
 		else
 		{	// 오른쪽
 			fPoint pos = getPos();
 
-			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f
-				+ getCollider()->getSize().x / 2.f + getCollider()->getOffset().x + 1;
+			pos.x = pOther->getPos().x + pOther->getSize().x * 0.5f
+				+ getCollider()->getSize().x * 0.5f + getCollider()->getOffset().x + 1;
 			setPos(pos);
 		}
 		break;

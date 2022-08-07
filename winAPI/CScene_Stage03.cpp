@@ -34,9 +34,6 @@ void CScene_Stage03::update()
 	if (KEY_ON(VK_ESCAPE))
 		changeScn(eSCENE::TITLE);
 
-	if (KEY_ON('N'))
-		changeScn(eSCENE::STAGE_04);
-
 	if (KEY_ON('M'))
 	{
 		if (m_bBGM)
@@ -178,7 +175,7 @@ void CScene_Stage03::exit()
 	resetGrp();
 
 	camSetIsArea(false);
-	camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
+	camSetFocus(fPoint(WINSIZEX * 0.5f, WINSIZEY * 0.5f));
 
 	CSoundManager::getInst()->stop(L"bgm_stg3");
 }

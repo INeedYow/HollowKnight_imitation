@@ -37,7 +37,7 @@ void CScene_Title::update()
 void CScene_Title::enter()
 {
 	// Camera Look ÁöÁ¤
-	camSetFocusNow(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
+	camSetFocusNow(fPoint(WINSIZEX * 0.5f, WINSIZEY * 0.5f));
 	camSetArea(0.f, 0.f, WINSIZEX, WINSIZEY);
 
 	CBackGround* pBG = new CBackGround;
@@ -57,14 +57,14 @@ void CScene_Title::enter()
 
 	CButtonUI_Image* pBtnStart = new CButtonUI_Image;
 	pBtnStart->load(L"Btn_Start", L"texture\\image\\button_start.bmp");
-	pBtnStart->setPos(fPoint(WINSIZEX / 2.f - 74.f, WINSIZEY / 2.f + 140));
+	pBtnStart->setPos(fPoint(WINSIZEX * 0.5f - 74.f, WINSIZEY * 0.5f + 140));
 	pBtnStart->setClickedCallBack(changeScene, (DWORD_PTR)eSCENE::STAGE_01, 0);
 	CGameManager::getInst()->setEnterPos(pEnterPos);
 	addObject(pBtnStart, eOBJ::UI);
 
 	CButtonUI_Image* pBtnExit = new CButtonUI_Image;
 	pBtnExit->load(L"Btn_Exit", L"texture\\image\\button_exit.bmp");
-	pBtnExit->setPos(fPoint(WINSIZEX / 2.f - 82.f, WINSIZEY / 2.f + 220));
+	pBtnExit->setPos(fPoint(WINSIZEX * 0.5f - 82.f, WINSIZEY * 0.5f + 220));
 	pBtnExit->setClickedCallBack(quitWindow, 0, 0);
 	addObject(pBtnExit, eOBJ::UI);
 

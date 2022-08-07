@@ -27,9 +27,9 @@ CCameraManager::~CCameraManager()
 void CCameraManager::init()
 {
 	m_pTex = CResourceManager::getInst()->createTexture(L"CameraTex", WINSIZEX, WINSIZEY);
-	m_fpCurFocus = { WINSIZEX / 2.f, WINSIZEY / 2.f };
-	m_fpFocus = { WINSIZEX / 2.f, WINSIZEY / 2.f };
-	m_fpPrevFocus = { WINSIZEX / 2.f, WINSIZEY / 2.f };
+	m_fpCurFocus =	{ WINSIZEX * 0.5f, WINSIZEY * 0.5f };
+	m_fpFocus =		{ WINSIZEX * 0.5f, WINSIZEY * 0.5f };
+	m_fpPrevFocus = { WINSIZEX * 0.5f, WINSIZEY * 0.5f };
 }
 
 void CCameraManager::update()
@@ -155,10 +155,10 @@ void CCameraManager::setTraceObj(CObject* targetObj)
 void CCameraManager::setCameraArea(float minX, float minY, float maxX, float maxY)
 {											// 알아서 WINSIZE에 맞게 설정해주도록
 	m_tCamArea = { 
-		minX + WINSIZEX / 2.f, 
-		minY + WINSIZEY / 2.f, 
-		maxX - WINSIZEX / 2.f, 
-		maxY - WINSIZEY / 2.f 
+		minX + WINSIZEX * 0.5f, 
+		minY + WINSIZEY * 0.5f, 
+		maxX - WINSIZEX * 0.5f, 
+		maxY - WINSIZEY * 0.5f 
 	};
 	m_bArea = true;							// 범위 설정했다는 건 사용하겠다고 보고 true로
 }
@@ -247,7 +247,7 @@ void CCameraManager::scroll(fVec2 vec, float spd)
 			m_fpCurFocus.y = m_tCamArea.fMaxY;
 	}
 
-	fPoint fptCenter = fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f);
+	fPoint fptCenter = fPoint(WINSIZEX * 0.5f, WINSIZEY * 0.5f);
 	m_fpDiff = m_fpCurFocus - fptCenter;
 }
 
@@ -259,7 +259,7 @@ void CCameraManager::calculateDiff()
 		m_fpCurFocus = m_fpFocus;
 	else
 	{
-		fPoint fpCenter = fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f);
+		fPoint fpCenter = fPoint(WINSIZEX * 0.5f, WINSIZEY * 0.5f);
 		m_fpCurFocus = m_fpPrevFocus + (m_fpFocus - m_fpPrevFocus).normalize() * m_fSpeed * fDT;
 		m_fpDiff = m_fpCurFocus - fpCenter;
 

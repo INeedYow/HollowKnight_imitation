@@ -91,8 +91,8 @@ void CAnimation::render(HDC hDC, float theta, bool rotReverse)
 	if (0.f == theta)
 	{
 		TransparentBlt(hDC,
-			(int)(pos.x - frm.fpSlice.x / 2.f),
-			(int)(pos.y - frm.fpSlice.y / 2.f),
+			(int)(pos.x - frm.fpSlice.x * 0.5f),
+			(int)(pos.y - frm.fpSlice.y * 0.5f),
 			(int)(frm.fpSlice.x),
 			(int)(frm.fpSlice.y),
 			m_pTex->getDC(),
@@ -110,8 +110,8 @@ void CAnimation::render(HDC hDC, float theta, bool rotReverse)
 		HDC hMemDC = m_pAnimator->getMemTex()->getDC();
 
 		TransparentBlt(hDC,
-			(int)(pos.x - texSize / 2),
-			(int)(pos.y - texSize / 2),
+			(int)(pos.x - texSize * 0.5),
+			(int)(pos.y - texSize * 0.5),
 			texSize,
 			texSize,
 			hMemDC,
@@ -131,9 +131,9 @@ void CAnimation::render(HDC hDC, float theta, bool rotReverse)
 
 		// ÁÂ»ó, ¿ì»ó, ÁÂÇÏ ÁÂÇ¥ 3°³
 		fPoint arr[3] = {
-			fPoint(frm.fpSlice.x / -2.f,	frm.fpSlice.y / -2.f),
-			fPoint(frm.fpSlice.x / 2.f,		frm.fpSlice.y / -2.f),
-			fPoint(frm.fpSlice.x / -2.f,	frm.fpSlice.y / 2.f)
+			fPoint(frm.fpSlice.x * -0.5f,	frm.fpSlice.y * -0.5f),
+			fPoint(frm.fpSlice.x *  0.5f,	frm.fpSlice.y * -0.5f),
+			fPoint(frm.fpSlice.x * -0.5f,	frm.fpSlice.y *  0.5f)
 		};
 
 		for (int i = 0; i < 3; i++)
@@ -150,8 +150,8 @@ void CAnimation::render(HDC hDC, float theta, bool rotReverse)
 
 		for (int i = 0; i < 3; i++)
 		{	// memDC Áß¾Ó ÁÂÇ¥·Î ÀÌµ¿
-			pointArr[i].x += (LONG)(texSize / 2);
-			pointArr[i].y += (LONG)(texSize / 2);
+			pointArr[i].x += (LONG)(texSize * 0.5);
+			pointArr[i].y += (LONG)(texSize * 0.5);
 		}
 
 		// memDC ¸¶Á¨Å¸·Î Ã¤¿ò
@@ -172,8 +172,8 @@ void CAnimation::render(HDC hDC, float theta, bool rotReverse)
 
 		// ¸¶Á¨Å¸ Á¦°Å
 		TransparentBlt(hDC,
-			(int)(pos.x - texSize / 2),
-			(int)(pos.y - texSize / 2),
+			(int)(pos.x - texSize * 0.5),
+			(int)(pos.y - texSize * 0.5),
 			texSize,
 			texSize,
 			hMemDC,

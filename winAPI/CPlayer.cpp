@@ -351,15 +351,15 @@ void CPlayer::collisionKeep(CCollider* pOther)
 		fPoint pos = getPos();
 		if (pos.x < pOther->getPos().x && m_tPrevInfo.fpPrevPos.x < pos.x)
 		{	// 왼쪽에서 오른쪽으로 이동하고 있는 경우
-			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f + pOther->getOffset().x
-				- getCollider()->getSize().x / 2.f + getCollider()->getOffset().x - 1;
+			pos.x = pOther->getPos().x - pOther->getSize().x * 0.5f + pOther->getOffset().x
+				- getCollider()->getSize().x * 0.5f + getCollider()->getOffset().x - 1;
 			setPos(pos);
 		}
 
 		else if (pos.x > pOther->getPos().x && m_tPrevInfo.fpPrevPos.x > pos.x)
 		{	// 오른쪽에서 왼쪽으로 이동하고 있는 경우
-			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f + pOther->getOffset().x
-				+ getCollider()->getSize().x / 2.f - getCollider()->getOffset().x + 1;
+			pos.x = pOther->getPos().x + pOther->getSize().x * 0.5f + pOther->getOffset().x
+				+ getCollider()->getSize().x * 0.5f - getCollider()->getOffset().x + 1;
 			setPos(pos);
 		}
 
@@ -372,8 +372,8 @@ void CPlayer::collisionKeep(CCollider* pOther)
 		{	// 위쪽에서 벽과 충돌
 			fPoint pos = getPos();
 
-			pos.y = pOther->getPos().y - pOther->getSize().y / 2.f
-				- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y  + 1;
+			pos.y = pOther->getPos().y - pOther->getSize().y * 0.5f
+				- getCollider()->getSize().y * 0.5f - getCollider()->getOffset().y  + 1;
 			setPos(pos);
 
 			tPlayerInfo info = getPlayerInfo();
@@ -390,8 +390,8 @@ void CPlayer::collisionKeep(CCollider* pOther)
 		{	// 아래쪽
 			fPoint pos = getPos();
 
-			pos.y = pOther->getPos().y + pOther->getSize().y / 2.f
-				+ getCollider()->getSize().y / 2.f + getCollider()->getOffset().y;
+			pos.y = pOther->getPos().y + pOther->getSize().y * 0.5f
+				+ getCollider()->getSize().y * 0.5f + getCollider()->getOffset().y;
 			setPos(pos);
 		}
 
@@ -414,8 +414,8 @@ void CPlayer::collisionEnter(CCollider* pOther)
 			{	// 떨어지고 있던 경우 착지
 				fPoint pos = getPos();
 
-				pos.y = pOther->getPos().y - pOther->getSize().y / 2.f + pOther->getOffset().y
-					- getCollider()->getSize().y / 2.f - getCollider()->getOffset().y + 1;
+				pos.y = pOther->getPos().y - pOther->getSize().y * 0.5f + pOther->getOffset().y
+					- getCollider()->getSize().y * 0.5f - getCollider()->getOffset().y + 1;
 
 				setPos(pos);
 
@@ -442,8 +442,8 @@ void CPlayer::collisionEnter(CCollider* pOther)
 			m_tInfo.fSpdY = 0;
 			fPoint pos = getPos();
 
-			pos.y = pOther->getPos().y + pOther->getSize().y / 2.f + pOther->getOffset().y
-				+ getCollider()->getSize().y / 2.f - getCollider()->getOffset().y;
+			pos.y = pOther->getPos().y + pOther->getSize().y * 0.5f + pOther->getOffset().y
+				+ getCollider()->getSize().y * 0.5f - getCollider()->getOffset().y;
 
 			setPos(pos);
 		}
@@ -454,15 +454,15 @@ void CPlayer::collisionEnter(CCollider* pOther)
 		fPoint pos = getPos();
 		if (pos.x < pOther->getPos().x && m_tPrevInfo.fpPrevPos.x < pos.x)
 		{	// 왼쪽에서 오른쪽으로 이동하고 있는 경우
-			pos.x = pOther->getPos().x - pOther->getSize().x / 2.f + pOther->getOffset().x
-				- getCollider()->getSize().x / 2.f + getCollider()->getOffset().x - 1;
+			pos.x = pOther->getPos().x - pOther->getSize().x * 0.5f + pOther->getOffset().x
+				- getCollider()->getSize().x * 0.5f + getCollider()->getOffset().x - 1;
 			setPos(pos);
 		}
 	
 		else if (pos.x > pOther->getPos().x && m_tPrevInfo.fpPrevPos.x > pos.x)
 		{	// 오른쪽에서 왼쪽으로 이동하고 있는 경우
-			pos.x = pOther->getPos().x + pOther->getSize().x / 2.f + pOther->getOffset().x
-				+ getCollider()->getSize().x / 2.f - getCollider()->getOffset().x + 1;
+			pos.x = pOther->getPos().x + pOther->getSize().x * 0.5f + pOther->getOffset().x
+				+ getCollider()->getSize().x * 0.5f - getCollider()->getOffset().x + 1;
 			setPos(pos);
 		}
 		
@@ -548,7 +548,7 @@ void CPlayer::createMissile()
 
 	if (m_uiCheck & SP_DIR)
 	{
-		mPos.x += getSize().x / 2.f;
+		mPos.x += getSize().x * 0.5f;
 		mDir = 1.f;
 		pMissile->createAnim(L"Msl_pl", pMissile->getTex(),
 			fPoint(0.f, 0.f), fPoint(254.f, 108.f), fPoint(254.f, 0.f), 0.15f, 4, false);
@@ -558,7 +558,7 @@ void CPlayer::createMissile()
 	}
 	else
 	{
-		mPos.x -= getSize().x / 2.f;
+		mPos.x -= getSize().x * 0.5f;
 		mDir = -1.f;
 		pMissile->createAnim(L"Msl_pl", pMissile->getTex(),
 			fPoint(762.f, 108.f), fPoint(254.f, 108.f), fPoint(-254.f, 0.f), 0.15f, 4, false);

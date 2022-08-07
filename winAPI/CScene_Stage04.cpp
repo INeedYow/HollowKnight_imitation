@@ -142,7 +142,7 @@ void CScene_Stage04::exit()
 	resetGrp();
 
 	camSetIsArea(false);
-	camSetFocus(fPoint(WINSIZEX / 2.f, WINSIZEY / 2.f));
+	camSetFocus(fPoint(WINSIZEX * 0.5f, WINSIZEY * 0.5f));
 
 	CSoundManager::getInst()->stop(L"bgm_stg4");
 }
