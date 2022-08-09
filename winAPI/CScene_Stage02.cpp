@@ -125,14 +125,14 @@ void CScene_Stage02::enter()
 	CGround::create(54, 1424, 304, 1532);
 	CWall::create(50, 1456, 308, 1500);
 
-	CGround::create(0, 1708, 416, 1740);
+	CGround::create(0, 1708, 424, 1740);
 	CWall::create(420, 1662, 1332, STG02_SIZEY);
 	CGround::create(424, 1630, 1328, STG02_SIZEY);
 	CGround::create(490, 1462, 1256, 1494);
 	CWall::create(486, 1494, 518, 1657);
 	CWall::create(1230, 1494, 1260, 1650);
-	CGround::create(1234, 1462, 1256, 1494);
-	CGround::create(1336, 1790, 1996, STG02_SIZEY);
+	//CGround::create(1234, 1462, 1256, 1494);
+	CGround::create(1306, 1790, 1996, STG02_SIZEY);
 	CWall::create(1776, 1610, 2832, STG02_SIZEY);
 	CGround::create(1442, 1540, 1796, 1570);
 	CGround::create(1442, 1424, 2380, 1456);
