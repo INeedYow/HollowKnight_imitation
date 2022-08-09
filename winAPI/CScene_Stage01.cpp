@@ -12,6 +12,7 @@
 #include "CHUD_HP.h"
 #include "CHUD_Soul.h"
 #include "CTriggerBox.h"
+#include "CMissile.h"		// 충돌 테스트용
 
 #include "CTest.h"
 
@@ -60,10 +61,6 @@ void CScene_Stage01::enter()
 
 	CGameManager::getInst()->registPlayer(pPlayer);
 	CGameManager::getInst()->loadPlayerInfo(pPlayer);		
-	
-	/*CTest* pTest = new CTest;
-	pTest->setPos(fPoint(1350.f, 1470.f));
-	addObject(pTest, eOBJ::TEST);*/
 
 	CBackGround* pBg = new CBackGround;
 	pBg->load(L"BG_stage1", L"texture\\background\\stage1_back.bmp");
@@ -108,12 +105,10 @@ void CScene_Stage01::enter()
 	// 충돌 체크
 	checkGrp(eOBJ::PLAYER, eOBJ::WALL);
 	checkGrp(eOBJ::PLAYER, eOBJ::GROUND);
-	//checkGrp(eOBJ::PLAYER, eOBJ::TEST);
 	checkGrp(eOBJ::PLAYER, eOBJ::TRIGGERBOX);
 
 	checkGrp(eOBJ::ATTACK, eOBJ::WALL);
 	checkGrp(eOBJ::ATTACK, eOBJ::GROUND);
-	//checkGrp(eOBJ::ATTACK, eOBJ::TEST);
 
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::WALL);
 	checkGrp(eOBJ::MISSILE_PLAYER, eOBJ::GROUND);
@@ -124,6 +119,29 @@ void CScene_Stage01::enter()
 
 	CSoundManager::getInst()->addSound(L"bgm_stg1", L"sound\\bgm\\Dirtmouth1.wav", true);
 	CSoundManager::getInst()->play(L"bgm_stg1", 0.1f);
+
+
+	//////////////////////////////////////////////
+	//////////////// 충돌 테스트용 ////////////////
+	// 
+	//checkGrp(eOBJ::PLAYER, eOBJ::TEST);
+	//checkGrp(eOBJ::ATTACK, eOBJ::TEST);
+	//checkGrp(eOBJ::MISSILE_MONSTER, eOBJ::PLAYER);
+	
+	/*CMissile* pMsl = new CMissile;
+	pMsl->setPos(fPoint(1300.f, 1410.f));
+	pMsl->setName(eOBJNAME::MISSILE_MONSTER);
+	pMsl->setSize(fPoint(42.f, 42.f));
+	pMsl->getCollider()->setSize(fPoint(60.f, 60.f));
+	pMsl->getCollider()->setShape(eSHAPE::RECT);
+
+	createObj(pMsl, eOBJ::MISSILE_MONSTER);*/
+
+	//CTest* pTest = new CTest;
+	//pTest->setPos(fPoint(1350.f, 1470.f));
+	//addObject(pTest, eOBJ::TEST);
+	
+	////////////////////////////////////////////
 }
 
 void CScene_Stage01::exit()
