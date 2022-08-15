@@ -25,5 +25,7 @@ bool isCollisionCircleToCircle(const fPoint& cp1, int cr1, const fPoint& cp2, in
 
 // createMemTex ID 생성용 (중복 이름 에러 방지)
 wstring addStrIDNumber(const wstring& str);
-bool isOBB(fPoint* fpArr1, fPoint pos1, fPoint sz1, float rad1, fPoint* fpArr2, fPoint pos2, fPoint sz2, float rad2);
 bool OBB(SHAPE a, SHAPE b);
+
+bool IsOBB(fVec2 aCenterVec2, float aHalfWidth, float aHalfHeight, float aRad,
+	fVec2 bCenterVec2, float bHalfWidth, float bHalfHeight, float bRad);
